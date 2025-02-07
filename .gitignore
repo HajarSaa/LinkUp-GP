@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+backend/.env
+frontend/.env
+
+# Build files
+backend/build/
+frontend/build/
