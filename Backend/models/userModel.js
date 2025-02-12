@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -26,8 +25,9 @@ const userSchema = new mongoose.Schema({
   },
   workspaces: {
     type: mongoose.Schema.ObjectId,
-    // ref:
+    ref: 'Workspace',
   },
+  
 });
 
 const User = mongoose.model("User", userSchema);

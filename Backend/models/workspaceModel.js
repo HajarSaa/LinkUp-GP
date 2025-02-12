@@ -6,8 +6,17 @@ const workspaceSchema = new mongoose.Schema({
     required: true,
   },
   createdBy: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
     ref: "User",
+  },
+  members: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+  ],
+  joinCode: {
+    type: String,
   },
   settings: String,
   createdAt: {

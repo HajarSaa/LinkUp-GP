@@ -1,27 +1,42 @@
 import mongoose from "mongoose";
 
 const fileSchema = new mongoose.Schema({
-  fileName: String,
-  fileSize: String,
-  fileType: String,
-  uploadedBy: {
+  fileName: {
     type: String,
+  },
+  fileSize: {
+    String,
+  },
+  fileType: {
+    String,
+  },
+  sentBy: {
+    type: mongoose.Schema.ObjectId,
     ref: "User",
   },
   channelID: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
     ref: "Channel",
     default: null,
   },
-  threadID: {
-    type: String,
-    ref: "Thread",
+  workspaceID: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Workspace",
+  },
+  conversationId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Conversation",
+  },
+  parentMessageID: {
+    type: mongoose.Schema.ObjectId,
+    refPath: "parentType",
     default: null,
   },
-  isDirectMessage: {
-    type: Boolean,
+  parentType: {
+    type: String,
+    enum: ["TextMessage", "File"],
   },
-  uploadedAt: {
+  sentAt: {
     type: Date,
     default: Date.now,
   },

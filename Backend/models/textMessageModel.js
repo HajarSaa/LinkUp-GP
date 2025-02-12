@@ -6,29 +6,32 @@ const textMessageSchema = new mongoose.Schema({
     required: true,
   },
   sentBy: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
     ref: "User",
-  },
-  recipientID: {
-    type: String,
-    ref: "User",
-    default: null,
   },
   channelID: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
     ref: "Channel",
     default: null,
   },
-  threadID: {
-    type: String,
-    ref: "Thread",
+  conversationId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Conversation",
+  },
+  workspaceID: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Workspace",
+  },
+  parentMessageID: {
+    type: mongoose.Schema.ObjectId,
+    refPath: "parentType",
     default: null,
   },
-  isDirectMessage: {
-    type: Boolean,
-    required: true,
+  parentType: {
+    type: String,
+    enum: ["TextMessage", "File"],
   },
-  timestamp: {
+  sentAt: {
     type: Date,
     default: Date.now,
   },

@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema({
-  type: String,
-  recipientID: {
-    type: String,
-    ref: "User",
+  type: {
+    type:String,
   },
   isRead: {
     type: Boolean,

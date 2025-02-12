@@ -4,7 +4,7 @@ const integrationSchema = new mongoose.Schema({
   name: String,
   type: String,
   workspaceID: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
     ref: "Workspace",
   },
   createdAt: {
