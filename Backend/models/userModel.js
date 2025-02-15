@@ -25,9 +25,8 @@ const userSchema = new mongoose.Schema({
   },
   workspaces: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Workspace',
+    ref: "Workspace",
   },
-  
 });
 
 const User = mongoose.model("User", userSchema);

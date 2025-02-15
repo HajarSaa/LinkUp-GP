@@ -4,6 +4,7 @@ const channelSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   type: {
     type: String,
@@ -13,6 +14,7 @@ const channelSchema = new mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
+    required: true,
   },
   members: [
     {
@@ -20,9 +22,10 @@ const channelSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  workspaceID: {
+  workspaceId: {
     type: mongoose.Schema.ObjectId,
     ref: "Workspace",
+    required: true,
   },
   createdAt: {
     type: Date,

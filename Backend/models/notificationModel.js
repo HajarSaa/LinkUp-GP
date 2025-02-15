@@ -2,13 +2,21 @@ import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema({
   type: {
-    type:String,
+    type: String,
   },
   isRead: {
     type: Boolean,
     default: false,
   },
-  message: String,
+  messageId: {
+    type: mongoose.Schema.ObjectId,
+    refPath: "messageType",
+    default: null,
+  },
+  messageType: {
+    type: String,
+    enum: ["Message", "File"],
+  },
   sentAt: {
     type: Date,
     default: Date.now,
