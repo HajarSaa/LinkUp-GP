@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const textMessageSchema = new mongoose.Schema({
+const messageSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true,
@@ -8,8 +8,14 @@ const textMessageSchema = new mongoose.Schema({
   sentBy: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
+    required: true,
   },
-  channelID: {
+  workspaceId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Workspace",
+    required: true,
+  },
+  channelId: {
     type: mongoose.Schema.ObjectId,
     ref: "Channel",
     default: null,
@@ -17,19 +23,16 @@ const textMessageSchema = new mongoose.Schema({
   conversationId: {
     type: mongoose.Schema.ObjectId,
     ref: "Conversation",
+    default: null,
   },
-  workspaceID: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Workspace",
-  },
-  parentMessageID: {
+  parentMessageId: {
     type: mongoose.Schema.ObjectId,
     refPath: "parentType",
     default: null,
   },
   parentType: {
     type: String,
-    enum: ["TextMessage", "File"],
+    enum: ["Message", "File"],
   },
   sentAt: {
     type: Date,
@@ -37,5 +40,5 @@ const textMessageSchema = new mongoose.Schema({
   },
 });
 
-const TextMessage = mongoose.model("TextMessage", textMessageSchema);
-export default TextMessage;
+const Message = mongoose.model("Message", messageSchema);
+export default Message;

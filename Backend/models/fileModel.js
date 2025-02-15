@@ -14,27 +14,28 @@ const fileSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
   },
-  channelID: {
+  channelId: {
     type: mongoose.Schema.ObjectId,
     ref: "Channel",
     default: null,
   },
-  workspaceID: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Workspace",
-  },
   conversationId: {
     type: mongoose.Schema.ObjectId,
     ref: "Conversation",
+    default: null,
   },
-  parentMessageID: {
+  workspaceId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Workspace",
+  },
+  parentMessageId: {
     type: mongoose.Schema.ObjectId,
     refPath: "parentType",
     default: null,
   },
   parentType: {
     type: String,
-    enum: ["TextMessage", "File"],
+    enum: ["Message", "File"],
   },
   sentAt: {
     type: Date,

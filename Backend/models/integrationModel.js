@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const integrationSchema = new mongoose.Schema({
   name: String,
   type: String,
-  workspaceID: {
+  workspaceId: {
     type: mongoose.Schema.ObjectId,
     ref: "Workspace",
   },

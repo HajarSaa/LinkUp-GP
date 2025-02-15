@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 const reactionSchema = new mongoose.Schema({
-  workspaceID: {
+  workspaceId: {
     type: mongoose.Schema.ObjectId,
     ref: "Workspace",
   },
-  messageID: {
+  messageId: {
     type: mongoose.Schema.ObjectId,
     refPath: "messageType",
   },
   messageType: {
     type: String,
-    enum: ["TextMessage", "File"],
+    enum: ["Message", "File"],
   },
   member: {
     type: mongoose.Schema.ObjectId,
