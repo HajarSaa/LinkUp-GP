@@ -10,6 +10,7 @@ const channelSchema = new mongoose.Schema({
     type: String,
     enum: ["public", "private"], // also include direct messages
     required: true,
+  
   },
   createdBy: {
     type: mongoose.Schema.ObjectId,
