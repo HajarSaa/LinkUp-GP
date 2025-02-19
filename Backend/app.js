@@ -1,9 +1,9 @@
 import express from "express";
-import userRouter from "./routes/userRoutes.js";
-import workspaceRouter from "./routes/workspaceRoutes.js";
-import channelRouter from "./routes/channelRoutes.js";
-import conversationRouter from "./routes/conversationRoutes.js";
-import messageRouter from "./routes/messageRoutes.js";
+import userRouter from "./routes/user.routes.js";
+import workspaceRouter from "./routes/workspace.routes.js";
+import channelRouter from "./routes/channel.routes.js";
+import conversationRouter from "./routes/conversation.routes.js";
+import messageRouter from "./routes/message.routes.js";
 
 const app = express();
 

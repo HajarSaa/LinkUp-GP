@@ -5,7 +5,7 @@ import {
   createWorkspace,
   updateWorkspace,
   deleteWorkspace,
-} from "../controllers/workspaceController.js";
+} from "../controllers/workspace.controller.js";
 
 const router = express.Router();
 

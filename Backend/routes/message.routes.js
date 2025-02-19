@@ -5,7 +5,7 @@ import {
   createMessage,
   updateMessage,
   deleteMessage,
-} from "../controllers/messageController.js";
+} from "../controllers/message.controller.js";
 
 const router = express.Router();
 
