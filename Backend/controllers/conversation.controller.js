@@ -1,4 +1,4 @@
-import Conversation from "../models/converstionModel.js";
+import Conversation from "../models/converstion.model.js";
 import {
   createOne,
   deleteOne,

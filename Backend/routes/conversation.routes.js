@@ -5,7 +5,7 @@ import {
   createConversation,
   updateConversation,
   deleteConversation,
-} from "../controllers/conversationController.js";
+} from "../controllers/conversation.controller.js";
 
 const router = express.Router();
 

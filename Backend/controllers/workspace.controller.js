@@ -5,7 +5,7 @@ import {
   updateOne,
   deleteOne,
 } from "../utils/handlerFactory.js";
-import Workspace from "../models/workspaceModel.js";
+import Workspace from "../models/workspace.model.js";
 
 export const getAllWorkspaces = getAll(Workspace);
 export const getWorkspace = getOne(Workspace);

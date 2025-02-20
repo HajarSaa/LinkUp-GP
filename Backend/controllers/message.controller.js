@@ -1,4 +1,4 @@
-import Message from "../models/messageModel.js";
+import Message from "../models/message.model.js";
 import {
   createOne,
   deleteOne,

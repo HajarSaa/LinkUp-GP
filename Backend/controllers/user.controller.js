@@ -5,7 +5,7 @@ import {
   updateOne,
   deleteOne,
 } from "../utils/handlerFactory.js";
-import User from "../models/userModel.js";
+import User from "../models/user.model.js";
 
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);

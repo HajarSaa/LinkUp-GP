@@ -5,7 +5,7 @@ import {
   createChannel,
   updateChannel,
   deleteChannel,
-} from "../controllers/channelController.js";
+} from "../controllers/channel.controller.js";
 
 const router = express.Router();
 

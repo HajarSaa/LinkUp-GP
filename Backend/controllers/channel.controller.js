@@ -1,4 +1,4 @@
-import Channel from "../models/channelModel.js";
+import Channel from "../models/channel.model.js";
 import {
   createOne,
   deleteOne,

@@ -1,15 +1,20 @@
 import express from "express";
-import userRouter from "./routes/userRoutes.js";
-import workspaceRouter from "./routes/workspaceRoutes.js";
-import channelRouter from "./routes/channelRoutes.js";
-import conversationRouter from "./routes/conversationRoutes.js";
-import messageRouter from "./routes/messageRoutes.js";
+import morgan from "morgan";
+
+import userRouter from "./routes/user.routes.js";
+import workspaceRouter from "./routes/workspace.routes.js";
+import channelRouter from "./routes/channel.routes.js";
+import conversationRouter from "./routes/conversation.routes.js";
+import messageRouter from "./routes/message.routes.js";
 
 const app = express();
 
 // body parser -> read data from body int req.body
 app.use(express.json());
+// logger
+app.use(morgan("dev"));
 
+// Routes
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/workspaces", workspaceRouter);
 app.use("/api/v1/channels", channelRouter);
@@ -23,6 +28,5 @@ app.use("/api/v1/messages", messageRouter);
 app.all("*", (req, res) => {
   res.send("ERORR: 404 NOT FOUND");
 });
-0;
 
 export default app;
