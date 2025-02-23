@@ -9,12 +9,17 @@ const channelSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["public", "private"], // also include direct messages
+      enum: ["public", "private"],
       required: true,
     },
     createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
+      required: true,
+    },
+    workspaceId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Workspace",
       required: true,
     },
     members: [
@@ -23,11 +28,6 @@ const channelSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-      required: true,
-    },
     // createdAt
     // updatedAt
   },

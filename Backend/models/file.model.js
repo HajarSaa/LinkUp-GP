@@ -6,10 +6,10 @@ const fileSchema = new mongoose.Schema(
       type: String,
     },
     fileSize: {
-      String,
+      type: String,
     },
     fileType: {
-      String,
+      type: String,
     },
     sentBy: {
       type: mongoose.Schema.ObjectId,
