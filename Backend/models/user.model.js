@@ -2,18 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-    },
     email: {
       type: String,
       required: true,
       unique: true,
-    },
-    role: {
-      type: String,
-      enum: ["admin", "user"],
-      default: "user",
     },
     status: {
       type: String,
@@ -25,9 +17,9 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.ObjectId,
         ref: "Workspace",
       },
+      // TODO create a userProfle model to store user profile data
+      // TODO modify workspaces array to me a pair of workspaceId and and userProfileId
     ],
-    // createdAt
-    // updatedAt
   },
   { timestamps: true }
 );

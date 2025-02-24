@@ -34,5 +34,8 @@ const channelSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// TODO handle deleting messages when a channel is deleted
+
+
 const Channel = mongoose.model("Channel", channelSchema);
 export default Channel;

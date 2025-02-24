@@ -23,7 +23,9 @@ const conversationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// TODO: Create a pre save method to make sure that the same conversation is not created before
+
+// TODO handle deleting messages when conversation is deleted
+
 
 const Conversation = mongoose.model("Conversation", conversationSchema);
 export default Conversation;
