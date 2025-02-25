@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Indexes
+// Users in the same workspace
+userSchema.index({ workspaces: 1 });
+
+
 // Query middlewares
 // populating workspaces when finding a user
 userSchema.pre(/^find/, function (next) {

@@ -23,9 +23,11 @@ const conversationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Indexes
+// Conversations in the same workspace
+conversationSchema.index({ workspaceId: 1 });
 
 // TODO handle deleting messages when conversation is deleted
-
 
 const Conversation = mongoose.model("Conversation", conversationSchema);
 export default Conversation;

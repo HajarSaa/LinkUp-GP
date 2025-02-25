@@ -41,5 +41,13 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Indexes
+// All replies to a message && Oldest first (Threads)
+messageSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
+// Newest first (Channels)
+messageSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
+// Newest first (Conversations)
+messageSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
+
 const Message = mongoose.model("Message", messageSchema);
 export default Message;

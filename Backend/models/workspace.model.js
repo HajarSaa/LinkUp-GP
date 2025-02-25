@@ -30,6 +30,12 @@ const workspaceSchema = new mongoose.Schema(
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
 
+// Indexes
+// workspaces created by the same user
+workspaceSchema.index({ createdBy: 1 });
+// workspaces where a user is a member of
+workspaceSchema.index({ joinCode: 1 });
+
 // virtual populate
 workspaceSchema.virtual("conversations", {
   ref: "Conversation",
@@ -125,7 +131,6 @@ workspaceSchema.post("save", async function (doc) {
   // TODO: Generate a unique join code
   // Generate join code if not already present
 });
-
 
 // // Pre-update: Store the original document before update
 // workspaceSchema.pre(["findOneAndUpdate", "updateOne"], async function (next) {
