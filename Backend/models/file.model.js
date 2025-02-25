@@ -6,10 +6,10 @@ const fileSchema = new mongoose.Schema(
       type: String,
     },
     fileSize: {
-      String,
+      type: String,
     },
     fileType: {
-      String,
+      type: String,
     },
     sentBy: {
       type: mongoose.Schema.ObjectId,
@@ -43,6 +43,14 @@ const fileSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Indexes
+// All replies to a message && Oldest first (Threads)
+fileSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
+// Newest first (Channels)
+fileSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
+// Newest first (Conversations)
+fileSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
 
 const File = mongoose.model("File", fileSchema);
 export default File;

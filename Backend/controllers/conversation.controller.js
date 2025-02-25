@@ -9,6 +9,3 @@ import {
 
 export const getAllConversations = getAll(Conversation);
 export const getConversation = getOne(Conversation);
-export const createConversation = createOne(Conversation);
-export const updateConversation = updateOne(Conversation);
-export const deleteConversation = deleteOne(Conversation);

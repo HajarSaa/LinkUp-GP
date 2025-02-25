@@ -9,12 +9,17 @@ const channelSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["public", "private"], // also include direct messages
+      enum: ["public", "private"],
       required: true,
     },
     createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
+      required: true,
+    },
+    workspaceId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Workspace",
       required: true,
     },
     members: [
@@ -23,16 +28,20 @@ const channelSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-      required: true,
-    },
     // createdAt
     // updatedAt
   },
   { timestamps: true }
 );
+// Indexes
+// Channels in the same workspace
+channelSchema.index({ workspaceId: 1 });
+// By type (public or private)
+channelSchema.index({ type: 1 });
+
+
+// TODO handle deleting messages when a channel is deleted
+
 
 const Channel = mongoose.model("Channel", channelSchema);
 export default Channel;
