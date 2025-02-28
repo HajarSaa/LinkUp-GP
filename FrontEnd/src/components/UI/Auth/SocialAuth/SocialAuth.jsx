@@ -1,6 +1,6 @@
 import styles from "./SocialAuth.module.css";
-import GoogleIcon from "../../../assets/icons/google.svg";
-import AppleIcon from "../../../assets/icons/apple.svg";
+import GoogleIcon from "../../../../assets/icons/google.svg";
+import AppleIcon from "../../../../assets/icons/apple.svg";
 
 const SocialAuth = () => {
   return (

@@ -1,14 +1,15 @@
 import styles from "./Register.module.css";
-import SocialAuth from "../SocialAuth/SocialAuth.jsx";
+import SocialAuth from "../../../components/UI/Auth/SocialAuth/SocialAuth";
+import AuthFooter from "../../../components/UI/Auth/AuthFooter/AuthFooter";
 import Logo from "../../../assets/icons/logo.svg";
-import AuthFooter from "../AuthFooter/AuthFooter.jsx";
 
 const Register = () => {
   return (
     <div className={styles.container}>
-      <img src={Logo} alt="Link-Up Logo" className={styles.logo} />
       <div className={styles.card}>
-        <h1 className={styles.title}>First, enter your email</h1>
+        <img src={Logo} alt="Link-Up Logo" className={styles.logo} />
+        <h1 className={styles.title}>Register</h1>
+        <h2 className={styles.title}>First, enter your email</h2>
         <p className={styles.subtitle}>
           We suggest using the <strong>email address you use at work.</strong>
         </p>
@@ -25,7 +26,7 @@ const Register = () => {
         </div>
         <SocialAuth />
         <p className={styles.signInText}>Already using Link-Up? </p>
-        <a href="/login">Sign in to an existing workspace</a>
+        <a className={styles.signInLink} href="/login">Sign in to an existing workspace</a>
       </div>
       <AuthFooter />
     </div>
