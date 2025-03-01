@@ -17,8 +17,6 @@ const conversationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // createdAt
-    // updatedAt
   },
   { timestamps: true }
 );
