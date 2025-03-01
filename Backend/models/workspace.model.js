@@ -24,8 +24,6 @@ const workspaceSchema = new mongoose.Schema(
       type: String,
     },
     settings: String,
-    // createdAt
-    // updatedAt
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
@@ -132,7 +130,7 @@ workspaceSchema.post("save", async function (doc) {
   // Generate join code if not already present
 });
 
-// // Pre-update: Store the original document before update
+// Pre-update: Store the original document before update
 // workspaceSchema.pre(["findOneAndUpdate", "updateOne"], async function (next) {
 //   this.oldDoc = await this.model.findOne(this.getQuery());
 //   next();

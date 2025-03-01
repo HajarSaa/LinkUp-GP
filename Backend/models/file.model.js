@@ -38,8 +38,6 @@ const fileSchema = new mongoose.Schema(
       type: String,
       enum: ["Message", "File"],
     },
-    // createdAt
-    // updatedAt
   },
   { timestamps: true }
 );

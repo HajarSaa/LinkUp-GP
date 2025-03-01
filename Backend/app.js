@@ -6,6 +6,8 @@ import workspaceRouter from "./routes/workspace.routes.js";
 import channelRouter from "./routes/channel.routes.js";
 import conversationRouter from "./routes/conversation.routes.js";
 import messageRouter from "./routes/message.routes.js";
+import AppError from "./utils/appError.js";
+import { globalErrorHandeler } from "./utils/globalErrorHandeler.js";
 
 const app = express();
 
@@ -25,8 +27,13 @@ app.use("/api/v1/messages", messageRouter);
 // Integration -> off
 // Notification -> off
 
-app.all("*", (req, res) => {
-  res.send("ERORR: 404 NOT FOUND");
+// 404 route handeler middleware
+app.all("*", (req, res, next) => {
+  // res.send("ERORR: 404 NOT FOUND");
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+// Error handeler middleware
+app.use(globalErrorHandeler);
 
 export default app;
