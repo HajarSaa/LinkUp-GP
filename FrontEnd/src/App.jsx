@@ -1,15 +1,15 @@
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import "./styles/global.css"
-import "./styles/variables.css"
 import "@fontsource/lato";
+import "./styles/variables.css"
+import "./styles/global.css"
 
 function App() {
   return (
-    <div>
-      <Register />
+    <>
+      <Register/>
       <Login />
-    </div>
+    </>
   );
 }
 

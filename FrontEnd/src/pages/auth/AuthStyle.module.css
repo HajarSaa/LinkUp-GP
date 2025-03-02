@@ -6,64 +6,15 @@
 
 .subtitle {
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--text-color-grey);
     margin-bottom: 20px;
 }
 
 
-.input {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
-    font-size: var(--font-size);
-    margin-bottom: 16px;
-    outline: none;
-    transition: border-color var(--transition-time) ease;
-}
-
-.input:focus {
-    border-color: var(--main-color);
-}
-
-.authBtn {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--main-color);
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    font-size: var(--font-size);
-    cursor: pointer;
-    transition: background var(--transition-time) ease;
-}
-
-.authBtn:hover {
-    background-color: var(--accent-color);
-}
-
-/* Divider */
-.orContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 16px 0;
-    color: #888;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.line {
-    flex: 1;
-    height: 1px;
-    background-color: #ddd;
-    margin: 0 10px;
-}
-
 /* Login */
 .signUpText {
     font-size: 14px;
-    color: var(--text-color);
+    color: var(--text-color-grey);
     margin-top: 16px;
 }
 

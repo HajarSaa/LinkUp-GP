@@ -1,6 +1,9 @@
 import styles from "./AuthStyle.module.css";
 import SocialAuth from "../../components/UI/Auth/SocialAuth/SocialAuth";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
+import GmailAuthForm from "../../components/UI/Auth/GmailAuthForm/GmailAuthForm";
+import OrDivider from "../../components/UI/Auth/OrDivider/OrDivider";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   return (
@@ -9,22 +12,13 @@ const Register = () => {
       <p className={styles.subtitle}>
         We suggest using the <strong>email address you use at work.</strong>
       </p>
-      <input
-        type="email"
-        placeholder="name@gmail.com"
-        className={styles.input}
-      />
-      <button className={styles.authBtn}>Continue</button>
-      <div className={styles.orContainer}>
-        <hr className={styles.line} />
-        <span className={styles.orText}>OR</span>
-        <hr className={styles.line} />
-      </div>
+      <GmailAuthForm btnName={'Register'} />
+      <OrDivider/>
       <SocialAuth />
       <p className={styles.signInText}>Already using Link-Up? </p>
-      <a className={styles.signInLink} href="/login">
+      <Link to="/login" className={styles.signInLink}>
         Sign in to an existing workspace
-      </a>
+      </Link>
     </AuthLayout>
   );
 };

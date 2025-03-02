@@ -1,14 +1,14 @@
 .footer {
     margin-top: 20px;
     font-size: 12px;
-    color: var(--text-color);
+    color: var(--text-color-grey);
     display: flex;
     justify-content: center;
     gap: 15px;
 }
 
 .footer a {
-    color: var(--text-color);
+    color: var(--text-color-grey);
     text-decoration: none;
 }
 

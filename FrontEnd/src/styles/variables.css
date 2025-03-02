@@ -1,20 +1,22 @@
 :root {
-    --main-color: #0D2E45;
-    /* لون أغمق للأزرار والخلفيات */
-    --accent-color: #2F4F68;
-    /* لون إضافي للعناصر التفاعلية */
-    --text-color: #666666;
+    /* Colors */
+    --primary-color: #0D2E45;
+    --secondary-color: #2F4F68;
+    --text-color-grey: #666666;
+    --text-color-black: #333333;
     --border-color: #ccc;
-    --hover-color: #f5f5f5;
-    --button-hover: #16222e;
-    /* لون زر الكونتينيو عند الهوفر */
+    --white-btn-hover-color: #f0f0f0;
     --divider-color: #ddd;
-    /* لون الخط الفاصل */
     --link-color: #1264A3;
-    --transition-time: 0.4s;
-    /* New variables */
-    --font-size: 16px;
-    --border-radius: 6px;
-    --gray-light: #f0f0f0;
     --gray-dark: #888;
+    --gray-light: #f0f0f0;
+    --error-color: #E74C3C;         /* الأحمر للأخطاء */
+    --success-color: #27AE60;       /* الأخضر للنجاح */
+    --input-border-error: #F5B7B1;  /* حدود حمراء باهتة */
+    --input-border-success: #A9DFBF; /* حدود خضراء باهتة */
+    /* transitions */
+    --transition-time: 0.4s;
+    /* Sizes*/
+    --font-size: 1rem;
+    --border-radius: 6px;
 }

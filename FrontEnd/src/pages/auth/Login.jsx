@@ -1,6 +1,10 @@
 import styles from "./AuthStyle.module.css";
 import SocialAuth from "../../components/UI/Auth/SocialAuth/SocialAuth";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
+import GmailAuthForm from "../../components/UI/Auth/GmailAuthForm/GmailAuthForm";
+import OrDivider from "../../components/UI/Auth/OrDivider/OrDivider";
+import { Link } from "react-router-dom";
+
 
 const Login = () => {
   return (
@@ -10,23 +14,10 @@ const Login = () => {
         You should use the <strong>email address you use in Link-UP.</strong>
       </p>
       <SocialAuth />
-
-      <div className={styles.orContainer}>
-        <hr className={styles.line} />
-        <span className={styles.orText}>OR</span>
-        <hr className={styles.line} />
-      </div>
-
-      <input
-        type="email"
-        className={styles.input}
-        placeholder="name@gmail.com"
-      />
-
-      <button className={styles.authBtn}>Login In</button>
-
+      <OrDivider/>
+      <GmailAuthForm btnName="Login In" />
       <p className={styles.signUpText}>
-        Don’t have an account? <a href="/register">Sign up</a>
+        Don’t have an account? <Link to="/register">Sign up</Link>
       </p>
     </AuthLayout>
   );
