@@ -7,5 +7,5 @@
     --button-hover: #16222e; /* لون زر الكونتينيو عند الهوفر */
     --divider-color: #ddd; /* لون الخط الفاصل */
     --link-color:#1264A3;
-
+    --transition-time: 0.4s;
 }

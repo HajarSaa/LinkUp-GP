@@ -5,7 +5,7 @@
     width: 100%;
 }
 
-.authButton {
+.socialBtn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,11 +20,20 @@
     transition: background 0.2s ease-in-out;
 }
 
-.authButton:hover {
+.socialBtn:hover {
     background-color: #f0f0f0;
 }
 
 .icon {
     width: 20px;
     height: 20px;
+}
+
+
+@media (max-width: 480px) {
+
+    .socialBtn {
+        padding: 10px;
+        font-size: 14px;
+    }
 }
