@@ -10,17 +10,17 @@
     margin-bottom: 20px;
 }
 
+
 .input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
     margin-bottom: 16px;
     outline: none;
     transition: border-color var(--transition-time) ease;
 }
-
 
 .input:focus {
     border-color: var(--main-color);
@@ -32,8 +32,8 @@
     background-color: var(--main-color);
     color: white;
     border: none;
-    border-radius: 6px;
-    font-size: 16px;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
     cursor: pointer;
     transition: background var(--transition-time) ease;
 }
@@ -67,7 +67,8 @@
     margin-top: 16px;
 }
 
-.signUpText a,.signInLink {
+.signUpText a,
+.signInLink {
     color: var(--link-color);
     text-decoration: underline;
     text-decoration-color: transparent;
@@ -76,7 +77,8 @@
     transition: text-decoration-color var(--transition-time) ease;
 }
 
-.signUpText a:hover,.signInLink:hover {
+.signUpText a:hover,
+.signInLink:hover {
     text-decoration-color: var(--link-color);
 }
 

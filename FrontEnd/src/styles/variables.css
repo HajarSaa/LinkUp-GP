@@ -1,11 +1,20 @@
 :root {
-    --main-color: #0D2E45; /* لون أغمق للأزرار والخلفيات */
-    --accent-color: #2F4F68; /* لون إضافي للعناصر التفاعلية */
+    --main-color: #0D2E45;
+    /* لون أغمق للأزرار والخلفيات */
+    --accent-color: #2F4F68;
+    /* لون إضافي للعناصر التفاعلية */
     --text-color: #666666;
     --border-color: #ccc;
     --hover-color: #f5f5f5;
-    --button-hover: #16222e; /* لون زر الكونتينيو عند الهوفر */
-    --divider-color: #ddd; /* لون الخط الفاصل */
-    --link-color:#1264A3;
+    --button-hover: #16222e;
+    /* لون زر الكونتينيو عند الهوفر */
+    --divider-color: #ddd;
+    /* لون الخط الفاصل */
+    --link-color: #1264A3;
     --transition-time: 0.4s;
+    /* New variables */
+    --font-size: 16px;
+    --border-radius: 6px;
+    --gray-light: #f0f0f0;
+    --gray-dark: #888;
 }
