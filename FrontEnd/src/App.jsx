@@ -3,7 +3,7 @@ import Register from "./pages/auth/Register";
 import "@fontsource/lato";
 import "./styles/variables.css";
 import "./styles/global.css";
-import { Navigate, Route, Router, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
