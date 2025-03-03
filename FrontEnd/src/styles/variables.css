@@ -1,0 +1,23 @@
+:root {
+    /* Colors */
+    --primary-color: #193a55;
+    --secondary-color: #2F4F68;
+    --active-color: #e3f8ff;
+    --text-color-grey: #666666;
+    --text-color-black: #333333;
+    --border-color: #ccc;
+    --white-btn-hover-color: #f0f0f0;
+    --divider-color: #ddd;
+    --link-color: #1264A3;
+    --gray-dark: #888;
+    --gray-light: #f0f0f0;
+    --error-color: #E74C3C;         /* الأحمر للأخطاء */
+    --success-color: #27AE60;       /* الأخضر للنجاح */
+    --input-border-error: #F5B7B1;  /* حدود حمراء باهتة */
+    --input-border-success: #A9DFBF; /* حدود خضراء باهتة */
+    /* transitions */
+    --transition-time: 0.4s;
+    /* Sizes*/
+    --font-size: 1rem;
+    --border-radius: 6px;
+}

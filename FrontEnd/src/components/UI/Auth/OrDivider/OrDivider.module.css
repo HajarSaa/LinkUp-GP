@@ -1,0 +1,16 @@
+.orContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 0;
+    color: #888;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background-color: var(--divider-color);
+    margin: 0 10px;
+}

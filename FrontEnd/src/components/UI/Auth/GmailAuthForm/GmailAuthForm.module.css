@@ -1,0 +1,60 @@
+/* GmailAuthForm.module.css */
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+.input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
+    outline: none;
+    transition: all var(--transition-time) ease;
+}
+
+.input:focus {
+    border-color: var(--primary-color);
+}
+
+.input.error {
+    border-color: var(--error-color);
+    box-shadow: 0 0 5px var(--input-border-error);
+}
+
+.input.success {
+    border-color: var(--success-color);
+    box-shadow: 0 0 5px var(--input-border-success);
+}
+
+.feedback {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    transition: color var(--transition-time);
+}
+
+.feedback.error {
+    color: var(--error-color);
+}
+
+.feedback.success {
+    color: var(--success-color);
+}
+
+.authBtn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
+    cursor: pointer;
+    transition: background var(--transition-time) ease;
+}
+
+.authBtn:hover {
+    background-color: var(--secondary-color);
+}
