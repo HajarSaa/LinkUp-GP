@@ -7,6 +7,7 @@ import channelRouter from "./routes/channel.routes.js";
 import conversationRouter from "./routes/conversation.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import authRouter from "./routes/auth.routes.js";
+import userProfileRouter from "./routes/userProfile.routes.js";
 import AppError from "./utils/appError.js";
 import { globalErrorHandeler } from "./utils/globalErrorHandeler.js";
 
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/userProfiles", userProfileRouter);
 app.use("/api/v1/workspaces", workspaceRouter);
 app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);

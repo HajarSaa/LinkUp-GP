@@ -14,7 +14,7 @@ const channelSchema = new mongoose.Schema(
     },
     createdBy: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
       required: true,
     },
     workspaceId: {
@@ -25,7 +25,7 @@ const channelSchema = new mongoose.Schema(
     members: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "User",
+        ref: "UserProfile",
       },
     ],
   },

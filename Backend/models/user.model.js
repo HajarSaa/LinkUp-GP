@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      validate: [validator.isEmail, "please provide a valide eamil"],
+      validate: [validator.isEmail, "please provide a valide email"],
     },
     password: {
       type: String,
@@ -27,33 +27,28 @@ const userSchema = new mongoose.Schema(
       },
     },
     passwordChangedAt: Date,
-    status: {
-      type: String,
-      enum: ["online", "offline"],
-      default: "offline",
-    },
-    workspaces: [
+    workspaceProfiles: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "Workspace",
+        ref: "UserProfile",
       },
-      // TODO create a userProfle model to store user profile data
-      // TODO modify workspaces array to me a pair of workspaceId and and userProfileId
     ],
+    // TODO create a userProfle model to store user profile data
+    // TODO modify workspaces array to me a pair of workspaceId and and userProfileId
   },
   { timestamps: true }
 );
 
 // Indexes
 // Users in the same workspace
-userSchema.index({ workspaces: 1 });
+// userSchema.index({ workspaces: 1 }); FIXME: workspaces doesnot exist in the user model
 
 // Query middlewares
 // populating workspaces when finding a user
-userSchema.pre(/^find/, function (next) {
-  this.populate("workspaces");
-  next();
-});
+// userSchema.pre(/^find/, function (next) {
+// this.populate("workspaces"); FIXME: workspaces doesnot exist in the user model
+//   next();
+// });
 
 // Document Middlewares
 // Hash the password before saving it to the database
@@ -83,7 +78,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
       this.passwordChangedAt.getTime() / 1000,
       10
     );
-    // Return true if the password was changed after the token was issued 
+    // Return true if the password was changed after the token was issued
     return JWTTimestamp < changedTimestamp;
   }
   return false;

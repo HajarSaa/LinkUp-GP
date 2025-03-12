@@ -17,13 +17,19 @@ const workspaceSchema = new mongoose.Schema(
     members: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "User",
+        ref: "UserProfile",
       },
     ],
     joinCode: {
       type: String,
     },
-    settings: String,
+    settings: {
+      //  TODO - Search how to store settings
+      // TODO - How to handle settings of the workspace like theme, notifications, limits, etc
+      type: Object,
+      default: {},
+      // TODO - Add default settings
+    },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
@@ -72,8 +78,9 @@ workspaceSchema.pre(/^find/, function (next) {
 
 // Pre-save: Add creator to members array
 workspaceSchema.pre("save", function (next) {
-  if (!this.members.includes(this.createdBy)) {
-    this.members.push(this.createdBy);
+  if (this.isNew && !this.members.includes(this.createdBy)) {
+    // this.members.push(this.createdBy);
+    // TODO - Check if the user ceated the workspace is a added as an owner or the workspace
   }
   next();
 });
@@ -113,22 +120,22 @@ async function createMemberConversations(workspaceId, members) {
 }
 
 // Post-save: Update both workspace and users
-workspaceSchema.post("save", async function (doc) {
-  // Making sure that the workspace is just created and not updated
-  // if (doc._id && doc.isNew) {
+// workspaceSchema.post("save", async function (doc) {
+//   // Making sure that the workspace is just created and not updated
+//   // if (doc._id && doc.isNew) {
 
-  // Update all users to include this workspace in their workspaces array
-  await User.updateMany(
-    { _id: { $in: doc.members } },
-    { $addToSet: { workspaces: doc._id } }
-  );
+//   // Update all users to include this workspace in their workspaces array
+//   await User.updateMany(
+//     { _id: { $in: doc.members } },
+//     { $addToSet: { workspaces: doc._id } }
+//   );
 
-  // create conversations between all the members of the workspace
-  await createMemberConversations(doc._id, doc.members);
+//   // create conversations between all the members of the workspace
+//   await createMemberConversations(doc._id, doc.members);
 
-  // TODO: Generate a unique join code
-  // Generate join code if not already present
-});
+//   // TODO: Generate a unique join code
+//   // Generate join code if not already present
+// });
 
 // Pre-update: Store the original document before update
 // workspaceSchema.pre(["findOneAndUpdate", "updateOne"], async function (next) {

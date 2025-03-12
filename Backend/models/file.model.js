@@ -13,7 +13,7 @@ const fileSchema = new mongoose.Schema(
     },
     sentBy: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
     },
     channelId: {
       type: mongoose.Schema.ObjectId,

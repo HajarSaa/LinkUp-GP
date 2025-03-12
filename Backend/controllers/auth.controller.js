@@ -1,24 +1,19 @@
 import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
-import { signToken } from "../utils/jwt.js";
+import { createSendTokenCookie } from "../utils/jwt.js";
 
 export const signup = catchAsync(async (req, res, next) => {
+  // Create a new user
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
-  const token = signToken(newUser._id);
 
-  res.status(201).json({
-    status: "success",
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  // Send token to client
+  createSendTokenCookie(newUser, 201, res);
 });
 
 export const login = catchAsync(async (req, res, next) => {
@@ -37,10 +32,5 @@ export const login = catchAsync(async (req, res, next) => {
   }
 
   // If everything is ok, send token to client
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: "success",
-    token,
-  });
+  createSendTokenCookie(user, 200, res);
 });

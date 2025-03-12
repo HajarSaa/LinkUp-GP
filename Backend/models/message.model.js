@@ -8,7 +8,7 @@ const messageSchema = new mongoose.Schema(
     },
     sentBy: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
       required: true,
     },
     workspaceId: {
