@@ -12,3 +12,7 @@ export const getUser = getOne(User);
 export const createUser = createOne(User);
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
+
+// TODO - Add functionality of user update his data (updateMe)
+// TODO - Add functionality of user updating his password (updatePassword)
+// TODO - Add functionality of user deleting his account (deleteMe)

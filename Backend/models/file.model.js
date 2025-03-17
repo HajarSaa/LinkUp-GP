@@ -11,9 +11,9 @@ const fileSchema = new mongoose.Schema(
     fileType: {
       type: String,
     },
-    sentBy: {
+    createdBy: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
     },
     channelId: {
       type: mongoose.Schema.ObjectId,

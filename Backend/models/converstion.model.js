@@ -9,12 +9,12 @@ const conversationSchema = new mongoose.Schema(
     },
     memberOneId: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
       required: true,
     },
     memberTwoId: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
       required: true,
     },
   },
