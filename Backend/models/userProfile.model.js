@@ -10,7 +10,6 @@ const userProfileSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Workspace",
     required: [true, "A user profile must have a workspace"],
-    unique: true,
   },
   role: {
     type: String,
@@ -39,6 +38,9 @@ const userProfileSchema = new mongoose.Schema({
     type: String,
   },
 });
+
+// Indexes
+userProfileSchema.index({ user: 1, workspace: 1 });
 
 const UserProfile = mongoose.model("UserProfile", userProfileSchema);
 export default UserProfile;

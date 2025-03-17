@@ -1,4 +1,7 @@
 import Channel from "../models/channel.model.js";
+import UserProfile from "../models/userProfile.model.js";
+import { attachUserProfileData } from "../utils/attchData.js";
+import catchAsync from "../utils/catchAsync.js";
 import {
   createOne,
   deleteOne,

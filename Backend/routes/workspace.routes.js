@@ -5,18 +5,21 @@ import {
   createWorkspace,
   updateWorkspace,
   deleteWorkspace,
+  addUserToWorkspace,
 } from "../controllers/workspace.controller.js";
 import { protect } from "../middlewares/authMiddleware.js";
+import { attachUserData } from "../utils/attchData.js";
 
 const router = express.Router();
 
-// router.use(protect);
+router.use(protect);
 
 router
   .get("/", getAllWorkspaces)
-  .post("/", createWorkspace)
+  .post("/", attachUserData({ createdBy: "id" }), createWorkspace)
   .get("/:id", getWorkspace)
   .patch("/:id", updateWorkspace)
-  .delete("/:id", deleteWorkspace);
+  .delete("/:id", deleteWorkspace)
+  .post("/addUser", addUserToWorkspace);
 
 export default router;

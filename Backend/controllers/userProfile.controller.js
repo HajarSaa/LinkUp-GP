@@ -12,3 +12,5 @@ export const getUserProfile = getOne(UserProfile);
 export const createUserProfile = createOne(UserProfile);
 export const updateUserProfile = updateOne(UserProfile);
 export const deleteUserProfile = deleteOne(UserProfile);
+
+

@@ -6,7 +6,7 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    sentBy: {
+    createdBy: {
       type: mongoose.Schema.ObjectId,
       ref: "UserProfile",
       required: true,

@@ -37,6 +37,12 @@ channelSchema.index({ workspaceId: 1 });
 // By type (public or private)
 channelSchema.index({ type: 1 });
 
+// post-save
+// Adds the user created the channel to the members array
+channelSchema.post("save", function () {
+  this.members.push(this.createdBy);
+});
+
 // TODO handle deleting messages when a channel is deleted
 
 const Channel = mongoose.model("Channel", channelSchema);

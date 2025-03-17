@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import express from "express";
 import mongoSanitize from "express-mongo-sanitize";
+import cookieParser from "cookie-parser";
 
 const middlewares = (app) => {
   // Rate limiting
@@ -29,8 +30,10 @@ const middlewares = (app) => {
   app.use(hpp());
   // Set security headers
   app.use(helmet());
-  // Enable CORS
+  // Enable CORS for all requests
   app.use(cors());
+  // Cookie parser -> read data from cookies
+  app.use(cookieParser());
 };
 
 export default middlewares;

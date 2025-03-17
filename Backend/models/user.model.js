@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import validator from "validator";
+import catchAsync from "../utils/catchAsync.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -33,22 +34,16 @@ const userSchema = new mongoose.Schema(
         ref: "UserProfile",
       },
     ],
-    // TODO create a userProfle model to store user profile data
-    // TODO modify workspaces array to me a pair of workspaceId and and userProfileId
   },
   { timestamps: true }
 );
 
-// Indexes
-// Users in the same workspace
-// userSchema.index({ workspaces: 1 }); FIXME: workspaces doesnot exist in the user model
-
 // Query middlewares
 // populating workspaces when finding a user
-// userSchema.pre(/^find/, function (next) {
-// this.populate("workspaces"); FIXME: workspaces doesnot exist in the user model
-//   next();
-// });
+userSchema.pre(/^find/, function (next) {
+  this.populate("workspaceProfiles");
+  next();
+});
 
 // Document Middlewares
 // Hash the password before saving it to the database
@@ -66,9 +61,12 @@ userSchema.pre("save", async function (next) {
 
 // Instance methods
 // Compare the user password with the provided password
-userSchema.methods.correctPassword = async function (candidatepass, userpass) {
+userSchema.methods.correctPassword = catchAsync(async function (
+  candidatepass,
+  userpass
+) {
   return await bcrypt.compare(candidatepass, userpass);
-};
+});
 
 // Check if the user changed password after the token was issued
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
