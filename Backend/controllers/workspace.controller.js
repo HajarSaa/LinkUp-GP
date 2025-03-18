@@ -49,12 +49,6 @@ export const addUserToWorkspace = catchAsync(async (req, res, next) => {
   // add the userProfile to the workspace members array
   workspace.members.push(userProfileId);
   await workspace.save();
-  res.status(200).json({
-    status: "success",
-    data: {
-      workspace,
-    },
-  });
 
   // add the userProfile to his workspaceProfiles array
   await User.findByIdAndUpdate(req.user.id, {
@@ -63,6 +57,13 @@ export const addUserToWorkspace = catchAsync(async (req, res, next) => {
 
   // create conversations between all the members of the workspace and the new member
   workspace.createMemberConversations();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      workspace,
+    },
+  });
 });
 
 // TODO - separate the logic of adding a user to a workspace into add and join

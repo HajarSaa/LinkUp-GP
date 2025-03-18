@@ -75,42 +75,40 @@ workspaceSchema.virtual("channels", {
 //   next();
 // });
 
-workspaceSchema.methods.createMemberConversations = catchAsync(
-  async function () {
-    const conversations = [];
-    const workspaceId = this.id;
-    const members = this.members;
+workspaceSchema.methods.createMemberConversations = async function () {
+  const conversations = [];
+  const workspaceId = this.id;
+  const members = this.members;
 
-    // Create a conversation for each unique pair of members
-    // For n members, we only need n(n-1)/2 conversations
-    for (let i = 0; i < members.length; i++) {
-      for (let j = i + 1; j < members.length; j++) {
-        // Store memberIds in sorted order to ensure consistency
-        const [memberOneId, memberTwoId] = [members[i], members[j]].sort();
+  // Create a conversation for each pair of members
+  // For n members, we only need (n(n+1))/2 conversations
+  for (let i = 0; i < members.length; i++) {
+    for (let j = i; j < members.length; j++) {
+      // Store memberIds in sorted order to ensure consistency
+      const [memberOneId, memberTwoId] = [members[i], members[j]].sort();
 
-        // Check if conversation already exists
-        const existingConversation = await Conversation.findOne({
+      // Check if conversation already exists
+      const existingConversation = await Conversation.findOne({
+        workspaceId,
+        memberOneId,
+        memberTwoId,
+      });
+
+      if (!existingConversation) {
+        conversations.push({
           workspaceId,
           memberOneId,
           memberTwoId,
         });
-
-        if (!existingConversation) {
-          conversations.push({
-            workspaceId,
-            memberOneId,
-            memberTwoId,
-          });
-        }
       }
     }
-
-    // Bulk insert all new conversations
-    if (conversations.length > 0) {
-      await Conversation.insertMany(conversations);
-    }
   }
-);
+
+  // Bulk insert all new conversations
+  if (conversations.length > 0) {
+    await Conversation.insertMany(conversations);
+  }
+};
 
 // TODO - Implement deletion of workspace and
 // TODO - handle deleting the workspace drom every user's workspace array
