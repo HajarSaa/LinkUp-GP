@@ -50,8 +50,8 @@ import { verifyToken } from "../utils/jwt.js";
 
 // protect using jwt stored in cookie
 export const protect = catchAsync(async (req, res, next) => {
-  // Get token from cookies
-  const token = req.cookies.jwt;
+  // Get token from headers
+  const token = req.headers.authorization;
 
   // Check if the token exists
   if (!token) {
@@ -83,7 +83,7 @@ export const protect = catchAsync(async (req, res, next) => {
 
   // Grant access to the protected route
   req.user = currentUser;
-    next();
+  next();
 });
 
 export const restrictTo = (...roles) => {

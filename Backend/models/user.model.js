@@ -61,12 +61,9 @@ userSchema.pre("save", async function (next) {
 
 // Instance methods
 // Compare the user password with the provided password
-userSchema.methods.correctPassword = catchAsync(async function (
-  candidatepass,
-  userpass
-) {
+userSchema.methods.correctPassword = async function (candidatepass, userpass) {
   return await bcrypt.compare(candidatepass, userpass);
-});
+};
 
 // Check if the user changed password after the token was issued
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
