@@ -7,6 +7,7 @@ import conversationRouter from "./routes/conversation.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import userProfileRouter from "./routes/userProfile.routes.js";
+import uploadRouter from "./routes/uploadFile.routes.js";
 import AppError from "./utils/appError.js";
 import { globalErrorHandeler } from "./utils/globalErrorHandeler.js";
 import middlewares from "./middlewares/middlewares.js";
@@ -24,6 +25,7 @@ app.use("/api/v1/workspaces", workspaceRouter);
 app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
+app.use("/api/v1/files", uploadRouter);
 
 // 404 route handeler middleware
 app.all("*", (req, res, next) => {

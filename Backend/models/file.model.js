@@ -11,7 +11,8 @@ const fileSchema = new mongoose.Schema(
     fileType: {
       type: String,
     },
-    createdBy: {
+    fileUrl: { type: String, required: true }, // Cloudinary URL
+    uploadedBy: {
       type: mongoose.Schema.ObjectId,
       ref: "UserProfile",
     },
@@ -29,14 +30,25 @@ const fileSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Workspace",
     },
+    // parentMessageId: {
+    //   type: mongoose.Schema.ObjectId,
+    //   refPath: "parentType",
+    //   default: null,
+    // },
+    // parentType: {
+    //   type: String,
+    //   enum: ["Message", "File"],
+    // },
+
     parentMessageId: {
       type: mongoose.Schema.ObjectId,
-      refPath: "parentType",
-      default: null,
+      ref: "Message",
+      default: null, //files can exist without a message
     },
     parentType: {
       type: String,
-      enum: ["Message", "File"],
+      // enum: ["Message", null], // can files alone
+      // default: null,
     },
   },
   { timestamps: true }

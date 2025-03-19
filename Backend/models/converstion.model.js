@@ -17,6 +17,14 @@ const conversationSchema = new mongoose.Schema(
       ref: "UserProfile",
       required: true,
     },
+
+    // Array of files in the conversation (media in conversation).
+    media: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "File",
+      },
+    ],
   },
   { timestamps: true }
 );
