@@ -97,3 +97,15 @@ export const restrictTo = (...roles) => {
     next();
   };
 };
+
+// TODO - Implement middlewares to check if the user is member of the (workspace,channel,conversation) or not
+// export const isMember = (Model, field) => {
+//   return catchAsync(async (req, res, next) => {
+//     const doc = await Model.findById(req.params.id);
+//     if (!doc[field].includes(req.user._id)) {
+//       return next(
+//         new AppError("You do not have permission to perform this action", 403)
+//       );
+//     }
+//   });
+// };
