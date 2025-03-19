@@ -20,6 +20,12 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Channel",
       default: null,
+      validate: {
+        validator: function () {
+          return !(this.channelId === null && this.conversationId === null);
+        },
+        message: "Either channelId or conversationId is required",
+      },
     },
     conversationId: {
       type: mongoose.Schema.ObjectId,

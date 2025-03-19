@@ -1,5 +1,7 @@
 import UserProfile from "../models/userProfile.model.js";
+import AppError from "./appError.js";
 
+// Attach user data to request body
 export const attachUserData = (fieldMappings) => {
   return (req, res, next) => {
     // Attach data to req.body based on field mappings
@@ -10,11 +12,18 @@ export const attachUserData = (fieldMappings) => {
   };
 };
 
+// Attach user profile data to request body
 export const attachUserProfileData = () => {
   return async (req, res, next) => {
+    // Find user profile based on workspace
     const userProfile = await UserProfile.findOne({
-      workspace: req.body.workspaceId,
+      workspace: req.body.workspaceId || req.params.workspaceId,
+      user: req.user.id,
     });
+
+    if (!userProfile) {
+      return next(new AppError("User profile not found", 404));
+    }
 
     req.body.createdBy = userProfile.id;
     next();

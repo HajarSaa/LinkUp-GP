@@ -14,24 +14,20 @@ export const getMessage = getOne(Message);
 export const updateMessage = updateOne(Message);
 export const deleteMessage = deleteOne(Message);
 
-export const createMessage = createOne(Message);
-// export const createMessage = catchAsync(async (req, res, next) => {
-//   const doc = await Message.create({
-//     content: req.body.content,
-//     createdBy:req.body.createdBy,
-//     workspaceId: req.body.workspaceId,
-//     channelId: req.body.channelId,
-//     conversationId: req.body.conversationId,
-//     parentMessageId: req.body.parentMessageId,
-//   });
+// export const createMessage = createOne(Message);
+export const createMessage = catchAsync(async (req, res, next) => {
+  if (req.params.channelId) req.body.channelId = req.params.channelId;
+  if (req.params.conversationId) req.body.channelId = req.params.conversationId;
 
-//   res.status(201).json({
-//     status: "success",
-//     data: {
-//       data: doc,
-//     },
-//   });
-// });
+  const doc = await Message.create(req.body);
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      data: doc,
+    },
+  });
+});
 
 export const validateMessageData = catchAsync(
   validateResources([

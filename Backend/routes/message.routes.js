@@ -11,7 +11,7 @@ import { attachUserProfileData } from "../utils/attchData.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { validateResources } from "../utils/validateResources.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.use(protect);
 
