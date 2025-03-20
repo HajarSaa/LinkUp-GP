@@ -51,7 +51,7 @@ import { verifyToken } from "../utils/jwt.js";
 // protect using jwt stored in cookie
 export const protect = catchAsync(async (req, res, next) => {
   // Get token from headers
-  const token = req.headers.authorization;
+  const token = req.cookies.jwt;
 
   // Check if the token exists
   if (!token) {
