@@ -5,6 +5,8 @@ import {
   createChannel,
   updateChannel,
   deleteChannel,
+  joinChannel,
+  leaveChannel,
 } from "../controllers/channel.controller.js";
 import { attachUserProfileData } from "../utils/attchData.js";
 import { protect } from "../middlewares/authMiddleware.js";
@@ -19,9 +21,11 @@ router.use("/:channelId/messages", messageRouter);
 
 router
   .get("/", getAllChannels)
-  .post("/", attachUserProfileData(), createChannel)
+  .post("/", attachUserProfileData("createdBy"), createChannel)
   .get("/:id", getChannel)
   .patch("/:id", updateChannel)
-  .delete("/:id", deleteChannel);
+  .delete("/:id", deleteChannel)
+  .post("/:id/join", attachUserProfileData("userId"), joinChannel)
+  .post("/:id/leave", attachUserProfileData("userId"), leaveChannel);
 
 export default router;

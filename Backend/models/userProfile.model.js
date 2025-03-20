@@ -40,7 +40,7 @@ const userProfileSchema = new mongoose.Schema({
 });
 
 // Indexes
-userProfileSchema.index({ user: 1, workspace: 1 });
+userProfileSchema.index({ user: 1, workspace: 1 }, { unique: true });
 
 const UserProfile = mongoose.model("UserProfile", userProfileSchema);
 export default UserProfile;
