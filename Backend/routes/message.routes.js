@@ -8,12 +8,13 @@ import {
   validateMessageData,
 } from "../controllers/message.controller.js";
 import { attachUserProfileData } from "../utils/attchData.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { protect, protectAttchWorkspace } from "../middlewares/authMiddleware.js";
 import { validateResources } from "../utils/validateResources.js";
 
 const router = express.Router({ mergeParams: true });
 
 router.use(protect);
+router.use(protectAttchWorkspace);
 
 router
   .get("/", getAllMessages)

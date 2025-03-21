@@ -17,7 +17,7 @@ export const uploadFile = async (req, res) => {
       fileSize: req.file.size,
       fileType: req.file.mimetype,
       fileUrl: fileUrl,
-      uploadedBy: req.user._id,
+      uploadedBy: req.user.id,
       workspaceId,
       channelId: channelId || null,
       conversationId: conversationId || null,

@@ -38,6 +38,7 @@ app.use(globalErrorHandeler);
 
 export default app;
 
+// TODO - Modify all the controllers that require the workspaceId or userProfileId and make them acces through the request
 // TODO - implement myUserProfile endpoint
 
 // TODO - Add functionality of user update his data (updateMe)

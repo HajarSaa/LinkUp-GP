@@ -1,9 +1,11 @@
 import User from "../models/user.model.js";
+import UserProfile from "../models/userProfile.model.js";
+import Workspace from "../models/workspace.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { verifyToken } from "../utils/jwt.js";
 
-// protect using jwt stored in the header
+// Protect using jwt stored in the header
 // export const protect = catchAsync(async (req, res, next) => {
 //   let token;
 
@@ -48,7 +50,7 @@ import { verifyToken } from "../utils/jwt.js";
 //   next();
 // });
 
-// protect using jwt stored in cookie
+// Protect using jwt stored in cookie
 export const protect = catchAsync(async (req, res, next) => {
   // Get token from headers
   const token = req.cookies.jwt;
@@ -86,25 +88,39 @@ export const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-export const restrictTo = (...roles) => {
-  return (req, res, next) => {
-    // roles ["admin", "user"]. role="user"
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError("You do not have permission to perform this action", 403)
-      );
-    }
-    next();
-  };
-};
+// Protect the route for only members of the workspace
+// Attches the workspace to the request
+export const protectAttchWorkspace = catchAsync(async (req, res, next) => {
+  const workspaceId = req.cookies.workspace;
 
-// export const isMember = (Model, field) => {
-//   return catchAsync(async (req, res, next) => {
-//     const doc = await Model.findById(req.params.id);
-//     if (!doc[field].includes(req.user._id)) {
-//       return next(
-//         new AppError("You do not have permission to perform this action", 403)
-//       );
-//     }
-//   });
-// };
+  if (!workspaceId) {
+    return next(new AppError("Workspace id not found", 404));
+  }
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+  if (!workspace) {
+    return next(new AppError("Workspace not found", 404));
+  }
+
+  // Find the user's profile in this workspace
+  const userProfile = await UserProfile.findOne({
+    user: req.user.id,
+    workspace: workspaceId,
+  });
+
+  if (!userProfile) {
+    return next(new AppError("User profile not found in this workspace", 404));
+  }
+
+  // Ensure that the user is a member of the workspace
+  if (!workspace.members.includes(userProfile.id)) {
+    return next(new AppError("You are not a member of this workspace", 403));
+  }
+
+  // Attach workspace to request
+  req.workspace = workspace;
+  // Attach userProfile to request
+  req.userProfile = userProfile;
+  next();
+});
