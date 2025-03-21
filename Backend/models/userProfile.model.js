@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import catchAsync from "../utils/catchAsync.js";
+import User from "./user.model.js";
 
 const userProfileSchema = new mongoose.Schema({
   user: {
@@ -40,7 +42,15 @@ const userProfileSchema = new mongoose.Schema({
 });
 
 // Indexes
-userProfileSchema.index({ user: 1, workspace: 1 });
+userProfileSchema.index({ user: 1, workspace: 1 }, { unique: true });
+
+// Post-save middleware to add userProfile ID to the User's workspaceProfiles array
+userProfileSchema.post("save", async (doc) => {
+  await User.findByIdAndUpdate(doc.user, {
+    $addToSet: { workspaceProfiles: doc._id }, 
+  });
+});
 
 const UserProfile = mongoose.model("UserProfile", userProfileSchema);
+
 export default UserProfile;

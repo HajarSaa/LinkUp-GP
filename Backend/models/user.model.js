@@ -38,12 +38,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Query middlewares
-// populating workspaces when finding a user
-userSchema.pre(/^find/, function (next) {
-  this.populate("workspaceProfiles");
-  next();
-});
 
 // Document Middlewares
 // Hash the password before saving it to the database

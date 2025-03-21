@@ -8,18 +8,20 @@ import {
   updateUserProfile,
 } from "../controllers/userProfile.controller.js";
 
-import { protect } from "../middlewares/authMiddleware.js";
+import { protect, protectAttchWorkspace } from "../middlewares/authMiddleware.js";
 import { attachUserData } from "../utils/attchData.js";
 
 const router = express.Router();
 
 router.use(protect);
+router.post("/", attachUserData({ user: "id", email: "email" }), createUserProfile)
 
+router.use(protectAttchWorkspace);
 router
   .get("/", getAllUserProfiles)
-  .post("/", attachUserData({ user: "id", email: "email" }), createUserProfile)
-  .get("/:id", getUserProfile)
   .patch("/:id", updateUserProfile)
-  .delete("/:id", deleteUserProfile);
+  .delete("/:id", deleteUserProfile)
+  .get("/updateme") // TODO- implement updateMe
+  .get("/:id", getUserProfile);
 
 export default router;

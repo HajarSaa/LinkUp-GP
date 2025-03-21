@@ -12,7 +12,6 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 
 export const getAllWorkspaces = getAll(Workspace);
-export const getWorkspace = getOne(Workspace);
 export const createWorkspace = createOne(Workspace);
 export const updateWorkspace = updateOne(Workspace);
 export const deleteWorkspace = deleteOne(Workspace);
@@ -66,6 +65,31 @@ export const addUserToWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
-// TODO - separate the logic of adding a user to a workspace into add and join
-// add -> the admins or owner can add a user to the workspace
-// join -> the user can join a workspace using a join code
+export const getWorkspace = catchAsync(async (req, res, next) => {
+  const workspaceId = req.params.id; // TODO - populate everything ¬_¬
+  const workspace = await Workspace.findById(workspaceId).populate({
+    path: "members",
+  });
+
+  // check if the workspace exists
+  if (!workspace) {
+    return next(
+      new AppError(`Cannot find document with ID: ${workspaceId}`, 404)
+    );
+  }
+
+  // Send the workspace id as a cookie
+  res.cookie("workspace", workspaceId, {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+  });
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    data: workspace,
+  });
+});

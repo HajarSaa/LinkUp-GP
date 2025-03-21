@@ -52,4 +52,3 @@ export const validateResources = (resources) => {
   };
 };
 
-// TODO - add this validation on all post requests across all controllers
