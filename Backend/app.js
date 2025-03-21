@@ -38,12 +38,14 @@ app.use(globalErrorHandeler);
 
 export default app;
 
-// TODO - Implement me endpoint for the user to get his data
 // TODO - implement myUserProfile endpoint
 
 // TODO - Add functionality of user update his data (updateMe)
 // TODO - Add functionality of user updating his password (updatePassword)
 // TODO - Add functionality of user deleting his account (deleteMe)
+
+// TODO - Edit the conversations logic (not to be created automatically when user joins) 
+// TODO - Instead, the user creates a converation between him and another member
 
 // TODO - Complete the nested routes for all resources and handle them separately in postman
 // TODO - Implement the forget password and reset Password functionality

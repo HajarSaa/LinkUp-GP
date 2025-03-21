@@ -5,6 +5,7 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  getMe,
 } from "../controllers/user.controller.js";
 import { protect } from "../middlewares/authMiddleware.js";
 
@@ -14,8 +15,9 @@ router.use(protect);
 router
   .get("/", getAllUsers)
   .post("/", createUser)
-  .get("/:id", getUser)
   .patch("/:id", updateUser)
-  .delete("/:id", deleteUser);
+  .delete("/:id", deleteUser)
+  .get("/me", getMe)
+  .get("/:id", getUser);
 
 export default router;
