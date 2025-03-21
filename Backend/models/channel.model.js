@@ -38,7 +38,6 @@ channelSchema.index({ workspaceId: 1 });
 // By type (public or private)
 channelSchema.index({ type: 1 });
 
-// TODO handle deleting messages when a channel is deleted
 
 const Channel = mongoose.model("Channel", channelSchema);
 export default Channel;

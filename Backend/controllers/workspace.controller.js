@@ -66,6 +66,4 @@ export const addUserToWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
-// TODO - separate the logic of adding a user to a workspace into add and join
-// add -> the admins or owner can add a user to the workspace
-// join -> the user can join a workspace using a join code
+

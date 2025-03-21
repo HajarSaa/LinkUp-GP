@@ -98,7 +98,6 @@ export const restrictTo = (...roles) => {
   };
 };
 
-// TODO - Implement middlewares to check if the user is member of the (workspace,channel,conversation) or not
 // export const isMember = (Model, field) => {
 //   return catchAsync(async (req, res, next) => {
 //     const doc = await Model.findById(req.params.id);

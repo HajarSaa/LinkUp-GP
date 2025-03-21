@@ -25,11 +25,8 @@ const workspaceSchema = new mongoose.Schema(
       type: String,
     },
     settings: {
-      //  TODO - Search how to store settings
-      // TODO - How to handle settings of the workspace like theme, notifications, limits, etc
       type: Object,
       default: {},
-      // TODO - Add default settings
     },
   },
   { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
@@ -109,10 +106,6 @@ workspaceSchema.methods.createMemberConversations = async function () {
     await Conversation.insertMany(conversations);
   }
 };
-
-// TODO - Implement deletion of workspace and
-// TODO - handle deleting the workspace drom every user's workspace array
-// TODO - handle deleting all conversations and channels associated with the workspace
 
 const Workspace = mongoose.model("Workspace", workspaceSchema);
 export default Workspace;

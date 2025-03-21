@@ -37,3 +37,31 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorHandeler);
 
 export default app;
+
+// TODO - Implement me endpoint for the user to get his data
+// TODO - implement myUserProfile endpoint
+
+// TODO - Add functionality of user update his data (updateMe)
+// TODO - Add functionality of user updating his password (updatePassword)
+// TODO - Add functionality of user deleting his account (deleteMe)
+
+// TODO - Complete the nested routes for all resources and handle them separately in postman
+// TODO - Implement the forget password and reset Password functionality
+
+// TODO - add the validation resouces on all post requests across all controllers
+
+// TODO - Implement middlewares to check if the user is member of the (workspace,channel,conversation) or not
+
+// TODO - Implement deletion of workspace and
+// TODO - handle deleting the workspace drom every user's workspace array
+// TODO - handle deleting all conversations and channels associated with the workspace
+// TODO - Search how to store settings
+// TODO - How to handle settings of the workspace like theme, notifications, limits, etc
+// TODO - Add default settings
+
+// TODO handle deleting messages when conversation is deleted
+// TODO handle deleting messages when a channel is deleted
+
+// TODO - separate the logic of adding a user to a workspace into add and join
+// TODO - add -> the admins or owner can add a user to the workspace
+// TODO - join -> the user can join a workspace using a join code
