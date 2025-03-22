@@ -66,7 +66,7 @@ export const addUserToWorkspace = catchAsync(async (req, res, next) => {
 });
 
 export const getWorkspace = catchAsync(async (req, res, next) => {
-  const workspaceId = req.params.id; // TODO - populate everything ¬_¬
+  const workspaceId = req.params.id; // TODO - populate everything ¬_¬ also virtuals
   const workspace = await Workspace.findById(workspaceId).populate({
     path: "members",
   });

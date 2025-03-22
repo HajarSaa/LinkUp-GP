@@ -39,7 +39,9 @@ app.use(globalErrorHandeler);
 export default app;
 
 // TODO - Modify all the controllers that require the workspaceId or userProfileId and make them acces through the request
-// TODO - implement myUserProfile endpoint
+
+// TODO - Implement virtual populate for the messages in channel and conversation
+// TODO - allow getting messages using pagination 
 
 // TODO - Add functionality of user update his data (updateMe)
 // TODO - Add functionality of user updating his password (updatePassword)
