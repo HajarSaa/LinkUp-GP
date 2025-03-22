@@ -26,10 +26,6 @@ const fileSchema = new mongoose.Schema(
       ref: "Conversation",
       default: null,
     },
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-    },
     // parentMessageId: {
     //   type: mongoose.Schema.ObjectId,
     //   refPath: "parentType",

@@ -8,7 +8,6 @@ import {
   joinChannel,
   leaveChannel,
 } from "../controllers/channel.controller.js";
-import { attachUserProfileData } from "../utils/attchData.js";
 import {
   protect,
   protectAttchWorkspace,
@@ -25,11 +24,11 @@ router.use("/:channelId/messages", messageRouter);
 
 router
   .get("/", getAllChannels)
-  .post("/", attachUserProfileData("createdBy"), createChannel)
+  .post("/", createChannel)
   .get("/:id", getChannel)
   .patch("/:id", updateChannel)
   .delete("/:id", deleteChannel)
-  .post("/:id/join", attachUserProfileData("userId"), joinChannel)
-  .post("/:id/leave", attachUserProfileData("userId"), leaveChannel);
+  .post("/:id/join", joinChannel)
+  .post("/:id/leave", leaveChannel);
 
 export default router;

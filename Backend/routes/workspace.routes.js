@@ -11,7 +11,7 @@ import {
   protect,
   protectAttchWorkspace,
 } from "../middlewares/authMiddleware.js";
-import { attachUserData, attachUserProfileData } from "../utils/attchData.js";
+import { attachUserData } from "../utils/attchData.js";
 import channelRouter from "./channel.routes.js";
 const router = express.Router();
 

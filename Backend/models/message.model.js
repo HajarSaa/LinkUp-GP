@@ -11,11 +11,6 @@ const messageSchema = new mongoose.Schema(
       ref: "UserProfile",
       required: true,
     },
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-      required: true,
-    },
     channelId: {
       type: mongoose.Schema.ObjectId,
       ref: "Channel",

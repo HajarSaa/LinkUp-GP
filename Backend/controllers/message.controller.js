@@ -16,6 +16,8 @@ export const deleteMessage = deleteOne(Message);
 
 // export const createMessage = createOne(Message);
 export const createMessage = catchAsync(async (req, res, next) => {
+  // Attach data into request body
+  req.body.createdBy = req.userProfile.id;
   if (req.params.channelId) req.body.channelId = req.params.channelId;
   if (req.params.conversationId) req.body.channelId = req.params.conversationId;
 
@@ -28,23 +30,3 @@ export const createMessage = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-export const validateMessageData = catchAsync(
-  validateResources([
-    {
-      model: "Workspace",
-      field: "workspaceId",
-      value: "req.body.workspaceId",
-    },
-    {
-      model: "Channel",
-      field: "channelId",
-      value: "req.body.channelId",
-    },
-    {
-      model: "Conversation",
-      field: "conversationId",
-      value: "req.body.conversationId",
-    },
-  ])
-);

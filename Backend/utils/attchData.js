@@ -11,21 +11,3 @@ export const attachUserData = (fieldMappings) => {
     next();
   };
 };
-
-// Attach user profile data to request body
-export const attachUserProfileData = (field) => {
-  return async (req, res, next) => {
-    // Find user profile based on workspace
-    const userProfile = await UserProfile.findOne({
-      workspace: req.body.workspaceId || req.params.workspaceId,
-      user: req.user.id,
-    });
-
-    if (!userProfile) {
-      return next(new AppError("User profile not found", 404));
-    }
-
-    req.body[field] = userProfile.id;
-    next();
-  };
-};

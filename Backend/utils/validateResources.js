@@ -51,4 +51,3 @@ export const validateResources = (resources) => {
     next();
   };
 };
-
