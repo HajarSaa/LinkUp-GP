@@ -13,16 +13,11 @@ import {
   protect,
   protectAttchWorkspace,
 } from "../middlewares/authMiddleware.js";
-import { attachUserData } from "../utils/attchData.js";
 
 const router = express.Router();
 
 router.use(protect);
-router.post(
-  "/",
-  attachUserData({ user: "id", email: "email" }),
-  createUserProfile
-);
+router.post("/", createUserProfile);
 
 router.use(protectAttchWorkspace);
 router

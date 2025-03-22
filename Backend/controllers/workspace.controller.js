@@ -12,14 +12,22 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 
 export const getAllWorkspaces = getAll(Workspace);
-export const createWorkspace = createOne(Workspace);
 export const updateWorkspace = updateOne(Workspace);
 export const deleteWorkspace = deleteOne(Workspace);
 
-export const attchCreatedByToWorkspace = (req, res, next) => {
+export const createWorkspace = catchAsync(async (req, res, next) => {
+  // Attach data into request body
   req.body.createdBy = req.user.id;
-  next();
-};
+
+  const workspace = await Workspace.create(req.body);
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      workspace,
+    },
+  });
+});
 
 // Adds user to workspace
 export const addUserToWorkspace = catchAsync(async (req, res, next) => {

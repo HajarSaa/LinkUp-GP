@@ -11,7 +11,6 @@ import {
   protect,
   protectAttchWorkspace,
 } from "../middlewares/authMiddleware.js";
-import { attachUserData } from "../utils/attchData.js";
 const router = express.Router();
 
 router.use(protect);
@@ -20,7 +19,7 @@ router.get("/:id", getWorkspace);
 
 router
   .get("/", getAllWorkspaces)
-  .post("/", attachUserData({ createdBy: "id" }), createWorkspace)
+  .post("/", createWorkspace)
   .patch("/:id", updateWorkspace)
   .delete("/:id", deleteWorkspace)
   .post("/addUser", addUserToWorkspace);

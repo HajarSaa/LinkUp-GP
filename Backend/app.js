@@ -38,24 +38,23 @@ app.use(globalErrorHandeler);
 
 export default app;
 
-// TODO - Modify all the controllers that require the workspaceId or userProfileId and make them acces through the request
+// TODO - Implement update controllers for workspace , channels, messages (like updateMyProfile)
+
 
 // TODO - Implement virtual populate for the messages in channel and conversation
-// TODO - allow getting messages using pagination 
+// TODO - allow getting messages using pagination
 
 // TODO - separate the logic of adding a user to a workspace into add and join
 // TODO - add -> the admins or owner can add a user to the workspace
 // TODO - join -> the user can join a workspace using a join code
-
 
 // TODO - Add functionality of user update his data (updateMe)
 // TODO - Add functionality of user deleting his account (deleteMe)
 // TODO - Add functionality of user updating his password (updatePassword)
 // TODO - Implement the forget password and reset Password functionality
 
-// TODO - Edit the conversations logic (not to be created automatically when user joins) 
+// TODO - Edit the conversations logic (not to be created automatically when user joins)
 // TODO - Instead, the user creates a converation between him and another member
-
 
 // TODO - add the validation resouces on all post requests across all controllers
 
@@ -70,4 +69,3 @@ export default app;
 
 // TODO handle deleting messages when conversation is deleted
 // TODO handle deleting messages when a channel is deleted
-

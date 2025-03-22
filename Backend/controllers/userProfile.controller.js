@@ -10,9 +10,22 @@ import {
 
 export const getAllUserProfiles = getAll(UserProfile);
 export const getUserProfile = getOne(UserProfile);
-export const createUserProfile = createOne(UserProfile);
 export const updateUserProfile = updateOne(UserProfile);
 export const deleteUserProfile = deleteOne(UserProfile);
+
+export const createUserProfile = catchAsync(async (req, res, next) => {
+  // Attach data into request body
+  req.body.user = req.user.id;
+  req.body.email = req.user.email;
+  const userProfile = await UserProfile.create(req.body);
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      userProfile,
+    },
+  });
+});
 
 export const updateMyProfile = catchAsync(async (req, res, next) => {
   // Create error if user POSTs password data
