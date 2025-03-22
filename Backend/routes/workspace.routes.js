@@ -12,13 +12,9 @@ import {
   protectAttchWorkspace,
 } from "../middlewares/authMiddleware.js";
 import { attachUserData } from "../utils/attchData.js";
-import channelRouter from "./channel.routes.js";
 const router = express.Router();
 
 router.use(protect);
-
-// Re-route into channel router
-router.use("/:workspaceId/channels", channelRouter);
 
 router.get("/:id", getWorkspace);
 

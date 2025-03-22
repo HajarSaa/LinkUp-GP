@@ -14,7 +14,7 @@ import {
 } from "../middlewares/authMiddleware.js";
 import messageRouter from "./message.routes.js";
 
-const router = express.Router({ mergeParams: true });
+const router = express.Router();
 
 router.use(protect);
 router.use(protectAttchWorkspace);
