@@ -1,39 +1,37 @@
 import Conversation from "../models/converstion.model.js";
 import File from "../models/file.model.js";
+import AppError from "../utils/appError.js";
+import catchAsync from "../utils/catchAsync.js";
 
-export const uploadFile = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded!" });
-    }
-
-    const { workspaceId, channelId, conversationId, parentMessageId } =
-      req.body;
-
-    const fileUrl = req.file.path;
-    console.log(req.file);
-    const file = new File({
-      fileName: req.file.originalname,
-      fileSize: req.file.size,
-      fileType: req.file.mimetype,
-      fileUrl: fileUrl,
-      uploadedBy: req.user.id,
-      workspaceId,
-      channelId: channelId || null,
-      conversationId: conversationId || null,
-      parentMessageId: parentMessageId || null,
-      parentType: parentMessageId ? "Message" : null,
-    });
-
-    await file.save();
-    await conversation.res.status(201).json({
-      message: "File uploaded successfully!",
-      file,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Upload failed",
-      error: error.message,
-    });
+export const uploadFile = catchAsync(async (req, res, next) => {
+  if (!req.files || req.files.length === 0) {
+    return next(new AppError("No files uploaded!", 400));
   }
-};
+
+  const { workspaceId, channelId, conversationId, parentMessageId } = req.body;
+
+  // Create array of file objects
+  const files = await Promise.all(
+    req.files.map(async (file) => {
+      const fileUrl = file.path;
+
+      return await File.create({
+        fileName: file.originalname,
+        fileSize: file.size,
+        fileType: file.mimetype,
+        fileUrl: fileUrl,
+        uploadedBy: req.user.id,
+        workspaceId,
+        channelId: channelId || null,
+        conversationId: conversationId || null,
+        parentMessageId: parentMessageId || null,
+        parentType: parentMessageId ? "Message" : null,
+      });
+    })
+  );
+
+  return res.status(201).json({
+    message: "Files uploaded successfully!",
+    files,
+  });
+});
