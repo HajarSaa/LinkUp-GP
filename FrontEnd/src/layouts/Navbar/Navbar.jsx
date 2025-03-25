@@ -21,7 +21,7 @@ function Navbar() {
         <img src={ClockIcon} alt="clock-icon" className={styles.icons_left} />
       </div>
       <div className={styles.Navbar__search}>
-        <input placeholder="Search here..." />
+        <input name="search" placeholder="Search here..." />
         <img src={SearchIcon} alt="search-icon" />
       </div>
       <div className={styles.Navbar__right}>

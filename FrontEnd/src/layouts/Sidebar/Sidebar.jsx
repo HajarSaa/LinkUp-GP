@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import styles from "./Sidebar.module.css";
 // import SidebarOption from "../SidebarOptions/SidebarOption";
 // import CreateIcon from "../../assets/icons/new-message.svg";
@@ -71,13 +72,44 @@ import ConnectIcon from "../../assets/icons/connect.svg";
 import FilesIcon from "../../assets/icons/files.svg";
 import MoreIcon from "../../assets/icons/more.svg";
 import CaretDownIcon from "../../assets/icons/caret-down.svg";
-import HashtagIcon from "../../assets/icons/hashtag-thin.svg";
+import { FaCaretDown, FaPlus } from "react-icons/fa";
+import { FaHashtag } from "react-icons/fa";
 import PlusIcon from "../../assets/icons/plus.svg";
 import UserIcon from "../../assets/icons/user.svg";
 import BotIcon from "../../assets/icons/bot.svg";
+import mockChannels from "../../API/services/mockChannels";
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { openCreateChannel } from "../../API/redux/chat/channel/modalSlice";
+import {
+  closeChannelMenu,
+  openChannelMenu,
+} from "../../API/redux/chat/channel/addChannelMenuSlice";
+import ChannelItem from "../../components/Chat/channel/SideBar/ChannelItem/ChannelItem";
+import ChannelsList from "../../components/Chat/channel/SideBar/ChannelList/ChannelList";
 function Sidebar() {
+  const dispatch = useDispatch();
+  const [showChannels, setShowChannels] = useState(true);
+  const channelsRef = useRef(null);
+  const toggleChannels = () => setShowChannels(!showChannels);
+  //
+  const isMenuOpen = useSelector((state) => state.addChannelMenu.isOpen);
+  //
+
+  function handleClose(e) {
+    if (e.target === e.currentTarget) {
+      dispatch(closeChannelMenu());
+    }
+  }
+
+  function handleCreateButton() {
+    dispatch(closeChannelMenu());
+    dispatch(openCreateChannel());
+  }
+
   return (
-    <div className={styles.sidebar}>
+    <div className={`${styles.sidebar} ${isMenuOpen ? styles.unScroll : ""}`}>
       <div className={styles.sidebar__Navbar}>
         <div className={styles.sidebar__info}>
           <h2>Web development</h2>
@@ -127,27 +159,68 @@ function Sidebar() {
 
       <hr />
 
-      <div className={styles.sidebarOption}>
-        <img src={CaretDownIcon} alt="Channels" className={styles.icon} />
-        <h3>Channels</h3>
-      </div>
-      <div className={styles.sidebarOption}>
-        <img src={HashtagIcon} alt="01-announcements" className={styles.icon} />
-        <h3>01-announcements</h3>
-      </div>
-      <div className={styles.sidebarOption}>
-        <img src={HashtagIcon} alt="02-community" className={styles.icon} />
-        <h3>02-community</h3>
-      </div>
-      <div className={styles.sidebarOption}>
-        <img src={HashtagIcon} alt="03-talk-random" className={styles.icon} />
-        <h3>03-talk-random</h3>
-      </div>
-      <div className={styles.sidebarOption}>
-        <img src={PlusIcon} alt="Add channel" className={styles.icon} />
-        <h3>Add channel</h3>
-      </div>
+      {/* Channels list */}
+      <ChannelsList />
 
+      {/* <div className={styles.sidebarOption} onClick={toggleChannels}>
+        <FaCaretDown
+          alt="Channels"
+          className={`${styles.icon} ${!showChannels ? styles.rotate : ""}`}
+        />
+        <h3 style={{ userSelect: "none" }}>Channels</h3>
+      </div> */}
+
+      {/* Display Channels From Response*/}
+      {/* <div
+        ref={channelsRef}
+        className={`${styles.channelList} ${
+          showChannels ? styles.open : styles.closed
+        }`}
+      >
+        {mockChannels.map((channel) => (
+          <Link
+            to={`/channels/${channel.id}`}
+            className={styles.sidebarOption}
+            key={channel.id}
+          >
+            <FaHashtag alt={channel.name} className={styles.icon} />
+            <h3>
+              <span>{`${channel.id}`.padStart(2, 0)}</span> -{" "}
+              <span className={styles.channelName}>{channel.name}</span>
+            </h3>
+          </Link>
+        ))}
+        {mockChannels.map((channel) => (
+          <ChannelItem key={channel.id} {...channel} />
+        ))}
+
+        <div className={styles.addChannelContainer}>
+          <div
+            className={styles.sidebarOption}
+            onClick={() => dispatch(openChannelMenu())}
+          >
+            <FaPlus alt="Add channel" className={styles.icon} />
+            <h3>Add channel</h3>
+          </div>
+          {isMenuOpen && (
+            <div className={styles.addChannelMenu}>
+              <div
+                className={styles.channelMenuItem}
+                onClick={handleCreateButton}
+              >
+                Create a new channel
+              </div>
+              <Link
+                to={`/channels`}
+                className={styles.channelMenuItem}
+                onClick={() => dispatch(closeChannelMenu())}
+              >
+                Browse Channels
+              </Link>
+            </div>
+          )}
+        </div>
+      </div> */}
       <hr />
 
       <div className={styles.sidebarOption}>
@@ -193,6 +266,9 @@ function Sidebar() {
         <img src={PlusIcon} alt="Add apps" className={styles.icon} />
         <h3>Add apps</h3>
       </div>
+      {isMenuOpen && (
+        <div className={styles.overlay} onClick={handleClose}></div>
+      )}
     </div>
   );
 }

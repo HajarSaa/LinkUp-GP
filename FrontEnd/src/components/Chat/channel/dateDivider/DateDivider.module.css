@@ -1,0 +1,25 @@
+/* src/components/UI/DateDivider.module.css */
+.dateDivider {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.dateText {
+    padding: 4px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #606060;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.dateDivider::before,
+.dateDivider::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid #e0e0e0;
+    margin: 0 10px;
+}

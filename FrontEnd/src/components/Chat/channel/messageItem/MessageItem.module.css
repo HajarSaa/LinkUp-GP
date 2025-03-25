@@ -1,0 +1,94 @@
+.messageItem {
+    background-color: var(--bg-white);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.messageItem>div {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.messageItem>div:hover {
+    background-color: var(--bg-white-hover);
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.avatar>img {
+    max-width: 100%;
+}
+
+.messageContent {
+    flex: 1;
+}
+
+.username {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.username:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.time {
+    color: #888;
+    font-size: 12px;
+}
+
+.text {
+    margin: 5px 0;
+    color: var(--text-color-black);
+}
+
+.reactions {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.icon {
+    cursor: pointer;
+    color: #888;
+    margin-right: 5px;
+}
+
+.reaction,
+.addrReact {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    font-size: 14px;
+    background-color: var(--reaction-bg);
+    border: 1px solid var(--reaction-border);
+    color: var(--reaction-text);
+    border-radius: 15px;
+    padding: 3px 10px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.addrReact {
+    font-size: 19px;
+    background-color: var(--gray-light);
+    border: 1px solid var(--gray-light);
+    color: #000;
+}
+
+/*Start Attachements */
+.attachmentImage {
+    width: 40px;
+    height: 20px;
+}
+
+/* End Attachements */
