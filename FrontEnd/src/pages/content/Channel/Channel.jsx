@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import mockChannels from "../../../API/services/mockChannels";
 import styles from "./Channel.module.css";
-import Header from "../../../components/Chat/channel/header/Header";
+import Header from "../../../components/Chat/channel/Header/Header";
 import DateDivider from "../../../components/Chat/channel/dateDivider/DateDivider";
 import MessageItem from "../../../components/Chat/channel/messageItem/MessageItem";
 import MessageInput from "../../../components/Chat/channel/messageInput/MessageInput";
@@ -25,6 +25,7 @@ const Channel = () => {
     <div className={styles.mainContentContainer}>
       <div className={styles.channelContainer}>
         <Header channel={channel} />
+        {/* <ChannelHeader/> */}
         {/* Messages*/}
         <div className={styles.messageContainer}>
           {channel.messages.map((message) => (

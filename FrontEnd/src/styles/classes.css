@@ -1,21 +1,32 @@
+.vis-hidden {
+    visibility: hidden;
+}
+
+/* width */
+.w-100{
+    width: 100%;
+}
+
+
+/* start flex */
+.d-flex {
+    display: flex;
+}
+
 .align-items-center {
     display: flex;
     align-items: center;
-}
-
-.vis-hidden {
-    visibility: hidden;
 }
 
 .justify-content-between {
     display: flex;
     justify-content: space-between;
 }
-
-.d-flex {
-    display: flex;
+.gap-8 {
+    gap: 8px;
 }
 
+/* end flex */
 .overlay {
     position: fixed;
     top: 0;
@@ -52,10 +63,7 @@
     background: #ddd;
     margin: 5px 0;
 }
-/* Global */
-.gap-8{
-    gap: 8px;
-}
+
 
 /* side Bar classes */
 
@@ -81,4 +89,9 @@
 .iconsPadding {
     padding: 3px;
     border-radius: 3px;
+}
+
+/* transform */
+.rotateY-180{
+    transform: rotateY(180deg);
 }

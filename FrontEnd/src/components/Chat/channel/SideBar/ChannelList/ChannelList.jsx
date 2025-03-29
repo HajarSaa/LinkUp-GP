@@ -1,48 +1,50 @@
-import { useState } from "react";
+/* eslint-disable no-unused-vars */
+import { useEffect, useState } from "react";
 import ChannelHeader from "../ChannelHeader/ChannelHeader";
 import ChannelItem from "../ChannelItem/ChannelItem";
 import styles from "./ChannelList.module.css";
 import AddButton from "../../../../UI/Buttons/AddButton/AddButton";
+import mockChannels from "../../../../../API/services/mockChannels";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChannels } from "../../../../../API/redux/chat/channel/channelsSlice";
 
-const mockChannels = [
-  { id: 1, name: "general", isPrivate: false },
-  { id: 2, name: "random", isPrivate: false },
-  { id: 3, name: "team-discussions", isPrivate: true, isActive: true },
-];
+// const mockChannels = [
+//   { id: 1, name: "general", isPrivate: false },
+//   { id: 2, name: "random", isPrivate: false },
+//   { id: 3, name: "team-discussions", isPrivate: true, isActive: true },
+// ];
 
 const ChannelsList = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeChannel, setActiveChannel] = useState(null);
+  const dispatch = useDispatch();
+  const { list: channels } = useSelector((state) => state.channels);
 
   const handleToggle = (openState) => {
     setIsOpen(openState);
   };
 
-  const handleChannelClick = (id) => {
-    setActiveChannel(id);
-  };
-
   const handleAddChannel = () => {
     console.log("Add Channel Clicked!");
   };
+  useEffect(() => {
+    dispatch(fetchChannels());
+  }, [dispatch]);
+
 
   return (
     <div className={styles.container}>
-      <ChannelHeader
-        isAnyChannelActive={activeChannel !== null}
-        onToggle={handleToggle}
-      />
-      {isOpen || activeChannel ? (
+      <ChannelHeader onToggle={handleToggle} />
+      {isOpen ? (
         <>
           <div className={styles.list}>
-            {mockChannels.map((channel) => (
+            {channels.map((channel) => (
               <ChannelItem
                 key={channel.id}
                 id={channel.id}
                 name={channel.name}
                 isPrivate={channel.isPrivate}
                 isActive={+activeChannel === channel.id}
-                onClick={() => handleChannelClick(channel.id)}
               />
             ))}
           </div>

@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import styles from "./ChannelItem.module.css";
 import { FaLock, FaHashtag } from "react-icons/fa";
 import PropTypes from "prop-types";
@@ -9,7 +7,7 @@ const ChannelItem = ({ id, name, isActive, hasUnread, isPrivate}) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // navigate(`/channel/${id}`);
+    navigate(`/channels/${id}`);
   };
 
   return (

@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { FaCaretDown, FaCaretRight, FaChevronDown } from "react-icons/fa";
 import styles from "./ChannelHeader.module.css";
+import { useDispatch } from "react-redux";
+import { openConvActionModal } from "../../../../../API/redux/modals/convActionModal";
+import ConvActionsModal from '../../../../UI/Modal/ConvActionModal/ConvActionsModal';
+
 
 const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const dispacth = useDispatch();
+  const buttonRef = useRef(null);
 
   const handleToggle = () => {
     if (!isAnyChannelActive) {
@@ -14,22 +20,26 @@ const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
   };
 
   return (
-    <div className={styles.header}>
-      <span
-        className={`iconsPadding align-items-center sideBarHover`}
-        onClick={handleToggle}
-      >
-        {isOpen || isAnyChannelActive ? <FaCaretDown /> : <FaCaretRight />}
-      </span>
-      <div
-        className={`${styles.title} iconsPadding sideBarHover align-items-center gap-8`}
-      >
-        Channels
-        <span className={`${styles.icon} align-items-center`}>
-          <FaChevronDown />
+    <>
+      <div className={styles.header} ref={buttonRef}>
+        <span
+          className={`iconsPadding align-items-center sideBarHover`}
+          onClick={handleToggle}
+        >
+          {isOpen || isAnyChannelActive ? <FaCaretDown /> : <FaCaretRight />}
         </span>
+        <div
+          className={`${styles.title} iconsPadding sideBarHover align-items-center gap-8`}
+          onClick={() => dispacth(openConvActionModal())}
+        >
+          Channels
+          <span className={`${styles.icon} align-items-center`}>
+            <FaChevronDown />
+          </span>
+        </div>
       </div>
-    </div>
+      <ConvActionsModal targetRef={buttonRef} />
+    </>
   );
 };
 
