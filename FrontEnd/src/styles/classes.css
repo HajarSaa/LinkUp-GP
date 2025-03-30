@@ -25,6 +25,9 @@
 .gap-8 {
     gap: 8px;
 }
+.gap-3{
+    gap: 3px;
+}
 
 /* end flex */
 .overlay {
@@ -91,7 +94,26 @@
     border-radius: 3px;
 }
 
+.padd-3{
+    padding: 3px;
+}
+
 /* transform */
 .rotateY-180{
     transform: rotateY(180deg);
 }
+
+/* Start Font */
+.f-bold{
+    font-weight: bold;
+}
+.f-15{
+    font-weight: 15px;
+}
+.f-16{
+    font-size: 16px;
+}
+.f-18{
+    font-size: 18px;
+}
+/* End Font */

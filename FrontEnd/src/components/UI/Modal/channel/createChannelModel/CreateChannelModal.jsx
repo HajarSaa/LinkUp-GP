@@ -16,7 +16,6 @@ const CreateChannelModal = () => {
   const dispatch = useDispatch()
   if (!isModalOpen) return;
   return (
-    <div className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.config}>
           <h2>Channel details</h2>
@@ -135,7 +134,6 @@ const CreateChannelModal = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

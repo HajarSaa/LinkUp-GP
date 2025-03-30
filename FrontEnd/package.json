@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fontsource/lato": "^5.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@reduxjs/toolkit": "^2.6.1",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

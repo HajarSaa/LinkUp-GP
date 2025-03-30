@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import threadReducer from "./chat/channel/threadSlice";
-import channelDetailsReducer from "./chat/channel/channelDetailsSlice";
+import channelDetailsReducer from "./modals/channelDetailsSlice";
 import profilePanelReducer from "./chat/channel/profilePanelSlice";
 import modalReducer from "./chat/channel/modalSlice";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";

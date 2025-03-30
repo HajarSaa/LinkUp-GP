@@ -4,7 +4,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import styles from "./ChannelOptionModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { closeMenu } from "../../../../../API/redux/chat/channel/channelMenuSlice";
-import { openChannelDetails } from "../../../../../API/redux/chat/channel/channelDetailsSlice";
+import { openChannelDetails } from "../../../../../API/redux/modals/channelDetailsSlice";
 import { openNotificationsModel } from "../../../../../API/redux/chat/channel/notificationsModelSlice";
 import Overlay from "../../Overlay/Overlay";
 

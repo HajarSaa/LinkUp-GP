@@ -10,14 +10,11 @@ import Register from "./pages/auth/Register";
 import Channel from "./pages/content/Channel/Channel";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import { Routes, Route } from "react-router-dom";
-// import ChannelDetails from "./components/Chat/channel/channelDetails/ChannelDetails";
 import { useSelector } from "react-redux";
-// import CreateChannelModal from "./components/Chat/channel/createChannelModel/CreateChannelModal";
-// import AddPeopleModal from "./components/Chat/channel/addPeopleModal/AddPeopleModal";
 import BrowseChannels from "./pages/content/browseChannels/BrowseChannels";
-// import NotificationsModal from "./components/Chat/channel/header/channelMenu/notifiactionModel/NotificationsModel";
-// import Models from "./Models";
-// import ConvActionsModal from "./components/UI/Modal/ConvActionModal/ConvActionsModal";
+import FullModals from "./FullModals";
+import ChannelDetailsModal from "./components/UI/Modal/channel/ChannelDetailsModal/ChannelDetailsModal";
+
 
 function App() {
   return (
@@ -32,7 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
       </Routes>
       {/* models */}
-      {/* <Models /> */}
+      <FullModals />
     </div>
   );
 }
