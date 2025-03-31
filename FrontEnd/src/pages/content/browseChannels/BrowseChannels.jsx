@@ -1,53 +1,62 @@
 import styles from "./BrowseChannels.module.css";
-import {
-  FaLock,
-  FaHashtag,
-  FaChevronDown,
-  FaCheck,
-} from "react-icons/fa";
+import { FaLock, FaHashtag, FaChevronDown, FaCheck } from "react-icons/fa";
 
 import mockChannels from "../../../API/services/mockChannels";
 import { BsDot } from "react-icons/bs";
-import { GoSearch } from "react-icons/go";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { openCreateChannel } from "../../../API/redux/chat/channel/modalSlice";
+import SearchInput from "../../../components/UI/InputField/SearchInput/SearchInput";
 // import { useState } from "react";
 
 const BrowseChannels = () => {
   const isJoin = true;
   const [isHovered, setIsHovered] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   return (
     <div className={styles.container}>
       <div className={`${styles.browesHeader} justify-content-between`}>
         <h2>All channels</h2>
-        <button className={styles.createBtn}
-          onClick={()=>dispatch(openCreateChannel())}
+        <button
+          className={styles.createBtn}
+          onClick={() => dispatch(openCreateChannel())}
         >
-          Create Channel</button>
+          Create Channel
+        </button>
       </div>
 
-      <div className={styles.searchBox}>
-        <GoSearch className={styles.searchIcon} />
-        <input type="text" placeholder="Search for channels" />
-      </div>
+      <SearchInput />
 
       <div className={styles.filters}>
         <div>
-          <span>All channels</span> <span className={`${styles.filterIcon} align-items-center`}><FaChevronDown /></span>
+          <span>All channels</span>{" "}
+          <span className={`${styles.filterIcon} align-items-center`}>
+            <FaChevronDown />
+          </span>
         </div>
         <div>
-          <span>Any channel type</span> <span className={`${styles.filterIcon} align-items-center`}><FaChevronDown /></span>
+          <span>Any channel type</span>{" "}
+          <span className={`${styles.filterIcon} align-items-center`}>
+            <FaChevronDown />
+          </span>
         </div>
         <div>
-          <span>Workspaces</span> <span className={`${styles.filterIcon} align-items-center`}><FaChevronDown /></span>
+          <span>Workspaces</span>{" "}
+          <span className={`${styles.filterIcon} align-items-center`}>
+            <FaChevronDown />
+          </span>
         </div>
         <div>
-          <span>Organisations</span> <span className={`${styles.filterIcon} align-items-center`}><FaChevronDown /></span>
+          <span>Organisations</span>{" "}
+          <span className={`${styles.filterIcon} align-items-center`}>
+            <FaChevronDown />
+          </span>
         </div>
         <div>
-          <span>A to Z</span> <span className={`${styles.filterIcon} align-items-center`}><FaChevronDown /></span>
+          <span>A to Z</span>{" "}
+          <span className={`${styles.filterIcon} align-items-center`}>
+            <FaChevronDown />
+          </span>
         </div>
       </div>
 
@@ -57,12 +66,13 @@ const BrowseChannels = () => {
             <div className={styles.header}>
               <div className={styles.headerText}>
                 <div className={styles.channelName}>
-                  {channel.isPrivate ? <FaLock /> : <FaHashtag />} {channel.name}
+                  {channel.isPrivate ? <FaLock /> : <FaHashtag />}{" "}
+                  {channel.name}
                 </div>
                 <span className={styles.viewChannel}>View Channel</span>
               </div>
               <div className={styles.buttonGroups}>
-                <button >Open in Home</button>
+                <button>Open in Home</button>
                 <button
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
@@ -72,7 +82,11 @@ const BrowseChannels = () => {
               </div>
             </div>
             <div className={styles.channelInfo}>
-              <div className={`${styles.status} ${isJoin ? styles.joined : styles.leaved}`}>
+              <div
+                className={`${styles.status} ${
+                  isJoin ? styles.joined : styles.leaved
+                }`}
+              >
                 <FaCheck className={styles.joinedIcon} />
                 <span>Joined</span>
                 <BsDot />

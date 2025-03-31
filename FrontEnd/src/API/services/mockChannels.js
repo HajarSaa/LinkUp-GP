@@ -25,6 +25,7 @@ const mockChannels = [
         role: "Admin",
         status: "Online",
         avatar: "/public/assets/avatars/ahmed.png",
+        displayName: "AYmoon",
       },
       {
         id: 2,
@@ -32,6 +33,7 @@ const mockChannels = [
         role: "Member",
         status: "Away",
         avatar: "/assets/avatars/omar.png",
+        displayName: "Mans",
       },
       {
         id: 3,
@@ -39,6 +41,7 @@ const mockChannels = [
         role: "Member",
         status: "Offline",
         avatar: "/assets/avatars/alaa.png",
+        displayName: "alaa",
       },
     ],
     messages: [
@@ -133,6 +136,7 @@ const mockChannels = [
         role: "Admin",
         status: "Online",
         avatar: "/assets/avatars/ahmed.png",
+        displayName: "AYmoon",
       },
       {
         id: 2,
@@ -140,6 +144,7 @@ const mockChannels = [
         role: "Member",
         status: "Do Not Disturb",
         avatar: "/assets/avatars/omar.png",
+        displayName: "Mans",
       },
     ],
     messages: [
