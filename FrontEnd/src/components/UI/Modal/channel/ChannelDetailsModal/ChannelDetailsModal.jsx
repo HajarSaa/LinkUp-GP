@@ -1,4 +1,4 @@
-import { IoIosClose } from "react-icons/io";
+import { IoIosClose, IoMdAdd } from "react-icons/io";
 import { BsArrowDown, BsArrowUp, BsBell, BsCopy } from "react-icons/bs";
 import styles from "./ChannelDetailsModal.module.css";
 import PropTypes from "prop-types";
@@ -22,9 +22,10 @@ import {
 } from "react-icons/md";
 import SearchInput from "../../../InputField/SearchInput/SearchInput";
 import { FiChevronDown } from "react-icons/fi";
-import { TbPin } from "react-icons/tb";
+import { TbMessageCircleFilled, TbPin } from "react-icons/tb";
 import { GoStack } from "react-icons/go";
 import { LuEye } from "react-icons/lu";
+import { RiStickyNoteAddLine } from "react-icons/ri";
 
 const ChannelDetailsModal = ({ channel }) => {
   const dispatch = useDispatch();
@@ -206,6 +207,17 @@ const ChannelDetailsModal = ({ channel }) => {
                     <div className={styles.tabItem}>
                       <div className={styles.leftSide}>
                         <span className="align-items-center">
+                          <TbMessageCircleFilled
+                            className="rotateY-180"
+                            size={20}
+                          />
+                        </span>
+                        <span className="align-items-center">Messages</span>
+                      </div>
+                    </div>
+                    <div className={styles.tabItem}>
+                      <div className={styles.leftSide}>
+                        <span className="align-items-center">
                           <TbPin size={20} />
                         </span>
                         <span className="align-items-center">Pins</span>
@@ -218,17 +230,78 @@ const ChannelDetailsModal = ({ channel }) => {
                           <BsArrowUp />
                         </span>
                         <span className="align-items-center">
-                          <BsArrowDown/>
+                          <BsArrowDown />
                         </span>
                       </div>
                     </div>
                     <div className={styles.tabItem}>
+                      <div className={styles.leftSide}>
+                        <span className="align-items-center">
+                          <RiStickyNoteAddLine size={20} />
+                        </span>
+                        <span className="align-items-center">Add canvas</span>
+                      </div>
+                      <div className={styles.rightActions}>
+                        <span className="align-items-center">
+                          <LuEye />
+                        </span>
+                        <span className="align-items-center">
+                          <BsArrowUp />
+                        </span>
+                        <span className="align-items-center">
+                          <BsArrowDown />
+                        </span>
+                      </div>
+                    </div>
+                    <div className={styles.tabItem}>
+                      <div className={styles.leftSide}>
+                        <span className="align-items-center">
+                          <GoStack size={20} />
+                        </span>
+                        <span className="align-items-center">Files</span>
+                      </div>
+                      <div className={styles.rightActions}>
+                        <span className="align-items-center">
+                          <LuEye />
+                        </span>
+                        <span className="align-items-center">
+                          <BsArrowUp />
+                        </span>
+                        <span className="align-items-center">
+                          <BsArrowDown />
+                        </span>
+                      </div>
+                    </div>
+                    <div className={styles.newTab}>
                       <span className="align-items-center">
-                        <GoStack size={20} />
+                        <IoMdAdd size={20} />
                       </span>
-                      <span className="align-items-center">Pins</span>
+                      <span className="align-items-center f-bold">New Tab</span>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* integrations tab */}
+          {activeTab === "integrations" && (
+            <div className={styles.integTabContent}>
+              <div className={styles.integTab}>
+                <div className={styles.intLeft}>
+                  <span className="align-items-center f-bold">Apps</span>
+                  <p>
+                    Bring the tools that you need into this channel to pull
+                    reports, start calls, file tickets and more.
+                  </p>
+                  <div className={styles.btnContainer}>
+                    <DetailsButton>Add an app</DetailsButton>
+                  </div>
+                </div>
+                <div className={styles.intImg}>
+                  <img
+                    src="/public/assets/images/integrations.png"
+                    alt="intImage"
+                  />
                 </div>
               </div>
             </div>
