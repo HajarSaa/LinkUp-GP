@@ -1,7 +1,6 @@
 import express from "express";
 
 import {
-  createUserProfile,
   deleteUserProfile,
   getAllUserProfiles,
   getUserProfile,
@@ -17,7 +16,6 @@ import {
 const router = express.Router();
 
 router.use(protect);
-router.post("/", createUserProfile);
 
 router.use(protectAttchWorkspace);
 router

@@ -38,9 +38,9 @@ app.use(globalErrorHandeler);
 
 export default app;
 
-// TODO - Implement update controllers for workspace , channels, messages (like updateMyProfile)
 
 
+// TODO - merge create userProfile and join workspace
 // TODO - Implement virtual populate for the messages in channel and conversation
 // TODO - allow getting messages using pagination
 
@@ -58,14 +58,16 @@ export default app;
 
 // TODO - add the validation resouces on all post requests across all controllers
 
-// TODO - Implement middlewares to check if the user is member of the (workspace,channel,conversation) or not
+// TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
+
+// TODO - Implement update controllers for workspace , channels, messages (like updateMyProfile)
 
 // TODO - Implement deletion of workspace and
 // TODO - handle deleting the workspace drom every user's workspace array
 // TODO - handle deleting all conversations and channels associated with the workspace
 // TODO - Search how to store settings
-// TODO - How to handle settings of the workspace like theme, notifications, limits, etc
-// TODO - Add default settings
-
 // TODO handle deleting messages when conversation is deleted
 // TODO handle deleting messages when a channel is deleted
+
+// TODO - How to handle settings of the workspace like theme, notifications, limits, etc
+// TODO - Add default settings

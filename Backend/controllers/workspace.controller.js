@@ -29,10 +29,18 @@ export const createWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
+
 // Adds user to workspace
-export const addUserToWorkspace = catchAsync(async (req, res, next) => {
+export const joinWorkspace = catchAsync(async (req, res, next) => {
+  // Create the userProfile
+  req.body.user = req.user.id;
+  req.body.email = req.user.email;
+  req.body.workspace = req.params.id;
+  const userProfile = await UserProfile.create(req.body);
+  const userProfileId = userProfile.id;
+
   // get the workspace id and the userProfile id from the request parameters
-  const { workspaceId, userProfileId } = req.body;
+  const workspaceId = req.params.id;
 
   // find the workspace by the workspace id
   const workspace = await Workspace.findById(workspaceId);

@@ -5,7 +5,7 @@ import {
   createWorkspace,
   updateWorkspace,
   deleteWorkspace,
-  addUserToWorkspace,
+  joinWorkspace,
 } from "../controllers/workspace.controller.js";
 import {
   protect,
@@ -22,6 +22,6 @@ router
   .post("/", createWorkspace)
   .patch("/:id", updateWorkspace)
   .delete("/:id", deleteWorkspace)
-  .post("/addUser", addUserToWorkspace);
+  .post("/:id/join", joinWorkspace);
 
 export default router;
