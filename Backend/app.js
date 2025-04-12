@@ -38,9 +38,18 @@ app.use(globalErrorHandeler);
 
 export default app;
 
+// ------------------------------------------------ NOW -------------------------------------------------- //
 
+// TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done
+// TODO - Implement deletion of workspace and
+// TODO - handle deleting the workspace from every user's workspace array
+// TODO - handle deleting all conversations and channels associated with the workspace
+// TODO - handle deleting conversation -> only messages are deleted
 
-// TODO - merge create userProfile and join workspace
+// ------------------------------------------------ next -------------------------------------------------- //
+// TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
+// TODO - Implement update controllers for workspace , channels, messages (like updateMyProfile)
+
 // TODO - Implement virtual populate for the messages in channel and conversation
 // TODO - allow getting messages using pagination
 
@@ -48,7 +57,6 @@ export default app;
 // TODO - add -> the admins or owner can add a user to the workspace
 // TODO - join -> the user can join a workspace using a join code
 
-// TODO - Add functionality of user update his data (updateMe)
 // TODO - Add functionality of user deleting his account (deleteMe)
 // TODO - Add functionality of user updating his password (updatePassword)
 // TODO - Implement the forget password and reset Password functionality
@@ -58,16 +66,6 @@ export default app;
 
 // TODO - add the validation resouces on all post requests across all controllers
 
-// TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
-
-// TODO - Implement update controllers for workspace , channels, messages (like updateMyProfile)
-
-// TODO - Implement deletion of workspace and
-// TODO - handle deleting the workspace drom every user's workspace array
-// TODO - handle deleting all conversations and channels associated with the workspace
-// TODO - Search how to store settings
-// TODO handle deleting messages when conversation is deleted
-// TODO handle deleting messages when a channel is deleted
-
 // TODO - How to handle settings of the workspace like theme, notifications, limits, etc
+// TODO - Search how to store settings
 // TODO - Add default settings

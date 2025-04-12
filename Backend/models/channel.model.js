@@ -30,14 +30,21 @@ const channelSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+// Virtual populate for messages
+channelSchema.virtual("messages", {
+  ref: "Message",
+  foreignField: "channelId",
+  localField: "_id",
+});
+
 // Indexes
 // Channels in the same workspace
 channelSchema.index({ workspaceId: 1 });
 // By type (public or private)
 channelSchema.index({ type: 1 });
-
 
 const Channel = mongoose.model("Channel", channelSchema);
 export default Channel;

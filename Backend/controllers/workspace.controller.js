@@ -29,14 +29,22 @@ export const createWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
-
 // Adds user to workspace
 export const joinWorkspace = catchAsync(async (req, res, next) => {
+  // Check if the user is already a member of the workspace
+  const userProfile = await UserProfile.findOne({
+    user: req.user.id,
+    workspace: req.params.id,
+  });
+  if (userProfile) {
+    return next(new AppError("User already in workspace", 400));
+  }
+
   // Create the userProfile
   req.body.user = req.user.id;
   req.body.email = req.user.email;
   req.body.workspace = req.params.id;
-  const userProfile = await UserProfile.create(req.body);
+  userProfile = await UserProfile.create(req.body);
   const userProfileId = userProfile.id;
 
   // get the workspace id and the userProfile id from the request parameters
@@ -82,7 +90,7 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
 });
 
 export const getWorkspace = catchAsync(async (req, res, next) => {
-  const workspaceId = req.params.id; // TODO - populate everything ¬_¬ also virtuals
+  const workspaceId = req.params.id;
   const workspace = await Workspace.findById(workspaceId).populate({
     path: "members",
   });
@@ -106,6 +114,8 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   // Send the response
   res.status(200).json({
     status: "success",
-    data: workspace,
+    data: {
+      workspace,
+    },
   });
 });

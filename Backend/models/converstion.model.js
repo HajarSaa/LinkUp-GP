@@ -26,13 +26,19 @@ const conversationSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+// Virtual populate for messages
+conversationSchema.virtual("messages", {
+  ref: "Message",
+  foreignField: "conversationId",
+  localField: "_id",
+});
 
 // Indexes
 // Conversations in the same workspace
 conversationSchema.index({ workspaceId: 1 });
-
 
 const Conversation = mongoose.model("Conversation", conversationSchema);
 export default Conversation;
