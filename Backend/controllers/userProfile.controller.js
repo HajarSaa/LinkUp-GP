@@ -1,7 +1,6 @@
 import UserProfile from "../models/userProfile.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import {
-  createOne,
   deleteOne,
   getAll,
   getOne,

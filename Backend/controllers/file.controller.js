@@ -1,4 +1,3 @@
-import Conversation from "../models/converstion.model.js";
 import File from "../models/file.model.js";
 
 export const uploadFile = async (req, res) => {

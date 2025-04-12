@@ -1,12 +1,6 @@
 import Conversation from "../models/converstion.model.js";
 import catchAsync from "../utils/catchAsync.js";
-import {
-  createOne,
-  deleteOne,
-  getAll,
-  getOne,
-  updateOne,
-} from "../utils/handlerFactory.js";
+import { getAll } from "../utils/handlerFactory.js";
 
 export const getAllConversations = getAll(Conversation);
 

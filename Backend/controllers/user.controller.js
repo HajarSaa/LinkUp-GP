@@ -7,7 +7,6 @@ import {
 } from "../utils/handlerFactory.js";
 import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
-import Workspace from "../models/workspace.model.js";
 
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);

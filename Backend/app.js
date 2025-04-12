@@ -44,7 +44,6 @@ export default app;
 // TODO - Implement deletion of workspace and
 // TODO - handle deleting the workspace from every user's workspace array
 // TODO - handle deleting all conversations and channels associated with the workspace
-// TODO - handle deleting conversation -> only messages are deleted
 
 // ------------------------------------------------ next -------------------------------------------------- //
 // TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not

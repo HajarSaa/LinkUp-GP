@@ -1,13 +1,11 @@
 import Message from "../models/message.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import {
-  createOne,
   deleteOne,
   getAll,
   getOne,
   updateOne,
 } from "../utils/handlerFactory.js";
-import { validateResources } from "../utils/validateResources.js";
 
 export const getAllMessages = getAll(Message);
 export const getMessage = getOne(Message);

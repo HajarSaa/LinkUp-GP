@@ -1,15 +1,8 @@
 import Channel from "../models/channel.model.js";
 import Message from "../models/message.model.js";
-import UserProfile from "../models/userProfile.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
-import {
-  createOne,
-  deleteOne,
-  getAll,
-  getOne,
-  updateOne,
-} from "../utils/handlerFactory.js";
+import { getAll, updateOne } from "../utils/handlerFactory.js";
 
 export const getAllChannels = getAll(Channel);
 export const updateChannel = updateOne(Channel);
@@ -28,6 +21,7 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
 export const getChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 

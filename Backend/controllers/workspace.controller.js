@@ -1,10 +1,4 @@
-import {
-  getAll,
-  getOne,
-  createOne,
-  updateOne,
-  deleteOne,
-} from "../utils/handlerFactory.js";
+import { getAll, updateOne, deleteOne } from "../utils/handlerFactory.js";
 import Workspace from "../models/workspace.model.js";
 import UserProfile from "../models/userProfile.model.js";
 import User from "../models/user.model.js";
