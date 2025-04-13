@@ -1,10 +1,4 @@
-import {
-  getAll,
-  getOne,
-  createOne,
-  updateOne,
-  deleteOne,
-} from "../utils/handlerFactory.js";
+import { getAll, updateOne, deleteOne } from "../utils/handlerFactory.js";
 import Workspace from "../models/workspace.model.js";
 import UserProfile from "../models/userProfile.model.js";
 import User from "../models/user.model.js";
@@ -12,19 +6,41 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 
 export const getAllWorkspaces = getAll(Workspace);
-export const createWorkspace = createOne(Workspace);
 export const updateWorkspace = updateOne(Workspace);
-export const deleteWorkspace = deleteOne(Workspace);
 
-export const attchCreatedByToWorkspace = (req, res, next) => {
+export const createWorkspace = catchAsync(async (req, res, next) => {
+  // Attach data into request body
   req.body.createdBy = req.user.id;
-  next();
-};
 
-// Adds user to workspace
-export const addUserToWorkspace = catchAsync(async (req, res, next) => {
+  const workspace = await Workspace.create(req.body);
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      workspace,
+    },
+  });
+});
+
+export const joinWorkspace = catchAsync(async (req, res, next) => {
+  // Check if the user is already a member of the workspace
+  let userProfile = await UserProfile.findOne({
+    user: req.user.id,
+    workspace: req.params.id,
+  });
+  if (userProfile) {
+    return next(new AppError("User already in workspace", 400));
+  }
+
+  // Create the userProfile
+  req.body.user = req.user.id;
+  req.body.email = req.user.email;
+  req.body.workspace = req.params.id;
+  userProfile = await UserProfile.create(req.body);
+  const userProfileId = userProfile.id;
+
   // get the workspace id and the userProfile id from the request parameters
-  const { workspaceId, userProfileId } = req.body;
+  const workspaceId = req.params.id;
 
   // find the workspace by the workspace id
   const workspace = await Workspace.findById(workspaceId);
@@ -66,7 +82,7 @@ export const addUserToWorkspace = catchAsync(async (req, res, next) => {
 });
 
 export const getWorkspace = catchAsync(async (req, res, next) => {
-  const workspaceId = req.params.id; // TODO - populate everything ¬_¬
+  const workspaceId = req.params.id;
   const workspace = await Workspace.findById(workspaceId).populate({
     path: "members",
   });
@@ -90,6 +106,42 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   // Send the response
   res.status(200).json({
     status: "success",
-    data: workspace,
+    data: {
+      workspace,
+    },
+  });
+});
+
+export const deleteWorkspace = catchAsync(async (req, res, next) => {
+  const workspaceId = req.params.id;
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+  if (!workspace) {
+    return next(new AppError("No workspace found with that ID", 404));
+  }
+
+  // get the ids of the userProfiles
+  const userProfiles = await UserProfile.find({ workspace: workspaceId });
+  const userProfileIds = userProfiles.map((profile) => profile._id);
+
+  // Remove userProfiles from users' workspaceProfiles array
+  await User.updateMany(
+    { workspaceProfiles: { $in: userProfileIds } },
+    { $pull: { workspaceProfiles: { $in: userProfileIds } } }
+  );
+
+  // Delete the userProfiles
+  await UserProfile.deleteMany({ workspace: workspaceId });
+
+  // Delete all conversations and channels associated with the workspace
+  await workspace.deleteConversationsAndChannels();
+
+  // Delete the workspace
+  await Workspace.findByIdAndDelete(workspaceId);
+
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
 });

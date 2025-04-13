@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import UserProfile from "./userProfile.model.js";
+import Message from "./message.model.js";
 
 const channelSchema = new mongoose.Schema(
   {
@@ -30,14 +30,35 @@ const channelSchema = new mongoose.Schema(
       },
     ],
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
+
+// Virtual populate for messages
+channelSchema.virtual("messages", {
+  ref: "Message",
+  foreignField: "channelId",
+  localField: "_id",
+});
+
 // Indexes
 // Channels in the same workspace
 channelSchema.index({ workspaceId: 1 });
 // By type (public or private)
 channelSchema.index({ type: 1 });
 
+// pre-hook to delete messages when a channel is deleted
+channelSchema.pre("findOneAndDelete", async function (next) {
+  console.log("Deleting messages associated with the channel...");
+  // Access the query filter
+  const filter = this.getFilter(); 
+
+  if (filter._id) {
+    // Delete all messages associated with the channel
+    await Message.deleteMany({ channelId: filter._id });
+  }
+
+  next();
+});
 
 const Channel = mongoose.model("Channel", channelSchema);
 export default Channel;

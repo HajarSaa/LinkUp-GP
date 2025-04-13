@@ -1,48 +1,70 @@
 import Channel from "../models/channel.model.js";
-import UserProfile from "../models/userProfile.model.js";
 import AppError from "../utils/appError.js";
-import { attachUserProfileData } from "../utils/attchData.js";
 import catchAsync from "../utils/catchAsync.js";
-import {
-  createOne,
-  deleteOne,
-  getAll,
-  getOne,
-  updateOne,
-} from "../utils/handlerFactory.js";
+import { getAll, updateOne } from "../utils/handlerFactory.js";
 
 export const getAllChannels = getAll(Channel);
-export const getChannel = getOne(Channel);
 export const updateChannel = updateOne(Channel);
-export const deleteChannel = deleteOne(Channel);
 
-// export const createChannel = createOne(Channel);
-export const createChannel = catchAsync(async (req, res, next) => {
-  // Attach the workspaceId to the request body if it is in the params
-  if (req.params.workspaceId) {
-    req.body.workspaceId = req.params.workspaceId;
+export const deleteChannel = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+
+  // Delete the channel
+  const channel = await Channel.findByIdAndDelete(channelId);
+
+  // Check if the channel exists
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
   }
 
-  // Attach the user into members array in the request body
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
+
+export const getChannel = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+
+  // Find the channel and populate the virtual "messages" field
+  const channel = await Channel.findById(channelId).populate("messages");
+
+  // Check if the channel exists
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    data: { channel },
+  });
+});
+
+export const createChannel = catchAsync(async (req, res, next) => {
+  // Attach data into request body
+  req.body.createdBy = req.userProfile.id;
+  req.body.workspaceId = req.workspace.id;
   req.body.members = [req.body.createdBy];
 
   // Create the channel
-  const doc = await Channel.create(req.body);
+  const channel = await Channel.create(req.body);
 
   // Send response
   res.status(201).json({
     status: "success",
-    data: {
-      data: doc,
-    },
+    data: { channel },
   });
 });
 
 // Join a channel
 export const joinChannel = catchAsync(async (req, res, next) => {
+  // Attach data into request body
+  req.body.userId = req.userProfile.id;
+
   // Find the channel
   const channel = await Channel.findById(req.params.id);
-  
+
   // Check if the user is already a member of the channel
   if (channel.members.includes(req.body.userId)) {
     return next(new AppError("You are already a member of this channel", 400));
@@ -64,6 +86,9 @@ export const joinChannel = catchAsync(async (req, res, next) => {
 });
 
 export const leaveChannel = catchAsync(async (req, res, next) => {
+  // Attach data into request body
+  req.body.userId = req.userProfile.id;
+
   // Find the channel
   const channel = await Channel.findById(req.params.id);
 
