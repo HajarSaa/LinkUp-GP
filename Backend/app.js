@@ -42,26 +42,15 @@ export default app;
 
 // TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done
 
-// ------------------------------------------------ next -------------------------------------------------- //
-// TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
-// TODO - Implement update controllers for workspace , channels, messages (like updateMyProfile)
-
 // TODO - Implement virtual populate for the messages in channel and conversation
 // TODO - allow getting messages using pagination
 
-// TODO - separate the logic of adding a user to a workspace into add and join
-// TODO - add -> the admins or owner can add a user to the workspace
-// TODO - join -> the user can join a workspace using a join code
+// TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
+
+// ------------------------------------------------ next -------------------------------------------------- //
 
 // TODO - Add functionality of user deleting his account (deleteMe)
 // TODO - Add functionality of user updating his password (updatePassword)
 // TODO - Implement the forget password and reset Password functionality
 
-// TODO - Edit the conversations logic (not to be created automatically when user joins)
-// TODO - Instead, the user creates a converation between him and another member
-
 // TODO - add the validation resouces on all post requests across all controllers
-
-// TODO - How to handle settings of the workspace like theme, notifications, limits, etc
-// TODO - Search how to store settings
-// TODO - Add default settings
