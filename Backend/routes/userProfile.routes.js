@@ -1,4 +1,5 @@
 import express from "express";
+import uploader from "../middlewares/uploadFileMiddleware.js";
 
 import {
   deleteUserProfile,
@@ -6,6 +7,7 @@ import {
   getUserProfile,
   updateMyProfile,
   updateUserProfile,
+  updateUserImage,
 } from "../controllers/userProfile.controller.js";
 
 import {
@@ -14,14 +16,15 @@ import {
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+const upload = uploader();
 
 router.use(protect);
-
 router.use(protectAttchWorkspace);
+
 router
   .get("/", getAllUserProfiles)
-  .delete("/:id", deleteUserProfile)
+  .get("/:id", getUserProfile)
   .patch("/updateMe", updateMyProfile)
-  .get("/:id", getUserProfile);
+  .patch("/updateUserImage", upload.single("photo"), updateUserImage);
 
 export default router;

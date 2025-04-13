@@ -1,21 +1,23 @@
 import express from "express";
 import { uploadFile } from "../controllers/file.controller.js";
 import uploader from "../middlewares/uploadFileMiddleware.js";
-import { protect, protectAttchWorkspace } from "../middlewares/authMiddleware.js";
+import {
+  protect,
+  protectAttchWorkspace,
+} from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 router.use(protect);
-router.use(protectAttchWorkspace);
-
+//router.use(protectAttchWorkspace);   // After upload.single cause this middleware convert the json to form data.
 
 const upload = uploader();
 // 📌 Route: Upload File
 router.post(
   "/upload",
-  upload.single("file"),
+  upload.array("files"),
   // (req, res, next) => {
-  //   console.log(req.file);
-  //   next();
+  //   console.log(req.files);
+  //   //next();
   // },
   uploadFile
 );
