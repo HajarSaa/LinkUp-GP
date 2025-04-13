@@ -5,8 +5,8 @@ import mockChannels from "../../../API/services/mockChannels";
 import { BsDot } from "react-icons/bs";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { openCreateChannel } from "../../../API/redux/chat/channel/modalSlice";
-import SearchInput from "../../../components/UI/InputField/SearchInput/SearchInput";
+import { openCreateChannel } from "../../../API/redux/modals/createChannelmodalSlice";
+import SearchInput from "../../../components/UI/InputField/ChannelInputs/SearchInput/SearchInput";
 // import { useState } from "react";
 
 const BrowseChannels = () => {

@@ -7,15 +7,21 @@ import { IoMdSend } from "react-icons/io";
 import ChatPreview from "./chatPreview/ChatPreview";
 import { FiHash } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModals, openAddMembers } from "../../../../API/redux/chat/channel/modalSlice"
+import {
+  closeCreateChannel,
+  openAddMembers,
+} from "../../../../../API/redux/modals/createChannelmodalSlice";
 
 const CreateChannelModal = () => {
   const [channelName, setChannelName] = useState("");
   const [isPublic, setIsPublic] = useState(true);
-  const isModalOpen = useSelector((state) => state.modal.createChannelOpen)
-  const dispatch = useDispatch()
-  if (!isModalOpen) return;
+  const { createChannelOpen: isOpen } = useSelector(
+    (state) => state.createChannelModal
+  );
+  const dispatch = useDispatch();
+  if (!isOpen) return;
   return (
+    <div className="overlay">
       <div className={styles.modal}>
         <div className={styles.config}>
           <h2>Channel details</h2>
@@ -26,7 +32,7 @@ const CreateChannelModal = () => {
               id="channelName"
               placeholder="# e.g. subscription-budget"
               value={channelName}
-              onChange={(e) => setChannelName(e.target.value)}
+              onChange={(e) => setChannelName(e.target.value.split(' ').join('-'))}
             />
             <p className={styles.description}>
               Channels are where conversations happen around a topic. Use a name
@@ -63,9 +69,12 @@ const CreateChannelModal = () => {
             </div>
           </div>
           <div className={styles.buttonContainer}>
-            <button className={styles.createButton}
+            <button
+              className={styles.createButton}
               onClick={() => dispatch(openAddMembers())}
-            >Create</button>
+            >
+              Create
+            </button>
           </div>
         </div>
 
@@ -73,7 +82,10 @@ const CreateChannelModal = () => {
           <div className={styles.prevHeader}>
             <div>
               <FaLink className={styles.headerIcon} />
-              <FaTimes className={styles.headerIcon} onClick={() => dispatch(closeModals())} />
+              <FaTimes
+                className={styles.headerIcon}
+                onClick={() => dispatch(closeCreateChannel())}
+              />
             </div>
           </div>
           <div className={styles.chatPreviewContainer}>
@@ -134,6 +146,7 @@ const CreateChannelModal = () => {
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@ import HuddleModal from "../../../UI/Modal/channel/HuddleModal/HuddleModal";
 import { openMenu } from "../../../../API/redux/chat/channel/channelMenuSlice";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { openHuddleModal } from "../../../../API/redux/modals/huddleSlice";
+import SmallAvatar from "../../Avatar/SmallAvatar/SmallAvatar";
 
 function Header({ channel, user }) {
   const dispatch = useDispatch();
@@ -59,17 +60,7 @@ function Header({ channel, user }) {
               >
                 <div className={styles.avatars}>
                   {membersArray.map((member, index) => (
-                    <div
-                      key={index}
-                      className={styles.avatar}
-                      style={{ zIndex: `${100 - index}` }}
-                    >
-                      <img
-                        src={member.avatar}
-                        alt={member.name}
-                        className={styles.avatarImg}
-                      />
-                    </div>
+                    <SmallAvatar key={index} avatrData={member} index={index} />
                   ))}
                 </div>
                 <span className={styles.memberCount}>

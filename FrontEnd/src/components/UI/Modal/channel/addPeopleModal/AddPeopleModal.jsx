@@ -3,13 +3,14 @@ import styles from "./AddPeopleModal.module.css";
 import { FaLock } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModals } from "../../../../API/redux/chat/channel/modalSlice"
+import { closeCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice"
+
 
 const AddPeopleModal = ({ channelName }) => {
-  const isModalOpen = useSelector((state) => state.modal.addMembersOpen)
+  const { addMembersOpen:isModalOpen} = useSelector((state) => state.createChannelModal);
   const dispatch = useDispatch();
   function close() {
-    dispatch(closeModals())
+    dispatch(closeCreateChannel());
   }
   if (!isModalOpen) return;
   return (

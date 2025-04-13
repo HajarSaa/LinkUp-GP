@@ -21,12 +21,12 @@ const ConvActionsModal = ({ createClick, manageClcik, targetRef }) => {
       const rect = targetRef.current.getBoundingClientRect();
       setPosition({
         top: rect.bottom + 5, // أسفل العنصر مع هامش 5px
-        left: rect.left+30,
+        left: rect.left + 30,
       });
     }
   }, [isOpen, targetRef]);
 
-  if (!isOpen) return;
+  if (!isOpen || position.top === 0) return null;
 
   return (
     <>
@@ -43,7 +43,7 @@ const ConvActionsModal = ({ createClick, manageClcik, targetRef }) => {
               <IoIosArrowForward />
             </span>
           </li>
-          <hr className='divider' />
+          <hr className="divider" />
           <li className={styles.item} onClick={manageClcik}>
             <span>Manage</span>
             <span className={`align-items-center`}>

@@ -14,13 +14,13 @@ import {
   closeChannelDetails,
   setActiveTab,
 } from "../../../../../API/redux/modals/channelDetailsSlice";
-import DetailsButton from "../../../Buttons/DetailsButton/DetailsButton";
+import DetailsButton from "../../../Buttons/ChannelButtons/DetailsButton/DetailsButton";
 import {
   MdDeleteOutline,
   MdHeadset,
   MdOutlinePersonAddAlt,
 } from "react-icons/md";
-import SearchInput from "../../../InputField/SearchInput/SearchInput";
+import SearchInput from "../../../InputField/ChannelInputs/SearchInput/SearchInput";
 import { FiChevronDown } from "react-icons/fi";
 import { TbMessageCircleFilled, TbPin } from "react-icons/tb";
 import { GoStack } from "react-icons/go";
@@ -29,10 +29,9 @@ import { RiStickyNoteAddLine } from "react-icons/ri";
 
 const ChannelDetailsModal = ({ channel }) => {
   const dispatch = useDispatch();
-  const { isOpen } = useSelector((state) => state.channelDetails);
-  const activeTab = useSelector((state) => state.channelDetails.activeTab);
-  const { channelData } = useSelector((state) => state.channelDetails);
-
+  const { isOpen, activeTab, channelData } = useSelector(
+    (state) => state.channelDetailsModal
+  );
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
       dispatch(closeChannelDetails());

@@ -12,7 +12,7 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import BrowseChannels from "./pages/content/browseChannels/BrowseChannels";
-import FullModals from "./FullModals";
+import GlobalModals from "./components/UI/Modal/GlobalModals";
 import ChannelDetailsModal from "./components/UI/Modal/channel/ChannelDetailsModal/ChannelDetailsModal";
 
 
@@ -29,7 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
       </Routes>
       {/* models */}
-      <FullModals />
+      <GlobalModals />
     </div>
   );
 }

@@ -1,13 +1,13 @@
 import { FaPlus } from "react-icons/fa";
 import styles from "./AddButton.module.css";
 import PropTypes from "prop-types";
-function AddButton({ onAddChannel, text }) {
+function AddButton({ clickEvent, text }) {
   return (
     <div
       className={`sideBarButton sideBarHover`}
       onClick={(e) => {
         e.stopPropagation();
-        onAddChannel();
+        clickEvent();
       }}
     >
       <span className="hovered iconsPadding align-items-center">
@@ -18,7 +18,7 @@ function AddButton({ onAddChannel, text }) {
   );
 }
 AddButton.propTypes = {
-  onAddChannel: PropTypes.func.isRequired,
+  clickEvent: PropTypes.func.isRequired,
   text: PropTypes.string.isRequired,
 };
 

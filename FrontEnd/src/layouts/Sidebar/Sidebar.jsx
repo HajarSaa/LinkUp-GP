@@ -81,7 +81,6 @@ import mockChannels from "../../API/services/mockChannels";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { openCreateChannel } from "../../API/redux/chat/channel/modalSlice";
 import {
   closeChannelMenu,
   openChannelMenu,
@@ -103,10 +102,6 @@ function Sidebar() {
     }
   }
 
-  function handleCreateButton() {
-    dispatch(closeChannelMenu());
-    dispatch(openCreateChannel());
-  }
 
   return (
     <div className={`${styles.sidebar} ${isMenuOpen ? styles.unScroll : ""}`}>
@@ -158,69 +153,7 @@ function Sidebar() {
       </div>
 
       <hr />
-
-      {/* Channels list */}
       <ChannelsList />
-
-      {/* <div className={styles.sidebarOption} onClick={toggleChannels}>
-        <FaCaretDown
-          alt="Channels"
-          className={`${styles.icon} ${!showChannels ? styles.rotate : ""}`}
-        />
-        <h3 style={{ userSelect: "none" }}>Channels</h3>
-      </div> */}
-
-      {/* Display Channels From Response*/}
-      {/* <div
-        ref={channelsRef}
-        className={`${styles.channelList} ${
-          showChannels ? styles.open : styles.closed
-        }`}
-      >
-        {mockChannels.map((channel) => (
-          <Link
-            to={`/channels/${channel.id}`}
-            className={styles.sidebarOption}
-            key={channel.id}
-          >
-            <FaHashtag alt={channel.name} className={styles.icon} />
-            <h3>
-              <span>{`${channel.id}`.padStart(2, 0)}</span> -{" "}
-              <span className={styles.channelName}>{channel.name}</span>
-            </h3>
-          </Link>
-        ))}
-        {mockChannels.map((channel) => (
-          <ChannelItem key={channel.id} {...channel} />
-        ))}
-
-        <div className={styles.addChannelContainer}>
-          <div
-            className={styles.sidebarOption}
-            onClick={() => dispatch(openChannelMenu())}
-          >
-            <FaPlus alt="Add channel" className={styles.icon} />
-            <h3>Add channel</h3>
-          </div>
-          {isMenuOpen && (
-            <div className={styles.addChannelMenu}>
-              <div
-                className={styles.channelMenuItem}
-                onClick={handleCreateButton}
-              >
-                Create a new channel
-              </div>
-              <Link
-                to={`/channels`}
-                className={styles.channelMenuItem}
-                onClick={() => dispatch(closeChannelMenu())}
-              >
-                Browse Channels
-              </Link>
-            </div>
-          )}
-        </div>
-      </div> */}
       <hr />
 
       <div className={styles.sidebarOption}>

@@ -27,7 +27,7 @@
     padding: 0 10px;
     border-radius: 6px;
     transition: background-color var(--transition-time);
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
 }
 
 .membersContainer:hover {

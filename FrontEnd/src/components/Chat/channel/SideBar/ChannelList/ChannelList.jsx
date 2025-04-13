@@ -3,16 +3,11 @@ import { useEffect, useState } from "react";
 import ChannelHeader from "../ChannelHeader/ChannelHeader";
 import ChannelItem from "../ChannelItem/ChannelItem";
 import styles from "./ChannelList.module.css";
-import AddButton from "../../../../UI/Buttons/AddButton/AddButton";
+import AddButton from "../../../../UI/Buttons/ChannelButtons/AddButton/AddButton";
 import mockChannels from "../../../../../API/services/mockChannels";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChannels } from "../../../../../API/redux/chat/channel/channelsSlice";
-
-// const mockChannels = [
-//   { id: 1, name: "general", isPrivate: false },
-//   { id: 2, name: "random", isPrivate: false },
-//   { id: 3, name: "team-discussions", isPrivate: true, isActive: true },
-// ];
+import { openCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice.js";
 
 const ChannelsList = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -25,12 +20,11 @@ const ChannelsList = () => {
   };
 
   const handleAddChannel = () => {
-    console.log("Add Channel Clicked!");
+    dispatch(openCreateChannel());
   };
   useEffect(() => {
     dispatch(fetchChannels());
   }, [dispatch]);
-
 
   return (
     <div className={styles.container}>
@@ -48,7 +42,7 @@ const ChannelsList = () => {
               />
             ))}
           </div>
-          <AddButton onAddChannel={handleAddChannel} text={"Add channels"} />
+          <AddButton clickEvent={handleAddChannel} text={"Add channels"} />
         </>
       ) : null}
     </div>

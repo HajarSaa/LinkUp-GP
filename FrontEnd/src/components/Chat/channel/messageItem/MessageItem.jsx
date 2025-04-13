@@ -1,26 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useDispatch } from "react-redux";
-import { openProfilePanel } from "../../../../API/redux/chat/channel/profilePanelSlice";
 import Threads from "../threads/Threads";
 import styles from "./MessageItem.module.css";
 import { MdOutlineAddReaction } from "react-icons/md";
+import LargeAvatar from "../../Avatar/LargeAvatar/LargeAvatar";
 
 const MessageItem = ({ message, channel }) => {
-  const dispatch = useDispatch()
   const sender = channel.members.find((m) => m.name === message.sender);
 
   return (
     <div className={styles.messageItem}>
       {/* Message Text & sender */}
       <div className={styles.header}>
-        <div className={styles.avatar}>
-          <img
-            src={sender.avatar}
-            alt={message.sender}
-            title={message.sender}
-            onClick={() => dispatch(openProfilePanel(sender))}
-          />
-        </div>
+        <LargeAvatar userObject={sender}/>
         <div className={styles.messageContent}>
           <div>
             <span className={styles.username}>{message.sender}</span>

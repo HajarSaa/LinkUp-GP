@@ -16,16 +16,6 @@
     background-color: var(--bg-white-hover);
 }
 
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.avatar>img {
-    max-width: 100%;
-}
 
 .messageContent {
     flex: 1;
