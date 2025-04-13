@@ -12,6 +12,7 @@ export const getUserProfile = getOne(UserProfile);
 export const updateUserProfile = updateOne(UserProfile);
 export const deleteUserProfile = deleteOne(UserProfile);
 
+// Updating the user profile information (not password)
 export const updateMyProfile = catchAsync(async (req, res, next) => {
   // Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {

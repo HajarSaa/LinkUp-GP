@@ -2,11 +2,9 @@ import express from "express";
 import uploader from "../middlewares/uploadFileMiddleware.js";
 
 import {
-  deleteUserProfile,
   getAllUserProfiles,
   getUserProfile,
   updateMyProfile,
-  updateUserProfile,
   updateUserImage,
 } from "../controllers/userProfile.controller.js";
 

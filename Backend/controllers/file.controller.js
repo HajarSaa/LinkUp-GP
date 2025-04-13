@@ -2,6 +2,7 @@ import File from "../models/file.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 
+// Upload files
 export const uploadFile = catchAsync(async (req, res, next) => {
   if (!req.files || req.files.length === 0) {
     return next(new AppError("No files uploaded!", 400));
