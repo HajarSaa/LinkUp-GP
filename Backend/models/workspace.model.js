@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import User from "./user.model.js";
 import Conversation from "./converstion.model.js";
-import catchAsync from "../utils/catchAsync.js";
+import Channel from "./channel.model.js";
 
 const workspaceSchema = new mongoose.Schema(
   {
@@ -52,26 +51,7 @@ workspaceSchema.virtual("channels", {
   localField: "_id", // acts as a primary key
 });
 
-// QUERY MIDDLEWARES
-
-// // Populate conversations on every find query
-// workspaceSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: "conversations",
-//     select: " _id memberOneId memberTwoId",
-//   });
-//   next();
-// });
-
-// // Populate channels on every find query
-// workspaceSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: "channels",
-//     select: " _id type name",
-//   });
-//   next();
-// });
-
+// Instance methods
 workspaceSchema.methods.createMemberConversations = async function () {
   const conversations = [];
   const workspaceId = this.id;
@@ -104,6 +84,29 @@ workspaceSchema.methods.createMemberConversations = async function () {
   // Bulk insert all new conversations
   if (conversations.length > 0) {
     await Conversation.insertMany(conversations);
+  }
+};
+
+workspaceSchema.methods.deleteConversationsAndChannels = async function () {
+  console.log("deleteConversationsAndChannels is called");
+  const workspaceId = this._id;
+
+  // Find all conversations associated with the workspace
+  const conversations = await Conversation.find({ workspaceId });
+
+  // Loop over each conversation and delete it individually to trigger pre-hooks
+  for (const conversation of conversations) {
+    console.log("Deleting conversation:", conversation._id);
+    await Conversation.findByIdAndDelete(conversation._id); // This will trigger the pre("findOneAndDelete") hook
+  }
+
+  // Find all channels associated with the workspace
+  const channels = await Channel.find({ workspaceId });
+
+  // Loop over each channel and delete it individually to trigger pre-hooks
+  for (const channel of channels) {
+    console.log("Deleting channel:", channel._id);
+    await Channel.findByIdAndDelete(channel._id); // This will trigger the pre("findOneAndDelete") hook
   }
 };
 

@@ -1,5 +1,4 @@
 import Channel from "../models/channel.model.js";
-import Message from "../models/message.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll, updateOne } from "../utils/handlerFactory.js";
@@ -10,11 +9,13 @@ export const updateChannel = updateOne(Channel);
 export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
-  // Delete all messages associated with the channel
-  await Message.deleteMany({ channelId });
-
   // Delete the channel
-  await Channel.findByIdAndDelete(channelId);
+  const channel = await Channel.findByIdAndDelete(channelId);
+
+  // Check if the channel exists
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
 
   res.status(204).json({
     status: "success",

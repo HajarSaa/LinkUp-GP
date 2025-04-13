@@ -9,7 +9,6 @@ import {
 } from "../controllers/workspace.controller.js";
 import {
   protect,
-  protectAttchWorkspace,
 } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
