@@ -14,6 +14,9 @@ import middlewares from "./middlewares/middlewares.js";
 
 const app = express();
 
+// ✅ Trust proxy (important for Vercel and rate limiters)
+app.set("trust proxy", 1);
+
 // Add middlewares to the app
 middlewares(app);
 
@@ -52,4 +55,3 @@ export default app;
 // TODO - Add functionality of user deleting his account (deleteMe)
 // TODO - Add functionality of user updating his password (updatePassword)
 // TODO - Implement the forget password and reset Password functionality
-
