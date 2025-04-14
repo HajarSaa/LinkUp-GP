@@ -12,6 +12,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeChannelDetails,
+  openDescribtionModal,
+  openEditTopicModal,
+  openRenameModal,
   setActiveTab,
 } from "../../../../../API/redux/modals/channelDetailsSlice";
 import DetailsButton from "../../../Buttons/ChannelButtons/DetailsButton/DetailsButton";
@@ -88,7 +91,10 @@ const ChannelDetailsModal = ({ channel }) => {
           {/* About Tab */}
           {activeTab === "about" && (
             <div className={styles.editContent}>
-              <div className={styles.infoRow}>
+              <div
+                className={styles.infoRow}
+                onClick={() => dispatch(openRenameModal())}
+              >
                 <div className={styles.infoTopic}>
                   <div className={styles.top}>
                     <span className={styles.infoTitle}>Channel name</span>
@@ -105,7 +111,12 @@ const ChannelDetailsModal = ({ channel }) => {
                 </div>
               </div>
               <div className={styles.infoRow}>
-                <div className={styles.infoTopic}>
+                <div
+                  className={styles.infoTopic}
+                  onClick={() => {
+                    dispatch(openEditTopicModal());
+                  }}
+                >
                   <div className={styles.top}>
                     <div className={styles.infoTitle}>Topic</div>
                     <span className={styles.infoEdit}>Edit</span>
@@ -114,7 +125,12 @@ const ChannelDetailsModal = ({ channel }) => {
                     <p>Add a topic</p>
                   </div>
                 </div>
-                <div className={styles.infoTopic}>
+                <div
+                  className={styles.infoTopic}
+                  onClick={() => {
+                    dispatch(openDescribtionModal());
+                  }}
+                >
                   <div className={styles.top}>
                     <span className={styles.infoTitle}>Description</span>
                     <span className={styles.infoEdit}>Edit</span>
@@ -308,7 +324,10 @@ const ChannelDetailsModal = ({ channel }) => {
           {/* Setting Tab */}
           {activeTab === "settings" && (
             <div className={styles.editContent}>
-              <div className={styles.infoRow}>
+              <div
+                className={styles.infoRow}
+                onClick={() => dispatch(openRenameModal())}
+              >
                 <div className={styles.infoTopic}>
                   <div className={styles.top}>
                     <span className={styles.infoTitle}>Channel name</span>
