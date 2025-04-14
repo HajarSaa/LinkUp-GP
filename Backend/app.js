@@ -42,10 +42,10 @@ export default app;
 
 // TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done
 
-// TODO - Implement virtual populate for the messages in channel and conversation
 // TODO - allow getting messages using pagination
 
 // TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
+// TODO - add the validation resouces on all post requests across all controllers
 
 // ------------------------------------------------ next -------------------------------------------------- //
 
@@ -53,4 +53,3 @@ export default app;
 // TODO - Add functionality of user updating his password (updatePassword)
 // TODO - Implement the forget password and reset Password functionality
 
-// TODO - add the validation resouces on all post requests across all controllers
