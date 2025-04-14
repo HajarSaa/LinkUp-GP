@@ -1,4 +1,6 @@
 import express from "express";
+import { fileURLToPath } from "url";
+import path from "path";
 
 import userRouter from "./routes/user.routes.js";
 import workspaceRouter from "./routes/workspace.routes.js";
@@ -20,6 +22,7 @@ app.set("trust proxy", 1);
 // Add middlewares to the app
 middlewares(app);
 
+
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
@@ -29,6 +32,14 @@ app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/files", uploadRouter);
+
+// Welcome route for testing
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "welcome.html"));
+});
+
 
 // 404 route handeler middleware
 app.all("*", (req, res, next) => {
