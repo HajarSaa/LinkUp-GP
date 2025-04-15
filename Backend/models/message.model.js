@@ -36,6 +36,12 @@ const messageSchema = new mongoose.Schema(
       enum: ["Message", "File"],
     },
     // createdAt
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+
     // updatedAt
   },
   { timestamps: true }
