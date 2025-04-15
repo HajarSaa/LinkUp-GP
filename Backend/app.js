@@ -22,7 +22,6 @@ app.set("trust proxy", 1);
 // Add middlewares to the app
 middlewares(app);
 
-
 // Routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
@@ -40,7 +39,6 @@ app.use("/", (req, res, next) => {
   res.sendFile(path.join(__dirname, "welcome.html"));
 });
 
-
 // 404 route handeler middleware
 app.all("*", (req, res, next) => {
   // res.send("ERORR: 404 NOT FOUND");
@@ -54,15 +52,15 @@ export default app;
 
 // ------------------------------------------------ NOW -------------------------------------------------- //
 
-// TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done
+// TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done ✅
 
-// TODO - allow getting messages using pagination
+// TODO - allow getting messages using pagination ✅
 
 // TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
+
 // TODO - add the validation resouces on all post requests across all controllers
-
+//  valide the ids passed into the request body
+// how
+//  in every controller
+// example -> before creating messages -> check the channel id passed in the body is valid or not
 // ------------------------------------------------ next -------------------------------------------------- //
-
-// TODO - Add functionality of user deleting his account (deleteMe)
-// TODO - Add functionality of user updating his password (updatePassword)
-// TODO - Implement the forget password and reset Password functionality

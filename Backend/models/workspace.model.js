@@ -46,7 +46,6 @@ workspaceSchema.virtual("conversations", {
 
 workspaceSchema.virtual("channels", {
   ref: "Channel",
-  foreignField: "workspaceId",
   foreignField: "workspaceId", // acts as a foreign key
   localField: "_id", // acts as a primary key
 });
