@@ -28,10 +28,9 @@ export const createSendTokenCookie = (user, statusCode, res) => {
   // the reason the password is not removed although we set it visible to false in the schema is because the schema is not run when we create a new user
   // the schema is only run when we fetch a user from the database
 
-  // send the response with the token
+  // send the response 
   res.status(statusCode).json({
     status: "success",
-    token,
     data: {
       user,
     },

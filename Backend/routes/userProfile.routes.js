@@ -1,13 +1,11 @@
 import express from "express";
 import uploader from "../middlewares/uploadFileMiddleware.js";
-
 import {
   getAllUserProfiles,
   getUserProfile,
   updateMyProfile,
   updateUserImage,
 } from "../controllers/userProfile.controller.js";
-
 import {
   protect,
   protectAttchWorkspace,
