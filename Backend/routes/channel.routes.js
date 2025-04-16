@@ -3,7 +3,6 @@ import {
   getAllChannels,
   getChannel,
   createChannel,
-  updateChannel,
   deleteChannel,
   joinChannel,
   leaveChannel,
@@ -26,7 +25,6 @@ router
   .get("/", getAllChannels)
   .post("/", createChannel)
   .get("/:id", getChannel)
-  .patch("/:id", updateChannel)
   .delete("/:id", deleteChannel)
   .post("/:id/join", joinChannel)
   .post("/:id/leave", leaveChannel);

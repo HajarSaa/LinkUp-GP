@@ -56,14 +56,8 @@ export default app;
 
 // TODO - allow getting messages using pagination ✅
 
-// TODO - Implement middlewares to check if the user is member of the (channel,conversation) or not
+// TODO - add the validation resouces on all post requests across all controllers ✅
 
-// TODO - add the validation resouces on all post requests across all controllers
-//  valide the ids passed into the request body
-// how
-//  in every controller
-// example -> before creating messages -> check the channel id passed in the body is valid or not
+// TODO - Check the flow of the app and make sure everything is working as expected 
 
-// حاول تقلل استخدام الفاكتوري فانكشنز و كريت الكونترولر كامل 
-// و شيل الروتس ال مش هتستخدم 
 // ------------------------------------------------ next -------------------------------------------------- //

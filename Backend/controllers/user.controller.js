@@ -1,23 +1,13 @@
-import {
-  getAll,
-  getOne,
-  createOne,
-  updateOne,
-  deleteOne,
-} from "../utils/handlerFactory.js";
+import { getAll } from "../utils/handlerFactory.js";
 import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
 
 export const getAllUsers = getAll(User);
-export const getUser = getOne(User);
-export const createUser = createOne(User);
-export const updateUser = updateOne(User);
-export const deleteUser = deleteOne(User);
 
 export const getMe = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
-  // Get user and populate workspaceProfiles 
+  // Get user and populate workspaceProfiles
   const user = await User.findById(userId).populate({
     path: "workspaceProfiles",
     populate: {

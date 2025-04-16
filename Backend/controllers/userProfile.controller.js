@@ -1,16 +1,9 @@
 import UserProfile from "../models/userProfile.model.js";
 import catchAsync from "../utils/catchAsync.js";
-import {
-  deleteOne,
-  getAll,
-  getOne,
-  updateOne,
-} from "../utils/handlerFactory.js";
+import { getAll, getOne } from "../utils/handlerFactory.js";
 
 export const getAllUserProfiles = getAll(UserProfile);
 export const getUserProfile = getOne(UserProfile);
-export const updateUserProfile = updateOne(UserProfile);
-export const deleteUserProfile = deleteOne(UserProfile);
 
 // Updating the user profile information (not password)
 export const updateMyProfile = catchAsync(async (req, res, next) => {
