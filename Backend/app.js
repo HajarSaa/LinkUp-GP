@@ -63,4 +63,7 @@ export default app;
 // how
 //  in every controller
 // example -> before creating messages -> check the channel id passed in the body is valid or not
+
+// حاول تقلل استخدام الفاكتوري فانكشنز و كريت الكونترولر كامل 
+// و شيل الروتس ال مش هتستخدم 
 // ------------------------------------------------ next -------------------------------------------------- //
