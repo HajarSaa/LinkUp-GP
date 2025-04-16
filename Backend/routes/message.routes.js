@@ -6,8 +6,15 @@ import {
   updateMessage,
   deleteMessage,
 } from "../controllers/message.controller.js";
+import {
+  protect,
+  protectAttchWorkspace,
+} from "../middlewares/authMiddleware.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
+
+router.use(protect);
+router.use(protectAttchWorkspace);
 
 router
   .get("/", getAllMessages)

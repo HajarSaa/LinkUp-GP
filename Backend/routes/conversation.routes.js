@@ -2,18 +2,18 @@ import express from "express";
 import {
   getAllConversations,
   getConversation,
-  createConversation,
-  updateConversation,
-  deleteConversation,
 } from "../controllers/conversation.controller.js";
+import { protect, protectAttchWorkspace } from "../middlewares/authMiddleware.js";
+import messageRouter from "./message.routes.js";
 
 const router = express.Router();
 
-router
-  .get("/", getAllConversations)
-  .post("/", createConversation)
-  .get("/:id", getConversation)
-  .patch("/:id", updateConversation)
-  .delete("/:id", deleteConversation);
+router.use(protect);
+router.use(protectAttchWorkspace);
+
+// Re-route into message router
+router.use("/:conversationId/messages", messageRouter);
+
+router.get("/", getAllConversations).get("/:id", getConversation);
 
 export default router;

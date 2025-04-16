@@ -6,20 +6,21 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    sentBy: {
+    createdBy: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
+      ref: "UserProfile",
       required: true,
     },
     channelId: {
       type: mongoose.Schema.ObjectId,
       ref: "Channel",
       default: null,
+      validate: {
+        validator: function () {
+          return !(this.channelId === null && this.conversationId === null);
+        },
+        message: "Either channelId or conversationId is required",
+      },
     },
     conversationId: {
       type: mongoose.Schema.ObjectId,
@@ -46,6 +47,14 @@ const messageSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Indexes
+// All replies to a message && Oldest first (Threads)
+messageSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
+// Newest first (Channels)
+messageSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
+// Newest first (Conversations)
+messageSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
 
 const Message = mongoose.model("Message", messageSchema);
 export default Message;

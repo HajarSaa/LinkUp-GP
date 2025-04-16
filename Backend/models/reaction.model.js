@@ -16,7 +16,7 @@ const reactionSchema = new mongoose.Schema(
     },
     member: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
     },
     // createdAt
     // updatedAt

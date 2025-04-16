@@ -8,7 +8,7 @@ dotenv.config({ path: "./config.env" });
 const DB = process.env.DATABASE;
 mongoose.connect(DB, {}).then(() => console.log("DB connection successful!"));
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000; // Keep both versions with fallback
 const server = app.listen(port, () => {
   console.log(`server running on port ${port} -> http://127.0.0.1:${port}`);
 });

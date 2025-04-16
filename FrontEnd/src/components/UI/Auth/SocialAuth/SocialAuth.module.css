@@ -1,0 +1,39 @@
+.socialAuth {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.socialBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.socialBtn:hover {
+    background-color: var(--white-btn-hover-color);
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+@media (max-width: 480px) {
+
+    .socialBtn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

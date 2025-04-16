@@ -1,33 +1,77 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import validator from "validator";
+import catchAsync from "../utils/catchAsync.js";
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-    },
     email: {
       type: String,
       required: true,
       unique: true,
+      validate: [validator.isEmail, "please provide a valide email"],
     },
-    role: {
+    password: {
       type: String,
-      enum: ["admin", "user"],
-      default: "user",
+      required: true,
+      minlength: 8,
+      select: false,
     },
-    status: {
+    passwordConfirm: {
       type: String,
-      enum: ["online", "offline"],
-      default: "offline",
+      required: true,
+      validate: {
+        validator: function (value) {
+          return value === this.password;
+        },
+        message: "Passwords do not match",
+      },
     },
-    workspaces: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-    },
-    // createdAt
-    // updatedAt
+    passwordChangedAt: Date,
+    workspaceProfiles: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "UserProfile",
+      },
+    ],
   },
   { timestamps: true }
 );
+
+
+// Document Middlewares
+// Hash the password before saving it to the database
+userSchema.pre("save", async function (next) {
+  // Hash the password only if it has been modified
+  if (!this.isModified("password")) return next();
+
+  // Hash the password
+  this.password = await bcrypt.hash(this.password, 12);
+
+  // Delete the passwordConfirm field
+  this.passwordConfirm = undefined;
+  next();
+});
+
+// Instance methods
+// Compare the user password with the provided password
+userSchema.methods.correctPassword = async function (candidatepass, userpass) {
+  return await bcrypt.compare(candidatepass, userpass);
+};
+
+// Check if the user changed password after the token was issued
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    // Convert the passwordChangedAt date to seconds
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+    // Return true if the password was changed after the token was issued
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
+};
+
 const User = mongoose.model("User", userSchema);
 export default User;

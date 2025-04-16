@@ -6,14 +6,15 @@ const fileSchema = new mongoose.Schema(
       type: String,
     },
     fileSize: {
-      String,
+      type: String,
     },
     fileType: {
-      String,
+      type: String,
     },
-    sentBy: {
+    fileUrl: { type: String, required: true }, // Cloudinary URL
+    uploadedBy: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: "UserProfile",
     },
     channelId: {
       type: mongoose.Schema.ObjectId,
@@ -25,24 +26,37 @@ const fileSchema = new mongoose.Schema(
       ref: "Conversation",
       default: null,
     },
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-    },
+    // parentMessageId: {
+    //   type: mongoose.Schema.ObjectId,
+    //   refPath: "parentType",
+    //   default: null,
+    // },
+    // parentType: {
+    //   type: String,
+    //   enum: ["Message", "File"],
+    // },
+
     parentMessageId: {
       type: mongoose.Schema.ObjectId,
-      refPath: "parentType",
-      default: null,
+      ref: "Message",
+      default: null, //files can exist without a message
     },
     parentType: {
       type: String,
-      enum: ["Message", "File"],
+      // enum: ["Message", null], // can files alone
+      // default: null,
     },
-    // createdAt
-    // updatedAt
   },
   { timestamps: true }
 );
+
+// Indexes
+// All replies to a message && Oldest first (Threads)
+fileSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
+// Newest first (Channels)
+fileSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
+// Newest first (Conversations)
+fileSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
 
 const File = mongoose.model("File", fileSchema);
 export default File;
