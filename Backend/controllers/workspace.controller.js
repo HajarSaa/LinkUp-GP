@@ -83,9 +83,12 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
 
 export const getWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
-  const workspace = await Workspace.findById(workspaceId).populate({
-    path: "members",
-  });
+  const workspace = await Workspace.findById(workspaceId)
+    .populate({
+      path: "members",
+    })
+    .populate("channels")
+    .populate("conversations");
 
   // check if the workspace exists
   if (!workspace) {
