@@ -1,4 +1,5 @@
 import UserProfile from "../models/userProfile.model.js";
+import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll, getOne } from "../utils/handlerFactory.js";
 
@@ -43,7 +44,7 @@ export const updateMyProfile = catchAsync(async (req, res, next) => {
 // Update user profile image (can be in updateMyProfile  after implementation )
 export const updateUserImage = catchAsync(async (req, res, next) => {
   if (!req.file) {
-    return next(new ApiError("Please Upload Your Image", 404));
+    return next(new AppError("Please Upload Your Image", 404));
   }
   req.body.photo = req.file.path;
   const user = await UserProfile.findByIdAndUpdate(req.user._id, req.body, {
