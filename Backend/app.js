@@ -32,13 +32,6 @@ app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/files", uploadRouter);
 
-// Welcome route for testing
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use("/", (req, res, next) => {
-  res.sendFile(path.join(__dirname, "welcome.html"));
-});
-
 // 404 route handeler middleware
 app.all("*", (req, res, next) => {
   // res.send("ERORR: 404 NOT FOUND");
@@ -57,7 +50,5 @@ export default app;
 // TODO - allow getting messages using pagination ✅
 
 // TODO - add the validation resouces on all post requests across all controllers ✅
-
-// TODO - Check the flow of the app and make sure everything is working as expected 
 
 // ------------------------------------------------ next -------------------------------------------------- //

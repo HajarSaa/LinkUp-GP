@@ -166,6 +166,8 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
     httpOnly: true,
   });
 
+  
+
   // Send the response
   res.status(200).json({
     status: "success",
