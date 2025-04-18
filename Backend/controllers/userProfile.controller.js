@@ -43,15 +43,39 @@ export const updateMyProfile = catchAsync(async (req, res, next) => {
 
 // Update user profile image (can be in updateMyProfile  after implementation )
 export const updateUserImage = catchAsync(async (req, res, next) => {
-  if (!req.file) {
-    return next(new AppError("Please Upload Your Image", 404));
+  const workspaceId = req.cookies.workspace;
+  if (!workspaceId) {
+    return next(new AppError("Workspace ID not found ", 404));
   }
-  req.body.photo = req.file.path;
-  const user = await UserProfile.findByIdAndUpdate(req.user._id, req.body, {
-    new: true,
+
+  if (!req.file) {
+    return next(new AppError("Please upload your image", 400));
+  }
+
+  // Set photo path
+  const photoPath = req.file.path;
+
+  // Check if the user has a profile in this workspace
+  const userProfile = await UserProfile.findOne({
+    user: req.user._id,
+    workspace: workspaceId,
   });
+
+  if (!userProfile) {
+    return next(
+      new AppError(
+        `No user profile found for user ${req.user._id} in workspace ${workspaceId}`,
+        404
+      )
+    );
+  }
+
+  // Update the photo in the user's profile
+  userProfile.photo = photoPath;
+  await userProfile.save();
+
   res.status(200).json({
-    message: "success",
-    user,
+    message: "Success",
+    userProfile,
   });
 });
