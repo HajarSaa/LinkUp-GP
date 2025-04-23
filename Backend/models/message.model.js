@@ -36,6 +36,7 @@ const messageSchema = new mongoose.Schema(
       type: String,
       enum: ["Message", "File"],
     },
+<<<<<<< HEAD
     // createdAt
 
     createdAt: {
@@ -44,6 +45,8 @@ const messageSchema = new mongoose.Schema(
     },
 
     // updatedAt
+=======
+>>>>>>> 87772a274eea2831e3c6d78715d9636135fc5ba4
   },
   { timestamps: true }
 );

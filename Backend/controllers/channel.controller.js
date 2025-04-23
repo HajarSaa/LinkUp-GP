@@ -4,7 +4,6 @@ import catchAsync from "../utils/catchAsync.js";
 import { getAll, updateOne } from "../utils/handlerFactory.js";
 
 export const getAllChannels = getAll(Channel);
-export const updateChannel = updateOne(Channel);
 
 export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
@@ -26,8 +25,19 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
 export const getChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
-  // Find the channel and populate the virtual "messages" field
-  const channel = await Channel.findById(channelId).populate("messages");
+  // Apply pagination to the "messages" field
+  const page = req.query.page * 1 || 1; // Default to page 1
+  const limit = req.query.limit * 1 || 10; // Default to 10 messages per page
+  const skip = (page - 1) * limit;
+
+  // Populate the "messages" field with pagination
+  const channel = await Channel.findById(channelId).populate({
+    path: "messages",
+    options: {
+      skip,
+      limit,
+    },
+  });
 
   // Check if the channel exists
   if (!channel) {
@@ -57,13 +67,16 @@ export const createChannel = catchAsync(async (req, res, next) => {
   });
 });
 
-// Join a channel
 export const joinChannel = catchAsync(async (req, res, next) => {
   // Attach data into request body
   req.body.userId = req.userProfile.id;
 
   // Find the channel
   const channel = await Channel.findById(req.params.id);
+
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
 
   // Check if the user is already a member of the channel
   if (channel.members.includes(req.body.userId)) {
@@ -91,6 +104,10 @@ export const leaveChannel = catchAsync(async (req, res, next) => {
 
   // Find the channel
   const channel = await Channel.findById(req.params.id);
+
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
 
   // Check if the user is a member of the channel
   if (!channel.members.includes(req.body.userId)) {

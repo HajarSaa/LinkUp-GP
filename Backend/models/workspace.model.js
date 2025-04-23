@@ -7,7 +7,6 @@ const workspaceSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
     },
     createdBy: {
       type: mongoose.Schema.ObjectId,
@@ -46,7 +45,6 @@ workspaceSchema.virtual("conversations", {
 
 workspaceSchema.virtual("channels", {
   ref: "Channel",
-  foreignField: "workspaceId",
   foreignField: "workspaceId", // acts as a foreign key
   localField: "_id", // acts as a primary key
 });

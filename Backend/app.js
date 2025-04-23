@@ -25,10 +25,8 @@ const app = express();
 app.set("trust proxy", 1);
 
 // Middlewares
-middlewares(app); // From remote branch
-app.use(morgan("dev")); // From local branch
-
-// Body parser
+middlewares(app);
+app.use(morgan("dev"));
 app.use(express.json());
 
 // API Routes
@@ -40,7 +38,7 @@ app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/files", uploadRouter);
-app.use("/api", searchRoutes); // From local branch
+app.use("/api", searchRoutes);
 
 // Welcome route for testing
 const __filename = fileURLToPath(import.meta.url);
@@ -58,3 +56,7 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorHandeler);
 
 export default app;
+
+// ------------------------------------------------ NOW -------------------------------------------------- //
+// TODO - Check the flow of the app and make sure everything is working as expected
+// ------------------------------------------------ next -------------------------------------------------- //
