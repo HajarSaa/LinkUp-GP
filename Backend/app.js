@@ -59,4 +59,10 @@ export default app;
 
 // ------------------------------------------------ NOW -------------------------------------------------- //
 // TODO - Check the flow of the app and make sure everything is working as expected
+
+// TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done ✅
+
+// TODO - allow getting messages using pagination ✅
+
+// TODO - add the validation resouces on all post requests across all controllers ✅
 // ------------------------------------------------ next -------------------------------------------------- //

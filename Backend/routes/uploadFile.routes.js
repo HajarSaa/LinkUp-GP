@@ -14,7 +14,7 @@ const upload = uploader();
 // 📌 Route: Upload File
 router.post(
   "/upload",
-  upload.array("files"),
+  upload.array("file"),
   // (req, res, next) => {
   //   console.log(req.files);
   //   //next();
