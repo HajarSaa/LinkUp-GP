@@ -38,10 +38,9 @@ function Header({ channel, user }) {
         {user && (
           <div
             className={styles.userInfo}
-            onClick={() =>
-              // dispatch(openUserDetails({ user, tab: "about" }))
-              console.log("clicked")
-            }
+            // onClick={() =>
+            //   // dispatch(openUserDetails({ user, tab: "about" }))
+            // }
           >
             <h2 className={styles.userName}>
               <span>{user.img}</span>
@@ -88,7 +87,7 @@ function Header({ channel, user }) {
                 >
                   <BsThreeDotsVertical />
                 </div>
-                <ChannelOptionModal />
+                <ChannelOptionModal channel={channel} />
               </div>
             </>
           )}

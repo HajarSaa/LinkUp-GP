@@ -8,6 +8,7 @@ import mockChannels from "../../../../../API/services/mockChannels";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChannels } from "../../../../../API/redux/chat/channel/channelsSlice";
 import { openCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice.js";
+import { openAddButtonModal } from "../../../../../API/redux/modals/addButtonModal.js";
 
 const ChannelsList = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -20,7 +21,7 @@ const ChannelsList = () => {
   };
 
   const handleAddChannel = () => {
-    dispatch(openCreateChannel());
+    dispatch(openAddButtonModal());
   };
   useEffect(() => {
     dispatch(fetchChannels());

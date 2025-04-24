@@ -4,6 +4,7 @@ import CreateChannelModal from "./channel/createChannelModel/CreateChannelModal"
 import DescriptionModal from "./channel/editModals/DescriptionModal";
 import RenameChannelModal from "./channel/editModals/RenameChannelModal";
 import TopicModal from "./channel/editModals/TopicModal";
+import NotificationsModal from "./channel/NotifiactionModal/NotificationsModal";
 
 function GlobalModals() {
   return (
@@ -16,6 +17,7 @@ function GlobalModals() {
       {/* End Channel Details Modal */}
       <CreateChannelModal />
       <AddPeopleModal />
+      <NotificationsModal/>
     </>
   );
 }

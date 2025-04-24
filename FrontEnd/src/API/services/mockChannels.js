@@ -397,6 +397,5 @@ const mockChannels = [
   },
 ];
 
-// export const src = "/assets/avatars/alaa.png";
 
 export default mockChannels;

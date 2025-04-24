@@ -8,6 +8,7 @@ import MessageInput from "../../../components/Chat/channel/messageInput/MessageI
 import ThreadPanel from "../../../components/Chat/channel/threadPanel/ThreadPanel";
 import { useSelector } from "react-redux";
 import ProfilePanel from "../../../components/Chat/channel/profilePanel/ProfilePanel";
+import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
 
 const Channel = () => {
   const { id } = useParams();
@@ -35,6 +36,7 @@ const Channel = () => {
             </div>
           ))}
         </div>
+        <ChatMessage/>
         <MessageInput />
       </div>
       {/* pannel will appears hear */}

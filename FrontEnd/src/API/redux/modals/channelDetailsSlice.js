@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import mockChannels from '../../services/mockChannels';
+const firstChannel = mockChannels[0];
+
 const initialState = {
   isOpen: false,
-  channelData: null,
+  channelData: firstChannel,
   activeTab: "about",
   editModal: {
     renameChannel: false,

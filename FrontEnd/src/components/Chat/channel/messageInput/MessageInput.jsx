@@ -22,6 +22,14 @@ const MessageInput = () => {
         setMessage(e.target.value);
     };
 
+    const handleSend = () => {
+        if (!message.trim()) return;
+        console.log("Message Sent:", message);
+        setMessage("");
+        const textarea = textareaRef.current;
+        textarea.style.height = "40px";
+    };
+
     const handleKeyDown = (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -29,11 +37,10 @@ const MessageInput = () => {
         }
     };
 
-    const handleSend = () => {
-        if (!message.trim()) return;
-        console.log("Message Sent:", message);
-        setMessage("");
-    };
+    const handlInputHeight = () => {
+        const textarea = textareaRef.current;
+        textarea.style.height = `${textarea.scrollHeight}px`;
+    }
 
     return (
         <div className={styles.messageInputContainer}>
@@ -46,16 +53,15 @@ const MessageInput = () => {
                     <FaListOl />
                 </div>
 
-                <TextareaAutosize
-                name="messageBox"
+                <textarea
+                    name="messageBox"
                     ref={textareaRef}
                     className={styles.textarea}
                     placeholder="write your message ..."
                     value={message}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    minRows={1}
-                    maxRows={6}
+                    onInput={handlInputHeight}
                 />
 
                 <div className={styles.actions}>
@@ -71,14 +77,11 @@ const MessageInput = () => {
 
                 </div>
             </div>
-            <div
-                className={styles.newLineHint}
-            >
+            <div className={styles.newLineHint}>
                 <span className={`${styles.hintText} ${message.trim() ? styles.showHint : styles.hideHint}`}>
                     Shift + Enter for new line
                 </span>
             </div>
-
         </div>
     );
 };
