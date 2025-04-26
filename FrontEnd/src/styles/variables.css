@@ -1,38 +1,22 @@
 :root {
   /* Colors */
-<<<<<<< HEAD
-  --primary-color: #193a55;
-  /* الغامق*/
-  --secondary-color: #2f4f68;
-  /*الفاتح */
-
-  --active-color: #e3f8ff;
-  --sidebar-hover: #3c6685;
-
-  /* text-colors */
-  --text-white: #fff;
-  --text-color-grey: #666666;
-  --text-color-black: #333333;
-  --text-color-muted: #999999;
-  --text-secondary: #666;
-  /*   لون أفتح للوقت والتفاصيل الثانوية */
-  --sidebar-text-color: #e4f8ff;
-=======
   --primary-color: #163d5c;
   --secondary-color: #2d5878;
   --active-color: #e3f8ff;
   --sidebar-hover: #356c8e;
+  /* text-colors */
+  --text-white: #fff;
   --text-color-grey: #666666;
   --text-color-black: #333333;
   --button-text-color: #1d1c1d;
+  --text-color-muted: #999999;
+  --text-secondary: #666;
   --sidebar-text-color: rgba(227, 248, 255, 0.8);
->>>>>>> main
   --border-color: #ccc;
   --white-btn-hover-color: #f0f0f0;
   --divider-color: #ddd;
   --link-color: #1264a3;
   --gray-dark: #888;
-<<<<<<< HEAD
   --gray-light: #f0f0f0;
   --error-color: #e74c3c;
   --success-color: #27ae60;
@@ -55,16 +39,7 @@
   --input-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
 
   /* Sizes */
-=======
-  --gray-light: #f8f8f8;
-  --error-color: #e74c3c; /* الأحمر للأخطاء */
-  --success-color: #27ae60; /* الأخضر للنجاح */
-  --input-border-error: #f5b7b1; /* حدود حمراء باهتة */
-  --input-border-success: #a9dfbf; /* حدود خضراء باهتة */
-  /* transitions */
-  --transition-time: 0.4s;
-  /* Sizes*/
->>>>>>> main
+
   --font-size: 1rem;
   --font-size-small: 0.85rem;
 
