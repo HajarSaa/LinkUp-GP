@@ -5,8 +5,8 @@ import {
     FaBold, FaItalic, FaLink, FaListUl, FaListOl, FaSmile, FaAt,
     FaPaperPlane, FaPlus, FaVideo, FaMicrophone
 } from "react-icons/fa";
-import TextareaAutosize from "react-textarea-autosize";
-import Markdown from "react-markdown";
+// import TextareaAutosize from "react-textarea-autosize";
+// import Markdown from "react-markdown";
 
 const MessageInput = () => {
     const [message, setMessage] = useState("");
