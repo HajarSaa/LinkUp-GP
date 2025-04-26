@@ -1,0 +1,16 @@
+.actionBtn {
+  border: 1px solid var(--border-color);
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-size: 13px;
+  font-weight: bold;
+  transition: background-color var(--transition-3);
+}
+
+.actionBtn:hover {
+  background-color: var(--bg-light);
+}

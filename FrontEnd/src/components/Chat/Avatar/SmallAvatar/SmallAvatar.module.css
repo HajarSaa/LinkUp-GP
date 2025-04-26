@@ -1,0 +1,12 @@
+.avatar {
+width: 24px;
+  height: 24px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  margin-left: -8px;
+  background-color: #fff;
+}
+
+.avatar>img {
+  max-width: 100%;
+}

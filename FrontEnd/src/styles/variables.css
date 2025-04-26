@@ -4,23 +4,62 @@
   --secondary-color: #2d5878;
   --active-color: #e3f8ff;
   --sidebar-hover: #356c8e;
+  /* text-colors */
+  --text-white: #fff;
   --text-color-grey: #666666;
   --text-color-black: #333333;
   --button-text-color: #1d1c1d;
+  --text-color-muted: #999999;
+  --text-secondary: #666;
   --sidebar-text-color: rgba(227, 248, 255, 0.8);
   --border-color: #ccc;
   --white-btn-hover-color: #f0f0f0;
   --divider-color: #ddd;
   --link-color: #1264a3;
   --gray-dark: #888;
-  --gray-light: #f8f8f8;
-  --error-color: #e74c3c; /* الأحمر للأخطاء */
-  --success-color: #27ae60; /* الأخضر للنجاح */
-  --input-border-error: #f5b7b1; /* حدود حمراء باهتة */
-  --input-border-success: #a9dfbf; /* حدود خضراء باهتة */
-  /* transitions */
-  --transition-time: 0.4s;
-  /* Sizes*/
+  --gray-light: #f0f0f0;
+  --error-color: #e74c3c;
+  --success-color: #27ae60;
+  --input-border-error: #f5b7b1;
+  --input-border-success: #a9dfbf;
+  --green-color: #007a5a;
+
+  /* Backgrounds */
+  --bg-white: #fff;
+  --bg-light: #f8f8f8;
+  --bg-light-grey: #f5f5f5;
+  --bg-white-hover: #eaeaea;
+  --overlay-bg: rgba(0, 0, 0, 0.4);
+
+  /* color */
+  --c-white: #fff;
+
+  /* shadows */
+  --shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  --input-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
+
+  /* Sizes */
+
   --font-size: 1rem;
+  --font-size-small: 0.85rem;
+
+  /* Border radius*/
   --border-radius: 6px;
+  --border-radius-small: 4px;
+
+  /* Transitions */
+  --transition-time: 0.4s;
+  --transition-3: 0.3s;
+
+  /* Reaction color */
+  --reaction-bg: #E6F7FF;
+  /* لون الخلفية الأزرق الفاتح */
+  --reaction-border: #0066B2;
+  /* لون البوردر الأزرق */
+  --reaction-text: #003366;
+  /* لون الرقم */
+
+  /* gaps */
+  --gap-10: 10px;
+  --gap-8: 8px;
 }

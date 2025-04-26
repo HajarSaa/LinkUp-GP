@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    gap: var(--gap-8);
+    align-items: center;
+    padding: 6px 9px;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+
+.header>* {
+    cursor: pointer;
+}
+
+.icon{
+    font-size: 10px;
+}

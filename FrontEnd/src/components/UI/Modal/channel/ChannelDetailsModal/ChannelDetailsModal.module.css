@@ -1,0 +1,404 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  width: 600px;
+  height: 90%;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modalContent>div {
+  padding: 0 20px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.closeBtn {
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 35px;
+  color: var(--text-color-gry);
+  transition: background-color var(--transition-3);
+}
+
+.closeBtn:hover {
+  background-color: var(--bg-white-hover);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+
+.icon {
+  font-size: 17px;
+}
+
+.tabs {
+  display: flex;
+  gap: 15px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tabs div {
+  cursor: pointer;
+  font-size: 14px;
+  padding: 10px 0;
+  font-weight: bold;
+  color: var(--text-color-grey);
+  transition: color var(--transition-3);
+}
+
+.tabs div:hover {
+  color: #000;
+}
+
+.activeTab {
+  position: relative;
+  color: #000 !important;
+}
+
+.activeTab:after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--primary-color);
+}
+
+/* Tabs Constnet */
+
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 !important;
+}
+
+.editContent,
+.integTabContent {
+  padding: 20px;
+  background-color: var(--bg-light);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.infoRow {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+
+
+.infoTopic {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+
+.infoTopic:hover {
+  background-color: var(--bg-light-hover);
+}
+
+.infoRow .infoTopic:not(:last-of-type) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.top {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bottom :last-child {
+  font-size: 14px;
+}
+
+.infoTitle {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.infoEdit {
+  color: var(--link-color);
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.infoEdit:hover {
+  text-decoration: underline;
+}
+
+.icons {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.actionItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+}
+
+.archiveItem,
+.deleteItem {
+  color: var(--error-color);
+  transition: color var(--transition-3);
+}
+
+.deleteItem:hover {
+  color: #000;
+}
+
+.leaveItem {
+  color: var(--error-color);
+  padding: 15px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.chId {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-color-grey);
+}
+
+.chId span:last-child {
+  cursor: pointer;
+}
+
+/* Members Tab */
+.membersItem {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.membersItem:not(:first-of-type):hover {
+  cursor: pointer;
+  background-color: var(--bg-light);
+}
+
+.addBox {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e7f6fb;
+}
+
+.addBox>* {
+  color: var(--link-color);
+  font-size: 25px;
+}
+
+.memberImg {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: #000;
+}
+
+.memberImg img {
+  max-width: 100%;
+}
+
+.memberName {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status {
+  display: flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status.online {
+  background-color: var(--green-color);
+}
+
+.status.offline {
+  background-color: var(--gray-dark);
+}
+
+/* tabs */
+.tabsContent {
+  padding: 20px;
+  background-color: var(--bg-light);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tabsContent .infoRow {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.tabsContent .infoRow .infoTopic {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 10px;
+  background-color: #fff;
+  cursor: unset;
+}
+
+.tabItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: var(--border-radius);
+  transition: background-color var(--transition-3);
+}
+
+.tabItem:first-of-type:hover {
+  background: var(--bg-white-hover);
+  cursor: pointer;
+}
+
+.tabItem .leftSide {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tabItem .rightActions {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: #666;
+  padding: 1px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.tabItem:hover .rightActions {
+  opacity: 1;
+}
+
+.tabItem .rightActions>span {
+  border-radius: var(--border-radius-small);
+  padding: 9px 6px;
+}
+
+.tabItem .rightActions>span:hover {
+  background-color: var(--bg-light);
+}
+
+.tabItem .rightActions>span>* {
+  font-size: 18px;
+}
+
+.selectElement {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.newTab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--border-color);
+  width: fit-content;
+  padding: 5px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.newTab:hover {
+  background-color: var(--bg-light);
+}
+
+/*  */
+.integTab {
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  display: flex;
+
+}
+
+.intLeft{
+  padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.intImg {
+  width: 50%;
+}
+
+.intImg img {
+  max-width: 100%;
+  height: 100%;
+}
+
+.btnContainer{
+  width: fit-content;
+}

@@ -1,0 +1,149 @@
+.container {
+  padding: 20px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.browesHeader{
+  margin-bottom: 1rem;
+}
+
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filterIcon {
+  font-size: 0.75rem;
+}
+
+.filters>div {
+  background: var(--bg-white);
+  border: none;
+  padding: 7px 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.filters>div:hover {
+  background-color: var(--white-btn-hover-color);
+  box-shadow: var(--shadow);
+}
+
+.channelContainer {
+  background-color: var(--bg-white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.channelItem {
+  padding: 20px 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.channelItem:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.headerText {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.channelName {
+  display: flex;
+  font-weight: bold;
+  align-items: end;
+  gap: 10px;
+}
+
+.viewChannel {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  display: none;
+  align-items: center;
+}
+
+/* buttonGroup */
+.buttonGroups {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 30px;
+  display: none;
+  gap: 8px;
+  cursor: context-menu;
+}
+
+.buttonGroups>button,
+.createBtn {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 100%;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+}
+
+.buttonGroups>button:hover,
+.createBtn:hover {
+  background-color: var(--white-btn-hover-color);
+}
+
+.channelItem:hover .viewChannel,
+.channelItem:hover .buttonGroups {
+  display: flex;
+}
+
+.channelInfo {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.joined {
+  color: var(--green-color);
+}
+
+.leaved {
+  display: none;
+}
+
+.joinedIcon {
+  font-size: 11px;
+}

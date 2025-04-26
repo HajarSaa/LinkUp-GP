@@ -1,0 +1,89 @@
+.messageInputContainer {
+  width: 100%;
+  background-color: #fff;
+  max-width: 100%;
+  padding: 10px 10px 0;
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  background: #f9f9f9;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 8px;
+  color: #555;
+  border-bottom: 1px solid #ddd;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  resize: none;
+  font-size: 14px;
+  outline: none;
+  background: transparent;
+}
+
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 5px;
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.icons>* {
+  cursor: pointer;
+}
+
+.sendButton {
+  background: #007a5a;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.disabled {
+  background: #ddd;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  /* cursor: not-allowed; */
+}
+
+.newLineHint {
+  color: #aaa;
+  font-size: 13px;
+  padding: 5px 0;
+}
+
+.hintText {
+  transition: opacity var(--transition-time) linear;
+  opacity: 0;
+}
+
+.showHint {
+  opacity: 1;
+}

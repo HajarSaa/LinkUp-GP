@@ -1,0 +1,65 @@
+.thread {
+    display: flex;
+    align-items: center;
+    background-color:inherit;
+    width: 70%;
+    border-radius: 8px;
+    padding: 4px 8px;
+    margin-top: 8px;
+}
+
+.threadView {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    cursor: pointer;
+}
+
+.viewThread,.threadIcon{
+    visibility: hidden;
+}
+.thread:hover{
+    background-color: var(--bg-white);
+}
+.thread:hover .viewThread,
+.thread:hover .threadIcon{
+    visibility: visible;
+}
+.avatars {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.threadAvatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -8px;
+    /* تداخل الصور */
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.replies {
+
+    font-size: 14px;
+    margin-right: 4px;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.viewThread {
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 8px;
+
+    color: #9e9e9e;
+}
+
+.threadIcon,
+.replies,
+.avatars {
+    cursor: pointer;
+}

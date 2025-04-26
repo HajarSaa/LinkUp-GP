@@ -1,3 +1,4 @@
+/* @import "../../styles/variables.css";
 .layout {
   display: flex;
   flex-direction: column;
@@ -9,7 +10,26 @@
   display: flex;
   height: calc(100vh - 50px);
 }
-.workspace_content > div {
+
+.main {
+  flex: 1;
+  background-color: #f8f8f8;
+  height: calc(100vh - 50px);
+} */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.workspace_content {
+  flex: 1;
+  display: flex;
+  height: calc(100vh - 50px);
+}
+
+.workspace_content>div {
   height: 100%;
 }
 

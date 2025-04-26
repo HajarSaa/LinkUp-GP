@@ -1,0 +1,278 @@
+.message_container {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  gap: 8px;
+  text-align: left;
+  font-size: 15px;
+  color: #1d1c1d;
+}
+
+.message_container:hover {
+  background-color: #f8f8f8;
+}
+
+
+
+.profileWrapper {
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  flex-shrink: 0;
+  object-fit: cover;
+  color: var(--active-color);
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message_leftSide {
+  width: 45px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px 0px;
+}
+
+.message_sender {
+  position: relative;
+  line-height: 22px;
+  font-weight: 900;
+}
+
+.message_time {
+  position: relative;
+  font-size: 12px;
+  line-height: 16px;
+  color: #616061;
+}
+
+.message_time:hover,
+.message_sender:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.message_info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.message_text {
+  position: relative;
+  line-height: 22px;
+}
+
+.message_content {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.reactions {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.add_react,
+.react {
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.react {
+  gap: 4px;
+  background-color: #e4f8ff;
+  color: var(--link-color);
+  border: 1px solid var(--link-color);
+}
+
+.react_emoji,
+.react_count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add_react {
+  position: relative;
+  background-color: #ebebeb;
+  font-size: 20px;
+  border: 1px solid transparent;
+}
+
+.add_react:hover {
+  border-color: var(--border-color);
+  background-color: #fff;
+}
+
+.message_rightSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.message {
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  z-index: 0;
+}
+
+
+
+
+.action_icon {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  padding: 6px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.action_icon:hover {
+  background-color: var(--bg-white-hover);
+}
+
+.message_actions {
+  position: absolute;
+  top: -17px;
+  right: 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius);
+  background-color: #fff;
+  border: 1px solid #bbb;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 3px 8px;
+  gap: 12px;
+  z-index: 2;
+}
+
+/*Start thread Part */
+.thread_user {
+  width: 24px;
+  position: relative;
+  height: 24px;
+  color: var(--active-color);
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius-small);
+}
+
+.thread_users {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.thread_counts {
+  color: var(--link-color);
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.thread_counts:hover {
+  text-decoration: underline;
+}
+
+.viewThread {
+  color: #616061;
+  visibility: hidden;
+}
+
+
+
+.thread_rightSide {
+  flex: 1;
+  position: relative;
+  line-height: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.thread_icon {
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+  visibility: hidden;
+}
+
+.thread {
+  align-self: stretch;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-small);
+  background-color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px;
+  gap: 8px;
+}
+
+.threadWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 1;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.threadWrapper:hover .thread {
+  background-color: #fff;
+  border-color: var(--border-color);
+}
+
+.threadWrapper:hover .thread_icon,
+.threadWrapper:hover .viewThread {
+  visibility: visible;
+}
+
+.threadWrapper:hover .thread_time {
+  display: none;
+}
+
+/*End thread Part */
