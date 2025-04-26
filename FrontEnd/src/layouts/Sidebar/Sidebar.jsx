@@ -1,38 +1,3 @@
-<<<<<<< HEAD
-/* eslint-disable no-unused-vars */
-// import styles from "./Sidebar.module.css";
-// import SidebarOption from "../SidebarOptions/SidebarOption";
-// import CreateIcon from "../../assets/icons/new-message.svg";
-// import ThreadsIcon from "../../assets/icons/thread.svg";
-// import MentionIcon from "../../assets/icons/mention.svg";
-// import SendIcon from "../../assets/icons/send-outline.svg";
-// import CanvasIcon from "../../assets/icons/canvases.svg";
-// import ConnectIcon from "../../assets/icons/connect.svg";
-// import FilesIcon from "../../assets/icons/files.svg";
-// import MoreIcon from "../../assets/icons/more.svg";
-// import CaretDownIcon from "../../assets/icons/caret-down.svg";
-// import HashtagIcon from "../../assets/icons/hashtag-thin.svg";
-// import PlusIcon from "../../assets/icons/plus.svg";
-// import UserIcon from "../../assets/icons/user.svg";
-// import BotIcon from "../../assets/icons/bot.svg";
-// function Sidebar() {
-//   return (
-//     <div className={styles.sidebar}>
-//       <div className={styles.sidebar__Navbar}>
-//         <div className={styles.sidebar__info}>
-//           <h2>Web development</h2>
-//           {/* <h3>
-//             <FiberManualRecordIcon />
-//             Guest User
-//           </h3> */}
-//         </div>
-//         <img
-//           src={CreateIcon}
-//           alt="Crete-workspace icon"
-//           className={styles.create_icon}
-//         />
-//       </div>
-=======
 // // import styles from "./Sidebar.module.css";
 // // import SidebarOption from "../SidebarOptions/SidebarOption";
 // // import CreateIcon from "../../assets/icons/new-message.svg";
@@ -65,8 +30,6 @@
 // //           className={styles.create_icon}
 // //         />
 // //       </div>
->>>>>>> main
-
 // //       <SidebarOption Icon={ThreadsIcon} title="threads" />
 // //       <SidebarOption Icon={MentionIcon} title="Mentions & reactions " />
 // //       <SidebarOption Icon={SendIcon} title="Drafts & sent" />
@@ -112,10 +75,10 @@ import { FaHashtag } from "react-icons/fa";
 import PlusIcon from "../../assets/icons/plus.svg";
 import UserIcon from "../../assets/icons/user.svg";
 import BotIcon from "../../assets/icons/bot.svg";
-<<<<<<< HEAD
+
 import mockChannels from "../../API/services/mockChannels";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeChannelMenu,
@@ -124,6 +87,10 @@ import {
 import ChannelItem from "../../components/Chat/channel/SideBar/ChannelItem/ChannelItem";
 import ChannelsList from "../../components/Chat/channel/SideBar/ChannelList/ChannelList";
 function Sidebar() {
+    const navigate = useNavigate();
+  const user = {
+    id:1,
+  }
   const dispatch = useDispatch();
   const [showChannels, setShowChannels] = useState(true);
   const channelsRef = useRef(null);
@@ -138,15 +105,6 @@ function Sidebar() {
     }
   }
 
-
-=======
-import { useNavigate } from "react-router-dom";
-function Sidebar() {
-  const navigate = useNavigate();
-  const user = {
-    id:1,
-  }
->>>>>>> main
   return (
     <div className={`${styles.sidebar} ${isMenuOpen ? styles.unScroll : ""}`}>
       <div className={styles.sidebar__Navbar}>

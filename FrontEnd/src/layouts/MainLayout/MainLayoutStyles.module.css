@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 /* @import "../../styles/variables.css";
-=======
->>>>>>> main
 .layout {
   display: flex;
   flex-direction: column;
@@ -13,7 +10,6 @@
   display: flex;
   height: calc(100vh - 50px);
 }
-<<<<<<< HEAD
 
 .main {
   flex: 1;
@@ -21,9 +17,6 @@
   height: calc(100vh - 50px);
 } */
 
-
-
-/* alaa mainlayout */
 .layout {
   display: flex;
   flex-direction: column;
@@ -37,9 +30,6 @@
 }
 
 .workspace_content>div {
-=======
-.workspace_content > div {
->>>>>>> main
   height: 100%;
 }
 
