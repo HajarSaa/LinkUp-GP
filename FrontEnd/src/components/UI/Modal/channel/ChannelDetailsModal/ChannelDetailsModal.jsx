@@ -404,7 +404,7 @@ const ChannelDetailsModal = ({ channel }) => {
 };
 
 ChannelDetailsModal.propTypes = {
-  channel: PropTypes.obj,
+  channel: PropTypes.any,
 };
 
 export default ChannelDetailsModal;

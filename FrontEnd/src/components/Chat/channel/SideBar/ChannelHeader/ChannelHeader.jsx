@@ -52,9 +52,9 @@ const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
 };
 
 ChannelsHeader.propTypes = {
-  isAnyChannelActive: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onAddChannel: PropTypes.func.isRequired,
+  isAnyChannelActive: PropTypes.bool,
+  onToggle: PropTypes.func,
+  onAddChannel: PropTypes.func,
 };
 
 export default ChannelsHeader;

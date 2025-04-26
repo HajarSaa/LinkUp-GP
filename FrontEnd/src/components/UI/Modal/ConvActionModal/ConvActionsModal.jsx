@@ -57,8 +57,8 @@ const ConvActionsModal = ({ createClick, manageClcik, targetRef }) => {
 };
 
 ConvActionsModal.propTypes = {
-  createClick: PropTypes.func.isRequired,
-  manageClcik: PropTypes.func.isRequired,
+  createClick: PropTypes.func,
+  manageClcik: PropTypes.func,
   targetRef: PropTypes.any,
 };
 
