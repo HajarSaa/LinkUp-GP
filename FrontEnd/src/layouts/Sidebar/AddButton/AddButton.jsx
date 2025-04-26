@@ -1,6 +1,6 @@
 import { FaPlus } from "react-icons/fa";
 import styles from "./AddButton.module.css";
-import AddButtonModal from "../../../Modal/channel/AddButtonModal/AddButtonModal";
+import AddButtonModal from "../../../components/UI/Modal/channel/AddButtonModal/AddButtonModal";
 import PropTypes from "prop-types";
 import { useRef } from "react";
 function AddButton({ clickEvent, text }) {

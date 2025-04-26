@@ -13,7 +13,7 @@ import HuddleModal from "../../../UI/Modal/channel/HuddleModal/HuddleModal";
 import { openMenu } from "../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { openHuddleModal } from "../../../../API/redux_toolkit/modals/huddleSlice";
-import SmallAvatar from "../../Avatar/SmallAvatar/SmallAvatar";
+import SmallAvatar from '../../Avatar/SmallAvatar/SmallAvatar';
 
 function Header({ channel, user }) {
   const dispatch = useDispatch();

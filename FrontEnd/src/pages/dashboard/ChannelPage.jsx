@@ -3,7 +3,7 @@ import mockChannels from "../../API/services/mockChannels";
 import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
 import ChatMessage from "../../components/Chat/ChatMessage/ChatMessage";
 import ContentPage from "./ContentPage/ContentPage";
-import Header from "../../components/Chat/channel/Header/Header";
+import Header from "../../components/UI/Channel/Header/Header";
 
 function ChannelPage() {
   const { id } = useParams();

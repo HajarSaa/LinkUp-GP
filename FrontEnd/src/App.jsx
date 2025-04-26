@@ -5,7 +5,7 @@ import "./styles/global.css";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import MainLayout from "./layouts/MainLayout/MainLayout";
-import BrowseChannels from './pages/content/BrowseChannels/BrowseChannels';
+import BrowseChannels from './pages/dashboard/BrowseChannels/BrowseChannels';
 // import Channel from "./pages/content/Channel/Channel";
 import DmPage from "./pages/dashboard/DmPage";
 import GlobalModals from "./components/UI/Modal/GlobalModals";
