@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import styles from "./UserProfile.module.css";
+import styles from "./UserPanel.module.css";
 import { LuClock3 } from "react-icons/lu";
 const ProfileInfo = ({ name, jobTitle, gender, status, localTime }) => {
   return (
@@ -22,7 +22,7 @@ const ProfileInfo = ({ name, jobTitle, gender, status, localTime }) => {
   );
 };
 ProfileInfo.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   name: PropTypes.string,
   jobTitle: PropTypes.string,
   gender: PropTypes.string,

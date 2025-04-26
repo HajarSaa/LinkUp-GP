@@ -1,4 +1,4 @@
-// import styles from "../UserProfile/UserProfile.module.css";
+// import styles from "../UserProfile/UserPanel.module.css";
 import MainLayout from "../../../layouts/MainLayout/MainLayout";
 import UserNavbar from "../UserDM/Userbar";
 import UserCard from "../UserDM/UserCard";

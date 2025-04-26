@@ -1,5 +1,5 @@
 // import React from "react";
-import styles from "./UserProfile.module.css";
+import styles from "./UserPanel.module.css";
 import PropTypes from "prop-types";
 import { IoMailOutline } from "react-icons/io5";
 import { FiPhone } from "react-icons/fi";
@@ -31,7 +31,7 @@ const ProfileAbout = ({ emailAddress, phone }) => {
   );
 };
 ProfileAbout.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   emailAddress: PropTypes.string,
   phone: PropTypes.string,
 };

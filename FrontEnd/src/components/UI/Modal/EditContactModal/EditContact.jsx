@@ -57,12 +57,12 @@ const EditContactModal = ({ isOpen, onClose, userData }) => {
 };
 
 EditContactModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
   userData: PropTypes.shape({
-    email: PropTypes.string.isRequired,
+    email: PropTypes.string,
     phone: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default EditContactModal;

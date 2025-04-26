@@ -1,17 +1,17 @@
 import { FaPlus } from "react-icons/fa";
 import styles from "./AddButton.module.css";
-import AddButtonModal from '../../../Modal/channel/AddButtonModal/AddButtonModal';
+import AddButtonModal from "../../../Modal/channel/AddButtonModal/AddButtonModal";
 import PropTypes from "prop-types";
 import { useRef } from "react";
 function AddButton({ clickEvent, text }) {
-  const addBtnRef = useRef(null)
+  const addBtnRef = useRef(null);
   return (
     <>
       <div
         className={`sideBarButton sideBarHover`}
         onClick={(e) => {
           e.stopPropagation();
-          clickEvent()
+          clickEvent();
         }}
         ref={addBtnRef}
       >
@@ -25,8 +25,8 @@ function AddButton({ clickEvent, text }) {
   );
 }
 AddButton.propTypes = {
-  clickEvent: PropTypes.func.isRequired,
-  text: PropTypes.string.isRequired,
+  clickEvent: PropTypes.func,
+  text: PropTypes.string,
 };
 
 export default AddButton;

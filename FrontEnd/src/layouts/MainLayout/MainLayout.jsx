@@ -20,11 +20,10 @@
 //   );
 // }
 // MainLayout.propTypes = {
-//   children: PropTypes.node.isRequired,
+//   children: PropTypes.node ,
 // };
 
 // export default MainLayout;
-
 
 // alaa mainlayout
 import Sidebar from "../Sidebar/Sidebar";

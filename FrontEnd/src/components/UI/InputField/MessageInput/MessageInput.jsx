@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./InputField.module.css";
+import styles from "./MessageInput.module.css";
 import { HiMiniBold } from "react-icons/hi2";
 import { FiItalic } from "react-icons/fi";
 import { AiOutlineStrikethrough } from "react-icons/ai";
@@ -51,7 +51,7 @@ const renderIcons = (icons, positions, iconClass, customClass) => {
   ));
 };
 
-const InputField = ({ isThread, channelName='front end' }) => {
+const MessageInput = ({ isThread, channelName='front end' }) => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const [isChecked, setIsChecked] = useState(false);
@@ -172,9 +172,9 @@ const InputField = ({ isThread, channelName='front end' }) => {
   );
 };
 
-export default InputField;
+export default MessageInput;
 
-InputField.propTypes = {
+MessageInput.propTypes = {
   channelName: PropTypes.string,
   isThread: PropTypes.bool,
 };

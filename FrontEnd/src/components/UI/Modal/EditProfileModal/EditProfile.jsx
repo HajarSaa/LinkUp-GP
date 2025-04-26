@@ -182,15 +182,15 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
 };
 
 ProfileEditModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
   userData: PropTypes.shape({
     fullName: PropTypes.string,
     displayName: PropTypes.string,
     title: PropTypes.string,
     namePronunciation: PropTypes.string,
     timeZone: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default ProfileEditModal;

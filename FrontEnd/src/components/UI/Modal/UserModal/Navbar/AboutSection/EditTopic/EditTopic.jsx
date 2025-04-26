@@ -32,7 +32,7 @@ const EditTopic = ({ isOpen, onClose }) => {
   );
 };
 EditTopic.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 export default EditTopic;

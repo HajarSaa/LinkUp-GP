@@ -108,8 +108,8 @@
 
 // // 🟢 تعريف PropTypes علشان نتأكد من صحة الـ props
 // EditDateModal.propTypes = {
-//   isOpen: PropTypes.bool.isRequired, // لازم يكون Boolean
-//   onClose: PropTypes.func.isRequired, // لازم يكون Function
+//   isOpen: PropTypes.bool , // لازم يكون Boolean
+//   onClose: PropTypes.func , // لازم يكون Function
 // };
 
 // export default EditDateModal;
@@ -207,8 +207,8 @@ const EditDateModal = ({ isOpen, onClose }) => {
 };
 
 EditDateModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default EditDateModal;

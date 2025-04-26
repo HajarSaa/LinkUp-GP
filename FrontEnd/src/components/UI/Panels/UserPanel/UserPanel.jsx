@@ -1,9 +1,8 @@
-
 import ProfileImage from "./ProfileImage";
 import ProfileInfo from "./ProfileInfo";
 import ProfileActions from "./ProfileActions";
 import ProfileAbout from "./ProfileAbout";
-import styles from "./UserProfile.module.css";
+import styles from "./UserPanel.module.css";
 import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
@@ -15,7 +14,7 @@ const ProfileCard = () => {
     dispatch(closeChatPanel());
   };
 
-    if (!userPanel) return null;
+  if (!userPanel) return null;
 
   return (
     <div className={styles.profileCard}>

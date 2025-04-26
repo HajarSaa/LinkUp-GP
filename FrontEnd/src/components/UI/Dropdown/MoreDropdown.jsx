@@ -85,7 +85,7 @@ const MoreDropdown = ({ items = [] }) => {
 MoreDropdown.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      label: PropTypes.string,
       isDanger: PropTypes.bool,
     })
   ),

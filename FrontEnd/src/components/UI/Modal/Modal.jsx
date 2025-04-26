@@ -23,11 +23,11 @@ const Modal = ({ isOpen, onClose, children, className, zIndex = 1000 }) => {
 };
 
 Modal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  children: PropTypes.node,
   className: PropTypes.string,
-  zIndex: PropTypes.number.isRequired,
+  zIndex: PropTypes.number,
 };
 
 export default Modal;

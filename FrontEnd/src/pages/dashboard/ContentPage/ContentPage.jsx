@@ -14,5 +14,5 @@ function ContentPage({ children }) {
 export default ContentPage;
 
 ContentPage.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any,
 };

@@ -26,8 +26,8 @@ const NavigationTabs = ({ activeTab, setActiveTab }) => {
 };
 
 NavigationTabs.propTypes = {
-  activeTab: PropTypes.string.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
+  activeTab: PropTypes.string,
+  setActiveTab: PropTypes.func,
 };
 
 export default NavigationTabs;

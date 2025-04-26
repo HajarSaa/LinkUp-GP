@@ -3,7 +3,7 @@ import { FaLock, FaHashtag } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const ChannelItem = ({ id, name, isActive, hasUnread, isPrivate}) => {
+const ChannelItem = ({ id, name, isActive, hasUnread, isPrivate }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -26,8 +26,8 @@ const ChannelItem = ({ id, name, isActive, hasUnread, isPrivate}) => {
 };
 
 ChannelItem.propTypes = {
-  id: PropTypes.any.isRequired, // if number only , change it
-  name: PropTypes.string.isRequired,
+  id: PropTypes.any, // if number only , change it
+  name: PropTypes.string,
   isActive: PropTypes.bool,
   hasUnread: PropTypes.bool,
   isPrivate: PropTypes.bool,

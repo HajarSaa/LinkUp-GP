@@ -18,7 +18,7 @@ const ThreadPanel = () => {
                 <FaTimes onClick={() => dispatch(closeThread())} className={styles.closeIcon} />
             </div>
 
-            {/* ✅ الرسالة الأصلية */}
+
             <div className={styles.originalMessage}>
                 <img src={`/assets/avatars/${selectedThread.sender.toLowerCase()}.png`}
                     alt={selectedThread.sender}
@@ -35,7 +35,7 @@ const ThreadPanel = () => {
                 </div>
             </div>
 
-            {/* ✅ قائمة الردود */}
+
             <div className={styles.replies}>
                 {selectedThread.thread.map((reply) => (
                     <div key={reply.id} className={styles.reply}>
@@ -56,7 +56,7 @@ const ThreadPanel = () => {
                 ))}
             </div>
 
-            {/* ✅ إدخال رد جديد */}
+
             <MessageInput />
         </div>
     );

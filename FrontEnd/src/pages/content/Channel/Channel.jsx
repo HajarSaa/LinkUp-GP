@@ -8,6 +8,7 @@ import MessageInput from "../../../components/Chat/channel/messageInput/MessageI
 import ThreadPanel from "../../../components/Chat/channel/threadPanel/ThreadPanel";
 import { useSelector } from "react-redux";
 import ProfilePanel from "../../../components/Chat/channel/profilePanel/ProfilePanel";
+import MessageItem from "../../../components/Chat/ChatMessage/MessageItem";
 import ChatMessage from "../../../components/Chat/ChatMessage/ChatMessage";
 
 const Channel = () => {
@@ -26,13 +27,12 @@ const Channel = () => {
     <div className={styles.mainContentContainer}>
       <div className={styles.channelContainer}>
         <Header channel={channel} />
-        {/* <ChannelHeader/> */}
-        {/* Messages*/}
-        <div className={styles.messageContainer}>
+        {/* <div className={styles.messageContainer}>
           {channel.messages.map((message, index) => (
-            <ChatMessage key={index} isFirstMessage={false} message={message}/>
+            <MessageItem key={index} isFirstMessage={false} message={message}/>
           ))}
-        </div>
+        </div> */}
+        <ChatMessage messages={channel.messages} />
         <MessageInput />
       </div>
       {/* pannel will appears hear */}
