@@ -2,7 +2,7 @@
 import PropTypes from "prop-types";
 import styles from "./Button.module.css";
 
-const Button = ({ onClick, children, icon, className, ...props }) => {
+const Button = ({ onClick, children=null, icon=null, className="", ...props }) => {
   return (
     <button
       className={`${styles.button} ${className}`}
@@ -16,16 +16,11 @@ const Button = ({ onClick, children, icon, className, ...props }) => {
 };
 
 Button.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  children: PropTypes.node,
-  icon: PropTypes.string,
-  className: PropTypes.string,
+  onClick: PropTypes.any,
+  children: PropTypes.any,
+  icon: PropTypes.any,
+  className: PropTypes.any,
 };
 
-Button.defaultProps = {
-  children: null,
-  icon: null,
-  className: "",
-};
 
 export default Button;
