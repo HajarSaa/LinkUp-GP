@@ -27,8 +27,6 @@
 
 
 // alaa mainlayout
-
-import PropTypes from "prop-types";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import Workbar from "../Workspaces/Workbar";
@@ -56,8 +54,5 @@ function MainLayout() {
     </div>
   );
 }
-MainLayout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export default MainLayout;
