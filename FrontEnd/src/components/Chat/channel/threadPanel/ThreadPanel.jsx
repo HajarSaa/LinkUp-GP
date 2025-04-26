@@ -1,19 +1,18 @@
 import styles from "./ThreadPanel.module.css";
 import { FaTimes } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux"; // ✅ استدعاء Redux Toolkit
-import { closeThread } from "../../../../API/redux/chat/channel/threadSlice"; // ✅ جلب Action إغلاق الثريد
+import { useDispatch, useSelector } from "react-redux";
+import { closeThread } from "../../../../API/redux_toolkit/chat/channel/threadSlice";
 import MessageInput from "../messageInput/MessageInput";
 
 const ThreadPanel = () => {
     const dispatch = useDispatch();
-    const selectedThread = useSelector((state) => state.threads.selectedThread); // ✅ جلب بيانات الثريد المفتوح
+    const selectedThread = useSelector((state) => state.threads.selectedThread);
 
-    if (!selectedThread) return null; // ✅ لو مفيش Thread مفتوح، لا تعرض أي شيء
+    if (!selectedThread) return null;
 
 
     return (
         <div className={styles.threadPanel}>
-            {/* ✅ الهيدر */}
             <div className={styles.header}>
                 <h3>Thread</h3>
                 <FaTimes onClick={() => dispatch(closeThread())} className={styles.closeIcon} />

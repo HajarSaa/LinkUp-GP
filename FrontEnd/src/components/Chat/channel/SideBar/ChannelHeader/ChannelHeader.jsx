@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { FaCaretDown, FaCaretRight, FaChevronDown } from "react-icons/fa";
 import styles from "./ChannelHeader.module.css";
 import { useDispatch } from "react-redux";
-import { closeConvActionModal, openConvActionModal } from "../../../../../API/redux/modals/convActionModal";
+import { closeConvActionModal, openConvActionModal } from "../../../../../API/redux_toolkit/modals/convActionModal";
 import ConvActionsModal from "../../../../UI/Modal/ConvActionModal/ConvActionsModal";
-import { openCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice";
+import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
 const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
   const [isOpen, setIsOpen] = useState(true);

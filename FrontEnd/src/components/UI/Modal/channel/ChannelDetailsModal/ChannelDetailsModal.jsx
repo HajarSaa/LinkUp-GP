@@ -16,7 +16,7 @@ import {
   openEditTopicModal,
   openRenameModal,
   setActiveTab,
-} from "../../../../../API/redux/modals/channelDetailsSlice";
+} from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import DetailsButton from "../../../Buttons/ChannelButtons/DetailsButton/DetailsButton";
 import {
   MdDeleteOutline,

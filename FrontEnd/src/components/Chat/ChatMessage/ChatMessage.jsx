@@ -1,127 +1,109 @@
+/* eslint-disable no-unused-vars */
 import { BiSolidUser } from "react-icons/bi";
 import styles from "./ChatMessage.module.css";
 import { MdOutlineAddReaction } from "react-icons/md";
 import Reaction from "./Reaction";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
+import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSlice";
+import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
+import MessageActions from "./MessageActions";
+import MessageThreads from "./MessageThreads";
 
-const ChatMessage = () => {
-  const [showPicker, setShowPicker] = useState(false);
+const ChatMessage = ({ isFirstMessage = true, message }) => {
   const [emoji, setEmoji] = useState("");
   const add_react_ref = useRef(null);
+  const [add_position, set_add_Position] = useState(null);
+  const [messageHover, setMessageHover] = useState(false);
+  const dispatch = useDispatch();
+  const showMessageHeader = isFirstMessage || message.thread.length > 0;
+
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
-    // setShowPicker(false);
   };
+  function openEmojies() {
+    dispatch(openEmojiPicker());
+  }
+
+  const updatePosition = () => {
+    if (add_react_ref.current) {
+      const rect = add_react_ref.current.getBoundingClientRect();
+      set_add_Position({
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+      });
+    }
+  };
+  useEffect(() => {
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("zoom", updatePosition);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("zoom", updatePosition);
+    };
+  }, []);
 
   return (
-    <div className={styles.message_container}>
-      <div className={styles.message}>
-        <div className={styles.message_leftSide}>
-          <div className={styles.profileWrapper}>
-            {/* <img/> */}
-            {/* لو فيه صوره هنضيفها مفيش يبقي الديفولت */}
-            <BiSolidUser className={styles.profile} />
+    <>
+      <div
+        className={styles.message_container}
+        onMouseEnter={() => setMessageHover(true)}
+        onMouseLeave={() => setMessageHover(false)}
+      >
+        <div className={styles.message}>
+          <div className={styles.message_leftSide}>
+            {showMessageHeader ? (
+              <div className={styles.profileWrapper}>
+                {/* <img/> */}
+                {/* لو فيه صوره هنضيفها مفيش يبقي الديفولت */}
+                <BiSolidUser className={styles.profile} />
+              </div>
+            ) : (
+              <>
+                {messageHover && (
+                  <div className={`${styles.message_time}`}>2:49 PM</div>
+                )}
+              </>
+            )}
           </div>
-        </div>
-        <div className={styles.message_rightSide}>
-          <div className={styles.message_content}>
-            <div className={styles.message_info}>
-              <div className={styles.message_sender}>Omar</div>
-              <div className={styles.message_time}>2:49 PM</div>
-            </div>
-            <div className={styles.message_text}>
-              Anyone in Shebin or around?
-            </div>
-          </div>
-          <div className={styles.reactions}>
-            <Reaction />
-            <div
-              className={styles.add_react}
-              onClick={() => setShowPicker(!showPicker)}
-              ref={add_react_ref}
-            >
-              <MdOutlineAddReaction />
-              {showPicker && (
-                <EmojiPicker
-                  targetRef={add_react_ref}
-                  onSelect={handleEmojiSelect}
-                />
+          <div className={styles.message_rightSide}>
+            <div className={styles.message_content}>
+              {showMessageHeader && (
+                <div className={styles.message_info}>
+                  <div className={styles.message_sender}>{message.sender}</div>
+                  <div className={styles.message_time}>2:49 PM</div>
+                </div>
               )}
-              {console.log(showPicker,emoji)}
+              <div className={styles.message_text}>{message.text}</div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.repliesWrapper}>
-        <div className={styles.replies}>
-          <div className={styles.frameDiv}>
-            <div className={styles.photosParent}>
-              <div className={styles.photos1}>
-                <img className={styles.x26Icon} alt="" src="26x26.png" />
-              </div>
-              <div className={styles.photos1}>
-                <img className={styles.x26Icon} alt="" src="26x26.png" />
+            <div className={styles.reactions}>
+              <Reaction reactions={message.reactions} />
+              <div
+                className={styles.add_react}
+                onClick={openEmojies}
+                ref={add_react_ref}
+              >
+                <MdOutlineAddReaction />
               </div>
             </div>
-            <div className={styles.repliesViewThreadContainer}>
-              <span className={styles.replies1}>{`4 replies   `}</span>
-              <span className={styles.viewThread}>View thread</span>
-            </div>
-          </div>
-          <div className={styles.repliesInner}>
-            <div className={styles.iconWrapper}>
-              <div className={styles.icon2}>
-                <img
-                  className={styles.typelineStatenormalIcon}
-                  alt=""
-                  src="Type=Line, State=Normal.svg"
-                />
-              </div>
-            </div>
+            {showMessageHeader && <MessageThreads />}
           </div>
         </div>
+        <MessageActions messageHover={messageHover} />
       </div>
-      <div className={styles.iconParent}>
-        <div className={styles.icon3}>
-          <img
-            className={styles.typelineStatenormalIcon}
-            alt=""
-            src="Type=Line, State=Normal.svg"
-          />
-        </div>
-        <div className={styles.icon3}>
-          <img
-            className={styles.typelineStatenormalIcon}
-            alt=""
-            src="Type=Line, State=Normal.svg"
-          />
-        </div>
-        <div className={styles.icon3}>
-          <img
-            className={styles.typelineStatenormalIcon}
-            alt=""
-            src="Type=Line, State=Normal.svg"
-          />
-        </div>
-        <div className={styles.icon3}>
-          <img
-            className={styles.typelineStatenormalIcon}
-            alt=""
-            src="Type=Line, State=Normal.svg"
-          />
-        </div>
-        <div className={styles.icon3}>
-          <img
-            className={styles.typelineStatenormalIcon}
-            alt=""
-            src="Type=Line, State=Normal.svg"
-          />
-        </div>
-      </div>
-    </div>
+      <EmojiPicker position={add_position} onSelect={handleEmojiSelect} />
+    </>
   );
+};
+
+ChatMessage.propTypes = {
+  isFirstMessage: PropTypes.bool,
+  message: PropTypes.object,
 };
 
 export default ChatMessage;

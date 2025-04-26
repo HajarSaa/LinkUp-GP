@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import styles from "./ConvActionsModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { closeConvActionModal } from "../../../../API/redux/modals/convActionModal";
+import { closeConvActionModal } from "../../../../API/redux_toolkit/modals/convActionModal";
 import { IoIosArrowForward } from "react-icons/io";
 import Overlay from "../Overlay/Overlay";
 import { useEffect, useState } from "react";

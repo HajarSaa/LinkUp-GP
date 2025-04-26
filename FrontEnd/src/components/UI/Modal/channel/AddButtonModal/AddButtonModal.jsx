@@ -3,8 +3,8 @@ import styles from "./AddButtonModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import Overlay from "../../Overlay/Overlay";
 import { useEffect, useState } from "react";
-import { closeAddButtonModal } from "../../../../../API/redux/modals/addButtonModal";
-import { openCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice";
+import { closeAddButtonModal } from "../../../../../API/redux_toolkit/modals/addButtonModal";
+import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 import { useNavigate } from "react-router-dom";
 
 const AddButtonModal = ({ targetRef }) => {
@@ -22,7 +22,7 @@ const AddButtonModal = ({ targetRef }) => {
   }
   function handleBrowseBtn() {
     dispatch(closeAddButtonModal())
-    navigateTo("channels");
+    navigateTo("browse-channels");
   }
 
   useEffect(() => {

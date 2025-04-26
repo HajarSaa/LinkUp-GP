@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { openChannelDetails } from "../../../../API/redux/modals/channelDetailsSlice";
+import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
 import { MdHeadset } from "react-icons/md";
 import { FiChevronDown } from "react-icons/fi";
@@ -10,9 +10,9 @@ import { TbMessageCircleFilled } from "react-icons/tb";
 import PropTypes from "prop-types";
 import ChannelOptionModal from "../../../UI/Modal/channel/ChannelOptionsModal/ChannelOptionModal";
 import HuddleModal from "../../../UI/Modal/channel/HuddleModal/HuddleModal";
-import { openMenu } from "../../../../API/redux/chat/channel/channelMenuSlice";
+import { openMenu } from "../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { openHuddleModal } from "../../../../API/redux/modals/huddleSlice";
+import { openHuddleModal } from "../../../../API/redux_toolkit/modals/huddleSlice";
 import SmallAvatar from "../../Avatar/SmallAvatar/SmallAvatar";
 
 function Header({ channel, user }) {

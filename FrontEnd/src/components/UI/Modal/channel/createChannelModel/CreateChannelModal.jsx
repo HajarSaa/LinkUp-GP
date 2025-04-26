@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   closeCreateChannel,
   openAddMembers,
-} from "../../../../../API/redux/modals/createChannelmodalSlice";
+} from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
 const CreateChannelModal = () => {
   const [channelName, setChannelName] = useState("");

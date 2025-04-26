@@ -5,7 +5,7 @@ import mockChannels from "../../../API/services/mockChannels";
 import { BsDot } from "react-icons/bs";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { openCreateChannel } from "../../../API/redux/modals/createChannelmodalSlice";
+import { openCreateChannel } from "../../../API/redux_toolkit/modals/createChannelmodalSlice";
 import SearchInput from "../../../components/UI/InputField/ChannelInputs/SearchInput/SearchInput";
 // import { useState } from "react";
 

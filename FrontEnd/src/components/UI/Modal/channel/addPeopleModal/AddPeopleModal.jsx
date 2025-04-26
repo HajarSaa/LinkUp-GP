@@ -3,7 +3,7 @@ import styles from "./AddPeopleModal.module.css";
 import { FaLock } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { closeCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice"
+import { closeCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
 
 const AddPeopleModal = ({ channelName }) => {

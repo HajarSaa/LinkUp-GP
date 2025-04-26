@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./EditModals.module.css";
-import { closeEditModal } from "../../../../../API/redux/modals/channelDetailsSlice";
+import { closeEditModal } from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
 

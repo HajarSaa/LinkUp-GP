@@ -84,7 +84,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   closeChannelMenu,
   openChannelMenu,
-} from "../../API/redux/chat/channel/addChannelMenuSlice";
+} from "../../API/redux_toolkit/chat/channel/addChannelMenuSlice";
 import ChannelItem from "../../components/Chat/channel/SideBar/ChannelItem/ChannelItem";
 import ChannelsList from "../../components/Chat/channel/SideBar/ChannelList/ChannelList";
 function Sidebar() {

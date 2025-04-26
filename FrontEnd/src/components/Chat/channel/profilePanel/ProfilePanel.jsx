@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { closeProfilePanel } from "../../../../API/redux/chat/channel/profilePanelSlice";
+import { closeProfilePanel } from "../../../../API/redux_toolkit/chat/channel/profilePanelSlice";
 import styles from "./ProfilePanel.module.css";
 import { FaTimes, FaClock, FaEnvelope, FaUserPlus, FaHeadphones, FaCommentDots } from "react-icons/fa";
 

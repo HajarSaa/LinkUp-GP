@@ -2,29 +2,30 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import PropTypes from "prop-types";
 import styles from "./EmojiPicker.module.css";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { closeEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSlice";
 
-const EmojiPicker = ({ onSelect, targetRef }) => {
-  const [position, setPosition] = useState(null);
-  const [height, setHeight] = useState(355);
-  useEffect(() => {
-    if (targetRef.current) {
-      const rect = targetRef.current.getBoundingClientRect();
-      console.log(rect.top, rect.left);
-      setPosition(rect.left);
-      setHeight((prev) => (rect.top > prev ? rect.top : prev));
-    }
-  }, []);
+
+const EmojiPicker = ({ onSelect, position }) => {
+  const { isOpen } = useSelector((state) => state.emojiPicker);
+  const dispatch = useDispatch();
+
+
+  function handleClose() {
+    dispatch(closeEmojiPicker());
+  }
+
+  if (!isOpen) return;
   return (
-    <div className={styles.overlay}>
+    <div className={styles.overlay} onClick={handleClose}>
       {position !== null && (
-        <div className={styles.emoji_picker} style={{ left: position }}>
+        <div className={styles.emoji_picker} style={{ left: position.left}}>
           <Picker
             data={data}
             onEmojiSelect={onSelect}
-            theme="light" // أو dark لو بتحب
+            theme="light" // or dark
+            styles={{height:"100%"}}
           />
-          {console.log(targetRef)}
         </div>
       )}
     </div>
@@ -33,7 +34,7 @@ const EmojiPicker = ({ onSelect, targetRef }) => {
 
 EmojiPicker.propTypes = {
   onSelect: PropTypes.func,
-  targetRef: PropTypes.any,
+  position: PropTypes.object,
 };
 
 export default EmojiPicker;

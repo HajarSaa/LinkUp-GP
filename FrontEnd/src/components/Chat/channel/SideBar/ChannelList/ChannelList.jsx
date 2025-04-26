@@ -6,9 +6,9 @@ import styles from "./ChannelList.module.css";
 import AddButton from "../../../../UI/Buttons/ChannelButtons/AddButton/AddButton";
 import mockChannels from "../../../../../API/services/mockChannels";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchChannels } from "../../../../../API/redux/chat/channel/channelsSlice";
-import { openCreateChannel } from "../../../../../API/redux/modals/createChannelmodalSlice.js";
-import { openAddButtonModal } from "../../../../../API/redux/modals/addButtonModal.js";
+import { fetchChannels } from "../../../../../API/redux_toolkit/chat/channel/channelsSlice";
+import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice.js";
+import { openAddButtonModal } from "../../../../../API/redux_toolkit/modals/addButtonModal.js";
 
 const ChannelsList = () => {
   const [isOpen, setIsOpen] = useState(true);

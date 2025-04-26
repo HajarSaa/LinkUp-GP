@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./NotificationsModal.module.css";
-import { closeNotificationsModal } from "../../../../../API/redux/modals/notificationsModalSlice";
+import { closeNotificationsModal } from "../../../../../API/redux_toolkit/modals/notificationsModalSlice";
 import { IoMdClose } from "react-icons/io";
 
 const NotificationsModal = () => {
