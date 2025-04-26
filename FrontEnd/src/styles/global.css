@@ -11,12 +11,15 @@ html,
 body {
   height: 100%;
   font-family: "Lato", "sans-serif";
-  font-weight: 500;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   color: #333;
   overflow: hidden;
 }
 
+/* .app__body {
+  display: flex;
+  height: 100vh;
+} */
 /* Basic typography */
 h1,
 h2,
@@ -29,12 +32,6 @@ h6 {
 
 p {
   line-height: 1.6;
-}
-input,button{
-  font-family: inherit;
-}
-input:focus{
-  outline: none;
 }
 
 /* Links */
