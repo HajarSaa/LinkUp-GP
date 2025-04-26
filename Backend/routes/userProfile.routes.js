@@ -1,27 +1,26 @@
 import express from "express";
-
+import uploader from "../middlewares/uploadFileMiddleware.js";
 import {
-  createUserProfile,
-  deleteUserProfile,
   getAllUserProfiles,
   getUserProfile,
-  updateUserProfile,
+  updateMyProfile,
+  updateUserImage,
 } from "../controllers/userProfile.controller.js";
-
-import { protect, protectAttchWorkspace } from "../middlewares/authMiddleware.js";
-import { attachUserData } from "../utils/attchData.js";
+import {
+  protect,
+  protectAttchWorkspace,
+} from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+const upload = uploader();
 
 router.use(protect);
-router.post("/", attachUserData({ user: "id", email: "email" }), createUserProfile)
-
 router.use(protectAttchWorkspace);
+
 router
   .get("/", getAllUserProfiles)
-  .patch("/:id", updateUserProfile)
-  .delete("/:id", deleteUserProfile)
-  .get("/updateme") // TODO- implement updateMe
-  .get("/:id", getUserProfile);
+  .get("/:id", getUserProfile)
+  .patch("/updateMe", updateMyProfile)
+  .patch("/updateUserImage", upload.single("photo"), updateUserImage);
 
 export default router;

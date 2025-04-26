@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+<<<<<<< HEAD
 import chatPanelReducer from "./ui/chatPanel";
 import threadReducer from "./chat/channel/threadSlice";
 import profilePanelReducer from "./chat/channel/profilePanelSlice";
@@ -13,10 +14,14 @@ import convActionModalReducer from "./modals/convActionModal";
 import huddleModalReducer from './modals/huddleSlice';
 import addButtonModalReducer from "./modals/addButtonModal";
 import emojiPickerReducer from './modals/emojiPickerSlice'
+=======
+import chatPanelReducer from './ui/chatPanel';
+>>>>>>> main
 
 const store = configureStore({
   reducer: {
     chatPanel: chatPanelReducer,
+<<<<<<< HEAD
     threads: threadReducer,
     profilePanel: profilePanelReducer,
     addChannelMenu: addChannelMenuReducer,
@@ -31,6 +36,8 @@ const store = configureStore({
     emojiPicker: emojiPickerReducer,
     // Channels List
     channels: channelsReducer,
+=======
+>>>>>>> main
   },
 });
 

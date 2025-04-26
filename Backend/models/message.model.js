@@ -11,11 +11,6 @@ const messageSchema = new mongoose.Schema(
       ref: "UserProfile",
       required: true,
     },
-    workspaceId: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Workspace",
-      required: true,
-    },
     channelId: {
       type: mongoose.Schema.ObjectId,
       ref: "Channel",
@@ -41,8 +36,17 @@ const messageSchema = new mongoose.Schema(
       type: String,
       enum: ["Message", "File"],
     },
+<<<<<<< HEAD
     // createdAt
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+
     // updatedAt
+=======
+>>>>>>> 87772a274eea2831e3c6d78715d9636135fc5ba4
   },
   { timestamps: true }
 );

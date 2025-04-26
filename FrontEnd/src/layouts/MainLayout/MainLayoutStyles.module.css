@@ -1,15 +1,19 @@
+<<<<<<< HEAD
 /* @import "../../styles/variables.css";
+=======
+>>>>>>> main
 .layout {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
-.content {
+.workspace_content {
   flex: 1;
   display: flex;
-  flex-direction: row;
+  height: calc(100vh - 50px);
 }
+<<<<<<< HEAD
 
 .main {
   flex: 1;
@@ -33,6 +37,9 @@
 }
 
 .workspace_content>div {
+=======
+.workspace_content > div {
+>>>>>>> main
   height: 100%;
 }
 
