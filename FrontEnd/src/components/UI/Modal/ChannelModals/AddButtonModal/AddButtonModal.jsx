@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import styles from "./AddButtonModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import Overlay from "../../Overlay/Overlay";
+import Overlay from "../Overlay/Overlay";
 import { useEffect, useState } from "react";
 import { closeAddButtonModal } from "../../../../../API/redux_toolkit/modals/addButtonModal";
 import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";

@@ -42,13 +42,12 @@
     width: 24px;
     height: 24px;
     border-radius: var(--border-radius);
-    border: 2px solid #fff;
+    border: 1px solid var(--border-color);
     margin-left: -8px;
-    box-shadow: 0 0 0 1px #e0e0e0;
     background-color: #fff;
 }
 
-.avatarImg {
+.avatar>img {
     max-width: 100%;
 }
 

@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
-import styles from "./ConvActionsModal.module.css";
+import styles from "./SideActionModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { closeConvActionModal } from "../../../../API/redux_toolkit/modals/convActionModal";
+import { closeConvActionModal } from "../../../../../API/redux_toolkit/modals/convActionModal";
 import { IoIosArrowForward } from "react-icons/io";
 import Overlay from "../Overlay/Overlay";
 import { useEffect, useState } from "react";
 
-const ConvActionsModal = ({ createClick, manageClcik, targetRef }) => {
+const SideActionModal = ({ createClick, manageClcik, targetRef }) => {
   const isOpen = useSelector((state) => state.convActionModal.isOpen);
   const dispatch = useDispatch();
 
@@ -56,10 +56,10 @@ const ConvActionsModal = ({ createClick, manageClcik, targetRef }) => {
   );
 };
 
-ConvActionsModal.propTypes = {
+SideActionModal.propTypes = {
   createClick: PropTypes.func,
   manageClcik: PropTypes.func,
   targetRef: PropTypes.any,
 };
 
-export default ConvActionsModal;
+export default SideActionModal;

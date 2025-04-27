@@ -5,7 +5,7 @@ import IconDropdown from "../../Dropdown/IconDropdown";
 import MoreDropdown from "../../Dropdown/MoreDropdown";
 import { FiHeadphones } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
-import Button from "../../Button/Button";
+import Button from "../../Buttons/Button/Button";
 // import { IoIosArrowDown } from "react-icons/io";
 
 const ProfileActions = () => {

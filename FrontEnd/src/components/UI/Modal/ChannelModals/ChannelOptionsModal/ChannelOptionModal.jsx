@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeMenu } from "../../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
 import { openChannelDetails } from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import { openNotificationsModal } from "../../../../../API/redux_toolkit/modals/notificationsModalSlice";
-import Overlay from "../../Overlay/Overlay";
+import Overlay from "../Overlay/Overlay";
 
 const ChannelOptionModal = ({ channel }) => {
     const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import { BsDot } from "react-icons/bs";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { openCreateChannel } from "../../../API/redux_toolkit/modals/createChannelmodalSlice";
-import SearchInput from "../../../components/UI/InputField/ChannelInputs/SearchInput/SearchInput";
+import SearchInput from "../../../components/UI/InputField/SearchInput/SearchInput";
 import ContentPage from "../ContentPage/ContentPage";
 // import { useState } from "react";
 

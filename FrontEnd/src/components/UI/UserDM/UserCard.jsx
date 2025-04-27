@@ -37,8 +37,8 @@
 
 import styles from "./UserDM.module.css";
 import { BiSolidUser } from "react-icons/bi";
-import Button from "../Button/Button";
-import style from "../Button/Button.module.css";
+import Button from "../Buttons/Button/Button";
+import style from "../Buttons/Button/Button.module.css";
 import { useDispatch } from "react-redux";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
 const UserCard = () => {

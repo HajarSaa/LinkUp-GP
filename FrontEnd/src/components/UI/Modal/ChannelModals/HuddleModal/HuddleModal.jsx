@@ -2,7 +2,7 @@ import { FaLink } from "react-icons/fa";
 import styles from "./HuddleModal.module.css";
 import { MdHeadset } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import Overlay from "../../Overlay/Overlay";
+import Overlay from "../Overlay/Overlay";
 import { closeHuddleModal } from "../../../../../API/redux_toolkit/modals/huddleSlice";
 
 const MoreOptionsModal = () => {

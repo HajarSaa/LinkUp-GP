@@ -4,7 +4,7 @@ import Modal from "../Modal";
 import styles from "./UploadProfilePhoto.module.css";
 import { FaUser } from "react-icons/fa";
 import { AiOutlineFileImage } from "react-icons/ai";
-import Button from "../../Button/Button";
+import Button from "../../Buttons/Button/Button";
 
 const UploadProfilePhotoModal = ({ isOpen, onClose }) => {
   const [selectedFile, setSelectedFile] = useState(null);

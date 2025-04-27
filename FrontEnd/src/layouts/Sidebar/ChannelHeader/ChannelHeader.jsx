@@ -4,7 +4,7 @@ import { FaCaretDown, FaCaretRight, FaChevronDown } from "react-icons/fa";
 import styles from "./ChannelHeader.module.css";
 import { useDispatch } from "react-redux";
 import { closeConvActionModal, openConvActionModal } from "../../../API/redux_toolkit/modals/convActionModal";
-import ConvActionsModal from "../../../components/UI/Modal/ConvActionModal/ConvActionsModal";
+import SideActionModal from "../../../components/UI/Modal/ChannelModals/SideActionModal/SideActionModal";
 import { openCreateChannel } from "../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
 const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
@@ -43,10 +43,7 @@ const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
           </span>
         </div>
       </div>
-      <ConvActionsModal
-        targetRef={buttonRef}
-        createClick={handleCreateButton}
-      />
+      <SideActionModal targetRef={buttonRef} createClick={handleCreateButton} />
     </>
   );
 };

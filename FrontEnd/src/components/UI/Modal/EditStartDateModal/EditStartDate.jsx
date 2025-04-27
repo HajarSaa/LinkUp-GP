@@ -127,7 +127,7 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import styles from "./EditStartDate.module.css";
-import Button from "../../Button/Button";
+import Button from "../../Buttons/Button/Button";
 
 const EditDateModal = ({ isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);

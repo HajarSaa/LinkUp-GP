@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import Modal from "../../../../Modal";
 import styles from "./AddPeople.module.css";
-import Button from "../../../../../Button/Button";
+import Button from "../../../../../Buttons/Button/Button";
 const AddPeopleModal = ({ isOpen, onClose }) => {
   return (
     <Modal

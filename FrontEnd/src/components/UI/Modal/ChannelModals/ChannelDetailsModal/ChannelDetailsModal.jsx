@@ -17,13 +17,13 @@ import {
   openRenameModal,
   setActiveTab,
 } from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
-import DetailsButton from "../../../Buttons/ChannelButtons/DetailsButton/DetailsButton";
+import DetailsButton from "../../../Buttons/DetailsButton/DetailsButton";
 import {
   MdDeleteOutline,
   MdHeadset,
   MdOutlinePersonAddAlt,
 } from "react-icons/md";
-import SearchInput from "../../../InputField/ChannelInputs/SearchInput/SearchInput";
+import SearchInput from "../../../InputField/SearchInput/SearchInput";
 import { FiChevronDown } from "react-icons/fi";
 import { TbMessageCircleFilled, TbPin } from "react-icons/tb";
 import { GoStack } from "react-icons/go";

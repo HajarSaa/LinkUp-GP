@@ -42,7 +42,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import styles from "./Dropdown.module.css";
-import Button from "../Button/Button";
+import Button from "../Buttons/Button/Button";
 import { IoMdMore } from "react-icons/io";
 
 const MoreDropdown = ({ items = [] }) => {
