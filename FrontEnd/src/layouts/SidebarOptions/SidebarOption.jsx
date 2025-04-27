@@ -31,7 +31,7 @@ function SidebarRow({ Icon, title, id }) {
 
 SidebarRow.propTypes = {
   Icon: PropTypes.elementType,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   id: PropTypes.string,
 };
 

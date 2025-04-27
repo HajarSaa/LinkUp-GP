@@ -5,11 +5,10 @@ import "./styles/global.css";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import MainLayout from "./layouts/MainLayout/MainLayout";
-import BrowseChannels from './pages/content/BrowseChannels/BrowseChannels';
-import Channel from "./pages/content/Channel/Channel";
+import BrowseChannels from './pages/dashboard/BrowseChannels/BrowseChannels';
 import DmPage from "./pages/dashboard/DmPage";
-import GlobalModals from "./components/UI/Modal/GlobalModals";
 import { Routes, Route } from "react-router-dom";
+import ChannelPage from "./pages/dashboard/ChannelPage";
 function App() {
   return (
     <div className="app__body">
@@ -18,12 +17,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<MainLayout />}>
           <Route path="dm/:id" element={<DmPage />} />
-          <Route path="channels/:id" element={<Channel />} />
+          <Route path="channels/:id" element={<ChannelPage />} />
           <Route path="browse-channels" element={<BrowseChannels />} />
         </Route>
       </Routes>
-      {/* models */}
-      <GlobalModals />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
-import Button from "../../Button/Button";
+import Button from "../../Buttons/Button/Button";
 import { AiOutlineAudio } from "react-icons/ai";
 import { FaUser } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
@@ -182,15 +182,15 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
 };
 
 ProfileEditModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
   userData: PropTypes.shape({
     fullName: PropTypes.string,
     displayName: PropTypes.string,
     title: PropTypes.string,
     namePronunciation: PropTypes.string,
     timeZone: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 export default ProfileEditModal;

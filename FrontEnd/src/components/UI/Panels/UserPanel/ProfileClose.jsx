@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./UserProfile.module.css";
+import styles from "./UserPanel.module.css";
 import { IoClose } from "react-icons/io5";
 // import ProfileCard from "./ProfileInfo";
 const ProfileClose = () => {

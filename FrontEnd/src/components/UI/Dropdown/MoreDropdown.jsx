@@ -42,7 +42,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import styles from "./Dropdown.module.css";
-import Button from "../Button/Button";
+import Button from "../Buttons/Button/Button";
 import { IoMdMore } from "react-icons/io";
 
 const MoreDropdown = ({ items = [] }) => {
@@ -85,7 +85,7 @@ const MoreDropdown = ({ items = [] }) => {
 MoreDropdown.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      label: PropTypes.string,
       isDanger: PropTypes.bool,
     })
   ),

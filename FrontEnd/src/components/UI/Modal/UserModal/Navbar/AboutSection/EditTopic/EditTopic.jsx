@@ -1,7 +1,7 @@
 import Modal from "../../../../Modal";
 import styles from "./EditTopic.module.css";
 import PropTypes from "prop-types";
-import Button from "../../../../../Button/Button";
+import Button from "../../../../../Buttons/Button/Button";
 
 const EditTopic = ({ isOpen, onClose }) => {
   return (
@@ -32,7 +32,7 @@ const EditTopic = ({ isOpen, onClose }) => {
   );
 };
 EditTopic.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 export default EditTopic;

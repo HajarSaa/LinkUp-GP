@@ -1,5 +1,5 @@
 // import React from "react";
-import styles from "./UserProfile.module.css";
+import styles from "./UserPanel.module.css";
 import { BiSolidUser } from "react-icons/bi";
 const ProfileImage = () => {
   return (

@@ -6,7 +6,7 @@ import styles from "./SetStatus.module.css";
 // import { AiOutlineClockCircle } from "react-icons/ai";
 // import { MdCommute, MdSick, MdBeachAccess, MdWork } from "react-icons/md";
 // import { BsCalendarEvent } from "react-icons/bs";
-import Button from "../../Button/Button";
+import Button from "../../Buttons/Button/Button";
 const statusOptions = [
   { icon: "📅", text: "In a meeting", duration: "1 hour" },
   { icon: "🚎", text: "Commuting", duration: "30 minutes" },
@@ -62,8 +62,8 @@ const SetStatusModal = ({ isOpen, onClose }) => {
 };
 
 SetStatusModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 };
 
 export default SetStatusModal;

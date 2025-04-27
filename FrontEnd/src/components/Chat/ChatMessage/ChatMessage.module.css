@@ -1,3 +1,8 @@
+/* .messages_wrapper {
+  background-color: var(--bg-white);
+  flex-grow: 1;
+  overflow-y: scroll;
+} */
 .message_container {
   width: 100%;
   position: relative;
@@ -31,6 +36,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .profile {

@@ -70,34 +70,22 @@ import ConnectIcon from "../../assets/icons/connect.svg";
 import FilesIcon from "../../assets/icons/files.svg";
 import MoreIcon from "../../assets/icons/more.svg";
 import CaretDownIcon from "../../assets/icons/caret-down.svg";
-import { FaCaretDown, FaPlus } from "react-icons/fa";
-import { FaHashtag } from "react-icons/fa";
 import PlusIcon from "../../assets/icons/plus.svg";
 import UserIcon from "../../assets/icons/user.svg";
 import BotIcon from "../../assets/icons/bot.svg";
-
-import mockChannels from "../../API/services/mockChannels";
-import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   closeChannelMenu,
-  openChannelMenu,
 } from "../../API/redux_toolkit/chat/channel/addChannelMenuSlice";
-import ChannelItem from "../../components/Chat/channel/SideBar/ChannelItem/ChannelItem";
-import ChannelsList from "../../components/Chat/channel/SideBar/ChannelList/ChannelList";
+import ChannelsList from "./ChannelList/ChannelList";
 function Sidebar() {
     const navigate = useNavigate();
   const user = {
     id:1,
   }
   const dispatch = useDispatch();
-  const [showChannels, setShowChannels] = useState(true);
-  const channelsRef = useRef(null);
-  const toggleChannels = () => setShowChannels(!showChannels);
-  //
   const isMenuOpen = useSelector((state) => state.addChannelMenu.isOpen);
-  //
 
   function handleClose(e) {
     if (e.target === e.currentTarget) {

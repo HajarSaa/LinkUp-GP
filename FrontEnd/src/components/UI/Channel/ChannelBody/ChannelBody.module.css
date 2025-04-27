@@ -1,0 +1,5 @@
+.channelBody{
+  background-color: var(--bg-white);
+    flex-grow: 1;
+    overflow-y: scroll;
+}
