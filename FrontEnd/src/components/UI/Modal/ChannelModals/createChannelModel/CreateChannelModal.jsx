@@ -19,9 +19,16 @@ const CreateChannelModal = () => {
     (state) => state.createChannelModal
   );
   const dispatch = useDispatch();
+
+  function handleClose(e) {
+    if (e.currentTarget === e.target) {
+      dispatch(closeCreateChannel());
+    }
+  }
+
   if (!isOpen) return;
   return (
-    <div className="overlay">
+    <div className="overlay" onClick={handleClose}>
       <div className={styles.modal}>
         <div className={styles.config}>
           <h2>Channel details</h2>
@@ -32,7 +39,9 @@ const CreateChannelModal = () => {
               id="channelName"
               placeholder="# e.g. subscription-budget"
               value={channelName}
-              onChange={(e) => setChannelName(e.target.value.split(' ').join('-'))}
+              onChange={(e) =>
+                setChannelName(e.target.value.split(" ").join("-"))
+              }
             />
             <p className={styles.description}>
               Channels are where conversations happen around a topic. Use a name

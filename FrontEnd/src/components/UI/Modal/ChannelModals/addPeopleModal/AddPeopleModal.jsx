@@ -5,16 +5,22 @@ import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
-
 const AddPeopleModal = ({ channelName }) => {
-  const { addMembersOpen:isModalOpen} = useSelector((state) => state.createChannelModal);
+  const { addMembersOpen: isModalOpen } = useSelector(
+    (state) => state.createChannelModal
+  );
   const dispatch = useDispatch();
   function close() {
     dispatch(closeCreateChannel());
   }
+  function handleClose(e) {
+    if (e.currentTarget === e.target) {
+      dispatch(closeCreateChannel());
+    }
+  }
   if (!isModalOpen) return;
   return (
-    <div className={styles.overlay}>
+    <div className={styles.overlay} onClick={handleClose}>
       <div className={styles.modalContainer}>
         {/* Header */}
         <div className={styles.modalHeader}>
@@ -39,8 +45,9 @@ const AddPeopleModal = ({ channelName }) => {
 
         {/* Buttons */}
         <div className={styles.modalActions}>
-          <div className={styles.skipButton}
-            onClick={close}>Skip for now</div>
+          <div className={styles.skipButton} onClick={close}>
+            Skip for now
+          </div>
         </div>
       </div>
     </div>

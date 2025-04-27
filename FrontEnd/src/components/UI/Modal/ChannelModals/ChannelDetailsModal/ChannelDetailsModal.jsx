@@ -35,6 +35,7 @@ const ChannelDetailsModal = ({ channel }) => {
   const { isOpen, activeTab, channelData } = useSelector(
     (state) => state.channelDetailsModal
   );
+
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
       dispatch(closeChannelDetails());

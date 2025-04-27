@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import chatPanelReducer from "./ui/chatPanel";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
 import channelMenuReducer from "./chat/channel/channelMenuSlice";

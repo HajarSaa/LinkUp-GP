@@ -5,6 +5,8 @@ import styles from "./ChannelHeader.module.css";
 import { useDispatch } from "react-redux";
 import { closeConvActionModal, openConvActionModal } from "../../../API/redux_toolkit/modals/convActionModal";
 import SideActionModal from "../../../components/UI/Modal/ChannelModals/SideActionModal/SideActionModal";
+import CreateChannelModal from "../../../components/UI/Modal/ChannelModals/CreateChannelModel/CreateChannelModal";
+import AddPeopleModal from "../../../components/UI/Modal/ChannelModals/AddPeopleModal/AddPeopleModal";
 import { openCreateChannel } from "../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
 const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
@@ -44,6 +46,8 @@ const ChannelsHeader = ({ isAnyChannelActive, onToggle }) => {
         </div>
       </div>
       <SideActionModal targetRef={buttonRef} createClick={handleCreateButton} />
+      <CreateChannelModal />
+      <AddPeopleModal />
     </>
   );
 };
