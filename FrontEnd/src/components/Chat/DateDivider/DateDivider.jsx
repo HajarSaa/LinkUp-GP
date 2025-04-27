@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-// src/components/UI/DateDivider.jsx
-import formatDate from "../../../../utils/formatedDate";
+
+import formatDate from "../../../utils/formatedDate";
 import styles from "./DateDivider.module.css";
 
 const DateDivider = ({ date }) => {

@@ -14,7 +14,6 @@ function ChannelPage() {
   return (
     <ContentPage>
       <Header channel={channel} />
-      {/* <ChatMessage messages={channel.messages} /> */}
       <ChannelBody />
       <MessageInput />
     </ContentPage>
