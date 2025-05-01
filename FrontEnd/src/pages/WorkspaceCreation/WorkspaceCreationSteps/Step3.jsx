@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import styles from "./Step3.module.css";
+import styles from "./Steps.module.css";
 import { IoIosLink } from "react-icons/io";
 import { useState } from "react";
 function Step3({ onNext }) {
@@ -15,7 +15,7 @@ function Step3({ onNext }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <p className={styles.stepText}>Step 3 of 4</p>
+        <p className={styles.stepText}>Step 3 of 3</p>
         <h1 className={styles.heading}>
           Who else is on the <span>try</span> team?
         </h1>

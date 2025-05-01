@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import styles from "./Step1.module.css";
+import styles from "./Steps.module.css";
 
 function Step1({ onNext }) {
   const [teamName, setTeamName] = useState("");
@@ -15,7 +15,7 @@ function Step1({ onNext }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <p className={styles.stepText}>Step 1 of 4</p>
+        <p className={styles.stepText}>Step 1 of 3</p>
         <h1 className={styles.heading}>
           What’s the name of your company or team?
         </h1>

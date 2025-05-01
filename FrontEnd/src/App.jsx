@@ -39,9 +39,9 @@ import "./styles/variables.css";
 import "./styles/classes.css";
 import "./styles/global.css";
 import { useState } from "react";
-import Step1 from "./pages/WorkspaceCreation/WorkspaceCreationSteps/Step1/Step1";
-import Step2 from "./pages/WorkspaceCreation/WorkspaceCreationSteps/Step2/Step2";
-import Step3 from "./pages/WorkspaceCreation/WorkspaceCreationSteps/Step3/Step3";
+import Step1 from "./pages/WorkspaceCreation/WorkspaceCreationSteps/Step1";
+import Step2 from "./pages/WorkspaceCreation/WorkspaceCreationSteps/Step2";
+import Step3 from "./pages/WorkspaceCreation/WorkspaceCreationSteps/Step3";
 
 const App = () => {
   const [step, setStep] = useState(1);

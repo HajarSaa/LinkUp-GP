@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import styles from "./Step2.module.css";
+import styles from "./Steps.module.css";
 import { FaUser } from "react-icons/fa6";
 function Step2({ onNext }) {
   const [userName, setUserName] = useState("");
@@ -16,7 +16,7 @@ function Step2({ onNext }) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <p className={styles.stepText}>Step 2 of 4</p>
+        <p className={styles.stepText}>Step 2 of 3</p>
         <h2 className={styles.heading}>What is your name?</h2>
         <p className={styles.subheading}>
           Adding your name and profile photo helps your teammates recognize and
