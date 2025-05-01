@@ -3,7 +3,7 @@ import "./styles/variables.css";
 import "./styles/classes.css";
 import "./styles/global.css";
 import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
+import Signup from "./pages/auth/Signup";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import BrowseChannels from './pages/dashboard/BrowseChannels/BrowseChannels';
 import DmPage from "./pages/dashboard/DmPage";
@@ -14,7 +14,7 @@ function App() {
     <div className="app__body">
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<MainLayout />}>
           <Route path="dm/:id" element={<DmPage />} />
           <Route path="channels/:id" element={<ChannelPage />} />

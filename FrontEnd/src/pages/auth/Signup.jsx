@@ -3,7 +3,7 @@ import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
 import { Link } from "react-router-dom";
 import RegisterForm from "../../components/UI/Auth/AuthForm/RegisterForm";
 
-const Register = () => {
+const Signup = () => {
   return (
     <AuthLayout>
       <p className={styles.subtitle}>
@@ -18,4 +18,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Signup;

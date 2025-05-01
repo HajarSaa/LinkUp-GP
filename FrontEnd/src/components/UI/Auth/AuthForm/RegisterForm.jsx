@@ -1,16 +1,18 @@
 import { useState } from "react";
 import AuthInput from "../AuthInput/AuthInput";
 import styles from "./AuthForm.module.css";
+import { signupService } from "../../../../API/services/authService";
 
 function RegisterForm() {
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: "",
+    passwordConfirm: "",
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
@@ -35,18 +37,28 @@ function RegisterForm() {
       newErrors.password = "password must be at least 8 characters";
     }
 
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "The passwords do not match.";
+    if (formData.password !== formData.passwordConfirm) {
+      newErrors.passwordConfirm = "The passwords do not match.";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Correct Data:", formData);
+    if (!validate()) return;
+
+    try {
+      setLoading(true);
+      setMessage("");
+      await signupService(formData);
+      setMessage("Account created successfully!");
+    } catch (err) {
+      console.log(err?.response?.data);
+      setMessage(err?.response?.data?.message || "Signup failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,15 +83,22 @@ function RegisterForm() {
       <AuthInput
         type="password"
         label="Confirm Password"
-        name="confirmPassword"
+        name="passwordConfirm"
         placeholder="name@gmail.com"
-        value={formData.confirmPassword}
+        value={formData.passwordConfirm}
         onChange={handleChange}
-        error={errors.confirmPassword}
+        error={errors.passwordConfirm}
       />
-      <button className={styles.authBtn} type="submit">
-        Sign Up
+      <button className={styles.authBtn} type="submit" disabled={loading}>
+        {loading ? "Signing up..." : "Sign Up"}
       </button>
+      {message && (
+        <p
+          style={{ color: message.includes("successfully") ? "green" : "red" }}
+        >
+          {message}
+        </p>
+      )}
     </form>
   );
 }

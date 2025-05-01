@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styles from './AuthForm.module.css';
 import AuthInput from '../AuthInput/AuthInput';
+import { loginService } from '../../../../API/services/authService';
 function LoginForm() {
   const [formData, setFormData] = useState({
     email: "",
@@ -8,6 +9,8 @@ function LoginForm() {
   });
 
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
@@ -36,10 +39,19 @@ function LoginForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log("Correct Data:", formData);
+    if (!validate()) return;
+    try {
+      const res = await loginService(formData);
+      setSuccessMessage("Login successful!");
+      setApiError(null);
+
+      // TODO: Navigate to home/dashboard or fetch user data
+      console.log("Logged In:", res);
+    } catch (err) {
+      setApiError(err.response?.data?.message || "Something went wrong.");
+      setSuccessMessage(null);
     }
   };
 
@@ -64,6 +76,12 @@ function LoginForm() {
       <button className={styles.authBtn} type="submit">
         Login in
       </button>
+      {apiError && (
+        <p style={{ color: "red", marginTop: "10px" }}>{apiError}</p>
+      )}
+      {successMessage && (
+        <p style={{ color: "green", marginTop: "10px" }}>{successMessage}</p>
+      )}
     </form>
   );
 }

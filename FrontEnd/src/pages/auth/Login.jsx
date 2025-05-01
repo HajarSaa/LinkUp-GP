@@ -11,7 +11,7 @@ const Login = () => {
       </p>
       <LoginForm />
       <p className={styles.signUpText}>
-        Don’t have an account? <Link to="/register">Sign up</Link>
+        Don’t have an account? <Link to="/signup">Sign up</Link>
       </p>
     </AuthLayout>
   );
