@@ -1,5 +1,5 @@
-/* Main Container */
-.container {
+/* Main auth_layout */
+.auth_layout {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,11 +9,11 @@
     padding: 20px;
 }
 
-/* Card Wrapper */
-.card {
+/* auth_container Wrapper */
+.auth_container {
     text-align: center;
-    width: 100%;
-    max-width: 400px;
+    width: 400px;
+    max-width: 100%;
 }
 
 /* Logo */
@@ -23,11 +23,11 @@
 }
 
 @media (max-width: 480px) {
-    .container {
+    .auth_layout {
         padding: 10px;
     }
 
-    .card {
+    .auth_container {
         max-width: 90%;
     }
 

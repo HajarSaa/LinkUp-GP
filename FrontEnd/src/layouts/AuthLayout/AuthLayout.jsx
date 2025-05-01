@@ -1,16 +1,16 @@
 import styles from "./AuthLayout.module.css";
 import AuthFooter from "../../components/UI/Auth/AuthFooter/AuthFooter";
-import Logo from "/logo.svg";
+
+import AuthHeader from "../../components/UI/Auth/AuthHeader/AuthHeader";
 
 
 
 // eslint-disable-next-line react/prop-types
 const AuthLayout = ({children}) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <img src={Logo} alt="Link-Up Logo" className={styles.logo} />
-        {/* <Outlet/> */}
+    <div className={styles.auth_layout}>
+      <div className={styles.auth_container}>
+        <AuthHeader/>
         {children}
       </div>
       <AuthFooter />
