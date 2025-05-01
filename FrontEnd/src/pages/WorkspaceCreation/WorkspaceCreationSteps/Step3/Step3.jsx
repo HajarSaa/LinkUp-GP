@@ -1,56 +1,60 @@
 /* eslint-disable react/prop-types */
-
-import { useState } from "react";
 import styles from "./Step3.module.css";
+import { IoIosLink } from "react-icons/io";
+import { useState } from "react";
+function Step3({ onNext }) {
+  const [email, setEmail] = useState("");
 
-const Step3 = ({ teamName = "try", onNext }) => {
-  const [emails, setEmails] = useState("");
-  const [copied, setCopied] = useState(false);
+  const isButtonDisabled = email.trim() === "";
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText("https://slack.com/invite-link").then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+  const handleNextClick = () => {
+    if (!isButtonDisabled) {
+      onNext(email);
+    }
   };
-
   return (
-    <div className={styles.container}>
-      <p className={styles.step}>Step 3 of 4</p>
-      <h2 className={styles.title}>
-        Who else is on the <span className={styles.highlight}>{teamName}</span>{" "}
-        team?
-      </h2>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <p className={styles.stepText}>Step 3 of 4</p>
+        <h1 className={styles.heading}>
+          Who else is on the <span>try</span> team?
+        </h1>
 
-      <label className={styles.label}>Add coworker by email</label>
-      <div className={styles.inputWrapper}>
+        <label className={styles.label}>Add coworker by email</label>
+
         <textarea
-          placeholder="Ex. ellis@gmail.com, maria@gmail.com"
-          value={emails}
-          onChange={(e) => setEmails(e.target.value)}
           className={styles.textarea}
+          placeholder="Ex. ellis@gmail.com, maria@gmail.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <a href="#" className={styles.googleLink}>
-          Add from Google Contacts
-        </a>
-      </div>
 
-      <p className={styles.note}>
-        Keep in mind that invitations expire in 30 days. You can always extend
-        that deadline.
-      </p>
+        <p className={styles.subheading}>
+          Keep in mind that invitations expire in 30 days. You can always extend
+          that deadline.
+        </p>
 
-      <div className={styles.buttonGroup}>
-        <button className={styles.nextButton} onClick={onNext}>
-          Next
-        </button>
-        <button className={styles.copyButton} onClick={handleCopy}>
-          {copied ? "Copied!" : "📋 Copy Invite Link"}
-        </button>
-        <button className={styles.skipButton}>Skip this step</button>
+        <div className={styles.actions}>
+          <button
+            onClick={handleNextClick}
+            disabled={isButtonDisabled}
+            className={`${styles.button} ${
+              isButtonDisabled ? styles.disabled : ""
+            }`}
+          >
+            Next
+          </button>
+          <button className={styles.copyButton}>
+            <IoIosLink />
+            Copy Invite Link
+          </button>
+          <a className={styles.skipButton} href="#">
+            Skip this step
+          </a>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default Step3;

@@ -1,91 +1,130 @@
-/* components/steps/Step3.module.css */
-.container {
-  padding: 2rem;
-  max-width: 600px;
-  margin: auto;
-  background-color: white;
-  border-radius: 8px;
-}
-
-.step {
-  color: #6b7280;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
-
-.highlight {
-  color: #611f69;
-}
-
-.label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.inputWrapper {
-  margin-bottom: 1rem;
-  position: relative;
-}
-
 .textarea {
   width: 100%;
-  min-height: 100px;
-  padding: 1rem;
-  border: 2px solid #b3d4fc;
-  border-radius: 6px;
-  font-size: 1rem;
-  resize: vertical;
+  height: 100px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 400;
+  resize: none;
+  border: 2px solid var(--divider-color);
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: var(--bg-white);
+  color: #1d1c1d;
+  margin: 15px 0;
+}
+.textarea::placeholder {
+  color: var(--text-color-muted);
 }
 
-.googleLink {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-  color: #1a73e8;
-  font-size: 0.9rem;
-  text-decoration: none;
+.textarea:focus {
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgb(183, 208, 227);
 }
-
-.note {
-  color: #6b7280;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-}
-
-.buttonGroup {
+.actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  margin-top: 20px;
+  gap: 15px;
+}
+.label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d1c1d;
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-light);
 }
 
-.nextButton {
-  background-color: #611f69;
+.container {
+  background-color: var(--bg-white);
+  padding: 50px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stepText {
+  color: var(--step-text-color);
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.heading {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1d1c1d;
+  line-height: 1.2;
+  span {
+    color: var(--primary-color);
+  }
+}
+
+.subheading {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1d1c1d;
+  margin-bottom: 30px;
+}
+
+.button {
+  width: 25%;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 8px;
+  background-color: var(--secondary-color);
   color: white;
+  font-weight: 400;
   border: none;
-  padding: 0.7rem 1.5rem;
-  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
+.button:hover:enabled {
+  background-color: var(--primary-color);
+}
+
+.disabled {
+  background-color: var(--divider-color);
+  color: var(--gray-dark);
+  cursor: not-allowed;
+}
 .copyButton {
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 0.7rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.skipButton {
-  background: none;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 8px;
+  font-weight: 700;
   border: none;
-  color: #6b7280;
-  font-size: 0.9rem;
   cursor: pointer;
+  background-color: transparent;
+  color: #1d1c1d;
+  border: 1.5px solid var(--border-color);
+  transition: 0.3s;
+  &:hover {
+    background-color: var(--bg-light);
+  }
+}
+.skipButton {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(29, 28, 29, 0.7);
+  position: relative;
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(29, 28, 29, 0.7);
+      bottom: -5px;
+      left: 0;
+    }
+  }
 }

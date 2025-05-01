@@ -2,7 +2,6 @@
 import { useState } from "react";
 import styles from "./Step2.module.css";
 import { FaUser } from "react-icons/fa6";
-import Button from "../../../../components/UI/Buttons/Button/Button";
 function Step2({ onNext }) {
   const [userName, setUserName] = useState("");
 
@@ -15,51 +14,49 @@ function Step2({ onNext }) {
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.heading}>What is your name?</h2>
-      <p className={styles.subheading}>
-        Adding your name and profile photo helps your teammates recognize and
-        connect with you more easily.
-      </p>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <p className={styles.stepText}>Step 2 of 4</p>
+        <h2 className={styles.heading}>What is your name?</h2>
+        <p className={styles.subheading}>
+          Adding your name and profile photo helps your teammates recognize and
+          connect with you more easily.
+        </p>
 
-      <input
-        type="text"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-        placeholder="Enter your name"
-        className={styles.input}
-      />
-
-      {/* <div className={styles.profileContainer}>
-        <img
-          src="https://via.placeholder.com/100"
-          alt="Profile"
-          className={styles.profileImage}
+        <input
+          type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder="Enter your name"
+          className={styles.input}
         />
-        <div>
-          <button className={styles.uploadButton}>Upload Photo</button>
-        </div>
-      </div> */}
 
-      <div className={styles.profilePhotoSection}>
-        <label> Profile photo</label>
-        <div className={styles.profilePhotoPlaceholder}>
-          <FaUser className={styles.photo} />
+        <div className={styles.profilePhotoSection}>
+          <label>
+            {" "}
+            Your profile photo <span>(optional)</span>
+          </label>
+          <p className={styles.subheading}>
+            Help your teammates know they’re talking to the right person.
+          </p>
+          <div className={styles.profilePhotoPlaceholder}>
+            <FaUser className={styles.photo} />
+          </div>
+          <button type="button" className={styles.uploadButton}>
+            Upload Photo
+          </button>
         </div>
-        <Button type="button" className={styles.uploadButton}>
-          Upload Photo
-        </Button>
+
+        <button
+          onClick={handleNextClick}
+          disabled={isButtonDisabled}
+          className={`${styles.button} ${
+            isButtonDisabled ? styles.disabled : ""
+          }`}
+        >
+          Next
+        </button>
       </div>
-
-      <button
-        onClick={handleNextClick}
-        disabled={isButtonDisabled}
-        className={`${styles.button} ${
-          isButtonDisabled ? styles.disabled : ""
-        }`}
-      >
-        Next
-      </button>
     </div>
   );
 }

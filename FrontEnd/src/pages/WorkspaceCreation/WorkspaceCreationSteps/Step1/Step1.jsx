@@ -4,7 +4,6 @@ import styles from "./Step1.module.css";
 
 function Step1({ onNext }) {
   const [teamName, setTeamName] = useState("");
-
   const isButtonDisabled = teamName.trim() === "";
 
   const handleNextClick = () => {
@@ -14,29 +13,36 @@ function Step1({ onNext }) {
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.heading}>What’s the name of your team?</h2>
-      <p className={styles.subheading}>
-        This will be your Slack workspace name.
-      </p>
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
+        <p className={styles.stepText}>Step 1 of 4</p>
+        <h1 className={styles.heading}>
+          What’s the name of your company or team?
+        </h1>
+        <p className={styles.subheading}>
+          This will be the name of your Link-UP workspace — choose something
+          that your team will recognize.
+        </p>
 
-      <input
-        type="text"
-        value={teamName}
-        onChange={(e) => setTeamName(e.target.value)}
-        placeholder="e.g., Marketing Team"
-        className={styles.input}
-      />
+        <input
+          type="text"
+          value={teamName}
+          onChange={(e) => setTeamName(e.target.value)}
+          placeholder="Ex: Acme Marketing or Acme Co"
+          className={styles.input}
+          maxLength={50}
+        />
 
-      <button
-        onClick={handleNextClick}
-        disabled={isButtonDisabled}
-        className={`${styles.button} ${
-          isButtonDisabled ? styles.disabled : ""
-        }`}
-      >
-        Next
-      </button>
+        <button
+          onClick={handleNextClick}
+          disabled={isButtonDisabled}
+          className={`${styles.button} ${
+            isButtonDisabled ? styles.disabled : ""
+          }`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

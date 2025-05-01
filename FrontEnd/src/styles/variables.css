@@ -23,7 +23,7 @@
   --input-border-error: #f5b7b1;
   --input-border-success: #a9dfbf;
   --green-color: #007a5a;
-
+  --step-text-color: #5e5d60;
   /* Backgrounds */
   --bg-white: #fff;
   --bg-light: #f8f8f8;
@@ -52,9 +52,9 @@
   --transition-3: 0.3s;
 
   /* Reaction color */
-  --reaction-bg: #E6F7FF;
+  --reaction-bg: #e6f7ff;
   /* لون الخلفية الأزرق الفاتح */
-  --reaction-border: #0066B2;
+  --reaction-border: #0066b2;
   /* لون البوردر الأزرق */
   --reaction-text: #003366;
   /* لون الرقم */

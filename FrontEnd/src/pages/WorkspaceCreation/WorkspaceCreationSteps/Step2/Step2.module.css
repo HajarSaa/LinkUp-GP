@@ -1,75 +1,83 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+}
+
 .container {
-  padding: 40px;
-  max-width: 500px;
-  margin: auto;
+  background-color: var(--bg-white);
+  padding: 50px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stepText {
+  color: var(--step-text-color);
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 16px;
 }
 
 .heading {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1d1c1d;
+  line-height: 1.2;
 }
 
 .subheading {
-  font-size: 16px;
-  color: vae(--text-secondary);
-  margin-bottom: 20px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #1d1c1d;
+  margin-bottom: 30px;
 }
 
 .input {
   width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border-radius: 5px;
-  border: 1px solid var(--border-color);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--divider-color);
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 30px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: var(--bg-white);
+  color: #1d1c1d;
 }
 
-.profileContainer {
-  text-align: center;
-  margin-bottom: 20px;
+.input::placeholder {
+  color: var(--text-color-muted);
 }
 
-.profileImage {
-  border-radius: 50%;
-}
-
-.uploadButton {
-  padding: 5px 15px;
-  border-radius: 5px;
-  border: 1px solid var(--primary-color);
-  background-color: white;
-  color: var(--primary-color);
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.button {
-  width: 100%;
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  background-color: var(--primary-color);
-  color: white;
-  cursor: pointer;
-}
-
-.disabled {
-  background-color: var(--gray-dark);
-  cursor: not-allowed;
+.input:focus {
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgb(183, 208, 227);
 }
 
 .profilePhotoSection {
-  margin-top: -15px;
-  width: 50%;
+  margin-bottom: 20px;
+  /* width: 25%; */
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1d1c1d;
+    span {
+      color: #5e5d60;
+      font-weight: 400;
+    }
+  }
   .profilePhotoPlaceholder {
-    margin-top: -10px;
-    width: 100%;
+    width: 25%;
     height: 100%;
     background: var(--secondary-color);
     border-radius: 15px;
@@ -78,17 +86,47 @@
     justify-content: center;
     .photo {
       color: var(--active-color);
-      font-size: 160px;
+      font-size: 150px;
+      padding: 10px 0;
     }
   }
 }
 .uploadButton {
+  margin-top: 10px;
+  width: 25%;
   padding: 10px;
+  font-size: 15px;
+  border-radius: 8px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
   background-color: transparent;
   color: #1d1c1d;
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   transition: 0.3s;
   &:hover {
-    background-color: #f8f8f8;
+    background-color: var(--bg-light);
   }
+}
+.button {
+  width: 25%;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 8px;
+  background-color: var(--secondary-color);
+  color: white;
+  font-weight: 400;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover:enabled {
+  background-color: var(--primary-color);
+}
+
+.disabled {
+  background-color: var(--divider-color);
+  color: var(--gray-dark);
+  cursor: not-allowed;
 }
