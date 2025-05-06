@@ -55,7 +55,7 @@ function RegisterForm() {
       setLoading(true);
       setMessage("");
       await signupService(formData);
-      navigateTo("/create-workspace");
+      navigateTo("/create-workspace/step-1");
     } catch (err) {
       setMessage(err?.response?.data?.message || "Signup failed.");
     } finally {

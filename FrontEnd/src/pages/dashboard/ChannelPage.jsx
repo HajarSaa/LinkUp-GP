@@ -17,6 +17,9 @@ function ChannelPage() {
       <Header channel={channel} />
       <ChannelBody />
       <MessageInput />
+      {/* <div>
+        hello
+      </div> */}
     </PageContent>
   );
 }

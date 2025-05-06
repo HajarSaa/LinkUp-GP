@@ -6,6 +6,20 @@
     user-select: none;
 }
 
+.right_side{
+        flex: 1;
+            max-width: 100%;
+            overflow: hidden;
+}
+
+.header_name{
+    white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+        min-width: 0;
+        /* ضروري */
+}
 .liste_header_name {
     font-size: 16px;
     gap: 5px;

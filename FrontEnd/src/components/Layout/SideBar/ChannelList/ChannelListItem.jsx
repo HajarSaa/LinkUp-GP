@@ -24,7 +24,7 @@ const ChannelListItem = ({
           {isPrivate ? <FaLock /> : <FaHashtag />}
         </span>
       </div>
-      <span>{name}</span>
+      <span className={styles.channel_name}>{name}</span>
     </div>
   );
 };

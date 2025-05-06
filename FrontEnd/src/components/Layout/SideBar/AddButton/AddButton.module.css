@@ -19,3 +19,9 @@
   border-radius: 3px;
   background-color: rgb(38 105 173);
 }
+
+.add_button_text{
+      white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+}

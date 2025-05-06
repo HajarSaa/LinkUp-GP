@@ -10,7 +10,7 @@ function AddButton({text }) {
         <span className={styles.icon}>
           <FaPlus />
         </span>
-        <span>{text}</span>
+        <span className={styles.add_button_text}>{text}</span>
       </div>
     </>
   );

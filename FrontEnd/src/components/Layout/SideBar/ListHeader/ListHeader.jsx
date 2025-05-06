@@ -31,9 +31,9 @@ const ListHeader = ({ isAnyChannelActive, onToggle, headerText }) => {
             </Icon>
           )}
         </span>
-        <div>
+        <div className={styles.right_side}>
           <Icon className={styles.liste_header_name}>
-            <span>{headerText}</span>
+            <span className={styles.header_name}>{headerText}</span>
             <span>
               <FaChevronDown />
             </span>

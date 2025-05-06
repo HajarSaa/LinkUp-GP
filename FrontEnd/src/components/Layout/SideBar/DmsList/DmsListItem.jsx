@@ -24,7 +24,7 @@ const DmsListItem = ({
       <div className={styles.left_side}>
         <BiSolidUser/>
       </div>
-      <span>{name}</span>
+      <span className={styles.user_name}>{name}</span>
     </div>
   );
 };

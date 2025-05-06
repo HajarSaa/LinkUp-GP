@@ -63,4 +63,5 @@
   flex: 1;
   overflow-y: auto;
   color: var(--gray-light);
+  overflow: hidden;
 }
