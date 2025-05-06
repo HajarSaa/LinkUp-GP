@@ -47,7 +47,6 @@ label {
 
 .input.error {
     border-color: var(--error-color);
-    box-shadow: 0 0 5px var(--input-border-error);
 }
 
 

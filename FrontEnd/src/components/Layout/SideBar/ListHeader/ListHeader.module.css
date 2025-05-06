@@ -1,0 +1,32 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 3px 7px;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+.liste_header_name {
+    font-size: 16px;
+    gap: 5px;
+}
+
+.liste_header_name>span:last-child {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    display: none;
+}
+
+.header:hover .liste_header_name>span:last-child {
+    display: flex;
+}
+
+
+.header>* {
+    cursor: pointer;
+}
+
+.icon {
+    font-size: 10px;
+}

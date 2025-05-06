@@ -1,7 +1,8 @@
 import { useState } from "react";
 import AuthInput from "../AuthInput/AuthInput";
 import styles from "./AuthForm.module.css";
-import { signupService } from "../../../../API/services/authService";
+import {signupService } from "../../../API/services/authService";
+import { useNavigate } from "react-router-dom";
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ function RegisterForm() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const navigateTo = useNavigate();
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
@@ -53,53 +55,56 @@ function RegisterForm() {
       setLoading(true);
       setMessage("");
       await signupService(formData);
-      setMessage("Account created successfully!");
+      navigateTo("/create-workspace");
     } catch (err) {
-      console.log(err?.response?.data);
       setMessage(err?.response?.data?.message || "Signup failed.");
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
-    <form onSubmit={handleSubmit}>
-      <AuthInput
-        type="text"
-        label="Email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        error={errors.email}
-      />
-      <AuthInput
-        type="password"
-        label="Password"
-        name="password"
-        value={formData.password}
-        onChange={handleChange}
-        error={errors.password}
-      />
-      <AuthInput
-        type="password"
-        label="Confirm Password"
-        name="passwordConfirm"
-        placeholder="name@gmail.com"
-        value={formData.passwordConfirm}
-        onChange={handleChange}
-        error={errors.passwordConfirm}
-      />
-      <button className={styles.authBtn} type="submit" disabled={loading}>
-        {loading ? "Signing up..." : "Sign Up"}
-      </button>
-      {message && (
+    <div>
+      {errors.email && <div className={styles.toast}>{errors.email}</div>}
+      <form onSubmit={handleSubmit}>
+        <AuthInput
+          type="text"
+          label="Email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          error={errors.email}
+        />
+        <AuthInput
+          type="password"
+          label="Password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          error={errors.password}
+        />
+        <AuthInput
+          type="password"
+          label="Confirm Password"
+          name="passwordConfirm"
+          placeholder="name@gmail.com"
+          value={formData.passwordConfirm}
+          onChange={handleChange}
+          error={errors.passwordConfirm}
+        />
+        <button className={styles.authBtn} type="submit" disabled={loading}>
+          {loading ? "Signing up..." : "Sign Up"}
+        </button>
+        {message && (
         <p
-          style={{ color: message.includes("successfully") ? "green" : "red" }}
+        style={{ color:"red" }}
         >
-          {message}
+        {message}
         </p>
-      )}
-    </form>
+        )}
+      </form>
+    </div>
   );
 }
 

@@ -1,0 +1,6 @@
+.sidebar_list {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    padding: 10px;
+}

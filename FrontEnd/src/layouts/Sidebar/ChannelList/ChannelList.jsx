@@ -14,6 +14,8 @@ const ChannelsList = () => {
   const dispatch = useDispatch();
   const { list: channels } = useSelector((state) => state.channels);
 
+  console.log(channels)
+
   const handleToggle = (openState) => {
     setIsOpen(openState);
   };

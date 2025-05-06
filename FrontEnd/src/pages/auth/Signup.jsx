@@ -1,7 +1,7 @@
 import styles from "./AuthStyle.module.css";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
 import { Link } from "react-router-dom";
-import RegisterForm from "../../components/UI/Auth/AuthForm/RegisterForm";
+import RegisterForm from "../../components/Auth/AuthForm/RegisterForm";
 
 const Signup = () => {
   return (

@@ -1,0 +1,21 @@
+.resizer {
+  position: absolute;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: transparent;
+  cursor: col-resize;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+
+.resizer:hover,
+.resizer:active {
+  background-color: #2196f3;
+}
+
+.resizer.disabled {
+  cursor: default !important;
+  background-color: transparent !important;
+  pointer-events: none;
+}

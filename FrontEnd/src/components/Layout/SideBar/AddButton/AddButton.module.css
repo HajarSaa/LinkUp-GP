@@ -1,0 +1,21 @@
+.add_button {
+  display: flex;
+  gap: var(--gap-8);
+  /* align-items: center; */
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-white);
+}
+
+.add_button:hover {
+  background-color: var(--sidebar-hover);
+}
+
+.add_button .icon {
+  display: flex;
+  padding: 3px;
+  border-radius: 3px;
+  background-color: rgb(38 105 173);
+}

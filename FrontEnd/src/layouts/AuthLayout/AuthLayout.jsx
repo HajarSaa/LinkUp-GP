@@ -1,7 +1,7 @@
 import styles from "./AuthLayout.module.css";
-import AuthFooter from "../../components/UI/Auth/AuthFooter/AuthFooter";
+import AuthFooter from "../../components/Auth/AuthFooter/AuthFooter";
 
-import AuthHeader from "../../components/UI/Auth/AuthHeader/AuthHeader";
+import AuthHeader from "../../components/Auth/AuthHeader/AuthHeader";
 
 
 

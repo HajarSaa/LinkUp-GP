@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import PropTypes from "prop-types";
 // import Sidebar from "../Sidebar/Sidebar";
 // import Navbar from "../Navbar/Navbar";
@@ -31,6 +32,8 @@ import Navbar from "../Navbar/Navbar";
 import Workbar from "../Workspaces/Workbar";
 import styles from "./MainLayoutStyles.module.css";
 import { Outlet, useLocation } from "react-router-dom";
+import SideBar from "../../components/Layout/SideBar/SideBar";
+// import EmptySideBar from "../../components/Layout/SideBar/EmptySideBar";
 function MainLayout() {
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
@@ -38,6 +41,7 @@ function MainLayout() {
     <div className={styles.layout}>
       <Navbar />
       <div className={styles.workspace_content}>
+        {/* <Workbar /> */}
         <Workbar />
         {isBrowseChannels ? (
           <div className={styles.page_conetnt}>
@@ -45,7 +49,9 @@ function MainLayout() {
           </div>
         ) : (
           <div className={styles.page_conetnt}>
-            <Sidebar />
+            {/* <Sidebar /> */}
+              <SideBar />
+              {/* <EmptySideBar/> */}
             <Outlet />
           </div>
         )}
