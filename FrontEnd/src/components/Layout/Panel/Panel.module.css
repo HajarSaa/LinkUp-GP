@@ -1,0 +1,8 @@
+.panel {
+  position: relative;
+  min-width: 200px;
+  height: 100%;
+  flex-shrink: 0;
+  background-color: var(--bg-white);
+  border-left: 1px solid #ddd;
+}

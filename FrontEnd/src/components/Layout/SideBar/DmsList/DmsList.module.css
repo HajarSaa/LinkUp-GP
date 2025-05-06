@@ -1,0 +1,41 @@
+.active {
+    background-color: var(--active-color);
+    color: var(--secondary-color);
+}
+
+.icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.left_side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+        min-width: 30px;
+        height: 30px;
+        min-height: 30px;
+}
+
+.dms_item {
+    display: flex;
+    gap: var(--gap-8);
+    align-items: center;
+    padding: 2px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: var(--text-white);
+}
+
+.dms_item:hover {
+    background-color: var(--sidebar-hover);
+}
+
+.user_name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
