@@ -14,9 +14,9 @@ import ChannelPage from "./pages/dashboard/ChannelPage";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import Landing from "./pages/dashboard/Landing/Landing";
 
-import Step1 from './pages/dashboard/CreateWorkspace/Step1';
-import Step2 from './pages/dashboard/CreateWorkspace/Step2';
-import Step3 from './pages/dashboard/CreateWorkspace/Step3';
+import Step1 from "./pages/dashboard/CreateWorkspace/Step1";
+import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
+import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 
 function App() {
   return (
@@ -25,13 +25,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route
-          path="/landing"
+          path="/workspaces-landing"
           element={
             <ProtectedRoute>
               <Landing />
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/"
           element={
@@ -44,6 +45,7 @@ function App() {
           <Route path="channels/:id" element={<ChannelPage />} />
           <Route path="browse-channels" element={<BrowseChannels />} />
         </Route>
+
         <Route
           path="/create-workspace"
           element={
