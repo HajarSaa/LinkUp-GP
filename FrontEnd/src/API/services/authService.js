@@ -17,8 +17,9 @@ export const loginService = async (userData) => {
 };
 
 export const getMeService = async () => {
-  const response = await axios.get(`${API_BASE_URL}/users/me`, {
+  const axios_response = await axios.get(`${API_BASE_URL}/users/me`, {
     withCredentials: true,
   });
+  const response = axios_response.data
   return response.data;
 };

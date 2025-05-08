@@ -1,7 +1,15 @@
+import useCurrentUser from "../../../API/hooks/useCurrentUser";
 import styles from "./Landing.module.css";
 import WorkspaceItem from "./WorkspaceItem";
 
 function WorkspacesList() {
+
+  const { workspaces: w, user: u, loading, error } = useCurrentUser();
+
+  if (loading) console.log('loading....')
+  else console.log(w, u)
+  
+
   const workspaces = [
     {
       _id: "681b91137bf5ee5aa301816f",

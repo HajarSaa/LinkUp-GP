@@ -4,6 +4,7 @@ import AuthInput from "../AuthInput/AuthInput";
 import { loginService } from "../../../API/services/authService";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
+
 function LoginForm() {
   const [formData, setFormData] = useState({
     email: "",

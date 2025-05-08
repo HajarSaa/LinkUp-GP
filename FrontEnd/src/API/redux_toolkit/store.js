@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import authReducer from './auth/authSlice'
+// Auth
+// import currentUserReducer from "./auth/currentUserSlice";
 
 import chatPanelReducer from "./ui/chatPanel";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
@@ -19,8 +20,8 @@ import emojiPickerReducer from './modals/emojiPickerSlice'
 const store = configureStore({
   reducer: {
 
-    auth: authReducer,
-    
+    // current_user: currentUserReducer,
+
     chatPanel: chatPanelReducer,
     addChannelMenu: addChannelMenuReducer,
     channelMenu: channelMenuReducer,
