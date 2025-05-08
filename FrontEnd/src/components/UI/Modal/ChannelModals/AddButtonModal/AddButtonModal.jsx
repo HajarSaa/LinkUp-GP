@@ -7,35 +7,49 @@ import { closeAddButtonModal } from "../../../../../API/redux_toolkit/modals/add
 import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 import { useNavigate } from "react-router-dom";
 
-const AddButtonModal = ({ targetRef }) => {
-  const { isOpen } = useSelector((state) => state.addButtonModal);
+const AddButtonModal = () => {
+  const { isOpen, position: modalPosition } = useSelector(
+    (state) => state.addButtonModal
+  );
+  const [position, setPosition] = useState(null);
+
   const dispatch = useDispatch();
   const navigateTo = useNavigate();
-  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   function handleClose(e) {
     if (e.target === e.currentTarget) dispatch(closeAddButtonModal());
   }
+
   function handleCreateBtn() {
     dispatch(closeAddButtonModal());
     dispatch(openCreateChannel());
   }
   function handleBrowseBtn() {
-    dispatch(closeAddButtonModal())
-    navigateTo("browse-channels");
+    dispatch(closeAddButtonModal());
+    navigateTo("/browse-channels");
   }
 
+  // useEffect(() => {
+  //   if (isOpen && targetRef?.current) {
+  //     const rect = targetRef.current.getBoundingClientRect();
+  //     setPosition({
+  //       top: rect.top - 80,
+  //       left: rect.left + 30,
+  //     });
+  //   }
+  // }, [isOpen, targetRef]);
+
   useEffect(() => {
-    if (isOpen && targetRef?.current) {
-      const rect = targetRef.current.getBoundingClientRect();
+    // لو الـ Modal مفتوح هنحدد موقع الـ Modal بناءً على الـ position اللي بعتناه
+    if (isOpen && modalPosition) {
       setPosition({
-        top: rect.top - 80,
-        left: rect.left + 30,
+        top: modalPosition.top - 20, // تعديل الـ top حسب الموقع
+        left: modalPosition.left + 30, // تعديل الـ left حسب الموقع
       });
     }
-  }, [isOpen, targetRef]);
+  }, [isOpen, modalPosition]);
 
-  if (!isOpen || position.top === 0) return null;
+  if (!isOpen || !position || position.top === 0) return null;
 
   return (
     <>

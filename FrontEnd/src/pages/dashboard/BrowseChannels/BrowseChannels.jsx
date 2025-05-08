@@ -7,7 +7,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { openCreateChannel } from "../../../API/redux_toolkit/modals/createChannelmodalSlice";
 import SearchInput from "../../../components/UI/InputField/SearchInput/SearchInput";
-import ContentPage from "../ContentPage/ContentPage";
+// import ContentPage from "../ContentPage/ContentPage";
+import FullPageContent from "../../../components/Layout/FullPageContent/FullPageContnet";
 // import { useState } from "react";
 
 const BrowseChannels = () => {
@@ -15,7 +16,7 @@ const BrowseChannels = () => {
   const [isHovered, setIsHovered] = useState(false);
   const dispatch = useDispatch();
   return (
-    <ContentPage>
+    <FullPageContent>
       <div className={styles.container}>
         <div className={`${styles.browesHeader} justify-content-between`}>
           <h2>All channels</h2>
@@ -108,7 +109,7 @@ const BrowseChannels = () => {
           ))}
         </div>
       </div>
-    </ContentPage>
+    </FullPageContent>
   );
 };
 

@@ -26,14 +26,6 @@ function EmptyState({ title }) {
 
 EmptyState.propTypes = {
   title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  actions: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      onClick: PropTypes.func,
-      icon: PropTypes.node,
-    })
-  ),
 };
 
 export default EmptyState;

@@ -40,13 +40,6 @@ app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/files", uploadRouter);
 app.use("/api", searchRoutes);
 
-// Welcome route for testing
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use("/", (req, res, next) => {
-  res.sendFile(path.join(__dirname, "welcome.html"));
-});
-
 // 404 route handler middleware
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
@@ -56,13 +49,3 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorHandeler);
 
 export default app;
-
-// ------------------------------------------------ NOW -------------------------------------------------- //
-// TODO - Check the flow of the app and make sure everything is working as expected
-
-// TODO - populate everything ¬_¬ also virtuals //  (channel - conversation ) Done ✅
-
-// TODO - allow getting messages using pagination ✅
-
-// TODO - add the validation resouces on all post requests across all controllers ✅
-// ------------------------------------------------ next -------------------------------------------------- //
