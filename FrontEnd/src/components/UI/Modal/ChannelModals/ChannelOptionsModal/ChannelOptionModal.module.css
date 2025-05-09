@@ -1,0 +1,89 @@
+.dropdownMenu {
+  position: absolute;
+  top: 95%;
+  right: 0;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  min-width: 240px;
+  padding: 8px 0;
+  z-index: 1001;
+  border: 1px solid var(--border-color);
+}
+
+.menuItem {
+  width: 100%;
+  text-align: left;
+  background: none;
+  padding: 6px 19px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.subText {
+  font-size: 12px;
+  color: gray;
+  display: block;
+  margin-top: 2px;
+}
+
+.menuItem:hover,
+.copyItem:hover {
+  background-color: var(--link-color);
+  color: var(--c-white) !important;
+}
+
+.menuItem:hover span,
+.menuItem:hover span>* {
+  color: var(--c-white);
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background: #ddd;
+  margin: 5px 0;
+}
+
+.danger {
+  color: var(--error-color);
+}
+
+.danger:hover {
+  background: var(--error-color);
+}
+
+.hasSubmenu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.copyList {
+  position: relative;
+}
+
+.arrow {
+  font-size: 18px;
+  color: gray;
+}
+
+/* ✅ **Submenu (Copy Menu)** ✅ */
+.copyMenu {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 20;
+  padding: 8px 0;
+  transform: translate(-100%, -50%);
+  border: 1px solid var(--border-color);
+}
+
+.copyItem {
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 15px;
+}

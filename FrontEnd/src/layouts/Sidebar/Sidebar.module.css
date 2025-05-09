@@ -1,5 +1,6 @@
 .sidebar {
   background-color: var(--secondary-color);
+  min-width: 250px;
   max-width: 250px;
   height: 100vh;
   color: var(--sidebar-text-color);
@@ -8,7 +9,7 @@
   overflow: scroll;
 }
 
-.sidebar > hr {
+.sidebar>hr {
   margin-top: 10px;
   margin-bottom: 10px;
   border: 1px solid var(--primary-color);
@@ -39,7 +40,7 @@
   padding: 10px;
 }
 
-.sidebar__info > h2 {
+.sidebar__info>h2 {
   font-size: 18px;
   font-weight: 900;
   margin-bottom: 5px;
@@ -52,7 +53,7 @@
     font-size: 13px;
     font-weight: 400;
   }
-  
+
   .sidebar__info > h3 > .MuiSvgIcon-root {
     font-size: 14px;
     margin-top: 1px;
@@ -65,7 +66,7 @@
   align-items: center;
   font-size: 12px;
   cursor: pointer;
-  padding: 5px 2px;
+  padding: 4px 2px;
 }
 
 .sidebarOption:hover {
@@ -76,3 +77,6 @@
 .icon {
   padding: 8px;
 }
+
+/* Button,List Styles */
+

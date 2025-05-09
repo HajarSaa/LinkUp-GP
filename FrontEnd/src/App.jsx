@@ -1,54 +1,62 @@
-// import Login from "./pages/auth/Login";
-// import Register from "./pages/auth/Register";
-// import "@fontsource/lato";
-// import "./styles/variables.css";
-// import "./styles/global.css";
-// import { Navigate, Route, Routes } from "react-router-dom";
-
-// function App() {
-//   return (
-//     <>
-//         <Routes>
-//           {/* تحويل الصفحة الرئيسية لصفحة الـ Login */}
-//           <Route path="/" element={<Navigate to="/login" replace />} />
-
-//           {/* صفحات الـ Authentication */}
-//           <Route path="/login" element={<Login />} />
-//           <Route path="/register" element={<Register />} />
-//         </Routes>
-//     </>
-//   );
-// }
-
-// export default App;
-
 import "@fontsource/lato";
 import "./styles/variables.css";
+import "./styles/classes.css";
 import "./styles/global.css";
 import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
+import Signup from "./pages/auth/Signup";
 import MainLayout from "./layouts/MainLayout/MainLayout";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import EmptyLayout from "./layouts/MainLayout/EmptyLayout";
+import BrowseChannels from "./pages/dashboard/BrowseChannels/BrowseChannels";
+import DmPage from "./pages/dashboard/DmPage";
+import { Routes, Route } from "react-router-dom";
+import ChannelPage from "./pages/dashboard/ChannelPage";
+
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import Landing from "./pages/dashboard/Landing/Landing";
+
+import Step1 from './pages/dashboard/CreateWorkspace/Step1';
+import Step2 from './pages/dashboard/CreateWorkspace/Step2';
+import Step3 from './pages/dashboard/CreateWorkspace/Step3';
 
 function App() {
   return (
     <div className="app__body">
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <MainLayout>
-                <Routes>
-                  <Route path="/" element={<h1>Welcome</h1>} />
-                </Routes>
-              </MainLayout>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/landing"
+          element={
+            <ProtectedRoute>
+              <Landing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dm/:id" element={<DmPage />} />
+          <Route path="channels/:id" element={<ChannelPage />} />
+          <Route path="browse-channels" element={<BrowseChannels />} />
+        </Route>
+        <Route
+          path="/create-workspace"
+          element={
+            <ProtectedRoute>
+              <EmptyLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="step-1" element={<Step1 />} />
+          <Route path="step-2" element={<Step2 />} />
+          <Route path="step-3" element={<Step3 />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

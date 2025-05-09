@@ -1,12 +1,30 @@
-/* @import "../../styles/variables.css"; */
-.layout {
+.main_layout {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  overflow: hidden;
 }
 
-.content {
+/* workspace_wrapper */
+.workspace_wrapper {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  height: calc(100% - 40px);
+}
+
+/* workspace_content */
+.workspace_content_wrapper {
+  padding: 0 5px 5px;
+  background-color: var(--primary-color);
+  flex: 1;
+  height: 100%;
+}
+
+.workspace_content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border-radius: 7px;
+  overflow: hidden;
 }

@@ -21,6 +21,7 @@ export const createSendTokenCookie = (user, statusCode, res) => {
     ),
     secure: process.env.NODE_ENV === "production", // cookie will only be sent on an encrypted connection (https) in production
     httpOnly: true, // cookie cannot be accessed or modified in any way by the browser
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // cookie will only be sent on cross-site requests in production
   });
 
   // Remove the password from the output
@@ -28,7 +29,7 @@ export const createSendTokenCookie = (user, statusCode, res) => {
   // the reason the password is not removed although we set it visible to false in the schema is because the schema is not run when we create a new user
   // the schema is only run when we fetch a user from the database
 
-  // send the response 
+  // send the response
   res.status(statusCode).json({
     status: "success",
     data: {

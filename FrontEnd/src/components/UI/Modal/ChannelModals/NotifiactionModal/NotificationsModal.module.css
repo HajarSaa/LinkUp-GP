@@ -1,0 +1,130 @@
+.modalContainer {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    width: 500px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: var(--text-color-black);
+}
+
+.headerIcon {
+    font-size: 25px;
+    padding: 3px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+}
+
+.headerIcon:hover {
+    background-color: var(--bg-light-grey);
+}
+
+.modalHeader {
+    font-size: 1.2rem;
+
+}
+
+.modalContainer>p {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.radioGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-10);
+    margin-bottom: 15px;
+}
+
+.radioGroup label{
+    cursor: pointer;
+}
+
+.checkboxGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-10);
+    margin-bottom: 20px;
+}
+
+.checkboxGroup .checkboxItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--text-color-grey);
+    cursor: pointer;
+    padding: 10px 0;
+}
+
+.checkboxGroup .checkboxItem p {
+    line-height: 100%;
+}
+
+.note {
+    font-size: var(--font-size-small);
+    color: var(--text-color-muted);
+    margin-top: 10px;
+}
+
+.note a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.note a:hover {
+    text-decoration: underline;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancelBtn,
+.saveBtn {
+    background: var(--bg-light-grey);
+    border: none;
+    color: #333;
+    padding: 8px 15px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    font-weight: bold;
+    transition: var(--transition-3);
+}
+
+.cancelBtn {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+}
+
+.cancelBtn:hover {
+    background-color: var(--bg-light-grey);
+}
+
+.saveBtn:hover {
+    background: var(--link-color);
+    color: #fff;
+}
+
+/* .saveBtn {
+    background: var(--green-color);
+    color: var(--c-white);
+    border: none;
+    padding: 8px 15px;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: var(--transition-time);
+}
+
+.saveBtn:hover {
+    background: darken(var(--green-color), 10%);
+} */

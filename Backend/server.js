@@ -25,7 +25,6 @@ server.listen(port, () => {
 process.on("unhandledRejection", (err) => {
   console.log("UNHANDLED REJECTION ❌");
   console.log(err.name, err.message);
-  console.log(err);
   server.close(() => {
     process.exit(1);
   });
@@ -34,7 +33,6 @@ process.on("unhandledRejection", (err) => {
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION ❌");
   console.log(err.name, err.message);
-  console.log(err);
   server.close(() => {
     process.exit(1);
   });
