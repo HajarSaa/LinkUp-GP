@@ -39,6 +39,12 @@ const userProfileSchema = new mongoose.Schema({
   photo: {
     type: String,
   },
+  lastActive: { type: Date },
+  connectionQuality: {
+    type: String,
+    enum: ["stable", "unstable"],
+    default: "stable",
+  },
 });
 
 // Indexes
@@ -47,7 +53,7 @@ userProfileSchema.index({ user: 1, workspace: 1 }, { unique: true });
 // Post-save middleware to add userProfile ID to the User's workspaceProfiles array
 userProfileSchema.post("save", async (doc) => {
   await User.findByIdAndUpdate(doc.user, {
-    $addToSet: { workspaceProfiles: doc._id }, 
+    $addToSet: { workspaceProfiles: doc._id },
   });
 });
 

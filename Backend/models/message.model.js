@@ -15,12 +15,12 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Channel",
       default: null,
-      validate: {
-        validator: function () {
-          return !(this.channelId === null && this.conversationId === null);
-        },
-        message: "Either channelId or conversationId is required",
-      },
+      // validate: {
+      //   validator: function () {
+      //     return !(this.channelId === null && this.conversationId === null);
+      //   },
+      //   message: "Either channelId or conversationId is required",
+      // },
     },
     conversationId: {
       type: mongoose.Schema.ObjectId,
@@ -36,9 +36,35 @@ const messageSchema = new mongoose.Schema(
       type: String,
       enum: ["Message", "File"],
     },
+    readBy: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "UserProfile",
+        default: [],
+      },
+    ],
+    edited: { type: Boolean, default: false },
+    editedAt: { type: Date },
   },
   { timestamps: true }
 );
+
+messageSchema.pre("validate", function (next) {
+  if (!this.channelId && !this.conversationId) {
+    this.invalidate(
+      "channelId",
+      "Either channelId or conversationId is required"
+    );
+  }
+  next();
+});
+
+messageSchema.pre("validate", function (next) {
+  if (this.parentMessageId && !this.parentType) {
+    this.parentType = "Message";
+  }
+  next();
+});
 
 // Indexes
 // All replies to a message && Oldest first (Threads)

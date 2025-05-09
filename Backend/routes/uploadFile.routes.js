@@ -1,6 +1,8 @@
 import express from "express";
 import { uploadFile } from "../controllers/file.controller.js";
 import uploader from "../middlewares/uploadFileMiddleware.js";
+import { simulateUserIfMissing } from "../middlewares/simulateUser.middleware.js";
+
 import {
   protect,
   protectAttchWorkspace,
@@ -8,13 +10,14 @@ import {
 
 const router = express.Router();
 router.use(protect);
-//router.use(protectAttchWorkspace);   // After upload.single cause this middleware convert the json to form data.
+router.use(protectAttchWorkspace);
 
 const upload = uploader();
 // 📌 Route: Upload File
 router.post(
   "/upload",
-  upload.array("file"),
+  simulateUserIfMissing,
+  upload.array("files"),
   // (req, res, next) => {
   //   console.log(req.files);
   //   //next();

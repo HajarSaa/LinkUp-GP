@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket.IO Chat Test</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 30px;
+        max-width: 800px;
+      }
+      #connectionStatus {
+        margin: 10px 0;
+        font-weight: bold;
+      }
+      .connected {
+        color: green;
+      }
+      .disconnected {
+        color: red;
+      }
+      #messages {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        height: 400px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .message {
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 80%;
+        word-wrap: break-word;
+        position: relative;
+      }
+      .incoming {
+        background: #e3f2fd;
+        align-self: flex-start;
+      }
+      .outgoing {
+        background: #c8e6c9;
+        align-self: flex-end;
+      }
+      .message-status {
+        font-size: 0.8em;
+        margin-left: 5px;
+        opacity: 0.7;
+      }
+      #inputArea {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+      input[type="text"] {
+        flex-grow: 1;
+        padding: 8px;
+      }
+      button {
+        padding: 8px 15px;
+        cursor: pointer;
+      }
+      #error {
+        margin-top: 10px;
+        color: red;
+        display: none;
+      }
+      #typingStatus {
+        height: 20px;
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 5px;
+      }
+      .credentials {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      .room-selection {
+        margin-bottom: 15px;
+      }
+      .presence-panel {
+        position: fixed;
+        right: 20px;
+        top: 20px;
+        width: 200px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background: white;
+      }
+      .message-actions {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        gap: 5px;
+      }
+      .edit-btn,
+      .delete-btn {
+        background: rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 4px;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .message:hover .edit-btn,
+      .message:hover .delete-btn {
+        opacity: 1;
+      }
+      .edit-btn:hover {
+        background: rgba(0, 0, 255, 0.2);
+      }
+      .delete-btn:hover {
+        background: rgba(255, 0, 0, 0.2);
+      }
+      .edited-badge {
+        font-size: 0.8em;
+        color: #666;
+        margin-left: 5px;
+      }
+      .message.editing {
+        padding: 0;
+      }
+      .edit-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        resize: none;
+        font-family: inherit;
+        font-size: inherit;
+      }
+      .edit-actions {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+        justify-content: flex-end;
+      }
+      .edit-actions button {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Socket.IO Chat Test</h2>
+    <div id="connectionStatus">Status: Disconnected</div>
+
+    <div class="presence-panel">
+      <h3>Online Users</h3>
+      <div id="onlineUsersList">None</div>
+    </div>
+
+    <div class="credentials">
+      <div>
+        <label>Your User ID:</label>
+        <input type="text" id="userIdInput" placeholder="User ID" />
+      </div>
+      <div>
+        <label>Workspace ID:</label>
+        <input type="text" id="workspaceIdInput" placeholder="Workspace ID" />
+      </div>
+    </div>
+
+    <div class="room-selection">
+      <label>Room Selection:</label>
+      <div style="display: flex; gap: 10px; margin-top: 5px">
+        <input
+          type="text"
+          id="conversationIdInput"
+          placeholder="Conversation ID"
+        />
+        <span>or</span>
+        <input type="text" id="channelIdInput" placeholder="Channel ID" />
+      </div>
+    </div>
+
+    <div id="messages"></div>
+
+    <div id="inputArea">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <button id="sendButton">Send</button>
+    </div>
+    <div id="typingStatus"></div>
+    <div id="error"></div>
+
+    <script>
+      const socket = io("http://localhost:5000", {
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+        connectionStateRecovery: {
+          maxDisconnectionDuration: 120000,
+        },
+        transports: ["websocket"], // Force WebSocket for clearer debugging
+      });
+
+      const elements = {
+        messageInput: document.getElementById("messageInput"),
+        userIdInput: document.getElementById("userIdInput"),
+        workspaceIdInput: document.getElementById("workspaceIdInput"),
+        conversationIdInput: document.getElementById("conversationIdInput"),
+        channelIdInput: document.getElementById("channelIdInput"),
+        messages: document.getElementById("messages"),
+        connectionStatus: document.getElementById("connectionStatus"),
+        typingStatus: document.getElementById("typingStatus"),
+        error: document.getElementById("error"),
+        onlineUsersList: document.getElementById("onlineUsersList"),
+        sendButton: document.getElementById("sendButton"),
+      };
+
+      const state = {
+        messages: [],
+        currentRoom: null,
+        currentWorkspaceId: null,
+        onlineUsers: new Set(),
+        typingTimeout: null,
+        lastTypingEvent: 0,
+        TYPING_COOLDOWN: 2000,
+        pendingDeletions: new Set(),
+        pendingEdits: new Set(),
+      };
+
+      const helpers = {
+        showError: (message, duration = 5000) => {
+          elements.error.textContent = message;
+          elements.error.style.display = "block";
+          setTimeout(() => {
+            elements.error.style.display = "none";
+          }, duration);
+        },
+
+        updateOnlineUsers: () => {
+          elements.onlineUsersList.innerHTML =
+            state.onlineUsers.size > 0
+              ? Array.from(state.onlineUsers)
+                  .map((id) => `<div>• ${id}</div>`)
+                  .join("")
+              : "None";
+        },
+
+        renderMessages: () => {
+          elements.messages.innerHTML = state.messages
+            .filter((msg) => !state.pendingDeletions.has(msg._id || msg.tempId))
+            .map((msg) => {
+              const isOwnMessage =
+                msg.createdBy === elements.userIdInput.value.trim();
+              const isEditable =
+                isOwnMessage &&
+                Date.now() - new Date(msg.createdAt).getTime() < 15 * 60 * 1000;
+
+              if (state.pendingEdits.has(msg._id)) {
+                return `
+                  <div class="message editing" data-msg-id="${msg._id}">
+                    <textarea class="edit-input">${msg.content}</textarea>
+                    <div class="edit-actions">
+                      <button class="save-edit">Save</button>
+                      <button class="cancel-edit">Cancel</button>
+                    </div>
+                  </div>
+                `;
+              }
+
+              return `
+                <div class="message ${isOwnMessage ? "outgoing" : "incoming"}" 
+                     data-msg-id="${msg._id || msg.tempId}">
+                  <div class="message-content">${msg.content}</div>
+                  <div class="message-meta">
+                    ${new Date(msg.createdAt).toLocaleTimeString()}
+                    ${
+                      msg.edited
+                        ? '<span class="edited-badge" title="Edited">(edited)</span>'
+                        : ""
+                    }
+                  </div>
+                  ${
+                    isOwnMessage
+                      ? `
+                        <div class="message-actions">
+                          ${
+                            isEditable
+                              ? `<button class="edit-btn" data-msg-id="${msg._id}">✏️</button>`
+                              : ""
+                          }
+                          <button class="delete-btn" 
+                                  data-msg-id="${msg._id || msg.tempId}"
+                                  title="Delete message">
+                            ×
+                          </button>
+                        </div>`
+                      : ""
+                  }
+                </div>
+              `;
+            })
+            .join("");
+          elements.messages.scrollTop = elements.messages.scrollHeight;
+        },
+
+        joinRoom: () => {
+          const conversationId = elements.conversationIdInput.value.trim();
+          const channelId = elements.channelIdInput.value.trim();
+
+          if (conversationId && channelId) {
+            helpers.showError(
+              "Please select either conversation OR channel, not both"
+            );
+            return;
+          }
+
+          if (state.currentRoom) {
+            socket.emit("leaveRoom", state.currentRoom);
+          }
+
+          if (conversationId) {
+            state.currentRoom = `conversation:${conversationId}`;
+          } else if (channelId) {
+            state.currentRoom = `channel:${channelId}`;
+          } else {
+            state.currentRoom = null;
+            return;
+          }
+
+          socket.emit("joinRoom", state.currentRoom);
+        },
+      };
+
+      const socketHandlers = {
+        connect: () => {
+          console.log("✅ Connected to server");
+          elements.connectionStatus.textContent = "Status: Connected";
+          elements.connectionStatus.className = "connected";
+
+          const userId = elements.userIdInput.value.trim();
+          const workspaceId = elements.workspaceIdInput.value.trim();
+
+          if (userId && workspaceId) {
+            socket.emit("userConnected", userId, workspaceId, (response) => {
+              if (response.success) {
+                state.currentWorkspaceId = workspaceId;
+                helpers.joinRoom();
+              } else {
+                helpers.showError(`Connection error: ${response.error}`);
+              }
+            });
+          }
+        },
+
+        disconnect: () => {
+          console.log("❌ Disconnected from server");
+          elements.connectionStatus.textContent = "Status: Disconnected";
+          elements.connectionStatus.className = "disconnected";
+        },
+
+        onlineUsers: ({ userIds, workspaceId }) => {
+          if (workspaceId === state.currentWorkspaceId) {
+            state.onlineUsers = new Set(userIds);
+            helpers.updateOnlineUsers();
+          }
+        },
+
+        newMessage: (message) => {
+          if (!state.messages.some((m) => m._id === message._id)) {
+            state.messages.push(message);
+            helpers.renderMessages();
+
+            if (message.createdBy !== elements.userIdInput.value.trim()) {
+              socket.emit("markAsRead", {
+                messageIds: [message._id],
+                userId: elements.userIdInput.value.trim(),
+              });
+            }
+          }
+        },
+
+        messageRead: ({ messageId, readBy }) => {
+          const message = state.messages.find((m) => m._id === messageId);
+          if (message) {
+            message.readBy = readBy;
+            helpers.renderMessages();
+          }
+        },
+
+        typing: ({ userId, typingStatus }) => {
+          if (typingStatus) {
+            elements.typingStatus.textContent = `${userId} is typing...`;
+            setTimeout(() => {
+              if (elements.typingStatus.textContent.includes(userId)) {
+                elements.typingStatus.textContent = "";
+              }
+            }, state.TYPING_COOLDOWN);
+          } else {
+            elements.typingStatus.textContent = "";
+          }
+        },
+
+        messageDeleted: (messageId) => {
+          state.messages = state.messages.filter((m) => m._id !== messageId);
+          state.pendingDeletions.delete(messageId);
+          helpers.renderMessages();
+        },
+
+        messageEdited: (editedMessage) => {
+          const index = state.messages.findIndex(
+            (m) => m._id === editedMessage.messageId
+          );
+          if (index !== -1) {
+            state.messages[index] = {
+              ...state.messages[index],
+              content: editedMessage.newContent,
+              edited: true,
+              editedAt: editedMessage.editedAt,
+              updatedAt: editedMessage.updatedAt,
+            };
+            state.pendingEdits.delete(editedMessage.messageId);
+            helpers.renderMessages();
+          }
+        },
+      };
+
+      const uiHandlers = {
+        sendMessage: () => {
+          const content = elements.messageInput.value.trim();
+          if (!content || !state.currentRoom) {
+            helpers.showError("Please enter a message and join a room first");
+            return;
+          }
+
+          const messageData = {
+            content,
+            senderId: elements.userIdInput.value.trim(),
+            [state.currentRoom.startsWith("conversation:")
+              ? "conversationId"
+              : "channelId"]: state.currentRoom.split(":")[1],
+            tempId: crypto.randomUUID
+              ? crypto.randomUUID()
+              : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+                  /[xy]/g,
+                  function (c) {
+                    const r = (Math.random() * 16) | 0;
+                    const v = c === "x" ? r : (r & 0x3) | 0x8;
+                    return v.toString(16);
+                  }
+                ),
+          };
+
+          state.messages.push({
+            ...messageData,
+            createdBy: messageData.senderId,
+            tempId: messageData.tempId,
+          });
+          helpers.renderMessages();
+          elements.messageInput.value = "";
+
+          socket.emit("sendMessage", messageData, (response) => {
+            if (response.success) {
+              const index = state.messages.findIndex(
+                (m) => m.tempId === messageData.tempId
+              );
+              if (index !== -1) {
+                state.messages[index] = response.message;
+                helpers.renderMessages();
+              }
+            } else {
+              helpers.showError(response.error);
+            }
+          });
+        },
+
+        handleTyping: () => {
+          const now = Date.now();
+          if (now - state.lastTypingEvent < state.TYPING_COOLDOWN) return;
+          state.lastTypingEvent = now;
+
+          if (!state.currentRoom || !elements.userIdInput.value.trim()) return;
+
+          socket.emit("typing", {
+            userId: elements.userIdInput.value.trim(),
+            room: state.currentRoom,
+            typingStatus: true,
+          });
+
+          clearTimeout(state.typingTimeout);
+          state.typingTimeout = setTimeout(() => {
+            socket.emit("typing", {
+              userId: elements.userIdInput.value.trim(),
+              room: state.currentRoom,
+              typingStatus: false,
+            });
+          }, state.TYPING_COOLDOWN);
+        },
+
+        handleDelete: (messageId) => {
+          if (!messageId || state.pendingDeletions.has(messageId)) return;
+
+          if (!confirm("Are you sure you want to delete this message?")) return;
+
+          state.pendingDeletions.add(messageId);
+          helpers.renderMessages();
+
+          socket.emit("deleteMessage", messageId, (response) => {
+            state.pendingDeletions.delete(messageId);
+
+            if (response.success) {
+              state.messages = state.messages.filter(
+                (m) => m._id !== messageId
+              );
+            } else {
+              helpers.showError(response.error);
+            }
+            helpers.renderMessages();
+          });
+        },
+
+        handleEdit: (messageId) => {
+          const message = state.messages.find((m) => m._id === messageId);
+          if (!message) return;
+
+          state.pendingEdits.add(messageId);
+          helpers.renderMessages();
+
+          // Set up event listeners for the edit UI
+          setTimeout(() => {
+            const messageElement = document.querySelector(
+              `[data-msg-id="${messageId}"]`
+            );
+            if (!messageElement) return;
+
+            const textarea = messageElement.querySelector(".edit-input");
+            textarea.focus();
+            textarea.selectionStart = textarea.value.length;
+
+            messageElement
+              .querySelector(".save-edit")
+              .addEventListener("click", () => {
+                const newContent = textarea.value.trim();
+                if (!newContent || newContent === message.content) {
+                  state.pendingEdits.delete(messageId);
+                  helpers.renderMessages();
+                  return;
+                }
+
+                socket.emit(
+                  "editMessage",
+                  {
+                    messageId: message._id,
+                    newContent,
+                  },
+                  (response) => {
+                    if (!response.success) {
+                      helpers.showError(response.error);
+                    }
+                    state.pendingEdits.delete(messageId);
+                    helpers.renderMessages();
+                  }
+                );
+              });
+
+            messageElement
+              .querySelector(".cancel-edit")
+              .addEventListener("click", () => {
+                state.pendingEdits.delete(messageId);
+                helpers.renderMessages();
+              });
+          }, 0);
+        },
+      };
+
+      const initEventListeners = () => {
+        Object.entries(socketHandlers).forEach(([event, handler]) => {
+          socket.on(event, handler);
+        });
+
+        elements.sendButton.addEventListener("click", uiHandlers.sendMessage);
+        elements.messageInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") uiHandlers.sendMessage();
+        });
+        elements.messageInput.addEventListener(
+          "input",
+          uiHandlers.handleTyping
+        );
+
+        elements.messages.addEventListener("click", (e) => {
+          const deleteBtn = e.target.closest(".delete-btn");
+          if (deleteBtn) {
+            uiHandlers.handleDelete(deleteBtn.dataset.msgId);
+            return;
+          }
+
+          const editBtn = e.target.closest(".edit-btn");
+          if (editBtn) {
+            uiHandlers.handleEdit(editBtn.dataset.msgId);
+            return;
+          }
+        });
+
+        elements.conversationIdInput.addEventListener("input", () => {
+          if (elements.conversationIdInput.value.trim()) {
+            elements.channelIdInput.value = "";
+          }
+          helpers.joinRoom();
+        });
+
+        elements.channelIdInput.addEventListener("input", () => {
+          if (elements.channelIdInput.value.trim()) {
+            elements.conversationIdInput.value = "";
+          }
+          helpers.joinRoom();
+        });
+
+        elements.userIdInput.addEventListener("blur", () => {
+          const userId = elements.userIdInput.value.trim();
+          const workspaceId = elements.workspaceIdInput.value.trim();
+          if (userId && workspaceId) {
+            state.currentWorkspaceId = workspaceId;
+            socket.emit("userConnected", userId, workspaceId);
+          }
+        });
+      };
+
+      initEventListeners();
+    </script>
+  </body>
+</html>

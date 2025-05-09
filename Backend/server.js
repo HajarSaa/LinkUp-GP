@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import app from "./app.js";
+import http from "http";
+import socketServer from "./SocketServer.js";
 
 dotenv.config({ path: "./config.env" });
 
@@ -9,12 +11,19 @@ const DB = process.env.DATABASE;
 mongoose.connect(DB, {}).then(() => console.log("DB connection successful!"));
 
 const port = process.env.PORT;
-const server = app.listen(port, () => {
-  console.log(`server running on port ${port} -> http://127.0.0.1:${port}`);
+// create HTTP server, attach Socket.IO to.
+const server = http.createServer(app);
+const io = socketServer(server);
+
+// expose "io" (to be used in controllers)
+app.set("io", io);
+
+server.listen(port, () => {
+  console.log(`Server running on port ${port} -> http://127.0.0.1:${port}`);
 });
 
 process.on("unhandledRejection", (err) => {
-  console.log("UNHANDELED REJECTION ❌");
+  console.log("UNHANDLED REJECTION ❌");
   console.log(err.name, err.message);
   console.log(err);
   server.close(() => {

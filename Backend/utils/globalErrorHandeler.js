@@ -57,7 +57,7 @@ const sendErrorProduction = (err, res) => {
     console.error("ERROR:😭", err);
     res.status(err.statusCode).json({
       status: "error",
-      message: "Somthing went wrong ",
+      message: "Something went wrong ",
     });
   }
 };
