@@ -17,6 +17,8 @@ import Landing from "./pages/dashboard/Landing/Landing";
 import Step1 from "./pages/dashboard/CreateWorkspace/Step1";
 import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
 import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
+import ProtectedLoading from "./routes/ProtectedLoading/ProtectedLoading";
+
 
 
 function App() {
@@ -25,10 +27,10 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/loading" element={<ProtectedLoading />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/workspaces-landing" element={<Landing />} />
-
           <Route path="/" element={<MainLayout />}>
             <Route path="dm/:id" element={<DmPage />} />
             <Route path="channels/:id" element={<ChannelPage />} />

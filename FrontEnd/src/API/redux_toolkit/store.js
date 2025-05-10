@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 // Auth
-// import currentUserReducer from "./auth/currentUserSlice";
+import currentUserReducer from "./auth/currentUserSlice";
 
 import chatPanelReducer from "./ui/chatPanel";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
@@ -15,14 +15,16 @@ import convActionModalReducer from "./modals/convActionModal";
 import huddleModalReducer from './modals/huddleSlice';
 import addButtonModalReducer from "./modals/addButtonModal";
 import emojiPickerReducer from './modals/emojiPickerSlice'
-
+import workspaceReducer from './ui/workspaceSlice'
 
 const store = configureStore({
   reducer: {
 
-    // current_user: currentUserReducer,
+    current_user: currentUserReducer,
 
     chatPanel: chatPanelReducer,
+    workspace: workspaceReducer,
+
     addChannelMenu: addChannelMenuReducer,
     channelMenu: channelMenuReducer,
     // Modals

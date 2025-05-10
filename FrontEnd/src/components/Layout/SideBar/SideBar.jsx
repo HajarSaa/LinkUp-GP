@@ -11,8 +11,12 @@ import PropTypes from "prop-types";
 // import { useDispatch } from "react-redux";
 // import { openAddButtonModal } from "../../../API/redux_toolkit/modals/addButtonModal";
 import SidebarLists from "./SidebarLists";
+import { useSelector } from "react-redux";
 
 function SideBar({ width, onResizeStart, isResizable }) {
+
+  const { workspace } = useSelector((state) => state.workspace)
+  console.log(workspace)
 
   return (
     <div className={styles.side_bar} style={{ width }}>

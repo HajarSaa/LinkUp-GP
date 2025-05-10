@@ -1,46 +1,52 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { fetchUserData } from "./currentUserThunk";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { getMeService } from "../../services/authService";
+
+
+export const fetchCurrentUser = createAsyncThunk(
+  "current_user/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getMeService();
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 const initialState = {
-  userData: null,
+  user: null,
   workspaces: [],
-  isLoading: false,
-  isError: false,
-  errorMessage: "",
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+  isFirstLoad: true, // <-- Added this
 };
 
 const currentUserSlice = createSlice({
   name: "current_user",
   initialState,
-  reducers: {
-    clearUserData: (state) => {
-      state.userData = null;
-      state.workspaces = [];
-      state.isLoading = false;
-      state.isError = false;
-      state.errorMessage = "";
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUserData.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.errorMessage = "";
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.isFirstLoad = true;
       })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        console.log(action.payload);
-        state.isLoading = false;
-        state.userData = action.payload.user;
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
         state.workspaces = action.payload.workspaces;
+        state.isAuthenticated = true;
+        state.isFirstLoad = false;
       })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.error.message;
+      .addCase(fetchCurrentUser.rejected, (state) => {
+        state.loading = false;
+        state.error = "Failed to fetch user data";
+        state.isAuthenticated = false;
+        state.isFirstLoad = false;
       });
   },
 });
 
-export const { clearUserData } = currentUserSlice.actions;
 export default currentUserSlice.reducer;

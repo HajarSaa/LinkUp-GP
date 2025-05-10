@@ -4,13 +4,26 @@ import { BiSolidUser } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 import styles from "./Landing.module.css";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 function WorkspaceItem({ workspace }) {
   const work_title = getWorkBackground(workspace?.name || "workspace name");
   const work_background = getRandomColorFromPalette();
 
+  const navigate = useNavigate();
+
+  const handleClick = (work_id) => {
+    localStorage.setItem("selectedWorkspaceId", work_id);
+    navigate(`/`);
+  };
+
   return (
-    <div className={styles.workspaceItem}>
+    <div
+      className={styles.workspaceItem}
+      onClick={() => {
+        handleClick(workspace.id);
+      }}
+    >
       <div className={styles.workspaceItem_leftSide}>
         <div className={styles.workspaceImage}>
           {workspace?.image ? (

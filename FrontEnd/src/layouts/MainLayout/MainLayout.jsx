@@ -6,7 +6,7 @@ import SideBar from "../../components/Layout/SideBar/SideBar";
 import Panel from "../../components/Layout/Panel/Panel";
 import useResizableLayout from "../../API/hooks/useResizableLayout";
 import { Outlet } from "react-router-dom";
-
+import useCurrentWork from "../../API/hooks/useCurrentWork";
 
 function MainLayout() {
   const isResizable = true;
@@ -14,6 +14,10 @@ function MainLayout() {
   const { sidebarWidth, panelWidth, containerRef, handleResizeStart } =
     useResizableLayout(300, 250, isResizable);
 
+  const {loading, error } = useCurrentWork();
+
+  if (loading) return <div>Fteching Workspace Data ...</div>;
+  if (error) return <div>{error}</div>;
   return (
     <div className={styles.main_layout}>
       <NavBar />

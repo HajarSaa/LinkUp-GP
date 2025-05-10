@@ -1,13 +1,17 @@
 .authBtn {
-  width: 100%;
-  padding: 12px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius);
-  font-size: var(--font-size);
-  cursor: pointer;
-  transition: background var(--transition-time) ease;
+  display: flex;
+    height: 45px;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size);
+    cursor: pointer;
+    transition: background var(--transition-time) ease;
+    justify-content: center;
+    align-items: center;
 }
 
 .authBtn:hover {
