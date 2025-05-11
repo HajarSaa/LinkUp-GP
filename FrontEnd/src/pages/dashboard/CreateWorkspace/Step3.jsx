@@ -3,24 +3,29 @@ import { IoIosLink } from "react-icons/io";
 import { useState } from "react";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
-function Step3({ onNext }) {
+
+function Step3({ onNext, workspace }) {
   const [email, setEmail] = useState("");
 
   const isButtonDisabled = email.trim() === "";
 
   const handleNextClick = () => {
-    if (!isButtonDisabled) {
+    if (!isButtonDisabled && onNext) {
       onNext(email);
     }
   };
+
+  if (!workspace) {
+    return <p>Loading workspace info...</p>;
+  }
+
   return (
     <PageContent>
-      {/* 3 */}
       <div className={styles.wrapper}>
         <div className={styles.container}>
           <p className={styles.stepText}>Step 3 of 3</p>
           <h1 className={styles.heading}>
-            Who else is on the <span>try</span> team?
+            Who else is on the <span>{workspace.name || "your"}</span> team?
           </h1>
 
           <label className={styles.label}>Add coworker by email</label>
@@ -47,10 +52,12 @@ function Step3({ onNext }) {
             >
               Next
             </button>
+
             <button className={styles.copyButton}>
               <IoIosLink />
               Copy Invite Link
             </button>
+
             <a className={styles.skipButton} href="#">
               Skip this step
             </a>

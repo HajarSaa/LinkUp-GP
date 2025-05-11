@@ -1,11 +1,10 @@
-
 import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { getMeService } from "../../API/services/authService";
 
 function ProtectedRoute({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // null = لسه بيشيك
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,7 +13,7 @@ function ProtectedRoute({ children }) {
         await getMeService();
         setIsAuthenticated(true);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
