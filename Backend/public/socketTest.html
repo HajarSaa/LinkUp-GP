@@ -151,6 +151,26 @@
         padding: 5px 10px;
         font-size: 12px;
       }
+      #fileDisplay {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+      }
+      #fileDisplay a {
+        color: #0066cc;
+        text-decoration: none;
+      }
+      #fileDisplay a:hover {
+        text-decoration: underline;
+      }
+      .file-message {
+        margin: 5px 0;
+        padding: 8px;
+        background-color: #eef7ff;
+        border-radius: 4px;
+      }
     </style>
   </head>
   <body>
@@ -195,6 +215,10 @@
     <div id="typingStatus"></div>
     <div id="error"></div>
 
+    <div id="fileDisplay">
+      <h3>Shared Files</h3>
+    </div>
+
     <script>
       const socket = io("http://localhost:5000", {
         reconnection: true,
@@ -218,6 +242,7 @@
         error: document.getElementById("error"),
         onlineUsersList: document.getElementById("onlineUsersList"),
         sendButton: document.getElementById("sendButton"),
+        fileDisplay: document.getElementById("fileDisplay"),
       };
 
       const state = {
@@ -230,6 +255,7 @@
         TYPING_COOLDOWN: 2000,
         pendingDeletions: new Set(),
         pendingEdits: new Set(),
+        sharedFiles: [],
       };
 
       const helpers = {
@@ -334,6 +360,29 @@
 
           socket.emit("joinRoom", state.currentRoom);
         },
+
+        renderFiles: () => {
+          if (state.sharedFiles.length === 0) {
+            elements.fileDisplay.innerHTML =
+              "<h3>Shared Files</h3><p>No files shared yet</p>";
+            return;
+          }
+
+          let filesHTML = "<h3>Shared Files</h3>";
+          state.sharedFiles.forEach((file) => {
+            filesHTML += `
+  <div class="file-message">
+    <p>
+      <strong>${file.sender}:</strong>
+      <a href="${file.url}" target="_blank">${file.originalname}</a>
+      ${file.size ? `<span>(${Math.round(file.size / 1024)} KB)</span>` : ""}
+    </p>
+    ${!file.url ? "<small>(File path missing)</small>" : ""}
+  </div>
+`;
+          });
+          elements.fileDisplay.innerHTML = filesHTML;
+        },
       };
 
       const socketHandlers = {
@@ -426,6 +475,24 @@
             state.pendingEdits.delete(editedMessage.messageId);
             helpers.renderMessages();
           }
+        },
+        fileShared: (data) => {
+          const files = data.files || [data.file].filter(Boolean);
+
+          files.forEach((file) => {
+            state.sharedFiles.push({
+              url: file.path || file.url || "#",
+              originalname:
+                file.originalname || file.fileName || "Unnamed file",
+              sender: data.senderId || "Unknown",
+              timestamp: data.timestamp || new Date().toISOString(),
+              size: file.size || file.fileSize || 0,
+              type:
+                file.mimetype || file.fileType || "application/octet-stream",
+            });
+          });
+
+          helpers.renderFiles();
         },
       };
 

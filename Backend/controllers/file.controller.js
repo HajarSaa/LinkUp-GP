@@ -12,16 +12,17 @@ const formatFile = (file) => ({
   createdAt: file.createdAt,
 });
 
-// Upload files
 export const uploadFile = catchAsync(async (req, res, next) => {
-  // Check if files are uploaded
+  // Validate files exist
   if (!req.files || req.files.length === 0) {
     return next(new AppError("No files uploaded!", 400));
   }
-  // Optional fields for future use (Postman testing only)
-  // const { workspaceId, parentMessageId } = req.body;
-  const { userId, conversationId, channelId } = req.body;
 
+  // extract and validate data
+  const userId = req.user.id;
+  const { conversationId, channelId, parentId, parentType } = req.body;
+
+  // Validate IDs
   if (!mongoose.Types.ObjectId.isValid(userId)) {
     return next(new AppError("Invalid user ID", 400));
   }
@@ -34,52 +35,78 @@ export const uploadFile = catchAsync(async (req, res, next) => {
     return next(new AppError("Invalid channel ID", 400));
   }
 
-  // Optional fields for future use (e.g. Postman testing only)
-  // if (workspaceId && !mongoose.Types.ObjectId.isValid(workspaceId)) {
-  //   return next(new AppError("Invalid workspace ID", 400));
-  // }
+  if (parentId && !mongoose.Types.ObjectId.isValid(parentId)) {
+    return next(new AppError("Invalid parent ID", 400));
+  }
 
-  // if (parentMessageId && !mongoose.Types.ObjectId.isValid(parentMessageId)) {
-  //   return next(new AppError("Invalid parent message ID", 400));
-  // }
+  if (parentType && !["Message", "File"].includes(parentType)) {
+    return next(
+      new AppError("Invalid parentType — must be 'Message' or 'File'", 400)
+    );
+  }
 
-  // // Log received data
-  // console.log("Files received:", req.files);
-  // console.log("User ID:", userId);
-  // console.log("Body:", req.body);
-
-  // Create file documents in the database
+  // create files in database
   const files = await Promise.all(
-    req.files.map((file) => {
-      return File.create({
+    req.files.map((file) =>
+      File.create({
         fileName: file.originalname,
         fileSize: file.size,
         fileType: file.mimetype,
-        fileUrl: file.path, // Cloudinary
+        fileUrl: file.path,
         uploadedBy: userId,
         channelId: channelId || null,
         conversationId: conversationId || null,
-        // parentMessageId: parentMessageId || null,
-        // parentType: parentMessageId ? "Message" : null,
-      });
-    })
+        parentId: parentId || null,
+        parentType: parentType || null,
+      })
+    )
   );
 
-  // Emit real time event using Socket.IO
+  // prepare Socket.IO data
+  const formattedFiles = files.map((file) => ({
+    url: file.fileUrl,
+    originalname: file.fileName,
+    mimetype: file.fileType,
+    size: file.fileSize,
+  }));
+
+  // handle Socket.IO emission
   const io = req.app.get("io");
   const roomId = conversationId || channelId;
 
-  // Only emit event if the roomId valid
-  if (io && mongoose.Types.ObjectId.isValid(roomId)) {
-    io.to(roomId.toString()).emit("newFile", {
-      files: files.map(formatFile),
-      senderId: userId,
-    });
+  if (io && roomId) {
+    const roomType = conversationId ? "conversation" : "channel";
+    const fullRoomId = `${roomType}:${roomId}`;
+
+    io.to(fullRoomId).emit(
+      "fileShared",
+      {
+        room: fullRoomId,
+        file: formattedFiles[0],
+        files: formattedFiles,
+        senderId: userId,
+        timestamp: new Date().toISOString(),
+        parentId: parentId || null,
+        parentType: parentType || null,
+      },
+      (err) => {
+        if (err) {
+          console.error("Socket emission failed:", err);
+        } else {
+          console.log(`Emitted to ${fullRoomId}`);
+        }
+      }
+    );
+  } else {
+    console.warn(io ? "No room specified" : "Socket.IO not available");
   }
 
-  // return response to frontend
-  return res.status(201).json({
-    message: "Files uploaded successfully!",
-    files: files.map(formatFile),
+  res.status(200).json({
+    status: "success",
+    message:
+      files.length === 1
+        ? "File uploaded successfully!"
+        : `${files.length} files uploaded successfully!`,
+    data: files.map(formatFile),
   });
 });
