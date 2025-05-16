@@ -164,9 +164,8 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
     ),
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
-
-  
 
   // Send the response
   res.status(200).json({

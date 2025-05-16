@@ -10,13 +10,13 @@ import cookieParser from "cookie-parser";
 
 const middlewares = (app) => {
   // Rate limiting
-  app.use(
-    rateLimit({
-      windowMs: 60 * 60 * 1000,
-      max: 100,
-      message: "Too many requests from this IP, please try again in an hour!",
-    })
-  );
+  // app.use(
+  //   rateLimit({
+  //     windowMs: 60 * 60 * 1000,
+  //     max: 100,
+  //     message: "Too many requests from this IP, please try again in an hour!",
+  //   })
+  // );
 
   // Body parser -> read data from body int req.body
   app.use(express.json({ limit: "100kb" }));
