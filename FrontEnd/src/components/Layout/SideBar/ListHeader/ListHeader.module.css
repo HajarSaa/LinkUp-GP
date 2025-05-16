@@ -4,10 +4,10 @@
     padding: 3px 7px;
     color: var(--text-primary);
     user-select: none;
+    min-height: 40px;
 }
 
 .right_side{
-        flex: 1;
             max-width: 100%;
             overflow: hidden;
 }
@@ -43,4 +43,15 @@
 
 .icon {
     font-size: 10px;
+}
+
+.header_add_btn{
+    display: none;
+    font-weight: normal;
+    margin-left: auto;
+    font-size: 22px;
+}
+
+.header:hover  .header_add_btn{
+    display: flex;
 }

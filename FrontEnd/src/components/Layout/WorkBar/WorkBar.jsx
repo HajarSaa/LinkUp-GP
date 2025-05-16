@@ -13,11 +13,15 @@ import { IoIosMore } from "react-icons/io";
 import { FaPlus, FaUser } from "react-icons/fa6";
 import UserMenu from "./UserMenu/UserMenu";
 import styles from "./Workbar.module.css";
+import { useSelector } from "react-redux";
+import {getWorkLabel} from '../../../utils/workspaceUtils'
 
 function WorkBar() {
+  const { workspace } = useSelector((state) => state.workspace);
   const [activeIndex, setActiveIndex] = useState(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef(null);
+  const work_label = getWorkLabel(workspace?.name || "workspace name");
   const sidebarItems = [
     {
       label: "Home",
@@ -58,8 +62,12 @@ function WorkBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (!workspace) return <div className={styles.work_bar}></div>;
+
   return (
     <div className={styles.work_bar}>
+      <div className={styles.work_label}>{work_label}</div>
       {sidebarItems.map((item, index) => {
         const isActive = activeIndex === index;
 

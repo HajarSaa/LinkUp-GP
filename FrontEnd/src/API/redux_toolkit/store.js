@@ -1,8 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-// Auth
-import currentUserReducer from "./auth/currentUserSlice";
-
 import chatPanelReducer from "./ui/chatPanel";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
 import channelMenuReducer from "./chat/channel/channelMenuSlice";
@@ -15,15 +12,18 @@ import convActionModalReducer from "./modals/convActionModal";
 import huddleModalReducer from './modals/huddleSlice';
 import addButtonModalReducer from "./modals/addButtonModal";
 import emojiPickerReducer from './modals/emojiPickerSlice'
-import workspaceReducer from './ui/workspaceSlice'
+import workspaceReducer from './api_data/workspaceSlice'
+import channelReducer from "./api_data/channelSlice";
+import conversReducer from "./api_data/conversSlice";
+import resizeableReducer from './ui/resizeSlice'
 
 const store = configureStore({
   reducer: {
-
-    current_user: currentUserReducer,
-
+    resizableLayout: resizeableReducer,
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,
+    channel: channelReducer,
+    convers: conversReducer,
 
     addChannelMenu: addChannelMenuReducer,
     channelMenu: channelMenuReducer,

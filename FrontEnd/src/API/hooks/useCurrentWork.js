@@ -5,20 +5,25 @@ import {
   setWorkspace,
   setLoading,
   setError,
-} from "../redux_toolkit/ui/workspaceSlice";
+} from "../redux_toolkit/api_data/workspaceSlice";
+import {useNavigate } from "react-router-dom";
 
 const useCurrentWork = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { workspace, loading, error } = useSelector((state) => state.workspace);
 
   useEffect(() => {
     const fetchWorkspace = async () => {
       const work_id = localStorage.getItem("selectedWorkspaceId");
       if (!work_id) {
-        console.error("No Workspace ID found");
+        console.log("No Workspace ID found\nthen navigate to login page");
         dispatch(setLoading(false));
-        dispatch(setError("Workspace ID not found in localStorage."));
+        //
+        // this handle :=> workspace Id is deleted from localStorage
+        //
+        navigate("/login");
         return;
       }
 
@@ -26,17 +31,21 @@ const useCurrentWork = () => {
 
       try {
         const response = await getWorkspace(work_id);
-        dispatch(setWorkspace(response.workspace)); // تخزين الداتا في الـ Redux
+        dispatch(setWorkspace(response.workspace));
       } catch (err) {
         console.error("Error fetching workspace:", err);
         dispatch(setError("Failed to fetch workspace data."));
+        //
+        // this handle :=> the owner delete the workspace
+        //
+        navigate("/workspaces-landing");
       } finally {
         dispatch(setLoading(false));
       }
     };
 
     fetchWorkspace();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   return { workspace, loading, error };
 };

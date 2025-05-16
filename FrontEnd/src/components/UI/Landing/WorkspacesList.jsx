@@ -27,11 +27,19 @@ function WorkspacesList() {
       <div className={styles.workspace_list_header}>
         Workspaces for <strong>{user.email}</strong>
       </div>
-
       <div className={styles.workspace_list_items}>
-        {workspaces.map((workspace, index) => (
-          <WorkspaceItem key={index} workspace={workspace} />
-        ))}
+        {!loading && workspaces.length === 0 ? (
+          <div
+            className={`${styles.workspaceItem} ${styles.empty_workspace_item}`}
+          >
+            <h3>There is no workspaces or invitations</h3>
+            <p>try to create new one </p>
+          </div>
+        ) : (
+          workspaces.map((workspace, index) => (
+            <WorkspaceItem key={index} workspace={workspace} />
+          ))
+        )}
       </div>
     </div>
   );

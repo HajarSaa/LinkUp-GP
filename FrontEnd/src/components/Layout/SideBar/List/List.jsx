@@ -4,7 +4,7 @@ import styles from "./List.module.css";
 import AddButton from "../AddButton/AddButton.jsx";
 import PropTypes from 'prop-types'
 
-const List = ({ children, buttonText, headerText}) => {
+const List = ({ children, buttonText, headerText , handleAdd}) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = (openState) => {
@@ -14,7 +14,7 @@ const List = ({ children, buttonText, headerText}) => {
 
   return (
     <div className={styles.sidebar_list}>
-      <ListHeader onToggle={handleToggle} headerText={headerText} />
+      <ListHeader onToggle={handleToggle} headerText={headerText} handleAdd={handleAdd} />
       {isOpen ? (
         <>
           {children}
@@ -29,7 +29,7 @@ List.propTypes = {
   children: PropTypes.any,
   buttonText: PropTypes.any,
   headerText: PropTypes.any,
-  click_event: PropTypes.any,
+  handleAdd: PropTypes.any,
 };
 
 export default List;

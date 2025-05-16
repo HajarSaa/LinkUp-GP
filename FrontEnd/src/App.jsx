@@ -12,7 +12,7 @@ import { Routes, Route } from "react-router-dom";
 import ChannelPage from "./pages/dashboard/ChannelPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
-import Landing from "./pages/dashboard/Landing/Landing";
+import Landing from "./pages/Landing/Landing";
 
 import Step1 from "./pages/dashboard/CreateWorkspace/Step1";
 import Step2 from "./pages/dashboard/CreateWorkspace/Step2";

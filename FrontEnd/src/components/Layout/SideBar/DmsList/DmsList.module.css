@@ -14,20 +14,21 @@
     justify-content: center;
     align-items: center;
     width: 30px;
-        min-width: 30px;
-        height: 30px;
-        min-height: 30px;
+    min-width: 30px;
+    height: 30px;
+    min-height: 30px;
+    flex-shrink: 0;
 }
 
 .dms_item {
     display: flex;
-    gap: var(--gap-8);
-    align-items: center;
-    padding: 2px 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    color: var(--text-white);
+        gap: 2px;
+        align-items: center;
+        padding: 2px 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        color: var(--text-white);
 }
 
 .dms_item:hover {
@@ -35,7 +36,26 @@
 }
 
 .user_name {
+    flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+
+.user_name_hint {
+    margin-left: 6px;
+    opacity: 0.7;
+}
+
+.right_side {
+    display: none;
+    align-items: center;
+    font-size: 25px;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.dms_item:hover .right_side{
+    display: flex;
 }

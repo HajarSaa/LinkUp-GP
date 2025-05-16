@@ -1,0 +1,48 @@
+{
+  "_id": "681f483f7a97f958ea26473f",
+  "name": "taha1-workspace",
+  "createdBy": "681f47e87a97f958ea26473a",
+  "members": [
+    {
+      "_id": "681f48527a97f958ea264744",
+      "user": "681f47e87a97f958ea26473a",
+      "workspace": "681f483f7a97f958ea26473f",
+      "role": "owner",
+      "userName": "taha ayman",
+      "email": "taha@gmail.com",
+      "status": "offline",
+      "__v": 0
+    }
+  ],
+  "createdAt": "2025-05-10T12:36:15.057Z",
+  "updatedAt": "2025-05-10T12:36:34.599Z",
+  "__v": 1,
+  "conversations": [
+    {
+      "_id": "681f485b7a97f958ea26474b",
+      "workspaceId": "681f483f7a97f958ea26473f",
+      "memberOneId": "681f48527a97f958ea264744",
+      "memberTwoId": "681f48527a97f958ea264744",
+      "media": [],
+      "__v": 0,
+      "createdAt": "2025-05-10T12:36:43.142Z",
+      "updatedAt": "2025-05-10T12:36:43.142Z",
+      "id": "681f485b7a97f958ea26474b"
+    }
+  ],
+  "channels": [
+    {
+      "_id": "682117abcde78efc4ddb38d5",
+      "name": "taha-1-channel",
+      "type": "public",
+      "createdBy": "681f48527a97f958ea264744",
+      "workspaceId": "681f483f7a97f958ea26473f",
+      "members": ["681f48527a97f958ea264744"],
+      "createdAt": "2025-05-11T21:33:31.532Z",
+      "updatedAt": "2025-05-11T21:33:31.532Z",
+      "__v": 0,
+      "id": "682117abcde78efc4ddb38d5"
+    }
+  ],
+  "id": "681f483f7a97f958ea26473f"
+}

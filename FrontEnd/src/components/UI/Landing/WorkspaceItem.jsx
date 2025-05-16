@@ -1,5 +1,7 @@
-import { getWorkBackground } from "../../../utils/getWorkBackground";
-import { getRandomColorFromPalette } from "../../../utils/randomColor";
+import {
+  getWorkLabel,
+  getRandomColorFromPalette,
+} from "../../../utils/workspaceUtils";
 import { BiSolidUser } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 import styles from "./Landing.module.css";
@@ -7,7 +9,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 function WorkspaceItem({ workspace }) {
-  const work_title = getWorkBackground(workspace?.name || "workspace name");
+  const work_title = getWorkLabel(workspace?.name || "workspace name");
   const work_background = getRandomColorFromPalette();
 
   const navigate = useNavigate();

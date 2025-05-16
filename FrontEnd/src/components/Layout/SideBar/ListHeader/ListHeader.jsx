@@ -1,11 +1,12 @@
 import {useState } from "react";
 import PropTypes from "prop-types";
-import { FaCaretDown, FaCaretRight, FaChevronDown } from "react-icons/fa";
+import { FaCaretDown, FaCaretRight, FaChevronDown} from "react-icons/fa";
 import styles from "./ListHeader.module.css";
 import Icon from "../../../UI/Icons/Icon/Icon";
+import { IoMdAdd } from "react-icons/io";
 
 
-const ListHeader = ({ isAnyChannelActive, onToggle, headerText }) => {
+const ListHeader = ({ isAnyChannelActive, onToggle, headerText , handleAdd }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = () => {
@@ -39,6 +40,9 @@ const ListHeader = ({ isAnyChannelActive, onToggle, headerText }) => {
             </span>
           </Icon>
         </div>
+        <Icon className={styles.header_add_btn} onClick={handleAdd}>
+          <IoMdAdd />
+        </Icon>
       </div>
     </>
   );
@@ -49,6 +53,7 @@ ListHeader.propTypes = {
   onToggle: PropTypes.func,
   onAddChannel: PropTypes.func,
   headerText: PropTypes.any,
+  handleAdd: PropTypes.func,
 };
 
 export default ListHeader;

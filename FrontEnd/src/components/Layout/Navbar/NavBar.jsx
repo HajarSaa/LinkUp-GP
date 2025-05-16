@@ -5,8 +5,11 @@ import { FiHelpCircle } from "react-icons/fi";
 
 import { IoIosSearch } from "react-icons/io";
 import Icon from "../../UI/Icons/Icon/Icon";
+import { useSelector } from "react-redux";
 
 function NavBar() {
+  const { workspace } = useSelector((state) => state.workspace);
+  if (!workspace) return <div className={styles.nav_bar}></div>;
   return (
     <div className={styles.nav_bar}>
       <div className={styles.nav_bar_left_empty}></div>

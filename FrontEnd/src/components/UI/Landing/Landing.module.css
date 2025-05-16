@@ -200,7 +200,8 @@
   display: flex;
 }
 
-.loading,.error {
+.loading,
+.error {
   width: 100%;
   height: 142px;
   border: 1px solid var(--border-color);
@@ -210,17 +211,28 @@
   align-items: center;
 }
 
-.error > span{
+.error>span {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.error > span:last-child{
+
+.error>span:last-child {
   font-size: 50px;
 }
+
 .error {
   color: var(--error-color);
   font-size: 25px;
   font-weight: bold;
 
+}
+
+.empty_workspace_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-weight: bold;
 }

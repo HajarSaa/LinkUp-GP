@@ -7,17 +7,31 @@ import Panel from "../../components/Layout/Panel/Panel";
 import useResizableLayout from "../../API/hooks/useResizableLayout";
 import { Outlet } from "react-router-dom";
 import useCurrentWork from "../../API/hooks/useCurrentWork";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  disableResizing,
+  enableResizing,
+} from "../../API/redux_toolkit/ui/resizeSlice";
+import { useEffect } from "react";
 
 function MainLayout() {
-  const isResizable = true;
+  const { isResizable } = useSelector((state) => state.resizableLayout);
+  const dispatch = useDispatch();
+
   const isBrowseChannels = location.pathname === "/browse-channels";
   const { sidebarWidth, panelWidth, containerRef, handleResizeStart } =
     useResizableLayout(300, 250, isResizable);
 
-  const {loading, error } = useCurrentWork();
+  const { loading , workspace } = useCurrentWork();
 
-  if (loading) return <div>Fteching Workspace Data ...</div>;
-  if (error) return <div>{error}</div>;
+  useEffect(() => {
+    if (loading) {
+      dispatch(disableResizing());
+    } else {
+      dispatch(enableResizing());
+    }
+  }, [loading, dispatch]);
+
   return (
     <div className={styles.main_layout}>
       <NavBar />
@@ -25,7 +39,7 @@ function MainLayout() {
         <WorkBar />
         {isBrowseChannels ? (
           <div className={styles.workspace_content_wrapper}>
-            <Outlet />
+            {!loading && <Outlet />}
           </div>
         ) : (
           <div className={styles.workspace_content_wrapper}>
@@ -35,12 +49,14 @@ function MainLayout() {
                 onResizeStart={handleResizeStart}
                 isResizable={isResizable}
               />
-              <Outlet />
-              {/* <Panel
+              <div className={styles.main_content}>
+                {workspace && <Outlet />}
+              </div>
+              <Panel
                 width={panelWidth}
                 onResizeStart={handleResizeStart}
                 isResizable={isResizable}
-              /> */}
+              />
             </div>
           </div>
         )}

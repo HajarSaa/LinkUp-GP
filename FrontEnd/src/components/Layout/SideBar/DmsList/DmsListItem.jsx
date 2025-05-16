@@ -1,39 +1,50 @@
-/* eslint-disable no-unused-vars */
 import styles from "./DmsList.module.css";
 import { BiSolidUser } from "react-icons/bi";
+import { IoMdClose } from "react-icons/io";
+
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { findMemberById } from "../../../../utils/workspaceUtils";
 
-const DmsListItem = ({
-  id,
-  name,
-  isActive = false,
-  hasUnread,
-}) => {
+const DmsListItem = ({ dmData, workspace }) => {
   const navigate = useNavigate();
 
+  const memberData = findMemberById(
+    workspace,
+    dmData.memberOneId,
+    dmData.memberTwoId
+  );
+
+
+  const handleDeletelteItem = (e) => {
+    e.stopPropagation();
+    console.log("closed");
+  };
   const handleClick = () => {
-    navigate(`/dm/${id}`)
+    navigate(`/dm/${dmData.id}`);
   };
 
   return (
-    <div
-      className={`${styles.dms_item}`}
-      onClick={handleClick}
-    >
+    <div className={`${styles.dms_item}`} onClick={handleClick}>
       <div className={styles.left_side}>
-        <BiSolidUser/>
+        <BiSolidUser />
       </div>
-      <span className={styles.user_name}>{name}</span>
+      <div className={styles.user_name}>
+        <span>{memberData.member.userName}</span>
+        {memberData.isMe && (
+          <span className={styles.user_name_hint}>(you)</span>
+        )}
+      </div>
+      <div className={styles.right_side} onClick={handleDeletelteItem}>
+        <IoMdClose />
+      </div>
     </div>
   );
 };
 
 DmsListItem.propTypes = {
-  id: PropTypes.any,
-  name: PropTypes.string,
-  isActive: PropTypes.bool,
-  hasUnread: PropTypes.bool,
+  dmData: PropTypes.object,
+  workspace: PropTypes.object,
 };
 
 export default DmsListItem;

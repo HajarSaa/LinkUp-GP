@@ -1,21 +1,17 @@
+import { useSelector } from "react-redux";
 import styles from "./DmsList.module.css";
 import DmsListItem from "./DmsListItem";
 function DmsList() {
-  const users = [
-    {
-      name: "Alaa Abdulkhaliq",
-      id: "1",
-    },
-    {
-      name: "Ahmed AYman",
-      id: "2",
-    },
-  ];
+  const { workspace } = useSelector((state) => state.workspace);
   return (
     <div>
       <div className={styles.list}>
-        {users.map((user, index) => (
-          <DmsListItem key={index} id={user.id} name={user.name} />
+        {workspace.conversations.map((user, index) => (
+          <DmsListItem
+            key={index}
+            dmData={workspace.conversations[0]}
+            workspace={workspace}
+          />
         ))}
       </div>
     </div>

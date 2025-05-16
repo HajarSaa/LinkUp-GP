@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
+  padding-top: 10px;
 }
 
 
@@ -91,6 +92,17 @@
     color: var(--active-color);
     font-size: 22px;
   }
+}
+
+.work_label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #8b8181;
+  padding: 10px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 /* .statusDot {

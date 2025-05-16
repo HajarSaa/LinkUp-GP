@@ -14,26 +14,25 @@ import SidebarLists from "./SidebarLists";
 import { useSelector } from "react-redux";
 
 function SideBar({ width, onResizeStart, isResizable }) {
+  const { workspace } = useSelector((state) => state.workspace);
 
-  const { workspace } = useSelector((state) => state.workspace)
-  console.log(workspace)
-
+  if(!workspace) return <div className={styles.side_bar} style={{ width }}></div>
   return (
     <div className={styles.side_bar} style={{ width }}>
-      <div className={styles.side_bar_content}>
-        <div className={styles.side_bar_header}>
-          <div className={styles.side_bar_header_leftSide}>
-            <span className={styles.work_name}>Web development</span>
-            <span className={styles.side_bar_header_leftSide_icon}>
-              <IoIosArrowDown />
-            </span>
+        <div className={styles.side_bar_content}>
+          <div className={styles.side_bar_header}>
+            <div className={styles.side_bar_header_leftSide}>
+              <span className={styles.work_name}>{workspace.name}</span>
+              <span className={styles.side_bar_header_leftSide_icon}>
+                <IoIosArrowDown />
+              </span>
+            </div>
+            <Icon className={styles.side_bar_header_icon}>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Icon>
           </div>
-          <Icon className={styles.side_bar_header_icon}>
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </Icon>
+          <SidebarLists />
         </div>
-        <SidebarLists/>
-      </div>
       <Resizer
         onResizeStart={onResizeStart}
         name={"sidebar"}
