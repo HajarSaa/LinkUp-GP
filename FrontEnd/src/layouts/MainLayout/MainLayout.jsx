@@ -19,8 +19,6 @@ function MainLayout() {
   const dispatch = useDispatch();
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
-  const { sidebarWidth, panelWidth, containerRef, handleResizeStart } =
-    useResizableLayout(300, 250, isResizable);
   const { loading, workspace } = useCurrentWork();
 
   useEffect(() => {
@@ -42,12 +40,8 @@ function MainLayout() {
           </div>
         ) : (
           <div className={styles.workspace_content_wrapper}>
-            <div className={styles.workspace_content} ref={containerRef}>
-              <SideBar
-                width={sidebarWidth}
-                onResizeStart={handleResizeStart}
-                isResizable={isResizable}
-              />
+            <div className={styles.workspace_content}>
+              <SideBar />
               <div className={styles.main_content}>
                 {workspace && <Outlet />}
               </div>

@@ -13,32 +13,28 @@ import PropTypes from "prop-types";
 import SidebarLists from "./SidebarLists";
 import { useSelector } from "react-redux";
 
-function SideBar({ width, onResizeStart, isResizable }) {
+function SideBar() {
   const { workspace } = useSelector((state) => state.workspace);
 
-  if(!workspace) return <div className={styles.side_bar} style={{ width }}></div>
+  if (!workspace)
+    return <div className={styles.side_bar}></div>;
   return (
-    <div className={styles.side_bar} style={{ width }}>
-        <div className={styles.side_bar_content}>
-          <div className={styles.side_bar_header}>
-            <div className={styles.side_bar_header_leftSide}>
-              <span className={styles.work_name}>{workspace.name}</span>
-              <span className={styles.side_bar_header_leftSide_icon}>
-                <IoIosArrowDown />
-              </span>
-            </div>
-            <Icon className={styles.side_bar_header_icon}>
-              <FontAwesomeIcon icon={faPenToSquare} />
-            </Icon>
+    <div className={styles.side_bar}>
+      <div className={styles.side_bar_content}>
+        <div className={styles.side_bar_header}>
+          <div className={styles.side_bar_header_leftSide}>
+            <span className={styles.work_name}>{workspace.name}</span>
+            <span className={styles.side_bar_header_leftSide_icon}>
+              <IoIosArrowDown />
+            </span>
           </div>
-          <SidebarLists />
+          <Icon className={styles.side_bar_header_icon}>
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </Icon>
         </div>
-      <Resizer
-        onResizeStart={onResizeStart}
-        name={"sidebar"}
-        position={{ right: 0 }}
-        isResizable={isResizable}
-      />
+        <SidebarLists />
+      </div>
+      <Resizer position={{ right: 0 }} />
     </div>
   );
 }
