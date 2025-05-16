@@ -16,6 +16,7 @@ import { LiaClipboardListSolid } from "react-icons/lia";
 import { BsLightning } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
 import UserModal from "../Modal/UserModal/UserModal";
+import { useSelector } from "react-redux";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -24,6 +25,8 @@ import UserModal from "../Modal/UserModal/UserModal";
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { convers } = useSelector((state) => state.convers);
+  console.log(convers);
 
   const menuItems = [
     {

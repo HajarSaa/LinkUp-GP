@@ -33,7 +33,7 @@ const useCurrentWork = () => {
         const response = await getWorkspace(work_id);
         dispatch(setWorkspace(response.workspace));
       } catch (err) {
-        console.error("Error fetching workspace:", err);
+        console.log("Error fetching workspace:", err);
         dispatch(setError("Failed to fetch workspace data."));
         //
         // this handle :=> the owner delete the workspace

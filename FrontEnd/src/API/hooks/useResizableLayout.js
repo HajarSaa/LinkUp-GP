@@ -51,29 +51,29 @@ export default function useResizableLayout(
       animationFrame.current = requestAnimationFrame(() => {
         const deltaX = e.clientX - startX.current;
         const containerWidth = containerRef.current.offsetWidth;
+        const contentWidth = containerWidth - sidebarWidth; // المساحة المتاحة لـ PageContent
 
         if (resizing.current === "sidebar") {
+          // التأكد إن PageContent (Outlet + Panel) لسه عنده مساحة كفاية
           const newWidth = Math.max(
             MIN_SIDEBAR_WIDTH,
             Math.min(
               initialSidebarWidth.current + deltaX,
-              Math.min(
-                containerWidth - panelWidth - MIN_CONTENT_WIDTH,
-                MAX_SIDEBAR_WIDTH
-              )
+              containerWidth - (MIN_CONTENT_WIDTH + panelWidth), // نضمن مساحة للـ Outlet والـ Panel
+              MAX_SIDEBAR_WIDTH
             )
           );
           setSidebarWidth(newWidth);
           localStorage.setItem("sidebarWidth", newWidth);
         } else if (resizing.current === "panel") {
+          // الـ Panel داخل PageContent، فنحسب العرض المتاح بعد ضمان MIN_CONTENT_WIDTH للـ Outlet
+          const availableContentWidth = contentWidth - MIN_CONTENT_WIDTH;
           const newWidth = Math.max(
             MIN_PANEL_WIDTH,
             Math.min(
               initialPanelWidth.current - deltaX,
-              Math.min(
-                containerWidth - sidebarWidth - MIN_CONTENT_WIDTH,
-                MAX_PANEL_WIDTH
-              )
+              availableContentWidth, // نضمن ما نتعدّاش المساحة المتاحة
+              MAX_PANEL_WIDTH
             )
           );
           setPanelWidth(newWidth);
@@ -111,8 +111,27 @@ export default function useResizableLayout(
   const handleWindowResize = useCallback(() => {
     if (!containerRef.current) return;
     const containerWidth = containerRef.current.offsetWidth;
-    const requiredWidth = sidebarWidth + MIN_CONTENT_WIDTH + panelWidth;
+    const isSmallScreen = window.innerWidth <= 1000;
 
+    if (isSmallScreen) {
+      // تحت 1000px، الـ Panel ياخد كامل العرض، فنعدّل الـ sidebar بس
+      const requiredWidth = sidebarWidth + MIN_CONTENT_WIDTH;
+      if (containerWidth < requiredWidth) {
+        const excess = requiredWidth - containerWidth;
+        const newSidebarWidth = Math.max(
+          MIN_SIDEBAR_WIDTH,
+          sidebarWidth - excess
+        );
+        if (newSidebarWidth !== sidebarWidth) {
+          setSidebarWidth(Math.round(newSidebarWidth));
+          localStorage.setItem("sidebarWidth", Math.round(newSidebarWidth));
+        }
+      }
+      return;
+    }
+
+    // فوق 1000px، نتأكد إن الكل محترم الـ minimum widths
+    const requiredWidth = sidebarWidth + MIN_CONTENT_WIDTH + MIN_PANEL_WIDTH;
     if (containerWidth < requiredWidth) {
       const excess = requiredWidth - containerWidth;
       let newSidebarWidth = sidebarWidth;
@@ -149,7 +168,6 @@ export default function useResizableLayout(
 
   useEffect(() => {
     if (!isResizable) {
-      // لا نغير الـ widths، بس نمنع الـ event listeners من الشغل
       return;
     }
 

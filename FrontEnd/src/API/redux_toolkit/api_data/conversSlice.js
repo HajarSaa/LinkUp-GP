@@ -11,15 +11,15 @@ const conversSlice = createSlice({
     setConvers: (state, action) => {
       state.convers = action.payload;
     },
-    setLoading: (state, action) => {
+    setConLoading: (state, action) => {
       state.loading = action.payload;
     },
-    setError: (state, action) => {
+    setConError: (state, action) => {
       state.error = action.payload;
     },
   },
 });
 
-export const { setConvers, setLoading, setError } = conversSlice.actions;
+export const { setConvers, setConLoading, setConError } = conversSlice.actions;
 
 export default conversSlice.reducer;

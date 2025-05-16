@@ -11,15 +11,15 @@ const channelSlice = createSlice({
     setChannel: (state, action) => {
       state.channel = action.payload;
     },
-    setLoading: (state, action) => {
+    setChanLoading: (state, action) => {
       state.loading = action.payload;
     },
-    setError: (state, action) => {
+    setChanError: (state, action) => {
       state.error = action.payload;
     },
   },
 });
 
-export const { setChannel, setLoading, setError } = channelSlice.actions;
+export const { setChannel, setChanLoading, setChanError } = channelSlice.actions;
 
 export default channelSlice.reducer;

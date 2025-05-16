@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
 import { MdHeadset } from "react-icons/md";
@@ -23,6 +23,8 @@ function Header({ channel, user }) {
   const dispatch = useDispatch();
   const membersArray =
     channel.members.length > 6 ? channel.members.slice(0, 5) : channel.members;
+  const { channel:ch } = useSelector((state) => state.channel);
+  console.log(ch);
   return (
     <>
       <div className={styles.channelHeader}>

@@ -16,7 +16,7 @@ const useCurrentUser = () => {
         setWorkspaces(response.workspaces);
         setIsAuthenticated(true);
       } catch (err) {
-        console.error(err);
+        console.log(err);
         setError(err);
         setIsAuthenticated(false);
       } finally {

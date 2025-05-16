@@ -4,7 +4,6 @@ const API_BASE_URL = "https://link-up-beige.vercel.app/api/v1";
 
 export const getChannelData = async (channel_id) => {
   try {
-    console.log("Channel ID:", channel_id);
     const axios_response = await axios.get(
       `${API_BASE_URL}/channels/${channel_id}?page=1&limit=3`,
       {
@@ -13,7 +12,6 @@ export const getChannelData = async (channel_id) => {
     );
 
     const response = axios_response.data;
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error fetching channel:", error.response.data);

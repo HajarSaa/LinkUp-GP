@@ -1,7 +1,7 @@
 import {useEffect } from "react";
 import { getChannelData } from "../services/channleService";
 import { useDispatch, useSelector } from "react-redux";
-import { setChannel, setError, setLoading } from "../redux_toolkit/api_data/channelSlice";
+import { setChannel, setChanError, setChanLoading } from "../redux_toolkit/api_data/channelSlice";
 
 
 const useChannelData = (channel_id) => {
@@ -11,16 +11,15 @@ const useChannelData = (channel_id) => {
   useEffect(() => {
     const fetchChannelData = async () => {
       if (!channel_id) return;
-      dispatch(setLoading(true));
+      dispatch(setChanLoading(true));
       try {
         const response = await getChannelData(channel_id)
-        console.log(response)
-        dispatch(setChannel(response));
+        dispatch(setChannel(response.channel));
       } catch (err) {
-        console.error("Error fetching channel:", err);
-        dispatch(setError("Failed to fetch channel data."));
+        console.log("Error fetching channel:", err);
+        dispatch(setChanError("Failed to fetch channel data."));
       } finally {
-        dispatch(setLoading(false));
+        dispatch(setChanLoading(false));
       }
     };
 

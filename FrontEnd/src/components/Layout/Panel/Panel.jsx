@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 function Panel({ width, onResizeStart, isResizable }) {
   return (
     <div className={styles.panel} style={{ width }}>
-      {/* <div>Panel</div> */}
+      <div>Panel</div>
       <Resizer
         onResizeStart={onResizeStart}
         name={"panel"}

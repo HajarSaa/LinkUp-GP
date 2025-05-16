@@ -31,7 +31,8 @@
 
 .main_content {
   flex-grow: 1;
-  min-width: 300px;
+  min-width: 500px;
   height: 100%;
   background-color: #fff;
+  display: flex;
 }

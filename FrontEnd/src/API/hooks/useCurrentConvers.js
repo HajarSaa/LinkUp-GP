@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setConvers,
-  setError,
-  setLoading,
+  setConError,
+  setConLoading,
 } from "../redux_toolkit/api_data/conversSlice";
 import { getConversData } from "../services/coversService";
 
@@ -14,16 +14,15 @@ const useChannelData = (convers_id) => {
   useEffect(() => {
     const fetchConversData = async () => {
       if (!convers_id) return;
-      dispatch(setLoading(true));
+      dispatch(setConLoading(true));
       try {
         const response = await getConversData(convers_id);
-        console.log(response);
-        dispatch(setConvers(response));
+        dispatch(setConvers(response.conversation));
       } catch (err) {
-        console.error("Error fetching Conversation:", err);
-        dispatch(setError("Failed to fetch conversation data."));
+        console.log("Error fetching Conversation:", err);
+        dispatch(setConError("Failed to fetch conversation data."));
       } finally {
-        dispatch(setLoading(false));
+        dispatch(setConLoading(false));
       }
     };
 

@@ -5,7 +5,7 @@ import WorkBar from "../../components/Layout/Workbar/WorkBar";
 import SideBar from "../../components/Layout/SideBar/SideBar";
 import Panel from "../../components/Layout/Panel/Panel";
 import useResizableLayout from "../../API/hooks/useResizableLayout";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import useCurrentWork from "../../API/hooks/useCurrentWork";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,12 +17,11 @@ import { useEffect } from "react";
 function MainLayout() {
   const { isResizable } = useSelector((state) => state.resizableLayout);
   const dispatch = useDispatch();
-
+  const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
   const { sidebarWidth, panelWidth, containerRef, handleResizeStart } =
     useResizableLayout(300, 250, isResizable);
-
-  const { loading , workspace } = useCurrentWork();
+  const { loading, workspace } = useCurrentWork();
 
   useEffect(() => {
     if (loading) {
@@ -52,11 +51,6 @@ function MainLayout() {
               <div className={styles.main_content}>
                 {workspace && <Outlet />}
               </div>
-              <Panel
-                width={panelWidth}
-                onResizeStart={handleResizeStart}
-                isResizable={isResizable}
-              />
             </div>
           </div>
         )}
