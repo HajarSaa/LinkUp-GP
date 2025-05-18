@@ -7,9 +7,9 @@ import Signup from "./pages/auth/Signup";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import EmptyLayout from "./layouts/MainLayout/EmptyLayout";
 import BrowseChannels from "./pages/dashboard/BrowseChannels/BrowseChannels";
-import DmPage from "./pages/dashboard/DmPage";
+import DmPage from "./pages/dashboard/DmPage/DmPage";
 import { Routes, Route } from "react-router-dom";
-import ChannelPage from "./pages/dashboard/ChannelPage";
+import ChannelPage from "./pages/dashboard/ChannelPage/ChannelPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Landing from "./pages/Landing/Landing";
