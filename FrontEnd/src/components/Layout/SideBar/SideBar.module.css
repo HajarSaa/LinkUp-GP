@@ -1,11 +1,12 @@
 .side_bar {
   position: relative;
-  width: 300px;
   min-width: 180px;
+  max-width: 300px;
   height: 100%;
   flex-shrink: 0;
   background-color: var(--secondary-color);
-  /* overflow: hidden; */
+  will-change: width;
+
 }
 
 .side_bar_content {
@@ -57,11 +58,24 @@
   font-size: 20px !important;
 }
 
-/* lists */
 .side_bar_lists {
   height: 100%;
   flex: 1;
   overflow-y: auto;
   color: var(--gray-light);
-  overflow: hidden;
+}
+
+.resizer {
+  width: 5px;
+  cursor: col-resize;
+  background-color: transparent;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.resizer:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }

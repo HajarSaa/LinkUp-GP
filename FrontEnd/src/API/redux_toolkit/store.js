@@ -15,11 +15,11 @@ import emojiPickerReducer from './modals/emojiPickerSlice'
 import workspaceReducer from './api_data/workspaceSlice'
 import channelReducer from "./api_data/channelSlice";
 import conversReducer from "./api_data/conversSlice";
-import resizeableReducer from './ui/resizeSlice'
+import resizingReducer from './ui/resizeSlice'
 
 const store = configureStore({
   reducer: {
-    resizableLayout: resizeableReducer,
+    resizing: resizingReducer,
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,
     channel: channelReducer,

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const resizeSlice = createSlice({
   name: "resizeSlice",
-  initialState: { isResizable: true },
+  initialState: { isResizable: false },
   reducers: {
     enableResizing: (state) => {
       state.isResizable = true;
