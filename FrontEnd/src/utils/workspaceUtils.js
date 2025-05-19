@@ -33,16 +33,24 @@ export const getRandomColorFromPalette = (colorPalette = null) => {
 export const findMemberById = (workspace, memberOneId, memberTwoId) => {
   if (!workspace || !memberOneId) return null;
 
-  if (memberOneId === memberTwoId)
-    return {
-      member:
-        workspace.members.find((member) => member._id === memberOneId) || null,
-      isMe: true,
-    };
+  const my_data = workspace.members.find(
+    (member) => member.user === workspace.createdBy
+  );
+  const myMemberId = my_data._id
+
+  if (memberOneId === memberTwoId) {
+    if (memberOneId === myMemberId)
+      return {
+        member:
+          workspace.members.find((member) => member._id === myMemberId) ||
+          null,
+        isMe: true,
+      };
+  }
 
   return {
     member:
-      workspace.members.find((member) => member._id === memberOneId) || null,
+      workspace.members.find((member) => member._id !== myMemberId) || null,
     isMe: false,
   };
 };

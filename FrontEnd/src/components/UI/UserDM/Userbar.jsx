@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./UserDM.module.css";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { LuMessageCircle } from "react-icons/lu";
@@ -26,7 +26,9 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { convers } = useSelector((state) => state.convers);
-  console.log(convers);
+  useEffect(() => {
+    console.log("convers data =>", convers);
+  }, [convers]);
 
   const menuItems = [
     {
