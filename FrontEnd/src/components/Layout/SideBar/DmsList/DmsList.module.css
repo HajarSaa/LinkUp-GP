@@ -59,3 +59,10 @@
 .dms_item:hover .right_side{
     display: flex;
 }
+
+/*  */
+
+.active {
+    background-color: var(--sidebar-hover);
+    color: #ffffff;
+}

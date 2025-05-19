@@ -1,12 +1,11 @@
 import styles from "./DmsList.module.css";
 import { BiSolidUser } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
-
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { findMemberById } from "../../../../utils/workspaceUtils";
 
-const DmsListItem = ({ dmData, workspace }) => {
+const DmsListItem = ({ dmData, workspace, isActive }) => {
   const navigate = useNavigate();
 
   const memberData = findMemberById(
@@ -15,17 +14,20 @@ const DmsListItem = ({ dmData, workspace }) => {
     dmData.memberTwoId
   );
 
-
   const handleDeletelteItem = (e) => {
     e.stopPropagation();
     console.log("closed");
   };
+
   const handleClick = () => {
     navigate(`/dm/${dmData.id}`);
   };
 
   return (
-    <div className={`${styles.dms_item}`} onClick={handleClick}>
+    <div
+      className={`${styles.dms_item} ${isActive ? styles.active : ""}`}
+      onClick={handleClick}
+    >
       <div className={styles.left_side}>
         <BiSolidUser />
       </div>
@@ -45,6 +47,7 @@ const DmsListItem = ({ dmData, workspace }) => {
 DmsListItem.propTypes = {
   dmData: PropTypes.object,
   workspace: PropTypes.object,
+  isActive: PropTypes.bool,
 };
 
 export default DmsListItem;
