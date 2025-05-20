@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import Message from "./models/message.model.js";
+import File from "./models/file.model.js";
 import UserProfile from "./models/userProfile.model.js";
 import Conversation from "./models/converstion.model.js";
 import Channel from "./models/channel.model.js";
@@ -237,7 +238,15 @@ const socketServer = (httpServer) => {
         }
         lastMessageTimestamps.set(socket.id, now);
 
-        const { content, senderId, conversationId, channelId, tempId } = data;
+        const {
+          content,
+          senderId,
+          conversationId,
+          channelId,
+          tempId,
+          parentMessageId,
+          parentType,
+        } = data;
 
         if (!content?.trim())
           throw new AppError("Message content cannot be empty", 400);
@@ -247,6 +256,13 @@ const socketServer = (httpServer) => {
           throw new AppError("Invalid tempId format", 400);
 
         let message, room, workspaceId, recipientId;
+
+        const messagePayload = {
+          content,
+          createdBy: senderId,
+          readBy: [senderId],
+          metadata: { tempId },
+        };
 
         if (conversationId) {
           const conversation = await Conversation.findById(conversationId)
@@ -261,37 +277,35 @@ const socketServer = (httpServer) => {
               ? conversation.memberTwoId.user.toString()
               : conversation.memberOneId.user.toString();
 
-          const [senderProfile] = await Promise.all([
-            UserProfile.findOne({
-              user: senderId,
-              workspace: workspaceId,
-            }).lean(),
-          ]);
-
+          const senderProfile = await UserProfile.findOne({
+            user: senderId,
+            workspace: workspaceId,
+          }).lean();
           if (!senderProfile) throw new AppError("Not in workspace", 403);
 
-          message = await Message.create({
-            content,
-            createdBy: senderId,
-            conversationId,
-            readBy: [senderId],
-            metadata: { tempId },
-          });
+          messagePayload.conversationId = conversationId;
+          if (parentMessageId) {
+            messagePayload.parentMessageId = parentMessageId;
+            messagePayload.parentType = parentType || "Message";
+          }
 
+          message = await Message.create(messagePayload);
           room = `conversation:${conversationId}`;
-        } else if (channelId) {
+        }
+
+        // Channel
+        else if (channelId) {
           const channel = await Channel.findById(channelId)
             .select("members workspaceId type")
             .lean();
 
           if (!channel) throw new AppError("Channel not found", 404);
-
           workspaceId = channel.workspaceId;
+
           const senderProfile = await UserProfile.findOne({
             user: senderId,
             workspace: workspaceId,
           }).lean();
-
           if (!senderProfile) throw new AppError("Not in workspace", 403);
 
           const isMember = channel.members.some(
@@ -301,14 +315,13 @@ const socketServer = (httpServer) => {
             throw new AppError("Not in private channel", 403);
           }
 
-          message = await Message.create({
-            content,
-            createdBy: senderId,
-            channelId,
-            readBy: [senderId],
-            metadata: { tempId },
-          });
+          messagePayload.channelId = channelId;
+          if (parentMessageId) {
+            messagePayload.parentMessageId = parentMessageId;
+            messagePayload.parentType = parentType || "Message";
+          }
 
+          message = await Message.create(messagePayload);
           room = `channel:${channelId}`;
         } else {
           throw new AppError("conversationId or channelId required", 400);
@@ -336,6 +349,59 @@ const socketServer = (httpServer) => {
           });
         }
 
+        // notify all users involved in the thread (message / file)
+        if (message.parentMessageId) {
+          const involvedUserIds = new Set();
+
+          // get original parent author
+          if (message.parentType === "File") {
+            const parentFile = await File.findById(
+              message.parentMessageId
+            ).select("uploadedBy");
+            if (parentFile) {
+              involvedUserIds.add(parentFile.uploadedBy.toString());
+            }
+          } else {
+            const parentMessage = await Message.findById(
+              message.parentMessageId
+            ).select("createdBy");
+            if (parentMessage) {
+              involvedUserIds.add(parentMessage.createdBy.toString());
+            }
+          }
+
+          // Add users who replied to the same thread
+          const threadReplies = await Message.find({
+            parentMessageId: message.parentMessageId,
+          }).select("createdBy");
+
+          threadReplies.forEach((msg) => {
+            involvedUserIds.add(msg.createdBy.toString());
+          });
+
+          // remove sender
+          involvedUserIds.delete(senderId.toString());
+
+          // emit threadReply to all involved users
+          involvedUserIds.forEach((userId) => {
+            const recipientSockets = userConnections.get(userId);
+            if (recipientSockets && recipientSockets.size > 0) {
+              recipientSockets.forEach((socketId) => {
+                io.to(socketId).emit("threadReply", {
+                  messageId: message._id,
+                  parentMessageId: message.parentMessageId,
+                  content: message.content,
+                  repliedBy: senderId,
+                  channelId,
+                  conversationId,
+                  createdAt: message.createdAt,
+                });
+              });
+            }
+          });
+        }
+
+        // Final callback to sender
         callback?.({
           success: true,
           message: {
@@ -346,6 +412,7 @@ const socketServer = (httpServer) => {
         });
       })
     );
+
     // read receipts
     socket.on(
       "markAsRead",
