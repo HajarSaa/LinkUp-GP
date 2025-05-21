@@ -15,7 +15,10 @@ const AuthInput = ({ label, name, value, onChange, type = "text", error }) => {
   return (
     <div className={styles.auth_input}>
       <div className={styles.input_container}>
-        <label className={shouldFloat ? styles.floating : ""} htmlFor={name}>
+        <label
+          className={`${styles.input_label} ${shouldFloat ? styles.floating : ""}`}
+          htmlFor={name}
+        >
           {label}
         </label>
 

@@ -1,12 +1,13 @@
-import { useSelector } from "react-redux";
+/* eslint-disable no-unused-vars */
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./ChannelList.module.css";
 import ChannelListItem from "./ChannelListItem";
+import AddButton from "../AddButton/AddButton.jsx";
 import { useParams } from "react-router-dom";
 
 function ChannelList() {
   const { workspace } = useSelector((state) => state.workspace);
   const { id } = useParams();
-
 
   return (
     <div>
@@ -19,6 +20,7 @@ function ChannelList() {
           />
         ))}
       </div>
+      <AddButton type='channel' text='Add channels' />
     </div>
   );
 }

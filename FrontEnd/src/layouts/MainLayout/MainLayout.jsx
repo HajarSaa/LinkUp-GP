@@ -11,6 +11,7 @@ import {
   enableResizing,
 } from "../../API/redux_toolkit/ui/resizeSlice";
 import { useEffect } from "react";
+import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
 
 function MainLayout() {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ function MainLayout() {
         <WorkBar />
         {isBrowseChannels ? (
           <div className={styles.workspace_content_wrapper}>
-            {!loading && <Outlet />}
+            <div className={styles.full_content}>{workspace && <Outlet />}</div>
           </div>
         ) : (
           <div className={styles.workspace_content_wrapper}>
@@ -45,6 +46,9 @@ function MainLayout() {
             </div>
           </div>
         )}
+        {/* Modals */}
+        {/* Channel Modals */}
+        <CreateChannelModal />
       </div>
     </div>
   );

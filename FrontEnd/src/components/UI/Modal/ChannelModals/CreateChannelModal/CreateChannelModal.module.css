@@ -21,25 +21,27 @@
   font-size: 20px;
   margin: 10px 0 25px 0;
 }
-.details {
-  overflow-y: scroll;
-  padding: 0 10px 0 0;
-}
+
 .details .label {
   font-weight: bold;
 }
 
 .details > input {
-  width: 100%;
+  width: 90%;
   padding: 8px;
   margin: 10px 0;
   border: 1px solid var(--border-color, #ddd);
   border-radius: 4px;
   font-size: 14px;
+  font-family: inherit;
 }
 
 .details > input::placeholder {
   color: #6b6b6b;
+}
+.details > input:focus {
+  outline:none;
+  box-shadow: var(--input-shadow);
 }
 
 .description {

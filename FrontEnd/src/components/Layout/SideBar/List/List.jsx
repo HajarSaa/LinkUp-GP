@@ -1,10 +1,10 @@
 import {useState } from "react";
 import ListHeader from "../ListHeader/ListHeader";
 import styles from "./List.module.css";
-import AddButton from "../AddButton/AddButton.jsx";
+
 import PropTypes from 'prop-types'
 
-const List = ({ children, buttonText, headerText , handleAdd}) => {
+const List = ({ children,headerText , handleAdd}) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = (openState) => {
@@ -18,7 +18,6 @@ const List = ({ children, buttonText, headerText , handleAdd}) => {
       {isOpen ? (
         <>
           {children}
-          <AddButton text={buttonText} />
         </>
       ) : null}
     </div>

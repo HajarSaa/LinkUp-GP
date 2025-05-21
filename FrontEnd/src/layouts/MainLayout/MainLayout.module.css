@@ -36,3 +36,11 @@
   background-color: #fff;
   display: flex;
 }
+
+.full_content {
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  border-radius: 7px;
+  overflow: hidden;
+}

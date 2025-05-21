@@ -1,9 +1,8 @@
-import styles from './FullPageContent.module.css'
 import PropTypes from 'prop-types';
 
 function FullPageContent({children}) {
   return (
-    <div className={styles.full_page_content}>
+    <div>
       {children}
     </div>
   );

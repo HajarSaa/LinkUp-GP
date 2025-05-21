@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import styles from "./AddPeopleModal.module.css";
+import styles from "./InvitePeopleModal.module.css";
 import { FaLock } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
 
-const AddPeopleModal = ({ channelName }) => {
+const InvitePeopleModal = ({ channelName }) => {
   const { addMembersOpen: isModalOpen } = useSelector(
     (state) => state.createChannelModal
   );
@@ -54,4 +54,4 @@ const AddPeopleModal = ({ channelName }) => {
   );
 };
 
-export default AddPeopleModal;
+export default InvitePeopleModal;

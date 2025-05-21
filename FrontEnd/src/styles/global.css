@@ -52,7 +52,9 @@ p {
 a {
   text-decoration: none;
 }
-
+input:focus{
+outline: none;
+}
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

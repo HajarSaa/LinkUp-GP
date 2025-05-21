@@ -25,9 +25,12 @@ function Header({ channel, user }) {
   const membersArray =
     channel.members.length > 6 ? channel.members.slice(0, 5) : channel.members;
   const { channel: ch } = useSelector((state) => state.channel);
+  
   useEffect(() => {
     console.log("ch changed =>", ch);
   }, [ch]);
+
+  if(!ch) return
   return (
     <>
       <div className={styles.channelHeader}>

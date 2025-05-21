@@ -16,6 +16,7 @@ import workspaceReducer from './api_data/workspaceSlice'
 import channelReducer from "./api_data/channelSlice";
 import conversReducer from "./api_data/conversSlice";
 import resizingReducer from './ui/resizeSlice'
+import modalsReducer from './modals/modalsSlice';
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     addChannelMenu: addChannelMenuReducer,
     channelMenu: channelMenuReducer,
     // Modals
+    modals: modalsReducer,
     convActionModal: convActionModalReducer,
     huddleModal: huddleModalReducer,
     channelDetailsModal: channelDetailsModalReducer,
