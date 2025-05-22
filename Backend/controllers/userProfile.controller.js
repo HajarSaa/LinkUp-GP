@@ -1,10 +1,27 @@
 import UserProfile from "../models/userProfile.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
-import { getAll, getOne } from "../utils/handlerFactory.js";
+import { getAll } from "../utils/handlerFactory.js";
 
 export const getAllUserProfiles = getAll(UserProfile);
-export const getUserProfile = getOne(UserProfile);
+
+// Get user profile by ID
+export const getUserProfile = catchAsync(async (req, res, next) => {
+  const userProfile = await UserProfile.findById(req.params.id);
+
+  if (!userProfile) {
+    return next(
+      new AppError(`Cannot find userProfile with ID: ${req.params.id}`, 404)
+    );
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      userProfile,
+    },
+  });
+});
 
 // Updating the user profile information (not password)
 export const updateMyProfile = catchAsync(async (req, res, next) => {

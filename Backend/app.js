@@ -42,7 +42,7 @@ app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/files", uploadRouter);
-app.use("/api", searchRoutes);
+app.use("/api/v1/search", searchRoutes);
 
 // 404 route handler middleware
 app.all("*", (req, res, next) => {

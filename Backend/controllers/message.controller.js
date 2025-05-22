@@ -3,13 +3,24 @@ import Conversation from "../models/converstion.model.js";
 import Message from "../models/message.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
-import {
-  getAll,
-  getOne,
-} from "../utils/handlerFactory.js";
+import { getAll } from "../utils/handlerFactory.js";
 
 export const getAllMessages = getAll(Message);
-export const getMessage = getOne(Message);
+
+export const getMessage = catchAsync(async (req, res, next) => {
+  const message = await Message.findById(req.params.id);
+
+  if (!message) {
+    return next(new AppError("No message found with that ID", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      message,
+    },
+  });
+});
 
 export const createMessage = catchAsync(async (req, res, next) => {
   // Attach data into request body
