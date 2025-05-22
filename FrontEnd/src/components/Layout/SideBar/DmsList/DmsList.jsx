@@ -5,31 +5,33 @@ import DmsListItem from "./DmsListItem";
 import { useNavigate, useParams } from "react-router-dom";
 import AddButton from "../AddButton/AddButton";
 import { closeAddButtonModal } from "../../../../API/redux_toolkit/modals/addButtonModal";
+import { getMyConversationsDetailed } from "../../../../utils/workspaceUtils";
 
 function DmsList() {
   const { workspace } = useSelector((state) => state.workspace);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const conversations = getMyConversationsDetailed(workspace);
 
   function handleCreateBtn() {
     dispatch(closeAddButtonModal());
-    console.log('put here the creation modal')
+    console.log("put here the creation modal");
   }
+
   function handleBrowseBtn() {
     dispatch(closeAddButtonModal());
-    console.log('put here the browse modal')
-
+    console.log("put here the browse modal");
   }
 
   return (
     <div>
       <div className={styles.list}>
-        {workspace.conversations.map((conversation, index) => (
+        {conversations.map((conversation, index) => (
           <DmsListItem
             key={index}
             dmData={conversation}
             workspace={workspace}
-            isActive={String(conversation.id) === String(id)}
+            isActive={String(conversation.conversationId) === String(id)}
           />
         ))}
       </div>

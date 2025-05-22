@@ -3,16 +3,9 @@ import { BiSolidUser } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { findMemberById } from "../../../../utils/workspaceUtils";
 
-const DmsListItem = ({ dmData, workspace, isActive }) => {
+const DmsListItem = ({ dmData, isActive }) => {
   const navigate = useNavigate();
-
-  const memberData = findMemberById(
-    workspace,
-    dmData.memberOneId,
-    dmData.memberTwoId
-  );
 
   const handleDeletelteItem = (e) => {
     e.stopPropagation();
@@ -20,7 +13,7 @@ const DmsListItem = ({ dmData, workspace, isActive }) => {
   };
 
   const handleClick = () => {
-    navigate(`/dm/${dmData.id}`);
+    navigate(`/dm/${dmData.conversationId}`);
   };
 
   return (
@@ -32,10 +25,8 @@ const DmsListItem = ({ dmData, workspace, isActive }) => {
         <BiSolidUser />
       </div>
       <div className={styles.user_name}>
-        <span>{memberData.member.userName}</span>
-        {memberData.isMe && (
-          <span className={styles.user_name_hint}>(you)</span>
-        )}
+        <span>{dmData.member.userName}</span>
+        {dmData.isMe && <span className={styles.user_name_hint}>(you)</span>}
       </div>
       <div className={styles.right_side} onClick={handleDeletelteItem}>
         <IoMdClose />

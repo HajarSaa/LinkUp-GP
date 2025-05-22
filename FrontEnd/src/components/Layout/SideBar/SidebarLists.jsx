@@ -26,6 +26,7 @@ function SidebarLists() {
         headerText={"Direct messages"}
         buttonText={"Invite people"}
         handleAdd={handleDmsladd}
+        isDms={true}
       >
         <DmsList />
       </List>

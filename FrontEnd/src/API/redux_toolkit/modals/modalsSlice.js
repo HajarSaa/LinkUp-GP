@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  createChannel: { createChannelOpen: false, addMembersOpen: false },
+  createChannel: { isOpen: false},
+  invitePeople: { isOpen: false},
 };
 
 const modalsSlice = createSlice({
@@ -10,21 +11,27 @@ const modalsSlice = createSlice({
   reducers: {
     //Start Create Channels
     openCreateChannel: (state) => {
-      state.createChannel.createChannelOpen = true;
-      state.createChannel.addMembersOpen = false;
-    },
-    openAddMembers: (state) => {
-      state.createChannel.createChannelOpen = false;
-      state.createChannel.addMembersOpen = true;
+      state.createChannel.isOpen = true;
     },
     closeCreateChannel: (state) => {
-      state.createChannel.createChannelOpen = false;
-      state.createChannel.addMembersOpen = false;
+      state.createChannel.isOpen = false;
     },
     //End Create Channels
+    //Start invite people
+    openInvitePeople: (state) => {
+      state.invitePeople.isOpen = true;
+    },
+    closeInvitePeople: (state) => {
+      state.invitePeople.isOpen = false;
+    }
+    //End invite people
   },
 });
 
-export const { openCreateChannel, openAddMembers, closeCreateChannel } =
-  modalsSlice.actions;
+export const {
+  openCreateChannel,
+  closeCreateChannel,
+  openInvitePeople,
+  closeInvitePeople,
+} = modalsSlice.actions;
 export default modalsSlice.reducer;

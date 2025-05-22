@@ -12,15 +12,16 @@
 }
 
 .modalContainer {
-    background: white;
-    width: 50%;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    color: #333;
+  background: white;
+  width: 50%;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #333;
 }
+
 .modalContainer input {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .modalHeader {
@@ -29,51 +30,127 @@
   align-items: center;
 }
 
-h3 {
-  font-size: 16px;
+.modalHeader>h3 {
+  font-size: 25px;
   font-weight: bold;
-}
-
-.lockIcon {
-  margin-right: 5px;
-  font-size: 12px;
-}
-
-.closeIcon {
-  font-size: 30px;
-  cursor: pointer;
+  color: #000;
 }
 
 .subtext {
-  font-size: 14px;
-  color: #555;
-  margin-top: 5px;
+  font-size: 16px;
+  margin-top: 15px;
+  font-weight: bold;
 }
 
 .inputField {
   width: 100%;
   padding: 10px;
+  resize: none;
   margin-top: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
+  outline: none;
+  font-size: 20px;
+  font-weight: normal;
+  font-family: inherit;
+}
+
+.inputField:focus {
+  box-shadow: var(--input-shadow);
 }
 
 .modalActions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.link_btn {
+  display: flex;
+  align-items: center;
+  color: var(--link-color);
+  cursor: pointer;
+  gap: 5px;
+}
+
+.link_btn>span {
+  display: flex;
+}
+
+.send_btn {
+  background: #fff;
+  background-color: #ccc;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #555;
+}
+
+.send_btn.active {
+  color: #fff;
+  background-color: var(--primary-color);
+}
+
+/* Tags */
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 10px;
+  gap: 8px;
 }
 
-.skipButton {
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-weight: bold;
-    color: #525252;
+.tag {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
-.skipButton:hover {
-  background: #f5f5f5;
+.validTag {
+  background-color: #e0f7fa;
+  color: #333;
+}
+
+.invalidTag {
+  border: 1px dashed #ff4d6d;
+  color: var(--error-color);
+}
+
+.email_value{
+  display: flex;
+  padding-left: 10px;
+}
+
+.removeIcon {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
+  padding:0 10px;
+}
+
+/* Error Bar */
+.errorBar {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--error-color);
+  font-size: 14px;
+}
+
+.errorBar>span{
+  display: flex;
+  align-items: center;
+}
+
+.errorIcon {
+  font-size: 16px;
+}
+
+.removeErrorsLink {
+  color: var(--link-color);
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 5px;
 }

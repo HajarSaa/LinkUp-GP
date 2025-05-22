@@ -16,7 +16,7 @@ const CreateChannelModal = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [step, setStep] = useState(1);
 
-  const { createChannelOpen: isOpen } = useSelector(
+  const {isOpen} = useSelector(
     (state) => state.modals.createChannel
   );
 

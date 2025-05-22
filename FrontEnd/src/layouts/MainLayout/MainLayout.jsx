@@ -12,6 +12,7 @@ import {
 } from "../../API/redux_toolkit/ui/resizeSlice";
 import { useEffect } from "react";
 import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
+import InvitePeopleModal from "../../components/UI/Modal/InvitePeopleModal/InvitePeopleModal";
 
 function MainLayout() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function MainLayout() {
         {/* Modals */}
         {/* Channel Modals */}
         <CreateChannelModal />
+        <InvitePeopleModal />
       </div>
     </div>
   );
