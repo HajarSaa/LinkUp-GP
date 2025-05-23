@@ -25,4 +25,14 @@ export const createWorkspaceService = async (name) => {
       throw new Error("Failed to join workspace.");
     }
   }
-  
+////////////////////////////////////////////////////////////////////
+export const getWorkspace = async (work_id) => {
+  const axios_response = await axios.get(
+    `${API_BASE_URL}/workspaces/${work_id}`,
+    {
+      withCredentials: true,
+    }
+  );
+  const response = axios_response.data;
+  return response.data;
+};

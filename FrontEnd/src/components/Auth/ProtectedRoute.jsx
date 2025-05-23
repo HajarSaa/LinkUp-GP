@@ -1,31 +1,21 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
-import { getMeService } from "../../API/services/authService";
+import useCurrentUser from "../API/hooks/useCurrentUser";
+import ProtectedLoading from "./ProtectedLoading/ProtectedLoading";
 
-function ProtectedRoute({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [loading, setLoading] = useState(true);
+function ProtectedRoute() {
+  const { isAuthenticated, loading, error } = useCurrentUser();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        await getMeService();
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.log(error);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
-  }, []);
+  if (error) console.log(error);
 
-  if (loading) return <p>Loading...</p>;
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (loading) return <ProtectedLoading />;
 
-  return children;
+  if (!isAuthenticated) {
+    console.log("User not authenticated, redirecting to login...");
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 }
 
 ProtectedRoute.propTypes = {
