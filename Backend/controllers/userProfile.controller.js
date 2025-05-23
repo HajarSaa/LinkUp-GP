@@ -53,7 +53,7 @@ export const updateMyProfile = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      user: updatedProfile,
+      userProfile: updatedProfile,
     },
   });
 });
@@ -92,7 +92,9 @@ export const updateUserImage = catchAsync(async (req, res, next) => {
   await userProfile.save();
 
   res.status(200).json({
-    message: "Success",
-    userProfile,
+    status: "Success",
+    data: {
+      userProfile,
+    },
   });
 });
