@@ -17,6 +17,7 @@ import { BsLightning } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
 import UserModal from "../Modal/UserModal/UserModal";
 import { useSelector } from "react-redux";
+import { getConversationPartner } from "../../../utils/conversUtils";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -26,9 +27,12 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { convers } = useSelector((state) => state.convers);
+  const { workspace } = useSelector((state) => state.workspace);
+  const conversPartener = getConversationPartner(convers, workspace.members);
   useEffect(() => {
     console.log("convers data =>", convers);
-  }, [convers]);
+    console.log("convers partener =>", conversPartener);
+  }, [convers, conversPartener]);
 
   const menuItems = [
     {

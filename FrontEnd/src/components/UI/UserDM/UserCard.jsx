@@ -39,13 +39,19 @@ import styles from "./UserDM.module.css";
 import { BiSolidUser } from "react-icons/bi";
 import Button from "../Buttons/Button/Button";
 import style from "../Buttons/Button/Button.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { getConversationPartner } from "../../../utils/conversUtils";
+
 const UserCard = () => {
   const dispatch = useDispatch();
+  const { convers } = useSelector((state) => state.convers);
+  const { workspace } = useSelector((state) => state.workspace);
+  const conversPartener = getConversationPartner(convers, workspace.members);
+
 
   function handelOpenUserPanel() {
-    dispatch(openUserPanel());
+    dispatch(openUserPanel(conversPartener));
   }
 
   return (
@@ -54,7 +60,7 @@ const UserCard = () => {
         <BiSolidUser className={styles.cover} onClick={handelOpenUserPanel} />
         <div className={styles.info}>
           <div className={styles.user} onClick={handelOpenUserPanel}>
-            <span className={styles.name}>User</span>
+            <span className={styles.name}>{conversPartener?.userName}</span>
             <span className={styles.status}></span>
           </div>
           <span className={styles.job}>Backend Developer</span>

@@ -7,17 +7,18 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
 const ProfileCard = () => {
-  const { userPanel } = useSelector((state) => state.chatPanel);
+  const { isOpen,userData } = useSelector((state) => state.chatPanel.userPanel);
   const dispatch = useDispatch();
 
   const handleClose = () => {
     dispatch(closeChatPanel());
   };
 
-  if (!userPanel) return null;
+  if (!isOpen) return null;
 
   return (
     <div className={styles.profileCard}>
+      {console.log(userData)}
       {/* Header Bar with Close Button */}
       <div className={styles.profileHeader}>
         <span>Profile</span>

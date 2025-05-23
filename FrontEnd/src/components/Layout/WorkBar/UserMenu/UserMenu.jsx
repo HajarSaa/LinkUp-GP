@@ -7,12 +7,16 @@ import SetStatusModal from "../../../UI/Modal/SetStatusModal/SetStatus";
 
 function UserMenu() {
   const [hoverPause, setHoverPause] = useState(false);
-  const [showStatusModal, setShowStatusModal] = useState(false); // ✅ حالة المودال
+  const [showStatusModal, setShowStatusModal] = useState(false);
   const navigate = useNavigate();
 
   const handleProfileClick = () => {
-    navigate("/user-dm");
+    // navigate("/user-dm");
   };
+
+  const handleSignOut = () => {
+    navigate('/login')
+  }
 
   return (
     <div className={styles.dropdown}>
@@ -52,7 +56,7 @@ function UserMenu() {
       </div>
       <div className={styles.option}>Preferences</div>
       <div className={styles.option}>Upgrade :)</div>
-      <div className={styles.option}>Sign out :)</div>
+      <div className={styles.option} onClick={handleSignOut}>Sign out :)</div>
 
       {showStatusModal && (
         <SetStatusModal
