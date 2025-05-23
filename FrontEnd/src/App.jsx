@@ -19,8 +19,6 @@ import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
 import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 import ProtectedLoading from "./routes/ProtectedLoading/ProtectedLoading";
 
-
-
 function App() {
   return (
     <div className="app__body">
