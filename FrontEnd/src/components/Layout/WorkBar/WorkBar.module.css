@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
+  padding: 0 10px;
 }
 
 
@@ -43,12 +44,10 @@
 }
 
 .bottomSection {
-  margin-top: auto;
-  margin-bottom: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 15px;
 }
 
 .iconButton {
@@ -91,6 +90,20 @@
     color: var(--active-color);
     font-size: 22px;
   }
+}
+
+.work_label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ababad;
+  color: #333;
+  padding: 14px 0px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 /* .statusDot {

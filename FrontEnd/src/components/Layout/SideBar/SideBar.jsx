@@ -1,25 +1,39 @@
+import { useRef } from "react";
 import Icon from "../../UI/Icons/Icon/Icon";
-import Resizer from "../Resizer/Resizer";
 import styles from "./SideBar.module.css";
 import { IoIosArrowDown } from "react-icons/io";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons/faPenToSquare";
-// import List from "./List/List";
-// import ChannelList from "./ChannelList/ChannelList";
 import PropTypes from "prop-types";
-// import DmsList from "./DmsList/DmsList";
-// import { useDispatch } from "react-redux";
-// import { openAddButtonModal } from "../../../API/redux_toolkit/modals/addButtonModal";
 import SidebarLists from "./SidebarLists";
+import { useSelector } from "react-redux";
+import useResize from "../../../API/hooks/useResize";
 
-function SideBar({ width, onResizeStart, isResizable }) {
+function SideBar() {
+  const { workspace } = useSelector((state) => state.workspace);
+  const initialWidth = parseInt(localStorage.getItem("sidebarWidth")) || 250;
+  const sidebarRef = useRef(null);
+  const { width, startResizing } = useResize(sidebarRef, initialWidth);
+
+  if (!workspace)
+    return (
+      <div
+        ref={sidebarRef}
+        className={`${styles.side_bar} ${width ? styles.resizing : ""}`}
+        style={{ width: `${width}px` }}
+      ></div>
+    );
 
   return (
-    <div className={styles.side_bar} style={{ width }}>
+    <div
+      ref={sidebarRef}
+      className={`${styles.side_bar} ${width ? styles.resizing : ""}`}
+      style={{ width: `${width}px` }}
+    >
       <div className={styles.side_bar_content}>
         <div className={styles.side_bar_header}>
           <div className={styles.side_bar_header_leftSide}>
-            <span className={styles.work_name}>Web development</span>
+            <span className={styles.work_name}>{workspace.name}</span>
             <span className={styles.side_bar_header_leftSide_icon}>
               <IoIosArrowDown />
             </span>
@@ -28,14 +42,9 @@ function SideBar({ width, onResizeStart, isResizable }) {
             <FontAwesomeIcon icon={faPenToSquare} />
           </Icon>
         </div>
-        <SidebarLists/>
+        <SidebarLists />
       </div>
-      <Resizer
-        onResizeStart={onResizeStart}
-        name={"sidebar"}
-        position={{ right: 0 }}
-        isResizable={isResizable}
-      />
+      <span className={styles.resizer} onMouseDown={startResizing} />
     </div>
   );
 }

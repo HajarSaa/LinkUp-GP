@@ -1,8 +1,10 @@
 import { useState } from "react";
 import AuthInput from "../AuthInput/AuthInput";
 import styles from "./AuthForm.module.css";
-import {signupService } from "../../../API/services/authService";
+import { signupService } from "../../../API/services/authService";
 import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Spinner from '../../../routes/Spinner/Spinner'
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -63,10 +65,8 @@ function RegisterForm() {
     }
   };
 
-
   return (
     <div>
-      {errors.email && <div className={styles.toast}>{errors.email}</div>}
       <form onSubmit={handleSubmit}>
         <AuthInput
           type="text"
@@ -94,15 +94,13 @@ function RegisterForm() {
           error={errors.passwordConfirm}
         />
         <button className={styles.authBtn} type="submit" disabled={loading}>
-          {loading ? "Signing up..." : "Sign Up"}
+          {loading ? (
+            <Spinner secondaryColor="#0000ff54" color="#ccc" />
+          ) : (
+            "Sign Up"
+          )}
         </button>
-        {message && (
-        <p
-        style={{ color:"red" }}
-        >
-        {message}
-        </p>
-        )}
+        {message && <ErrorMessage message={message} />}
       </form>
     </div>
   );

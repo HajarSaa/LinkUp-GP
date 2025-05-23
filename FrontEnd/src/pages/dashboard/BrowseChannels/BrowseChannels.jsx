@@ -1,24 +1,37 @@
 import styles from "./BrowseChannels.module.css";
 import { FaLock, FaHashtag, FaChevronDown, FaCheck } from "react-icons/fa";
-
 import mockChannels from "../../../API/services/mockChannels";
 import { BsDot } from "react-icons/bs";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openCreateChannel } from "../../../API/redux_toolkit/modals/createChannelmodalSlice";
 import SearchInput from "../../../components/UI/InputField/SearchInput/SearchInput";
-// import ContentPage from "../ContentPage/ContentPage";
 import FullPageContent from "../../../components/Layout/FullPageContent/FullPageContnet";
-// import { useState } from "react";
+import Spinner from "../../../routes/Spinner/Spinner";
 
 const BrowseChannels = () => {
+  const { workspace, loading, error } = useSelector((state) => state.workspace);
+  const channels = workspace?.channels;
   const isJoin = true;
   const [isHovered, setIsHovered] = useState(false);
   const dispatch = useDispatch();
+
+  if (loading)
+    return (
+      <div className={styles.page_status}>
+        <Spinner width={70} height={70} border={3} color="var(--primary-color)" />
+      </div>
+    );
+  if (error)
+    return (
+      <div className={styles.page_status}>
+        <div className={styles.error}>Somting went wrong !</div>
+      </div>
+    );
   return (
     <FullPageContent>
       <div className={styles.container}>
-        <div className={`${styles.browesHeader} justify-content-between`}>
+        <div className={`${styles.browseHeader} justify-content-between`}>
           <h2>All channels</h2>
           <button
             className={styles.createBtn}
@@ -104,6 +117,7 @@ const BrowseChannels = () => {
                     {channel.description}
                   </p>
                 )}
+                {console.log(channels)}
               </div>
             </div>
           ))}

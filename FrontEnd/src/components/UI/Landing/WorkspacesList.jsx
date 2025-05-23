@@ -1,29 +1,45 @@
 import styles from "./Landing.module.css";
 import WorkspaceItem from "./WorkspaceItem";
+import useCurrentUser from "../../../API/hooks/useCurrentUser";
+import Spinner from "../../../routes/Spinner/Spinner";
+import { CiFaceFrown } from "react-icons/ci";
 
 function WorkspacesList() {
-  const workspaces = [
-    { name: "Graduation-Team", members: 5 },
-    { name: "Testing WorkSpace", members: 1 },
-    { name: "New Workspace", members: 1 },
-    { name: "test-2", members: 0 },
-    { name: "new-workspace", members: 0 },
-  ];
+  const { user, workspaces, loading, error } = useCurrentUser();
 
-  const user = {
-    email: "ahmed@gmail.com",
-  };
-
+  if (loading)
+    return (
+      <div className={styles.loading}>
+        <Spinner width={70} height={70} border={3} color={"#4285F4"} />
+      </div>
+    );
+  if (error)
+    return (
+      <div className={styles.error}>
+        <span>Something went wrong</span>
+        <span>
+          <CiFaceFrown />
+        </span>
+      </div>
+    );
   return (
     <div className={styles.workspaces_list}>
       <div className={styles.workspace_list_header}>
         Workspaces for <strong>{user.email}</strong>
       </div>
-
       <div className={styles.workspace_list_items}>
-        {workspaces.map((workspace, index) => (
-          <WorkspaceItem key={index} workspace={workspace} />
-        ))}
+        {!loading && workspaces.length === 0 ? (
+          <div
+            className={`${styles.workspaceItem} ${styles.empty_workspace_item}`}
+          >
+            <h3>There is no workspaces or invitations</h3>
+            <p>try to create new one </p>
+          </div>
+        ) : (
+          workspaces.map((workspace, index) => (
+            <WorkspaceItem key={index} workspace={workspace} />
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
 import { MdHeadset } from "react-icons/md";
@@ -18,11 +18,19 @@ import RenameChannelModal from "../../Modal/ChannelModals/editModals/RenameChann
 import TopicModal from "../../Modal/ChannelModals/editModals/TopicModal";
 import DescriptionModal from "../../Modal/ChannelModals/editModals/DescriptionModal";
 import NotificationsModal from "../../Modal/ChannelModals/NotifiactionModal/NotificationsModal";
+import { useEffect } from "react";
 
 function Header({ channel, user }) {
   const dispatch = useDispatch();
   const membersArray =
     channel.members.length > 6 ? channel.members.slice(0, 5) : channel.members;
+  const { channel: ch } = useSelector((state) => state.channel);
+  
+  useEffect(() => {
+    console.log("ch changed =>", ch);
+  }, [ch]);
+
+  if(!ch) return
   return (
     <>
       <div className={styles.channelHeader}>
@@ -37,7 +45,7 @@ function Header({ channel, user }) {
               <span className="align-items-center">
                 <FaHashtag />
               </span>
-              <span>{channel.name}</span>
+              <span>{ch.name}</span>
             </div>
           )}
           {user && (

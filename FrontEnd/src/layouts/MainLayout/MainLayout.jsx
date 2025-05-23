@@ -1,18 +1,32 @@
-/* eslint-disable no-unused-vars */
 import styles from "./MainLayout.module.css";
 import NavBar from "../../components/Layout/Navbar/NavBar";
 import WorkBar from "../../components/Layout/Workbar/WorkBar";
 import SideBar from "../../components/Layout/SideBar/SideBar";
-import Panel from "../../components/Layout/Panel/Panel";
-import useResizableLayout from "../../API/hooks/useResizableLayout";
-import { Outlet } from "react-router-dom";
 
+import { Outlet, useLocation } from "react-router-dom";
+import useCurrentWork from "../../API/hooks/useCurrentWork";
+import { useDispatch } from "react-redux";
+import {
+  disableResizing,
+  enableResizing,
+} from "../../API/redux_toolkit/ui/resizeSlice";
+import { useEffect } from "react";
+import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
+import InvitePeopleModal from "../../components/UI/Modal/InvitePeopleModal/InvitePeopleModal";
 
 function MainLayout() {
-  const isResizable = true;
+  const dispatch = useDispatch();
+  const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
-  const { sidebarWidth, panelWidth, containerRef, handleResizeStart } =
-    useResizableLayout(300, 250, isResizable);
+  const { loading, workspace } = useCurrentWork();
+
+  useEffect(() => {
+    if (loading) {
+      dispatch(disableResizing());
+    } else {
+      dispatch(enableResizing());
+    }
+  }, [loading, dispatch]);
 
   return (
     <div className={styles.main_layout}>
@@ -21,25 +35,22 @@ function MainLayout() {
         <WorkBar />
         {isBrowseChannels ? (
           <div className={styles.workspace_content_wrapper}>
-            <Outlet />
+            <div className={styles.full_content}>{workspace && <Outlet />}</div>
           </div>
         ) : (
           <div className={styles.workspace_content_wrapper}>
-            <div className={styles.workspace_content} ref={containerRef}>
-              <SideBar
-                width={sidebarWidth}
-                onResizeStart={handleResizeStart}
-                isResizable={isResizable}
-              />
-              <Outlet />
-              {/* <Panel
-                width={panelWidth}
-                onResizeStart={handleResizeStart}
-                isResizable={isResizable}
-              /> */}
+            <div className={styles.workspace_content}>
+              <SideBar />
+              <div className={styles.main_content}>
+                {workspace && <Outlet />}
+              </div>
             </div>
           </div>
         )}
+        {/* Modals */}
+        {/* Channel Modals */}
+        <CreateChannelModal />
+        <InvitePeopleModal />
       </div>
     </div>
   );

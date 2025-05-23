@@ -1,79 +1,85 @@
+/* eslint-disable no-unused-vars */
 import PropTypes from "prop-types";
 import styles from "./AddButtonModal.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import Overlay from "../Overlay/Overlay";
-import { useEffect, useState } from "react";
-import { closeAddButtonModal } from "../../../../../API/redux_toolkit/modals/addButtonModal";
-import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/createChannelmodalSlice";
+import {useLayoutEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { openCreateChannel } from "../../../../../API/redux_toolkit/modals/modalsSlice";
 
-const AddButtonModal = () => {
-  const { isOpen, position: modalPosition } = useSelector(
-    (state) => state.addButtonModal
-  );
+const AddButtonModal = ({ isOpen, targetRef, parentList, onClose }) => {
   const [position, setPosition] = useState(null);
+  const modalRef = useRef(null);
 
-  const dispatch = useDispatch();
   const navigateTo = useNavigate();
-
-  function handleClose(e) {
-    if (e.target === e.currentTarget) dispatch(closeAddButtonModal());
-  }
+  const dispatch = useDispatch();
 
   function handleCreateBtn() {
-    dispatch(closeAddButtonModal());
     dispatch(openCreateChannel());
+    if (onClose) onClose();
   }
+
   function handleBrowseBtn() {
-    dispatch(closeAddButtonModal());
     navigateTo("/browse-channels");
+    if (onClose) onClose();
   }
 
-  // useEffect(() => {
-  //   if (isOpen && targetRef?.current) {
-  //     const rect = targetRef.current.getBoundingClientRect();
-  //     setPosition({
-  //       top: rect.top - 80,
-  //       left: rect.left + 30,
-  //     });
-  //   }
-  // }, [isOpen, targetRef]);
+  useLayoutEffect(() => {
+    if (isOpen && targetRef?.current) {
+      const rect = targetRef.current.getBoundingClientRect();
 
-  useEffect(() => {
-    // لو الـ Modal مفتوح هنحدد موقع الـ Modal بناءً على الـ position اللي بعتناه
-    if (isOpen && modalPosition) {
+      const modalHeight = modalRef.current?.offsetHeight || 100;
+
       setPosition({
-        top: modalPosition.top - 20, // تعديل الـ top حسب الموقع
-        left: modalPosition.left + 30, // تعديل الـ left حسب الموقع
+        top: rect.top + window.scrollY - modalHeight - 8,
+        left: rect.left + window.scrollX + 50,
       });
     }
-  }, [isOpen, modalPosition]);
+  }, [isOpen, targetRef]);
 
-  if (!isOpen || !position || position.top === 0) return null;
+  function handleClose(e) {
+    if (e.target === e.currentTarget && onClose) {
+      onClose();
+    }
+  }
+
+  if (!isOpen || !position) return null;
 
   return (
     <>
-      <Overlay closeOverlay={handleClose} />
-      <div
-        className={styles.modal}
-        onClick={(e) => e.stopPropagation()}
-        style={{ top: position.top, left: position.left }}
-      >
-        <ul className={styles.list}>
-          <li className={styles.item} onClick={handleCreateBtn}>
-            <span>Create a new channel</span>
-          </li>
-          <li className={styles.item} onClick={handleBrowseBtn}>
-            <span>Browse channels</span>
-          </li>
-        </ul>
+      <div className={styles.overlay} onClick={handleClose}>
+        <div
+          ref={modalRef}
+          className={styles.modal}
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            top: position.top,
+            left: position.left,
+            position: "absolute",
+            zIndex: 1000,
+          }}
+        >
+          <ul className={styles.list}>
+            <li
+              className={styles.item}
+              onClick={handleCreateBtn}
+            >
+              <span>Create a new channel</span>
+            </li>
+            <li className={styles.item} onClick={handleBrowseBtn}>
+              <span>Browse channels</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </>
   );
 };
 
 AddButtonModal.propTypes = {
-  targetRef: PropTypes.any,
+  isOpen: PropTypes.bool,
+  targetRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  parentList: PropTypes.any,
+  onClose: PropTypes.func,
 };
 
 export default AddButtonModal;

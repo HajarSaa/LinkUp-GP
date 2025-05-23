@@ -1,39 +1,44 @@
-/* eslint-disable no-unused-vars */
 import styles from "./DmsList.module.css";
 import { BiSolidUser } from "react-icons/bi";
+import { IoMdClose } from "react-icons/io";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
-const DmsListItem = ({
-  id,
-  name,
-  isActive = false,
-  hasUnread,
-}) => {
+const DmsListItem = ({ dmData, isActive }) => {
   const navigate = useNavigate();
 
+  const handleDeletelteItem = (e) => {
+    e.stopPropagation();
+    console.log("closed");
+  };
+
   const handleClick = () => {
-    navigate(`/dm/${id}`)
+    navigate(`/dm/${dmData.conversationId}`);
   };
 
   return (
     <div
-      className={`${styles.dms_item}`}
+      className={`${styles.dms_item} ${isActive ? styles.active : ""}`}
       onClick={handleClick}
     >
       <div className={styles.left_side}>
-        <BiSolidUser/>
+        <BiSolidUser />
       </div>
-      <span className={styles.user_name}>{name}</span>
+      <div className={styles.user_name}>
+        <span>{dmData.member.userName}</span>
+        {dmData.isMe && <span className={styles.user_name_hint}>(you)</span>}
+      </div>
+      <div className={styles.right_side} onClick={handleDeletelteItem}>
+        <IoMdClose />
+      </div>
     </div>
   );
 };
 
 DmsListItem.propTypes = {
-  id: PropTypes.any,
-  name: PropTypes.string,
+  dmData: PropTypes.object,
+  workspace: PropTypes.object,
   isActive: PropTypes.bool,
-  hasUnread: PropTypes.bool,
 };
 
 export default DmsListItem;

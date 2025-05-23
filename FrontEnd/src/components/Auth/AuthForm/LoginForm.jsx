@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import styles from './AuthForm.module.css';
-import AuthInput from '../AuthInput/AuthInput';
-import { loginService } from '../../../API/services/authService';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import styles from "./AuthForm.module.css";
+import AuthInput from "../AuthInput/AuthInput";
+import { loginService } from "../../../API/services/authService";
+import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Spinner from "../../../routes/Spinner/Spinner";
+
 function LoginForm() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const navigateTo = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState(null);
 
@@ -44,11 +47,15 @@ function LoginForm() {
     e.preventDefault();
     if (!validate()) return;
     try {
+      setLoading(true);
       await loginService(formData);
       setApiError(null);
-      navigateTo("/landing");
+      navigateTo("/workspaces-landing");
     } catch (err) {
+      setLoading(false);
       setApiError(err.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,13 +78,15 @@ function LoginForm() {
         error={errors.password}
       />
       <button className={styles.authBtn} type="submit">
-        Login in
+        {loading ? (
+          <Spinner secondaryColor="#0000ff54" color="#ccc" />
+        ) : (
+          "Login in "
+        )}
       </button>
-      {apiError && (
-        <p style={{ color: "red", marginTop: "10px" }}>{apiError}</p>
-      )}
+      {apiError && <ErrorMessage message={apiError} />}
     </form>
   );
 }
 
-export default LoginForm
+export default LoginForm;

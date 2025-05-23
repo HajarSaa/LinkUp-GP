@@ -1,25 +1,49 @@
+import { useSelector } from "react-redux";
 import styles from "./Panel.module.css";
-import Resizer from "../Resizer/Resizer";
-import PropTypes from "prop-types";
+import ThreadPanel from "../../UI/Panels/ThreadPanel/ThreadPanel";
+import UserPanel from "../../UI/Panels/UserPanel/UserPanel";
 
-function Panel({ width, onResizeStart, isResizable }) {
+function Panel() {
+  const { threadPanel, userPanel } = useSelector((state) => state.chatPanel);
+  const selectedThread = [
+    {
+      id: 1,
+      sender: "Omar",
+      text: "Thanks, Ahmed!",
+      timestamp: "2025-03-04T10:05:00Z",
+    },
+    {
+      id: 2,
+      sender: "Ahmed",
+      text: "You're welcome!",
+      timestamp: "2025-03-04T10:05:15Z",
+    },
+    {
+      id: 3,
+      sender: "Ahmed",
+      text: "You're welcome!",
+      timestamp: "2025-03-04T10:05:15Z",
+    },
+    {
+      id: 4,
+      sender: "Ahmed",
+      text: "You're welcome!",
+      timestamp: "2025-03-04T10:05:15Z",
+    },
+    {
+      id: 5,
+      sender: "Ahmed",
+      text: "You're welcome!",
+      timestamp: "2025-03-04T10:05:15Z",
+    },
+  ];
+  if (!threadPanel && !userPanel.isOpen) return;
   return (
-    <div className={styles.panel} style={{ width }}>
-      {/* <div>Panel</div> */}
-      <Resizer
-        onResizeStart={onResizeStart}
-        name={"panel"}
-        position={{ left: 0 }}
-        isResizable={isResizable}
-      />
+    <div className={styles.panel}>
+      <ThreadPanel selectedThread={selectedThread} />
+      <UserPanel />
     </div>
   );
 }
-
-Panel.propTypes = {
-  width: PropTypes.any,
-  onResizeStart: PropTypes.any,
-  isResizable: PropTypes.any,
-};
 
 export default Panel;

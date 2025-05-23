@@ -1,23 +1,41 @@
+/* eslint-disable no-unused-vars */
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./DmsList.module.css";
 import DmsListItem from "./DmsListItem";
+import { useNavigate, useParams } from "react-router-dom";
+import AddButton from "../AddButton/AddButton";
+import { closeAddButtonModal } from "../../../../API/redux_toolkit/modals/addButtonModal";
+import { getMyConversationsDetailed } from "../../../../utils/workspaceUtils";
+
 function DmsList() {
-  const users = [
-    {
-      name: "Alaa Abdulkhaliq",
-      id: "1",
-    },
-    {
-      name: "Ahmed AYman",
-      id: "2",
-    },
-  ];
+  const { workspace } = useSelector((state) => state.workspace);
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const conversations = getMyConversationsDetailed(workspace);
+
+  function handleCreateBtn() {
+    dispatch(closeAddButtonModal());
+    console.log("put here the creation modal");
+  }
+
+  function handleBrowseBtn() {
+    dispatch(closeAddButtonModal());
+    console.log("put here the browse modal");
+  }
+
   return (
     <div>
       <div className={styles.list}>
-        {users.map((user, index) => (
-          <DmsListItem key={index} id={user.id} name={user.name} />
+        {conversations.map((conversation, index) => (
+          <DmsListItem
+            key={index}
+            dmData={conversation}
+            workspace={workspace}
+            isActive={String(conversation.conversationId) === String(id)}
+          />
         ))}
       </div>
+      <AddButton text="Invite people" />
     </div>
   );
 }

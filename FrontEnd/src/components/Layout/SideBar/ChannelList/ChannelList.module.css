@@ -39,3 +39,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/*  */
+
+.active {
+    background-color: var(--sidebar-hover);
+    color: #ffffff;
+}

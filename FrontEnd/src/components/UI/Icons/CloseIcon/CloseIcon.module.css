@@ -1,0 +1,19 @@
+.closeBtn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 1px;
+  border-radius: 4px;
+  font-size: 30px;
+  color: #555;
+}
+
+.closeBtn:hover {
+  background-color: #ccc;
+  color: #000;
+}
+
+.closeIcon {
+  font-size: 30px;
+  cursor: pointer;
+}

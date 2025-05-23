@@ -1,7 +1,7 @@
 import styles from "./AuthLayout.module.css";
-import AuthFooter from "../../components/Auth/AuthFooter/AuthFooter";
 
 import AuthHeader from "../../components/Auth/AuthHeader/AuthHeader";
+import AuthFooter from "../../components/Auth/AuthFooter/AuthFooter";
 
 
 
@@ -13,7 +13,7 @@ const AuthLayout = ({children}) => {
         <AuthHeader/>
         {children}
       </div>
-      <AuthFooter />
+      <AuthFooter/>
     </div>
   );
 };
