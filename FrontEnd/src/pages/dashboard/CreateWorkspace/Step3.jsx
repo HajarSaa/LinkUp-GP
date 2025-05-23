@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import { IoIosLink } from "react-icons/io";
 import { useState } from "react";
+import { IoIosLink } from "react-icons/io";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
+import SkipConfirmationModal from "../../../components/UI/Modal/SkipConfirmationModal/SkipConfirmationModal";
 
 function Step3({ onNext, workspace }) {
   const [email, setEmail] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isButtonDisabled = email.trim() === "";
 
@@ -13,6 +15,19 @@ function Step3({ onNext, workspace }) {
     if (!isButtonDisabled && onNext) {
       onNext(email);
     }
+  };
+
+  const handleSkipClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalConfirm = () => {
+    setIsModalOpen(false);
+    onNext([]);
   };
 
   if (!workspace) {
@@ -25,14 +40,18 @@ function Step3({ onNext, workspace }) {
         <div className={styles.container}>
           <p className={styles.stepText}>Step 3 of 3</p>
           <h1 className={styles.heading}>
-            Who else is on the <span>{workspace.name || "your"}</span> team?
+            Who else is on the{" "}
+            <span className={styles.workspaceName}>
+              {workspace.name || "your"}
+            </span>{" "}
+            team?
           </h1>
 
           <label className={styles.label}>Add coworker by email</label>
 
           <textarea
             className={styles.textarea}
-            placeholder="Ex. ellis@gmail.com, maria@gmail.com"
+            placeholder="Ex. User1@gmail.com, User2@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -58,12 +77,22 @@ function Step3({ onNext, workspace }) {
               Copy Invite Link
             </button>
 
-            <a className={styles.skipButton} href="#">
+            <button
+              type="skipButton"
+              onClick={handleSkipClick}
+              className={styles.skipButton}
+            >
               Skip this step
-            </a>
+            </button>
           </div>
         </div>
       </div>
+
+      <SkipConfirmationModal
+        isOpen={isModalOpen}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalConfirm}
+      />
     </PageContent>
   );
 }

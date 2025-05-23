@@ -1,0 +1,55 @@
+.modal {
+  width: 35%;
+  background: white;
+  border-radius: 8px;
+}
+
+.modalContent {
+  padding: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.description {
+  font-size: 15px;
+  color: #4a4a4a;
+  margin-bottom: 24px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancelButton {
+  background: white;
+  color: #1d1c1d;
+  border: 1px solid var(--border-color);
+  padding: 12.5px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background-color: #f8f8f8;
+  }
+}
+.skipButton {
+  background-color: #e01e5a;
+  color: white;
+  border: none;
+  padding: 12.5px 35px;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 3px rgb(183, 208, 227);
+    background-color: #d01a4b;
+  }
+}
