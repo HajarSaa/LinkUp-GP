@@ -30,7 +30,6 @@ const Navbar = () => {
   const { workspace } = useSelector((state) => state.workspace);
   const conversPartener = getConversationPartner(convers, workspace.members);
   useEffect(() => {
-    console.log("convers data =>", convers);
     console.log("convers partener =>", conversPartener);
   }, [convers, conversPartener]);
 
