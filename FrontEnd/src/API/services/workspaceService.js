@@ -13,3 +13,29 @@ export const getWorkspace = async (work_id) => {
   const response = axios_response.data;
   return response.data;
 };
+////////////////////////////////////////////////////////////////////
+export const createWorkspaceService = async (name) => {
+  const response = await axios.post(
+    `${API_BASE_URL}/workspaces`,
+    { name },
+    { withCredentials: true }
+  );
+  return response.data;
+};
+////////////////////////////////////////////////////////////////////
+  export async function joinWorkspace(workspaceId, userName) {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/workspaces/${workspaceId}/join`,
+        { userName },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      }
+      throw new Error("Failed to join workspace.");
+    }
+  }
+////////////////////////////////////////////////////////////////////
