@@ -7,14 +7,20 @@ import { FaArrowRight } from "react-icons/fa6";
 import styles from "./Landing.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
 
 function WorkspaceItem({ workspace }) {
   const work_title = getWorkLabel(workspace?.name || "workspace name");
   const work_background = getRandomColorFromPalette();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClick = (work_id) => {
+    if (localStorage.getItem("selectedWorkspaceId"))
+      localStorage.removeItem("selectedWorkspaceId");
+    dispatch(clearWorkspace());
     localStorage.setItem("selectedWorkspaceId", work_id);
     navigate(`/`);
   };
