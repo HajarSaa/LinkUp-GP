@@ -4,7 +4,8 @@ import { FaUser } from "react-icons/fa6";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
 import { joinWorkspace } from "../../../API/services/workspaceService";
-
+import { useDispatch } from "react-redux";
+import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
 function Step2({ onNext, workspace }) {
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -12,6 +13,7 @@ function Step2({ onNext, workspace }) {
 
   const isButtonDisabled = userName.trim() === "" || loading;
 
+  const dispatch = useDispatch();
   const handleNextClick = async () => {
     if (!workspace || !workspace._id) {
       setError("Workspace ID is missing.");
@@ -23,6 +25,11 @@ function Step2({ onNext, workspace }) {
 
     try {
       await joinWorkspace(workspace._id, userName);
+      if (localStorage.getItem("selectedWorkspaceId"))
+        localStorage.removeItem("selectedWorkspaceId");
+      dispatch(clearWorkspace());
+      localStorage.setItem("selectedWorkspaceId", workspace._id);
+      // navigate(`/`);
       onNext(userName);
     } catch (err) {
       setError(err.message);
