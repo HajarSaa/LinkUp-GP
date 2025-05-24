@@ -25,7 +25,8 @@ body {
   box-sizing: border-box;
 }
 
-#root , .app__body {
+#root,
+.app__body {
   width: 100%;
   height: 100%;
 }
@@ -48,13 +49,18 @@ p {
   line-height: 1.6;
 }
 
+input:focus {
+  outline: none;
+}
+input,textarea,button{
+  font-family: inherit;
+}
+
 /* Links */
 a {
   text-decoration: none;
 }
-input:focus{
-outline: none;
-}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

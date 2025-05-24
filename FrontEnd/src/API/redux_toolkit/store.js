@@ -9,7 +9,6 @@ import notificationsModalReducer from "./modals/notificationsModalSlice";
 import channelDetailsModalReducer from "./modals/channelDetailsSlice";
 import createChannelModalReducer from "./modals/createChannelmodalSlice";
 import convActionModalReducer from "./modals/convActionModal";
-import huddleModalReducer from './modals/huddleSlice';
 import addButtonModalReducer from "./modals/addButtonModal";
 import emojiPickerReducer from './modals/emojiPickerSlice'
 import workspaceReducer from './api_data/workspaceSlice'
@@ -31,7 +30,6 @@ const store = configureStore({
     // Modals
     modals: modalsReducer,
     convActionModal: convActionModalReducer,
-    huddleModal: huddleModalReducer,
     channelDetailsModal: channelDetailsModalReducer,
     createChannelModal: createChannelModalReducer,
     notificationsModal: notificationsModalReducer,

@@ -1,10 +1,7 @@
-/* .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: var(--bg-light);
-  } */
+.wrapper {
+  width: 100%;
+  overflow-y: auto;
+}
 
 .container {
   background-color: var(--bg-white);
@@ -81,6 +78,7 @@
   color: var(--gray-dark);
   cursor: not-allowed;
 }
+
 /**********************************Step2****************************************/
 .profilePhotoSection {
   margin-bottom: 20px;
@@ -90,6 +88,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+
   label {
     position: relative;
     left: -4px;
@@ -97,11 +96,13 @@
     font-size: 15px;
     font-weight: 700;
     color: #1d1c1d;
+
     span {
       color: #5e5d60;
       font-weight: 400;
     }
   }
+
   .profilePhotoPlaceholder {
     width: 25%;
     height: 100%;
@@ -110,6 +111,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     .photo {
       color: var(--active-color);
       font-size: 150px;
@@ -117,6 +119,7 @@
     }
   }
 }
+
 .uploadButton {
   margin-top: 10px;
   width: 25%;
@@ -130,14 +133,17 @@
   color: #1d1c1d;
   border: 1.5px solid var(--border-color);
   transition: 0.3s;
+
   &:hover {
     background-color: var(--bg-light);
   }
 }
+
 /**********************************Step3****************************************/
 .workspaceName {
   color: var(--primary-color);
 }
+
 .textarea {
   width: 100%;
   height: 100px;
@@ -153,6 +159,7 @@
   color: #1d1c1d;
   margin: 15px 0;
 }
+
 .textarea::placeholder {
   color: var(--text-color-muted);
 }
@@ -161,12 +168,14 @@
   border-color: var(--link-color);
   box-shadow: 0 0 0 3px rgb(183, 208, 227);
 }
+
 .actions {
   display: flex;
   align-items: center;
   margin-top: 20px;
   gap: 15px;
 }
+
 .label {
   position: relative;
   left: -4px;
@@ -176,6 +185,7 @@
   font-weight: 700;
   color: #1d1c1d;
 }
+
 .skipButton {
   border: none;
   background-color: transparent;
@@ -183,6 +193,7 @@
   font-weight: 400;
   color: rgba(29, 28, 29, 0.7);
   position: relative;
+
   &:hover {
     &::after {
       content: "";
@@ -195,6 +206,7 @@
     }
   }
 }
+
 .copyButton {
   padding: 10px;
   font-size: 15px;
@@ -206,8 +218,10 @@
   color: #1d1c1d;
   border: 1.5px solid var(--border-color);
   transition: 0.3s;
+
   &:hover {
     background-color: var(--bg-light);
   }
 }
+
 /*************************************************************************/

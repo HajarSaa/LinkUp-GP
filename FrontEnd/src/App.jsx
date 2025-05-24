@@ -194,11 +194,6 @@ function App() {
               }
             />
           </Route>
-          {/* <Route path="/create-workspace" element={<EmptyLayout />}>
-            <Route path="step-1" element={<Step1 />} />
-            <Route path="step-2" element={<Step2 />} />
-            <Route path="step-3" element={<Step3 />} />
-          </Route> */}
         </Route>
       </Routes>
     </div>
