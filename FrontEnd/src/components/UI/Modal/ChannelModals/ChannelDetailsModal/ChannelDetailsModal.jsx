@@ -34,9 +34,9 @@ import RenameChannelModal from "../editModals/RenameChannelModal";
 import DescriptionModal from "../editModals/DescriptionModal";
 import AboutTab from "./AboutTab";
 
-const ChannelDetailsModal = () => {
+const ChannelDetailsModal = ({channelData}) => {
   const dispatch = useDispatch();
-  const { isOpen, activeTab, channelData } = useSelector(
+  const { isOpen, activeTab } = useSelector(
     (state) => state.channelDetailsModal
   );
 
@@ -355,7 +355,7 @@ const ChannelDetailsModal = () => {
 };
 
 ChannelDetailsModal.propTypes = {
-  channel: PropTypes.any,
+  channelData: PropTypes.any,
 };
 
 export default ChannelDetailsModal;

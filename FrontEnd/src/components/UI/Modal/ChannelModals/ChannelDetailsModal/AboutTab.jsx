@@ -13,17 +13,32 @@ import { formatDateToLong } from "../../../../../utils/formatedDate";
 import { BsCopy } from "react-icons/bs";
 import Spinner from "../../../../../routes/Spinner/Spinner";
 import useLeaveChannel from "../../../../../API/hooks/useLeaveChannel";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 function AboutTab({ channelData }) {
   const dispatch = useDispatch();
   const { workspace } = useSelector((state) => state.workspace);
+  const { leaveChannel, loading, error, success } = useLeaveChannel();
   const createdBy = findMemberById(workspace, channelData?.createdBy);
   const createdAt = formatDateToLong(channelData?.createdAt);
-  const { leaveChannel, loading, error, success } = useLeaveChannel();
+  const [tooltipText, setTooltipText] = useState("Copy channel Id");
 
   const handleLeaveChannel = () => {
     leaveChannel(channelData.id);
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(channelData.id)
+      .then(() => {
+        setTooltipText("Copied");
+        setTimeout(() => setTooltipText("Copy channel Id"), 2000);
+      })
+      .catch(() => {
+        console.log("فشل النسخ ❌");
+      });
   };
 
   useEffect(() => {
@@ -54,9 +69,7 @@ function AboutTab({ channelData }) {
       <div className={styles.infoRow}>
         <div
           className={styles.infoTopic}
-          onClick={() => {
-            dispatch(openEditTopicModal());
-          }}
+          onClick={() => dispatch(openEditTopicModal())}
         >
           <div className={styles.top}>
             <div className={styles.infoTitle}>Topic</div>
@@ -68,9 +81,7 @@ function AboutTab({ channelData }) {
         </div>
         <div
           className={styles.infoTopic}
-          onClick={() => {
-            dispatch(openDescribtionModal());
-          }}
+          onClick={() => dispatch(openDescribtionModal())}
         >
           <div className={styles.top}>
             <span className={styles.infoTitle}>Description</span>
@@ -109,9 +120,21 @@ function AboutTab({ channelData }) {
       </div>
       <div className={styles.chId}>
         <span>Channel ID : {channelData.id}</span>
-        <span className="align-items-center">
+        <span
+          className={styles.chId_icon}
+          onClick={handleCopy}
+          data-tooltip-id="copy-tooltip"
+          data-tooltip-content={tooltipText}
+        >
           <BsCopy />
         </span>
+        <Tooltip
+          id="copy-tooltip"
+          place="top"
+          className={`custom-tooltip ${
+            tooltipText === "Copied" ? "tooltip-success" : ""
+          }`}
+        />
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import Panel from "../../../components/Layout/Panel/Panel";
 
 function ChannelPage() {
   const { id: channel_id } = useParams();
-  const { loading, error } = useCurrentChannel(channel_id);
+  const { loading, error , channel } = useCurrentChannel(channel_id);
 
   if (loading)
     return (
@@ -29,7 +29,7 @@ function ChannelPage() {
   return (
     <PageContent>
       <div className={styles.page_content}>
-        <Header/>
+        <Header channel={channel} />
         <ChannelBody />
         <MessageInput />
       </div>

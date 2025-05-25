@@ -201,9 +201,13 @@
   align-items: center;
   gap: 10px;
   color: var(--text-color-grey);
+  user-select: none;
 }
 
-.chId span:last-child {
+.chId .chId_icon{
+  display: flex;
+  align-items: center;
+
   cursor: pointer;
 }
 

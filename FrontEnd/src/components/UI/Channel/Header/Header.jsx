@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
 import { RiStickyNoteAddLine } from "react-icons/ri";
@@ -15,10 +15,8 @@ import { BiSolidUser } from "react-icons/bi";
 import { FiChevronDown } from "react-icons/fi";
 import { MdHeadset } from "react-icons/md";
 
-function Header() {
+function Header({channel}) {
   const dispatch = useDispatch();
-  const {channel} = useSelector((state) => state.channel);
-
   if (!channel) return;
   return (
     <>
@@ -98,7 +96,7 @@ function Header() {
         </div>
       </div>
       <NotificationsModal />
-      <ChannelDetailsModal />
+      <ChannelDetailsModal channelData={channel} />
     </>
   );
 }
