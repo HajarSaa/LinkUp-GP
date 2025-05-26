@@ -19,43 +19,18 @@ import { CgShortcut } from "react-icons/cg";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import PropTypes from "prop-types";
+import { useLocation, useParams } from "react-router-dom";
+import { sendMessage } from "../../../../API/services/messageService";
 
-const upperIcons = [
-  { icon: HiMiniBold },
-  { icon: FiItalic },
-  { icon: AiOutlineStrikethrough },
-  { icon: PiLinkBold },
-  { icon: MdOutlineFormatListNumbered },
-  { icon: MdOutlineFormatListBulleted },
-  { icon: RiQuoteText },
-  { icon: IoCodeSlash },
-  { icon: PiCodeBlockBold },
-];
 
-const lowerIcons = [
-  { icon: FaPlus },
-  { icon: RxLetterCaseCapitalize },
-  { icon: BsEmojiSmile },
-  { icon: GoMention },
-  { icon: IoVideocamOutline },
-  { icon: AiOutlineAudio },
-  { icon: CgShortcut },
-];
-
-const renderIcons = (icons, positions, iconClass, customClass) => {
-  return icons.map(({ icon: IconComponent }, index) => (
-    <React.Fragment key={index}>
-      <IconComponent className={`${iconClass} ${customClass}`} />
-      {positions.includes(index + 1) && <div className={styles.box11}></div>}
-    </React.Fragment>
-  ));
-};
-
-const MessageInput = ({ isThread, channelName='front end' }) => {
+const MessageInput = ({ isThread, channelName}) => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const [isChecked, setIsChecked] = useState(false);
-
+  const location = useLocation();
+  const { id } = useParams();
+  const isChannel = location.pathname.includes("/channels");
+  
   const handleToggleCheckbox = () => {
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
@@ -71,13 +46,21 @@ const MessageInput = ({ isThread, channelName='front end' }) => {
     setMessage(e.target.value);
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!message.trim()) return;
-    console.log("Message Sent:", message);
-    setMessage("");
-    const textarea = textareaRef.current;
-    textarea.style.height = "40px";
+
+    try {
+      const type = isChannel ? "channel" : "conversation";
+      await sendMessage(type, id, message);
+      setMessage("");
+      const textarea = textareaRef.current;
+      textarea.style.height = "40px";
+    } catch (error) {
+      console.error("Failed to send message", error);
+      // show message error
+    }
   };
+
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -177,4 +160,35 @@ export default MessageInput;
 MessageInput.propTypes = {
   channelName: PropTypes.string,
   isThread: PropTypes.bool,
+};
+
+const upperIcons = [
+  { icon: HiMiniBold },
+  { icon: FiItalic },
+  { icon: AiOutlineStrikethrough },
+  { icon: PiLinkBold },
+  { icon: MdOutlineFormatListNumbered },
+  { icon: MdOutlineFormatListBulleted },
+  { icon: RiQuoteText },
+  { icon: IoCodeSlash },
+  { icon: PiCodeBlockBold },
+];
+
+const lowerIcons = [
+  { icon: FaPlus },
+  { icon: RxLetterCaseCapitalize },
+  { icon: BsEmojiSmile },
+  { icon: GoMention },
+  { icon: IoVideocamOutline },
+  { icon: AiOutlineAudio },
+  { icon: CgShortcut },
+];
+
+const renderIcons = (icons, positions, iconClass, customClass) => {
+  return icons.map(({ icon: IconComponent }, index) => (
+    <React.Fragment key={index}>
+      <IconComponent className={`${iconClass} ${customClass}`} />
+      {positions.includes(index + 1) && <div className={styles.box11}></div>}
+    </React.Fragment>
+  ));
 };

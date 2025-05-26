@@ -26,12 +26,13 @@ function ChannelPage() {
   if (error)
     return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
 
+  if(!loading)
   return (
     <PageContent>
       <div className={styles.page_content}>
         <Header channel={channel} />
-        <ChannelBody />
-        <MessageInput />
+        <ChannelBody channel={channel} />
+        <MessageInput channelName={channel?.name} />
       </div>
       <Panel />
     </PageContent>

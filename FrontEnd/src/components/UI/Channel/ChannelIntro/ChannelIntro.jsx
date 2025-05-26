@@ -25,7 +25,7 @@ function EmptyState({ title }) {
 }
 
 EmptyState.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };
 
 export default EmptyState;

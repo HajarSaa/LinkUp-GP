@@ -17,6 +17,7 @@ import { MdHeadset } from "react-icons/md";
 
 function Header({channel}) {
   const dispatch = useDispatch();
+  console.log(channel)
   if (!channel) return;
   return (
     <>

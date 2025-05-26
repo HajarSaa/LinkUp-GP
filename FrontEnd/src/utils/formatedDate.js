@@ -16,3 +16,14 @@ export const formatDateToLong = (isoDateString) => {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     return date.toLocaleDateString('en-GB', options);
 };
+
+export const formatTimeTo12Hour = (isoDateString) => {
+    const date = new Date(isoDateString);
+    const options = {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+            timeZone: "Africa/Cairo",
+        };
+    return date.toLocaleTimeString("en-EG", options);
+};

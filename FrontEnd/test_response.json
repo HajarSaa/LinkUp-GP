@@ -1,27 +1,15 @@
-{
-  "_id": "682e5b4d0695df4545391ee0",
-  "name": "Gaza-Strip",
-  "type": "public",
-  "createdBy": "682e5b380695df4545391ecc",
-  "workspaceId": "682e5aa80695df4545391ec0",
-  "members": ["682e5b380695df4545391ecc", "682e5c170695df4545391ef5"],
-  "createdAt": "2025-05-21T23:01:33.436Z",
-  "updatedAt": "2025-05-21T23:05:32.411Z",
-  "__v": 1,
-  "messages": [
-    {
-      "_id": "68306741209f14cfe5faae8b",
-      "content": "Hello everyone",
-      "createdBy": "682e5b380695df4545391ecc",
-      "channelId": "682e5b4d0695df4545391ee0",
-      "conversationId": null,
-      "parentMessageId": null,
-      "readBy": [],
-      "edited": false,
-      "createdAt": "2025-05-23T12:17:05.511Z",
-      "updatedAt": "2025-05-23T12:17:05.511Z",
-      "__v": 0
-    }
-  ],
-  "id": "682e5b4d0695df4545391ee0"
-}
+[
+  {
+    "_id": "68306741209f14cfe5faae8b",
+    "content": "Hello everyone",
+    "createdBy": "682e5b380695df4545391ecc",
+    "channelId": "682e5b4d0695df4545391ee0",
+    "conversationId": null,
+    "parentMessageId": null,
+    "readBy": [],
+    "edited": false,
+    "createdAt": "2025-05-23T12:17:05.511Z",
+    "updatedAt": "2025-05-23T12:17:05.511Z",
+    "__v": 0
+  }
+]

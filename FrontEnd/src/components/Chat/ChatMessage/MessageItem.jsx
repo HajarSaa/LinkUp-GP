@@ -6,19 +6,23 @@ import Reaction from "./Reaction";
 import { useEffect, useRef, useState } from "react";
 import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
 import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import MessageActions from "./MessageActions";
 import MessageThreads from "./MessageThreads";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { findMemberById } from "../../../utils/workspaceUtils";
+import { formatTimeTo12Hour } from "../../../utils/formatedDate";
 
-const MessageItem = ({ isFirstMessage, message }) => {
+const MessageItem = ({ message }) => {
   const [emoji, setEmoji] = useState("");
   const add_react_ref = useRef(null);
   const [add_position, set_add_Position] = useState(null);
   const [messageHover, setMessageHover] = useState(false);
   const dispatch = useDispatch();
-  const showMessageHeader = isFirstMessage || message.thread.length > 0;
+  const { workspace } = useSelector((state) => state.workspace);
+  const sender = findMemberById(workspace, message?.createdBy);
+  const message_time = formatTimeTo12Hour(message?.createdAt);
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
@@ -61,41 +65,33 @@ const MessageItem = ({ isFirstMessage, message }) => {
       >
         <div className={styles.message}>
           <div className={styles.message_leftSide}>
-            {showMessageHeader ? (
-              <div className={styles.profileWrapper} onClick={openProfile}>
-                {/* <img/> */}
-                {/* لو فيه صوره هنضيفها مفيش يبقي الديفولت */}
-                <BiSolidUser className={styles.profile} />
-              </div>
-            ) : (
-              <>
-                {messageHover && (
-                  <div className={`${styles.message_time}`}>2:49 PM</div>
-                )}
-              </>
-            )}
+            <div className={styles.profileWrapper} onClick={openProfile}>
+              {/* <img/> */}
+              <BiSolidUser className={styles.profile} />
+            </div>
           </div>
           <div className={styles.message_rightSide}>
             <div className={styles.message_content}>
-              {showMessageHeader && (
-                <div className={styles.message_info}>
-                  <div className={styles.message_sender}>{message.sender}</div>
-                  <div className={styles.message_time}>2:49 PM</div>
+              <div className={styles.message_info}>
+                <div className={styles.message_sender} onClick={openProfile}>
+                  {sender.userName}
                 </div>
-              )}
-              <div className={styles.message_text}>{message.text}</div>
-            </div>
-            <div className={styles.reactions}>
-              <Reaction reactions={message.reactions} />
-              <div
-                className={styles.add_react}
-                onClick={openEmojies}
-                ref={add_react_ref}
-              >
-                <MdOutlineAddReaction />
+                <div className={styles.message_time}>{message_time}</div>
               </div>
+              <div className={styles.message_text}>{message.content}</div>
             </div>
-            {showMessageHeader && <MessageThreads />}
+            {message.reactions && (
+              <div className={styles.reactions}>
+                <Reaction reactions={message.reactions} />
+                <div
+                  className={styles.add_react}
+                  onClick={openEmojies}
+                  ref={add_react_ref}
+                >
+                  <MdOutlineAddReaction />
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <MessageActions messageHover={messageHover} />
