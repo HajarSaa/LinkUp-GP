@@ -6,7 +6,7 @@ import { FiEdit2, FiUserPlus } from "react-icons/fi";
 
 function EmptyState({ title }) {
   return (
-    <div className={styles.empty_state}>
+    <div className={styles.channel_intro}>
       <h2 className={styles.title}>{title}</h2>
       <p className={styles.description}>
         You created this channel on 22 March. This is the very beginning of the

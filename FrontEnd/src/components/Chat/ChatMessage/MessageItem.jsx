@@ -13,6 +13,7 @@ import MessageThreads from "./MessageThreads";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
 import { findMemberById } from "../../../utils/workspaceUtils";
 import { formatTimeTo12Hour } from "../../../utils/formatedDate";
+import UserImage from "../../UI/User/UserImage";
 
 const MessageItem = ({ message }) => {
   const [emoji, setEmoji] = useState("");
@@ -66,8 +67,7 @@ const MessageItem = ({ message }) => {
         <div className={styles.message}>
           <div className={styles.message_leftSide}>
             <div className={styles.profileWrapper} onClick={openProfile}>
-              {/* <img/> */}
-              <BiSolidUser className={styles.profile} />
+              <UserImage src={sender.photo} alt={sender.userName}/>
             </div>
           </div>
           <div className={styles.message_rightSide}>

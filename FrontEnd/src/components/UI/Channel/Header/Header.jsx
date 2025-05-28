@@ -1,9 +1,9 @@
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
 import { RiStickyNoteAddLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
-import { TbMessageCircleFilled } from "react-icons/tb";
+import {TbMessageFilled } from "react-icons/tb";
 import PropTypes from "prop-types";
 import ChannelOptionModal from "../../../UI/Modal/ChannelModals/ChannelOptionsModal/ChannelOptionModal";
 import { openMenu } from "../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
@@ -11,13 +11,15 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import ChannelDetailsModal from "../../Modal/ChannelModals/ChannelDetailsModal/ChannelDetailsModal";
 import NotificationsModal from "../../Modal/ChannelModals/NotifiactionModal/NotificationsModal";
 import ChannelType from "../ChannelType/ChannelType";
-import { BiSolidUser } from "react-icons/bi";
 import { FiChevronDown } from "react-icons/fi";
 import { MdHeadset } from "react-icons/md";
+import { getMembersData } from "../../../../utils/workspaceUtils";
+import UserImage from "../../User/UserImage";
 
 function Header({channel}) {
   const dispatch = useDispatch();
-  console.log(channel)
+  const {workspace} = useSelector((state)=> state.workspace)
+  const members = getMembersData(channel, workspace);
   if (!channel) return;
   return (
     <>
@@ -40,16 +42,13 @@ function Header({channel}) {
               }
             >
               <div className={styles.avatars}>
-                {channel.members.slice(0, 3).map((member, index) => (
+                {members.slice(0, 3).map((member, index) => (
                   <div
                     key={index}
                     className={styles.avatar}
                     style={{ zIndex: `${100 - index}` }}
                   >
-                    {/* <img src={member.avatar} alt={member.name} /> */}
-                    <div className={styles.avatar_icon}>
-                      <BiSolidUser />
-                    </div>
+                    <UserImage src={member.photo} alt={member.name} />
                   </div>
                 ))}
               </div>
@@ -80,16 +79,16 @@ function Header({channel}) {
         </div>
         <div className={`w-100 align-items-center ${styles.bottomPart}`}>
           <div className={`${styles.tab} ${styles.activeTab}`}>
-            <span className="align-items-center rotateY-180">
-              <TbMessageCircleFilled />
+            <span className="align-items-center">
+              <TbMessageFilled />
             </span>
-            <span>Messages</span>
+            <span className={styles.tab_text}>Messages</span>
           </div>
           <div className={styles.tab}>
             <span className="align-items-center">
               <RiStickyNoteAddLine />
             </span>
-            <span>Add canvas</span>
+            <span className={styles.tab_text}>Add canvas</span>
           </div>
           <span className={styles.plus}>
             <AiOutlinePlus />

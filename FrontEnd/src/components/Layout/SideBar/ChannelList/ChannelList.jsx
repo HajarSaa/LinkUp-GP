@@ -1,18 +1,19 @@
-/* eslint-disable no-unused-vars */
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import styles from "./ChannelList.module.css";
 import ChannelListItem from "./ChannelListItem";
 import AddButton from "../AddButton/AddButton.jsx";
 import { useParams } from "react-router-dom";
+import {getMyChannelsOnly} from "../../../../utils/workspaceUtils.js";
 
 function ChannelList() {
   const { workspace } = useSelector((state) => state.workspace);
   const { id } = useParams();
+  const myChannels = getMyChannelsOnly(workspace);
 
   return (
     <div>
       <div className={styles.list}>
-        {workspace.channels.map((channel, index) => (
+        {myChannels.map((channel, index) => (
           <ChannelListItem
             key={index}
             channelData={channel}
@@ -20,7 +21,7 @@ function ChannelList() {
           />
         ))}
       </div>
-      <AddButton type='channel' text='Add channels' />
+      <AddButton type="channel" text="Add channels" />
     </div>
   );
 }

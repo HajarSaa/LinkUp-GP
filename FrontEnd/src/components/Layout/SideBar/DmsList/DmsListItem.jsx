@@ -13,7 +13,7 @@ const DmsListItem = ({ dmData, isActive }) => {
   };
 
   const handleClick = () => {
-    navigate(`/dm/${dmData.conversationId}`);
+    navigate(`/conversations/${dmData.conversationId}`);
   };
 
   return (

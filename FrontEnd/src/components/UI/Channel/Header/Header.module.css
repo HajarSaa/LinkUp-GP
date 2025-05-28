@@ -55,20 +55,6 @@
     overflow: hidden;
 }
 
-.avatar>img,
-.avatar>.avatar_icon {
-    max-width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.avatar>.avatar_icon {
-    color: var(--active-color);
-    background-color: var(--secondary-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .memberCount {
     font-size: 14px;
@@ -184,4 +170,9 @@
 
 .activeTab {
     border-bottom: 2px solid var(--primary-color);
+}
+
+.tab_text{
+    font-size: 14px;
+    font-weight: bold;
 }

@@ -204,7 +204,7 @@
   user-select: none;
 }
 
-.chId .chId_icon{
+.chId .chId_icon {
   display: flex;
   align-items: center;
 
@@ -246,9 +246,6 @@
   background-color: #000;
 }
 
-.memberImg img {
-  max-width: 100%;
-}
 
 .memberName {
   display: flex;
@@ -401,7 +398,7 @@
   width: fit-content;
 }
 
-.loading_status{
+.loading_status {
   width: 100%;
   height: 100%;
   display: flex;

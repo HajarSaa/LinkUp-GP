@@ -35,8 +35,23 @@ export const findMemberById = (workspace, memberId) => {
   return workspace.members.find((member) => member._id === memberId) || null;
 };
 
+//===========(find member user login information )==========
+export const findMemberByUserId = (workspace) => {
+  if (!workspace) return null;
 
-export const getMyConversationsDetailed = (workspace) => {
+  let userId = null;
+  try {
+    const current_user = JSON.parse(localStorage.getItem("currentUser"));
+    userId = current_user?._id;
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+    return null;
+  }
+  return workspace.members.find((member) => member.user === userId) || null;
+};
+
+// ===========(Get My conversations)==========
+export const getMyConversations = (workspace) => {
   if (!workspace || !workspace.members || !workspace.conversations) return [];
 
   let userId = null;
@@ -82,4 +97,53 @@ export const getMyConversationsDetailed = (workspace) => {
     if (b.isSelfChat) return 1;
     return new Date(b.lastUpdated) - new Date(a.lastUpdated);
   });
+};
+
+// ============(Get My Channels)================
+export const getMyChannelsOnly = (workspace) => {
+  if (!workspace || !workspace.channels || !workspace.members) return [];
+
+  let userId = null;
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    userId = storedUser?._id;
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+    return [];
+  }
+
+  const myMember = workspace.members.find((member) => member.user === userId);
+  const myMemberId = myMember?._id;
+
+  if (!myMemberId) return [];
+
+  return workspace.channels.filter((channel) =>
+    channel.members.includes(myMemberId)
+  );
+};
+
+// ============(Get Channel Members)================
+export const getMembersData = (channel, workspace) => {
+  if (!channel || !workspace || !workspace.members) return [];
+
+  let userId = null;
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    userId = storedUser?._id;
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+    return [];
+  }
+
+  const memebersArray = channel.members.map((memberId) => {
+    const member = findMemberById(workspace, memberId);
+    return {
+      ...member,
+      isMe: member?.user === userId,
+    };
+  });
+
+  return memebersArray.sort((a, b) => (b.isMe === true) - (a.isMe === true));
 };

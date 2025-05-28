@@ -10,11 +10,15 @@ import {
   AiFillClockCircle,
 } from "react-icons/ai";
 import { IoIosMore } from "react-icons/io";
-import { FaPlus, FaUser } from "react-icons/fa6";
+import { FaPlus} from "react-icons/fa6";
 import UserMenu from "./UserMenu/UserMenu";
 import styles from "./Workbar.module.css";
 import { useSelector } from "react-redux";
-import {getWorkLabel} from '../../../utils/workspaceUtils'
+import {
+  findMemberByUserId,
+  getWorkLabel,
+} from "../../../utils/workspaceUtils";
+import UserImage from "../../UI/User/UserImage";
 
 function WorkBar() {
   const { workspace } = useSelector((state) => state.workspace);
@@ -22,6 +26,7 @@ function WorkBar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef(null);
   const work_label = getWorkLabel(workspace?.name || "workspace name");
+  const loggin_user = findMemberByUserId(workspace);
   const sidebarItems = [
     {
       label: "Home",
@@ -95,7 +100,7 @@ function WorkBar() {
             className={styles.profilePhotoPlaceholder}
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
-            <FaUser className={styles.photo} />
+            <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
           </div>
           <span className={styles.statusDot}></span>
 
