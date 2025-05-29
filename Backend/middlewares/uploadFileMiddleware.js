@@ -8,9 +8,10 @@ const uploader = () => {
     params: async (req, file) => {
       console.log("📂 File Received:", file.originalname);
 
+      const fileType = file.mimetype.split("/")[0];
       return {
         folder: "LinkUp",
-        resource_type: "raw",
+        resource_type: fileType === "image" ? "image" : "raw",
         format: file.mimetype.split("/")[1],
         public_id: `${Date.now()}-${file.originalname}`,
       };

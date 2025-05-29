@@ -21,11 +21,8 @@ export const uploadFile = catchAsync(async (req, res, next) => {
   // extract and validate data
   const userId = req.user.id;
   const { conversationId, channelId, parentId, parentType } = req.body;
-
-  // Validate IDs
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return next(new AppError("Invalid user ID", 400));
-  }
+  //const workspaceId = req.workspace._id;
+  const userProfile = req.userProfile;
 
   if (conversationId && !mongoose.Types.ObjectId.isValid(conversationId)) {
     return next(new AppError("Invalid conversation ID", 400));
@@ -53,7 +50,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         fileSize: file.size,
         fileType: file.mimetype,
         fileUrl: file.path,
-        uploadedBy: userId,
+        uploadedBy: userProfile._id,
         channelId: channelId || null,
         conversationId: conversationId || null,
         parentId: parentId || null,
@@ -64,10 +61,12 @@ export const uploadFile = catchAsync(async (req, res, next) => {
 
   // prepare Socket.IO data
   const formattedFiles = files.map((file) => ({
+    _id: file._id,
     url: file.fileUrl,
     originalname: file.fileName,
     mimetype: file.fileType,
     size: file.fileSize,
+    uploadedBy: userProfile._id,
   }));
 
   // handle Socket.IO emission
@@ -85,20 +84,19 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         file: formattedFiles[0],
         files: formattedFiles,
         senderId: userId,
+        senderProfile: {
+          _id: userProfile._id,
+          name: userProfile.userName,
+          avatar: userProfile.photo,
+        },
         timestamp: new Date().toISOString(),
         parentId: parentId || null,
         parentType: parentType || null,
       },
       (err) => {
-        if (err) {
-          console.error("Socket emission failed:", err);
-        } else {
-          console.log(`Emitted to ${fullRoomId}`);
-        }
+        if (err) console.error("Socket emission failed:", err);
       }
     );
-  } else {
-    console.warn(io ? "No room specified" : "Socket.IO not available");
   }
 
   res.status(200).json({
@@ -108,5 +106,62 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         ? "File uploaded successfully!"
         : `${files.length} files uploaded successfully!`,
     data: files.map(formatFile),
+  });
+});
+
+export const getAllFiles = catchAsync(async (req, res, next) => {
+  const { conversationId, channelId } = req.query;
+
+  if (!conversationId && !channelId) {
+    return next(
+      new AppError("Provide either conversationId or channelId", 400)
+    );
+  }
+
+  const filter = {};
+  if (conversationId) filter.conversationId = conversationId;
+  if (channelId) filter.channelId = channelId;
+
+  const files = await File.find(filter)
+    .sort({ createdAt: -1 })
+    .populate({
+      path: "uploadedBy",
+      select: "userName photo status",
+      populate: {
+        path: "user",
+        select: "email",
+      },
+    });
+
+  const formatted = files.map((file) => {
+    const uploader = file.uploadedBy;
+    const user = uploader?.user;
+
+    return {
+      _id: file._id,
+      fileName: file.fileName,
+      fileUrl: file.fileUrl,
+      fileSize: file.fileSize,
+      fileType: file.fileType,
+      createdAt: file.createdAt,
+      uploadedBy: uploader
+        ? {
+            _id: uploader._id,
+            name: uploader.userName,
+            email: user?.email,
+            avatar: uploader.photo,
+            status: uploader.status,
+            lastActive: uploader.lastActive,
+          }
+        : null,
+      parentId: file.parentId,
+      parentType: file.parentType,
+    };
+  });
+
+  res.status(200).json({
+    status: "success",
+    results: formatted.length,
+    data: formatted,
   });
 });

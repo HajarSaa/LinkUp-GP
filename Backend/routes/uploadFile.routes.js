@@ -9,20 +9,12 @@ import {
 } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+// router.use(simulateUserIfMissing); for testing purpose
 router.use(protect);
 router.use(protectAttchWorkspace);
 
 const upload = uploader();
 // 📌 Route: Upload File
-router.post(
-  "/upload",
-  simulateUserIfMissing,
-  upload.array("files"),
-  // (req, res, next) => {
-  //   console.log(req.files);
-  //   //next();
-  // },
-  uploadFile
-);
+router.post("/upload", upload.array("files"), uploadFile);
 
 export default router;

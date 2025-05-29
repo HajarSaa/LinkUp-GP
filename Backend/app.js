@@ -13,6 +13,7 @@ import searchRoutes from "./routes/search.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import userProfileRouter from "./routes/userProfile.routes.js";
 import uploadRouter from "./routes/uploadFile.routes.js";
+import fileRouter from "./routes/file.routes.js";
 
 // Error handling imports
 import AppError from "./utils/appError.js";
@@ -42,6 +43,7 @@ app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
 app.use("/api/v1/files", uploadRouter);
+app.use("/api/v1/files", fileRouter);
 app.use("/api/v1/search", searchRoutes);
 
 // 404 route handler middleware
