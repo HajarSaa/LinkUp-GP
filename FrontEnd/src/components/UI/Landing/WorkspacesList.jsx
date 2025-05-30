@@ -1,11 +1,11 @@
 import styles from "./Landing.module.css";
 import WorkspaceItem from "./WorkspaceItem";
-import useCurrentUser from "../../../API/hooks/useCurrentUser";
+import useGetMe from "../../../API/hooks/useGetMe";
 import Spinner from "../../../routes/Spinner/Spinner";
 import { CiFaceFrown } from "react-icons/ci";
 
 function WorkspacesList() {
-  const { user, workspaces, loading, error } = useCurrentUser();
+  const { user, workspaces, loading, error } = useGetMe();
 
   if (loading)
     return (

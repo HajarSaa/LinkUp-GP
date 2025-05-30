@@ -17,7 +17,7 @@ export const loginService = async (userData) => {
   return response.data;
 };
 
-export const getMeService = async (signal) => {
+export const getMe = async (signal) => {
   const { data } = await axiosInstance.get("/users/me", { signal });
-  return data;
+  return data.data;
 };

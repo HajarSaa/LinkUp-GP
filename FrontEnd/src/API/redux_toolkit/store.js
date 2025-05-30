@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore} from "@reduxjs/toolkit";
 
 import chatPanelReducer from "./ui/chatPanel";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
@@ -16,9 +16,11 @@ import channelReducer from "./api_data/channelSlice";
 import conversReducer from "./api_data/conversSlice";
 import resizingReducer from './ui/resizeSlice'
 import modalsReducer from './modals/modalsSlice';
+import userReducer from './api_data/userSlice'
 
 const store = configureStore({
   reducer: {
+    currentUser : userReducer,
     resizing: resizingReducer,
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,

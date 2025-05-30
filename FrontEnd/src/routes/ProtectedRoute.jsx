@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
 import PropTypes from "prop-types";
-import useCurrentUser from "../API/hooks/useCurrentUser";
+import useGetMe from "../API/hooks/useGetMe";
 import ProtectedLoading from "./ProtectedLoading/ProtectedLoading";
 
 function ProtectedRoute() {
   const { isAuthenticated, loading, error } =
-    useCurrentUser();
+    useGetMe();
 
 
   if (error) console.log(error);
