@@ -19,6 +19,7 @@ import Step1 from "./pages/dashboard/CreateWorkspace/Step1";
 import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
 import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 import ProtectedLoading from "./routes/ProtectedLoading/ProtectedLoading";
+import Testing from "../Testing/Code/Testing";
 
 function App() {
   const [workspace, setWorkspace] = useState(null);
@@ -54,11 +55,14 @@ function App() {
         <Route path="/loading" element={<ProtectedLoading />} />
 
         <Route element={<ProtectedRoute />}>
+
           <Route path="/workspaces-landing" element={<Landing />} />
+
           <Route path="/" element={<MainLayout />}>
             <Route path="conversations/:id" element={<DmPage />} />
             <Route path="channels/:id" element={<ChannelPage />} />
             <Route path="browse-channels" element={<BrowseChannels />} />
+            <Route path="testing" element={<Testing />} />
           </Route>
 
           {/* Create Workspace Flow */}
