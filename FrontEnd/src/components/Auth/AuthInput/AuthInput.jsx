@@ -8,20 +8,12 @@ const AuthInput = ({ label, name, value, onChange, type = "text", error }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const status = error ? "error" : "";
-  const shouldFloat = isFocused || value;
-
+  const shouldFloat = isFocused || value.length > 0;
   const isPassword = type === "password";
 
   return (
     <div className={styles.auth_input}>
       <div className={styles.input_container}>
-        <label
-          className={`${styles.input_label} ${shouldFloat ? styles.floating : ""}`}
-          htmlFor={name}
-        >
-          {label}
-        </label>
-
         <input
           id={name}
           type={isPassword && showPassword ? "text" : type}
@@ -33,6 +25,15 @@ const AuthInput = ({ label, name, value, onChange, type = "text", error }) => {
           autoComplete="on"
           className={`${styles.input} ${status && styles[status]}`}
         />
+
+        <label
+          className={`${styles.input_label} ${
+            shouldFloat ? styles.floating : ""
+          }`}
+          htmlFor={name}
+        >
+          {label}
+        </label>
 
         {isPassword && (
           <div className={styles.eyeBox}>
