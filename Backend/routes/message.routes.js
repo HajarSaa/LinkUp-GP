@@ -5,6 +5,9 @@ import {
   createMessage,
   updateMessage,
   deleteMessage,
+  getChannelMessages,
+  getConversationMessages,
+  getThread,
 } from "../controllers/message.controller.js";
 import {
   protect,
@@ -18,8 +21,11 @@ router.use(protectAttchWorkspace);
 
 router
   .get("/", getAllMessages)
-  .post("/", createMessage)
+  .get("/channelMessages/:id", getChannelMessages)
+  .get("/conversationMessages/:id", getConversationMessages)
+  .get("/thread/:id", getThread)
   .get("/:id", getMessage)
+  .post("/", createMessage)
   .patch("/:id", updateMessage)
   .delete("/:id", deleteMessage);
 

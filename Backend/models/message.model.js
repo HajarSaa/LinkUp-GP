@@ -15,12 +15,6 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: "Channel",
       default: null,
-      // validate: {
-      //   validator: function () {
-      //     return !(this.channelId === null && this.conversationId === null);
-      //   },
-      //   message: "Either channelId or conversationId is required",
-      // },
     },
     conversationId: {
       type: mongoose.Schema.ObjectId,
@@ -32,6 +26,17 @@ const messageSchema = new mongoose.Schema(
       refPath: "parentType",
       default: null,
     },
+    threadCount: {
+      type: Number,
+      default: 0,
+    },
+    threadParticipants: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "UserProfile",
+        default: [],
+      },
+    ],
     parentType: {
       type: String,
       enum: ["Message", "File"],

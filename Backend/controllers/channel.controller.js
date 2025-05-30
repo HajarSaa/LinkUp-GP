@@ -1,4 +1,5 @@
 import Channel from "../models/channel.model.js";
+import Message from "../models/message.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
@@ -25,19 +26,7 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
 export const getChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
-  // Apply pagination to the "messages" field
-  const page = req.query.page * 1 || 1; // Default to page 1
-  const limit = req.query.limit * 1 || 10; // Default to 10 messages per page
-  const skip = (page - 1) * limit;
-
-  // Populate the "messages" field with pagination
-  const channel = await Channel.findById(channelId).populate({
-    path: "messages",
-    options: {
-      skip,
-      limit,
-    },
-  });
+  const channel = await Channel.findById(channelId);
 
   // Check if the channel exists
   if (!channel) {
