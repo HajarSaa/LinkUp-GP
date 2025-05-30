@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import File from "../models/file.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
+import { cloudinary } from "../config/cloudinary.js";
 
 const formatFile = (file) => ({
   _id: file._id,
@@ -50,6 +51,12 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         fileSize: file.size,
         fileType: file.mimetype,
         fileUrl: file.path,
+        cloudinaryId: file.filename,
+        cloudinaryResourceType: file.mimetype.startsWith("image/")
+          ? "image"
+          : file.mimetype.startsWith("video/")
+          ? "video"
+          : "raw",
         uploadedBy: userProfile._id,
         channelId: channelId || null,
         conversationId: conversationId || null,
@@ -163,5 +170,47 @@ export const getAllFiles = catchAsync(async (req, res, next) => {
     status: "success",
     results: formatted.length,
     data: formatted,
+  });
+});
+
+export const deleteFile = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const userProfile = req.userProfile;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return next(new AppError("Invalid file ID", 400));
+  }
+
+  const file = await File.findById(id);
+  if (!file) {
+    return next(new AppError("File not found", 404));
+  }
+
+  if (!file.uploadedBy.equals(userProfile._id)) {
+    return next(
+      new AppError("You are not authorized to delete this file", 403)
+    );
+  }
+
+  // remove from cloudinary using stored metadata
+  if (file.cloudinaryId && file.cloudinaryResourceType) {
+    console.log(" Deleting from Cloudinary:", {
+      publicId: file.cloudinaryId,
+      resourceType: file.cloudinaryResourceType,
+    });
+
+    const result = await cloudinary.uploader.destroy(file.cloudinaryId, {
+      resource_type: file.cloudinaryResourceType,
+    });
+
+    console.log("Cloudinary delete result:", result);
+  }
+
+  // remove from MongoDB
+  await file.deleteOne();
+
+  res.status(200).json({
+    status: "success",
+    message: "File deleted successfully",
   });
 });

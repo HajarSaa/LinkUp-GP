@@ -1,6 +1,7 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { cloudinary } from "../config/cloudinary.js";
+import path from "path";
 
 const uploader = () => {
   const storage = new CloudinaryStorage({
@@ -8,12 +9,24 @@ const uploader = () => {
     params: async (req, file) => {
       console.log("📂 File Received:", file.originalname);
 
-      const fileType = file.mimetype.split("/")[0];
+      const ext = path.extname(file.originalname);
+      const baseName = path.basename(file.originalname, ext);
+      const timestamp = Date.now();
+      const finalName = `${timestamp}-${baseName}`;
+
+      const mimeTopLevel = file.mimetype.split("/")[0];
+      const resourceType =
+        mimeTopLevel === "image"
+          ? "image"
+          : mimeTopLevel === "video"
+          ? "video"
+          : "raw";
+
       return {
         folder: "LinkUp",
-        resource_type: fileType === "image" ? "image" : "raw",
-        format: file.mimetype.split("/")[1],
-        public_id: `${Date.now()}-${file.originalname}`,
+        resource_type: resourceType,
+        public_id: finalName,
+        format: ext.slice(1),
       };
     },
   });

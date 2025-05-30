@@ -15,6 +15,16 @@ const fileSchema = new mongoose.Schema(
       type: String,
       required: true, // Cloudinary URL
     },
+    // cloudinary fields
+    cloudinaryId: {
+      type: String,
+      required: true,
+    },
+    cloudinaryResourceType: {
+      type: String,
+      enum: ["image", "video", "raw"],
+      required: true,
+    },
     uploadedBy: {
       type: mongoose.Schema.ObjectId,
       ref: "UserProfile",
