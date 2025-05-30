@@ -4,6 +4,14 @@ import AppError from "../utils/appError.js";
 import { createSendTokenCookie } from "../utils/jwt.js";
 
 export const signup = catchAsync(async (req, res, next) => {
+  // Check if the email already exists
+  const existingUser = await User.find({ email: req.body.email });
+
+  // If user exists, return an error
+  if (existingUser.length > 0) {
+    return next(new AppError("Email already exists", 400));
+  }
+
   // Create a new user
   const newUser = await User.create({
     name: req.body.name,
