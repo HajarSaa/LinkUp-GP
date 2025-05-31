@@ -5,7 +5,7 @@ import styles from "./Landing.module.css";
 import WorkspaceItem from "./WorkspaceItem";
 
 function WorkspacesList() {
-  const { data, isLoading, error, isError ,isFetching} = useGetMe();
+  const { data, error, isError ,isFetching} = useGetMe();
 
   if (isFetching)
     return (

@@ -1,25 +1,12 @@
 import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 const API_BASE_URL = "https://link-up-beige.vercel.app/api/v1";
 
 export const getChannelData = async (channel_id) => {
-  try {
-    const axios_response = await axios.get(
-      `${API_BASE_URL}/channels/${channel_id}?page=1&limit=20`,
-      {
-        withCredentials: true,
-      }
-    );
-
-    const response = axios_response.data;
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching channel:", error.response.data);
-    return null;
-  }
+  const {data} = await axiosInstance.get(`/channels/${channel_id}`);
+  return data.data;
 };
-
-
 
 export const leaveThisChannel = async (channel_id) => {
   return axios.post(
@@ -28,4 +15,3 @@ export const leaveThisChannel = async (channel_id) => {
     { withCredentials: true }
   );
 };
-

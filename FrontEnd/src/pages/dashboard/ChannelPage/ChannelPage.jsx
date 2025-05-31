@@ -2,15 +2,15 @@ import MessageInput from "../../../components/UI/InputField/MessageInput/Message
 import Header from "../../../components/UI/Channel/Header/Header";
 import ChannelBody from "../../../components/UI/Channel/ChannelBody/ChannelBody";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
-import useCurrentChannel from "../../../API/hooks/useCurrentChannel";
 import { useParams } from "react-router-dom";
 import styles from "../dashboard.module.css";
 import Spinner from "../../../routes/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
+import useGetChannel from "../../../API/hooks/useGetChannel";
 
 function ChannelPage() {
   const { id: channel_id } = useParams();
-  const { loading, error , channel } = useCurrentChannel(channel_id);
+  const { channel, loading, error } = useGetChannel(channel_id);
 
   if (loading)
     return (
