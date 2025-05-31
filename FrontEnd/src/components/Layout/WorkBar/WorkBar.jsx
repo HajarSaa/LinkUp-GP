@@ -94,7 +94,6 @@ function WorkBar() {
         <div className={styles.iconButton}>
           <FaPlus />
         </div>
-
         <div className={styles.profileWrapper} ref={menuRef}>
           <div
             className={styles.profilePhotoPlaceholder}
