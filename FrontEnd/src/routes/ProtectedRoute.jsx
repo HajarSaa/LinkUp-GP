@@ -29,7 +29,7 @@ function ProtectedRoute() {
 
   if (isLoading) return <ProtectedLoading />;
 
-  if (error) console.log(error);
+  if (error) console.log(error.message);
 
   if (!data?.user) {
     console.log("User not authenticated, redirecting to login...");

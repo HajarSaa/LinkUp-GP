@@ -1,10 +1,14 @@
 import { useEffect } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getWorkspace } from "../services/workspaceService";
 import { setWorkspace } from "../redux_toolkit/api_data/workspaceSlice";
-import { disableResizing, enableResizing } from "../redux_toolkit/ui/resizeSlice";
+import {
+  disableResizing,
+  enableResizing,
+} from "../redux_toolkit/ui/resizeSlice";
 
 const useCurrentWorkspace = () => {
   const dispatch = useDispatch();
@@ -29,6 +33,15 @@ const useCurrentWorkspace = () => {
   // Handle error
   useEffect(() => {
     if (query.isError) {
+      if (axios.isAxiosError(query.error)) {
+        const status = query.error?.response?.status;
+
+        if (status === 401) {
+          navigate("/login");
+          return;
+        }
+      }
+
       console.error("Error fetching workspace:", query.error);
       navigate("/workspaces-landing");
     }
@@ -43,7 +56,7 @@ const useCurrentWorkspace = () => {
     }
   }, [query.isLoading, dispatch]);
 
-  return query
+  return query;
 };
 
 export default useCurrentWorkspace;
