@@ -4,7 +4,6 @@ import styles from "./Header.module.css";
 import { RiStickyNoteAddLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import {TbMessageFilled } from "react-icons/tb";
-import PropTypes from "prop-types";
 import ChannelOptionModal from "../../../UI/Modal/ChannelModals/ChannelOptionsModal/ChannelOptionModal";
 import { openMenu } from "../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -16,9 +15,10 @@ import { MdHeadset } from "react-icons/md";
 import { getMembersData } from "../../../../utils/workspaceUtils";
 import UserImage from "../../User/UserImage";
 
-function Header({channel}) {
+function Header() {
   const dispatch = useDispatch();
-  const {workspace} = useSelector((state)=> state.workspace)
+  const { workspace } = useSelector((state) => state.workspace)
+  const channel = useSelector((state) => state.channel.channel);
   const members = getMembersData(channel, workspace);
   if (!channel) return;
   return (
@@ -101,10 +101,5 @@ function Header({channel}) {
   );
 }
 
-Header.propTypes = {
-  channel: PropTypes.object,
-  user: PropTypes.object,
-  actionFun: PropTypes.func,
-};
 
 export default Header;

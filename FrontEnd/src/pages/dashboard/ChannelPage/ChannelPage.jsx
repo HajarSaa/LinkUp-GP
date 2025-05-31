@@ -7,11 +7,12 @@ import styles from "../dashboard.module.css";
 import Spinner from "../../../routes/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
 import useGetChannel from "../../../API/hooks/useGetChannel";
+import { useSelector } from "react-redux";
 
 function ChannelPage() {
   const { id: channel_id } = useParams();
-  const { data, isLoading,isError, error } = useGetChannel(channel_id);
-  const channel = data?.channel
+  const {isLoading,isError, error } = useGetChannel(channel_id);
+  const channel = useSelector((state) => state.channel.channel);
 
   if (isLoading)
     return (
