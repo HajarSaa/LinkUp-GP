@@ -1,62 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./AuthForm.module.css";
 import AuthInput from "../AuthInput/AuthInput";
-import { loginService } from "../../../API/services/authService";
-import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../../../routes/Spinner/Spinner";
+import useLogin from "../../../API/hooks/useLogin";
+import { validateLoginForm } from "../../../utils/validation";
 
 function LoginForm() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const navigateTo = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const [apiError, setApiError] = useState(null);
+
+  const loginMutation = useLogin();
+
+  useEffect(() => {
+    console.log("loginMutation:", loginMutation);
+  }, [loginMutation]);
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: value.trim(),
     }));
   };
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validate = () => {
-    const newErrors = {};
-
-    if (!isValidEmail(formData.email)) {
-      newErrors.email = "Invalid Email. please provide a valide email";
-    }
-
-    if (formData.password.length < 8) {
-      newErrors.password = "password must be at least 8 characters";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return;
-    try {
-      setLoading(true);
-      await loginService(formData);
-      setApiError(null);
-      navigateTo("/workspaces-landing");
-    } catch (err) {
-      setLoading(false);
-      setApiError(err.response?.data?.message || "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
+
+    const validationErrors = validateLoginForm(formData);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
+    loginMutation.mutate(formData);
   };
 
   return (
@@ -77,14 +51,25 @@ function LoginForm() {
         onChange={handleChange}
         error={errors.password}
       />
-      <button className={styles.authBtn} type="submit">
-        {loading ? (
-          <Spinner secondaryColor="#0000ff54" color="#ccc" />
+      <button
+        className={styles.authBtn}
+        type="submit"
+        disabled={loginMutation.isPending}
+      >
+        {loginMutation.isPending ? (
+          <Spinner secondaryColor="#4A90E2" color="#E6F0FA" />
         ) : (
-          "Login in "
+          "Login"
         )}
       </button>
-      {apiError && <ErrorMessage message={apiError} />}
+      {loginMutation.isError && (
+        <ErrorMessage
+          message={
+            loginMutation.error.response?.data?.message ||
+            "Something went wrong."
+          }
+        />
+      )}
     </form>
   );
 }

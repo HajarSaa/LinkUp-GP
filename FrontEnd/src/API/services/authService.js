@@ -11,10 +11,9 @@ export const signupService = async (userData) => {
 };
 
 export const loginService = async (userData) => {
-  const response = await axios.post(`${API_BASE_URL}/auth/login`, userData, {
-    withCredentials: true,
-  });
-  return response.data;
+  const {data} = await axiosInstance.post("/auth/login", userData);
+  console.log(data.data);
+  return data.data;
 };
 
 export const getMe = async (signal) => {
