@@ -4,7 +4,15 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
-const AuthInput = ({ label, name, value, onChange, type = "text", error }) => {
+const AuthInput = ({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  error,
+  autoComplete = 'on',
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const status = error ? "error" : "";
@@ -22,7 +30,7 @@ const AuthInput = ({ label, name, value, onChange, type = "text", error }) => {
           onChange={(e) => onChange(name, e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          autoComplete="on"
+          autoComplete={autoComplete}
           className={`${styles.input} ${status && styles[status]}`}
         />
 
@@ -59,6 +67,7 @@ AuthInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
   error: PropTypes.string,
+  autoComplete : PropTypes.string
 };
 
 export default AuthInput;

@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./AuthForm.module.css";
 import AuthInput from "../AuthInput/AuthInput";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../../../routes/Spinner/Spinner";
 import useLogin from "../../../API/hooks/useLogin";
 import { validateLoginForm } from "../../../utils/validation";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+  const navigateTo = useNavigate();
 
   const loginMutation = useLogin();
-
-  useEffect(() => {
-    console.log("loginMutation:", loginMutation);
-  }, [loginMutation]);
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
@@ -23,18 +22,29 @@ function LoginForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validateLoginForm(formData);
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
 
-    loginMutation.mutate(formData);
+    setMessage("");
+
+    loginMutation.mutate(formData, {
+      onSuccess: () => {
+        navigateTo("/workspaces-landing");
+      },
+      onError: (error) => {
+        setMessage(
+          error?.response?.data?.message || "Login failed, please try again."
+        );
+      },
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} autoComplete="off">
       <AuthInput
         type="text"
         label="Email"
@@ -62,14 +72,7 @@ function LoginForm() {
           "Login"
         )}
       </button>
-      {loginMutation.isError && (
-        <ErrorMessage
-          message={
-            loginMutation.error.response?.data?.message ||
-            "Something went wrong."
-          }
-        />
-      )}
+      {message && <ErrorMessage message={message} />}
     </form>
   );
 }

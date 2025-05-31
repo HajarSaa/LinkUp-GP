@@ -1,12 +1,13 @@
 import { useState } from "react";
 import AuthInput from "../AuthInput/AuthInput";
 import styles from "./AuthForm.module.css";
-import { signupService } from "../../../API/services/authService";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import Spinner from '../../../routes/Spinner/Spinner'
+import Spinner from "../../../routes/Spinner/Spinner";
+import { validateSignupForm } from "../../../utils/validation";
+import useSignup from "../../../API/hooks/useSignup"; // ✅
 
-function RegisterForm() {
+function SignupForm() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,9 +15,10 @@ function RegisterForm() {
   });
 
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigateTo = useNavigate();
+
+  const signupMutation = useSignup(); // ✅
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({
@@ -25,49 +27,28 @@ function RegisterForm() {
     }));
   };
 
-  const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validate = () => {
-    const newErrors = {};
-
-    if (!isValidEmail(formData.email)) {
-      newErrors.email = "Invalid Email. please provide a valide email";
-    }
-
-    if (formData.password.length < 8) {
-      newErrors.password = "password must be at least 8 characters";
-    }
-
-    if (formData.password !== formData.passwordConfirm) {
-      newErrors.passwordConfirm = "The passwords do not match.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return;
 
-    try {
-      setLoading(true);
-      setMessage("");
-      await signupService(formData);
-      navigateTo("/create-workspace/step-1");
-    } catch (err) {
-      setMessage(err?.response?.data?.message || "Signup failed.");
-    } finally {
-      setLoading(false);
-    }
+    const validationErrors = validateSignupForm(formData);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
+    setMessage("");
+
+    signupMutation.mutate(formData, {
+      onSuccess: () => {
+        navigateTo("/create-workspace/step-1");
+      },
+      onError: (err) => {
+        setMessage(err?.response?.data?.message || "Signup failed.");
+      },
+    });
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="off">
         <AuthInput
           type="text"
           label="Email"
@@ -75,6 +56,7 @@ function RegisterForm() {
           value={formData.email}
           onChange={handleChange}
           error={errors.email}
+          autoComplete="off"
         />
         <AuthInput
           type="password"
@@ -83,6 +65,7 @@ function RegisterForm() {
           value={formData.password}
           onChange={handleChange}
           error={errors.password}
+          autoComplete="new-password"
         />
         <AuthInput
           type="password"
@@ -92,10 +75,15 @@ function RegisterForm() {
           value={formData.passwordConfirm}
           onChange={handleChange}
           error={errors.passwordConfirm}
+          autoComplete="new-password"
         />
-        <button className={styles.authBtn} type="submit" disabled={loading}>
-          {loading ? (
-            <Spinner secondaryColor="#0000ff54" color="#ccc" />
+        <button
+          className={styles.authBtn}
+          type="submit"
+          disabled={signupMutation.isLoading}
+        >
+          {signupMutation.isPending ? (
+            <Spinner secondaryColor="#4A90E2" color="#E6F0FA" />
           ) : (
             "Sign Up"
           )}
@@ -106,4 +94,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default SignupForm;

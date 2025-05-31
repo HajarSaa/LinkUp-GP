@@ -18,4 +18,21 @@ export const validateLoginForm = (formData) => {
   return errors;
 };
 
-// ==================(validation)===============
+// ==================(Signup validation)===============
+export const validateSignupForm = (formData) => {
+  const newErrors = {};
+
+  if (!isValidEmail(formData.email)) {
+    newErrors.email = "Invalid Email. please provide a valid email";
+  }
+
+  if (formData.password.length < 8) {
+    newErrors.password = "Password must be at least 8 characters";
+  }
+
+  if (formData.password !== formData.passwordConfirm) {
+    newErrors.passwordConfirm = "The passwords do not match.";
+  }
+
+  return newErrors;
+};

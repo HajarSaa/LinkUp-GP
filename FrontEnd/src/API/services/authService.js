@@ -1,18 +1,12 @@
-import axios from "axios";
-import axiosInstance from './axiosInstance'
-
-const API_BASE_URL = "https://link-up-beige.vercel.app/api/v1";
+import axiosInstance from "./axiosInstance";
 
 export const signupService = async (userData) => {
-  const response = await axios.post(`${API_BASE_URL}/auth/signup`, userData, {
-    withCredentials: true,
-  });
-  return response.data;
+  const { data } = await axiosInstance.post("/auth/signup", userData);
+  return data.data;
 };
 
 export const loginService = async (userData) => {
-  const {data} = await axiosInstance.post("/auth/login", userData);
-  console.log(data.data);
+  const { data } = await axiosInstance.post("/auth/login", userData);
   return data.data;
 };
 
