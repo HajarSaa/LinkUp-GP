@@ -10,9 +10,10 @@ import useGetChannel from "../../../API/hooks/useGetChannel";
 
 function ChannelPage() {
   const { id: channel_id } = useParams();
-  const { channel, loading, error } = useGetChannel(channel_id);
+  const { data, isLoading,isError, error } = useGetChannel(channel_id);
+  const channel = data?.channel
 
-  if (loading)
+  if (isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -23,20 +24,19 @@ function ChannelPage() {
         />
       </div>
     );
-  if (error)
+  if (isError)
     return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
 
-  if(!loading)
-  return (
-    <PageContent>
-      <div className={styles.page_content}>
-        <Header channel={channel} />
-        <ChannelBody channel={channel} />
-        <MessageInput channelName={channel?.name} />
-      </div>
-      <Panel />
-    </PageContent>
-  );
+    return (
+      <PageContent>
+        <div className={styles.page_content}>
+          <Header channel={channel} />
+          <ChannelBody channel={channel} />
+          <MessageInput channelName={channel?.name} />
+        </div>
+        <Panel />
+      </PageContent>
+    );
 }
 
 export default ChannelPage;
