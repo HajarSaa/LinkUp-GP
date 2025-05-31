@@ -7,14 +7,25 @@ import styles from "../dashboard.module.css";
 import Spinner from "../../../routes/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
 import useGetChannel from "../../../API/hooks/useGetChannel";
+import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { useSelector } from "react-redux";
 
 function ChannelPage() {
   const { id: channel_id } = useParams();
-  const {isLoading,isError, error } = useGetChannel(channel_id);
+  const {
+    isLoading: channel_loading,
+    isError: channel_error,
+    ch_error,
+  } = useGetChannel(channel_id);
+  const {
+    isLoading: messages_loading,
+    isError: channel_ms_error,
+    ch_ms_error,
+  } = useGetChannelMessages(channel_id);
+
   const channel = useSelector((state) => state.channel.channel);
 
-  if (isLoading)
+  if (channel_loading || messages_loading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -25,19 +36,23 @@ function ChannelPage() {
         />
       </div>
     );
-  if (isError)
-    return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
-
+  if (channel_error)
+    return <div className={`${styles.status} ${styles.error}`}>{ch_error}</div>;
+  if (channel_ms_error)
     return (
-      <PageContent>
-        <div className={styles.page_content}>
-          <Header channel={channel} />
-          <ChannelBody channel={channel} />
-          <MessageInput channelName={channel?.name} />
-        </div>
-        <Panel />
-      </PageContent>
+      <div className={`${styles.status} ${styles.error}`}>{ch_ms_error}</div>
     );
+
+  return (
+    <PageContent>
+      <div className={styles.page_content}>
+        <Header />
+        <ChannelBody/>
+        <MessageInput channelName={channel?.name} />
+      </div>
+      <Panel />
+    </PageContent>
+  );
 }
 
 export default ChannelPage;

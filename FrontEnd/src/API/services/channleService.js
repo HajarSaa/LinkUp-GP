@@ -15,3 +15,21 @@ export const leaveThisChannel = async (channel_id) => {
     { withCredentials: true }
   );
 };
+
+
+// ==============( get channel messages)===
+export const getChannelMessages = async ({
+  channel_id,
+  pageParam = 1,
+  limit = 20,
+}) => {
+  const { data } = await axiosInstance.get(
+    `/messages/channelMessages/${channel_id}?limit=${limit}&page=${pageParam}`
+  );
+  return {
+    data: data.data,
+    currentPage: pageParam,
+    hasNextPage: data.data.length === limit,
+  };
+};
+
