@@ -60,15 +60,12 @@ function ChatMessage({ containerRef }) {
       {isFetchingNextPage && (
         <div className={styles.loading}>Loading History ...</div>
       )}
-      {messages
-        ?.slice(0)
-        .reverse()
-        .map((message) => (
-          <React.Fragment key={message._id}>
-            {/* <DateDivider date={message.createdAt} /> */}
-            <MessageItem message={message} />
-          </React.Fragment>
-        ))}
+      {messages?.slice(0).reverse().map((message) => (
+        <React.Fragment key={message._id}>
+          {/* <DateDivider date={message.createdAt} /> */}
+          <MessageItem message={message} />
+        </React.Fragment>
+      ))}
       <div ref={messagesEndRef} />
     </div>
   );
