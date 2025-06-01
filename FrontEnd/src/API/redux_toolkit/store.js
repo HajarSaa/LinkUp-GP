@@ -27,7 +27,7 @@ const store = configureStore({
     workspace: workspaceReducer,
     // channel
     channel: channelReducer,
-    channel_message: channel_messages_reducer,
+    channel_messages: channel_messages_reducer,
     // convers
     convers: conversReducer,
 

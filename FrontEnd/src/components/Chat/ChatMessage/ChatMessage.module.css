@@ -275,3 +275,13 @@
 }
 
 /*End thread Part */
+
+.loading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  color: var(--text-color-grey);
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { leaveThisChannel } from "../services/channleService";
+import { leaveThisChannel } from "../services/channelService";
 
 const useLeaveChannel = () => {
   const [loading, setLoading] = useState(false);
