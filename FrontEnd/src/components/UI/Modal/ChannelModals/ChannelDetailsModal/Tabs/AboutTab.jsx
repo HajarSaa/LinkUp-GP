@@ -16,6 +16,8 @@ import useLeaveChannel from "../../../../../../API/hooks/useLeaveChannel";
 import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import { isChannelOwner } from "../../../../../../utils/channelUtils";
+import InfoIcon from "../../../../Icons/InforIcon/InfoIcon";
 
 function AboutTab({ channelData }) {
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ function AboutTab({ channelData }) {
   const createdBy = findMemberById(workspace, channelData?.createdBy);
   const createdAt = formatDateToLong(channelData?.createdAt);
   const [tooltipText, setTooltipText] = useState("Copy channel Id");
+  const isOwner = isChannelOwner(channelData, workspace);
 
   const handleLeaveChannel = () => {
     leaveChannel(channelData.id);
@@ -48,102 +51,117 @@ function AboutTab({ channelData }) {
     }
   }, [success, dispatch]);
 
-  if (activeTab !== "about") return null
-    return (
-      <div className={styles.editContent}>
-        <div
-          className={styles.infoRow}
-          onClick={() => dispatch(openRenameModal())}
-        >
-          <div className={styles.infoTopic}>
-            <div className={styles.top}>
-              <span className={styles.infoTitle}>Channel name</span>
+  function rename_channel() {
+    if (isOwner) {
+      dispatch(openRenameModal());
+    }
+  }
+  function edit_topic() {
+    if (isOwner) {
+      dispatch(openEditTopicModal());
+    }
+  }
+  function edit_dicription() {
+    if (isOwner) {
+      dispatch(openDescribtionModal());
+    }
+  }
+
+  if (activeTab !== "about") return null;
+  return (
+    <div className={styles.editContent}>
+      <div className={styles.infoRow} onClick={rename_channel}>
+        <div className={styles.infoTopic}>
+          <div className={styles.top}>
+            <span className={styles.infoTitle}>Channel name</span>
+            {isOwner ? (
               <span className={styles.infoEdit}>Edit</span>
-            </div>
-            <div className={styles.bottom}>
-              <div className="align-items-center gap-3">
-                <ChannelType type={channelData.type} />
-                <span>{channelData.name}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.infoRow}>
-          <div
-            className={styles.infoTopic}
-            onClick={() => dispatch(openEditTopicModal())}
-          >
-            <div className={styles.top}>
-              <div className={styles.infoTitle}>Topic</div>
-              <span className={styles.infoEdit}>Edit</span>
-            </div>
-            <div className={styles.bottom}>
-              <p>Add a topic</p>
-            </div>
-          </div>
-          <div
-            className={styles.infoTopic}
-            onClick={() => dispatch(openDescribtionModal())}
-          >
-            <div className={styles.top}>
-              <span className={styles.infoTitle}>Description</span>
-              <span className={styles.infoEdit}>Edit</span>
-            </div>
-            <div className={styles.bottom}>
-              <p>Add a description</p>
-            </div>
-          </div>
-          <div className={styles.infoTopic}>
-            <div className={styles.bottom}>
-              <span className={styles.infoTitle}>Created by</span>
-              <p>
-                {createdBy?.userName} on {createdAt}
-              </p>
-            </div>
-          </div>
-          <div
-            className={`${styles.infoTopic} ${styles.leaveItem}`}
-            onClick={handleLeaveChannel}
-          >
-            {!error ? (
-              <>
-                {loading ? (
-                  <div className={styles.loading_status}>
-                    <Spinner
-                      width={20}
-                      height={20}
-                      color="var(--error-color)"
-                    />
-                  </div>
-                ) : (
-                  <span>Leave channel</span>
-                )}
-              </>
             ) : (
-              <span>{error.message}</span>
+              <InfoIcon id="edit_ch_name" text="only owners can edit" />
             )}
           </div>
-        </div>
-        <div className={styles.chId}>
-          <span>Channel ID : {channelData.id}</span>
-          <span
-            className={styles.chId_icon}
-            onClick={handleCopy}
-            data-tooltip-id="copy-tooltip"
-            data-tooltip-content={tooltipText}
-          >
-            <BsCopy />
-          </span>
-          <Tooltip
-            id="copy-tooltip"
-            place="top"
-            className={`custom-tooltip ${
-              tooltipText === "Copied" ? "tooltip-success" : ""
-            }`}
-          />
+          <div className={styles.bottom}>
+            <div className="align-items-center gap-3">
+              <ChannelType type={channelData.type} />
+              <span>{channelData.name}</span>
+            </div>
+          </div>
         </div>
       </div>
-    );
+      <div className={styles.infoRow}>
+        <div className={styles.infoTopic} onClick={edit_topic}>
+          <div className={styles.top}>
+            <div className={styles.infoTitle}>Topic</div>
+            {isOwner ? (
+              <span className={styles.infoEdit}>Edit</span>
+            ) : (
+              <InfoIcon id="edit_ch_name" text="only owners can edit" />
+            )}
+          </div>
+          <div className={styles.bottom}>
+            <p>Add a topic</p>
+          </div>
+        </div>
+        <div className={styles.infoTopic} onClick={edit_dicription}>
+          <div className={styles.top}>
+            <span className={styles.infoTitle}>Description</span>
+            {isOwner ? (
+              <span className={styles.infoEdit}>Edit</span>
+            ) : (
+              <InfoIcon id="edit_ch_name" text="only owners can edit" />
+            )}
+          </div>
+          <div className={styles.bottom}>
+            <p>Add a description</p>
+          </div>
+        </div>
+        <div className={styles.infoTopic}>
+          <div className={styles.bottom}>
+            <span className={styles.infoTitle}>Created by</span>
+            <p>
+              {createdBy?.userName} on {createdAt}
+            </p>
+          </div>
+        </div>
+        <div
+          className={`${styles.infoTopic} ${styles.leaveItem}`}
+          onClick={handleLeaveChannel}
+        >
+          {!error ? (
+            <>
+              {loading ? (
+                <div className={styles.loading_status}>
+                  <Spinner width={20} height={20} color="var(--error-color)" />
+                </div>
+              ) : (
+                <span>Leave channel</span>
+              )}
+            </>
+          ) : (
+            <span>{error.message}</span>
+          )}
+        </div>
+      </div>
+      <div className={styles.chId}>
+        <span>Channel ID : {channelData.id}</span>
+        <span
+          className={styles.chId_icon}
+          onClick={handleCopy}
+          data-tooltip-id="copy-tooltip"
+          data-tooltip-content={tooltipText}
+        >
+          <BsCopy />
+        </span>
+        <Tooltip
+          id="copy-tooltip"
+          place="top"
+          className={`custom-tooltip ${
+            tooltipText === "Copied" ? "tooltip-success" : ""
+          }`}
+        />
+      </div>
+    </div>
+  );
 }
 
 export default AboutTab;

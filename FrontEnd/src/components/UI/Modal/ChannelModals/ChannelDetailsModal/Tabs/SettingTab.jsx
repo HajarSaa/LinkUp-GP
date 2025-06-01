@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import styles from "../ChannelDetailsModal.module.css";
 import DetailsButton from "../../../../Buttons/DetailsButton/DetailsButton";
 import { openRenameModal } from "../../../../../../API/redux_toolkit/modals/channelDetailsSlice";
-import { FaHashtag, FaLink } from "react-icons/fa6";
+import { FaLink } from "react-icons/fa6";
 import { MdDeleteOutline, MdHeadset } from "react-icons/md";
 import ChannelType from "../../../../Channel/ChannelType/ChannelType";
 import { FaArchive } from "react-icons/fa";
 import { isChannelOwner } from "../../../../../../utils/channelUtils";
+import InfoIcon from "../../../../Icons/InforIcon/InfoIcon";
 
 function SettingTab({ channelData }) {
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
@@ -15,23 +16,27 @@ function SettingTab({ channelData }) {
   const dispatch = useDispatch();
   const isOwner = isChannelOwner(channelData, workspace);
 
+  function rename_channel() {
+    if (isOwner) {
+      dispatch(openRenameModal());
+    }
+  }
   if (activeTab !== "settings") return null;
   return (
     <div className={styles.editContent}>
-      <div
-        className={styles.infoRow}
-        onClick={() => dispatch(openRenameModal())}
-      >
+      <div className={styles.infoRow} onClick={rename_channel}>
         <div className={styles.infoTopic}>
           <div className={styles.top}>
             <span className={styles.infoTitle}>Channel name</span>
-            <span className={styles.infoEdit}>Edit</span>
+            {isOwner ? (
+              <span className={styles.infoEdit}>Edit</span>
+            ) : (
+              <InfoIcon id="edit_ch_name" text="only owners can edit" />
+            )}
           </div>
           <div className={styles.bottom}>
             <div className="align-items-center gap-3">
-              <span className={`align-items-center f-15`}>
-                <FaHashtag />
-              </span>
+              <ChannelType type={channelData.type} />
               <span>{channelData.name}</span>
             </div>
           </div>
@@ -41,7 +46,11 @@ function SettingTab({ channelData }) {
         <div className={styles.infoTopic}>
           <div className={styles.top}>
             <span className={styles.infoTitle}>Huddles</span>
-            <span className={styles.infoEdit}>Edit</span>
+            {isOwner ? (
+              <span className={styles.infoEdit}>Edit</span>
+            ) : (
+              <InfoIcon id="edit_ch_name" text="only owners can edit" />
+            )}
           </div>
           <div className={styles.bottom}>
             <div className="align-items-center gap-3">
@@ -57,8 +66,8 @@ function SettingTab({ channelData }) {
         </div>
       </div>
       <div className={styles.infoRow}>
-        {isOwner && (
-          <div className={styles.infoTopic}>
+        <div className={`${styles.infoTopic}  ${!isOwner && styles.ops_btn}`}>
+          <div className={styles.top}>
             <div className={styles.actionItem}>
               <ChannelType
                 type={`${channelData.type === "public" ? "private" : "public"}`}
@@ -68,26 +77,41 @@ function SettingTab({ channelData }) {
                 {channelData.type === "public" ? "private" : "public"} channel
               </div>
             </div>
-          </div>
-        )}
-        <div className={styles.infoTopic}>
-          <div className={`${styles.actionItem} ${styles.archiveItem}`}>
-            <span className="align-items-center">
-              <FaArchive />
-            </span>
-            <div>Archive channel for everyone</div>
+            {!isOwner && (
+              <InfoIcon id="edit_ch_name" text="You don`t have permissions" />
+            )}
           </div>
         </div>
-        {isOwner && (
-          <div className={`${styles.infoTopic} ${styles.deleteItem}`}>
+        <div className={`${styles.infoTopic}  ${!isOwner && styles.ops_btn}`}>
+          <div className={styles.top}>
+            <div className={`${styles.actionItem} ${styles.archiveItem}`}>
+              <span className="align-items-center">
+                <FaArchive />
+              </span>
+              <div>Archive channel for everyone</div>
+            </div>
+            {!isOwner && (
+              <InfoIcon id="edit_ch_name" text="You don`t have permissions" />
+            )}
+          </div>
+        </div>
+        <div
+          className={`${styles.infoTopic} ${styles.deleteItem} ${
+            isOwner ? styles.active_delete : styles.ops_btn
+          }`}
+        >
+          <div className={styles.top}>
             <div className={`${styles.actionItem}`}>
               <span className="align-items-center">
                 <MdDeleteOutline size={20} />
               </span>
               <div>Delete this channel</div>
             </div>
+            {!isOwner && (
+              <InfoIcon id="edit_ch_name" text="You don`t have permissions" />
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

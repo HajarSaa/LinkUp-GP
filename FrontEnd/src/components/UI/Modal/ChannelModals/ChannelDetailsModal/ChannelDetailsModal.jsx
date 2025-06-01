@@ -22,11 +22,12 @@ import TabsTab from "./Tabs/TabsTab";
 import IntegTab from "./Tabs/IntegTab";
 import SettingTab from "./Tabs/SettingTab";
 
-const ChannelDetailsModal = ({channelData}) => {
+const ChannelDetailsModal = () => {
   const dispatch = useDispatch();
   const { isOpen} = useSelector(
     (state) => state.channelDetailsModal
   );
+  const channelData = useSelector((state) => state.channel.channel);
 
 
   const handleClose = (e) => {

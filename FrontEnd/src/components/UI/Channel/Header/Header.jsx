@@ -96,7 +96,7 @@ function Header() {
         </div>
       </div>
       <NotificationsModal />
-      <ChannelDetailsModal channelData={channel} />
+      <ChannelDetailsModal/>
     </>
   );
 }

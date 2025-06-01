@@ -80,10 +80,11 @@ a {
 /* Start Custom Tooltip */
 .custom-tooltip {
   border-radius: 8px !important;
-  background-color: #333 !important;
+  background-color: #111 !important;
   color: white !important;
   padding: 8px 12px !important;
   transition: background-color 0.3s ease;
+  user-select: none;
 }
 
 .custom-tooltip.tooltip-success {

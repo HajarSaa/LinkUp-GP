@@ -2,16 +2,23 @@ import PropTypes from "prop-types";
 import styles from "../ChannelDetailsModal.module.css";
 import SearchInput from "../../../../InputField/SearchInput/SearchInput";
 import { MdOutlinePersonAddAlt } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getMembersData } from "../../../../../../utils/workspaceUtils";
 import UserStatus from "../../../../User/UserStatus";
 import UserImage from "../../../../User/UserImage";
+import { closeChannelDetails } from "../../../../../../API/redux_toolkit/modals/channelDetailsSlice";
+import { openUserPanel } from "../../../../../../API/redux_toolkit/ui/chatPanel";
 
 function MembersTab({ channelData }) {
   const { workspace } = useSelector((state) => state.workspace);
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   const members = getMembersData(channelData, workspace);
+  const dispatch = useDispatch();
 
+  function open_user_panel() {
+    dispatch(closeChannelDetails());
+    dispatch(openUserPanel());
+  }
 
   if (activeTab !== "members") return null;
   return (
@@ -26,7 +33,11 @@ function MembersTab({ channelData }) {
         <div className={styles.addText}>Add people</div>
       </div>
       {members.map((member, index) => (
-        <div className={styles.membersItem} key={index}>
+        <div
+          className={styles.membersItem}
+          key={index}
+          onClick={open_user_panel}
+        >
           <div className={styles.memberImg}>
             <UserImage src={member.photo} alt={member.userName} />
           </div>
