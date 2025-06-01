@@ -16,6 +16,8 @@ function ChatMessage({ containerRef }) {
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChannelMessages(channel_id);
   const messagesEndRef = useRef(null);
+  const isInitialLoad = useRef(true);
+
 
   // Infinite scroll لما نقرّب من أول رسالة
   useEffect(() => {
@@ -27,10 +29,17 @@ function ChatMessage({ containerRef }) {
         fetchNextPage();
       }
     };
-
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, containerRef]);
+
+  // اول مره هفتح الصفحه يوقفني عند اخر رسالة ممبعوته
+  useEffect(() => {
+    if (messages?.length && isInitialLoad.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
+      isInitialLoad.current = false;
+    }
+  }, [messages]);
 
   return (
     <div className={styles.messages_wrapper}>
