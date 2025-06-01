@@ -12,12 +12,13 @@ function ChatMessage({ containerRef }) {
   const messages = useSelector((state) =>
     selectMessagesByChannel(state, channel_id)
   );
-  console.log(messages)
+
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChannelMessages(channel_id);
+
   const messagesEndRef = useRef(null);
   const isInitialLoad = useRef(true);
-
+  const prevScrollHeightRef = useRef(0);
 
   // Infinite scroll لما نقرّب من أول رسالة
   useEffect(() => {
@@ -26,14 +27,17 @@ function ChatMessage({ containerRef }) {
 
     const handleScroll = () => {
       if (container.scrollTop < 150 && hasNextPage && !isFetchingNextPage) {
+        // نحفظ السكول هايت قبل الفتش علشان نرجع مكاننا بعد التحميل
+        prevScrollHeightRef.current = container.scrollHeight;
         fetchNextPage();
       }
     };
+
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, containerRef]);
 
-  // اول مره هفتح الصفحه يوقفني عند اخر رسالة ممبعوته
+  // اول مره هفتح الصفحه يوقفني عند اخر رسالة
   useEffect(() => {
     if (messages?.length && isInitialLoad.current) {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -41,17 +45,30 @@ function ChatMessage({ containerRef }) {
     }
   }, [messages]);
 
+  // بعد تحميل الرسائل القديمة، نحافظ على مكان المستخدم
+  useEffect(() => {
+    const container = containerRef?.current;
+    if (!container || isInitialLoad.current || isFetchingNextPage) return;
+
+    const newScrollHeight = container.scrollHeight;
+    const scrollDiff = newScrollHeight - prevScrollHeightRef.current;
+    container.scrollTop = container.scrollTop + scrollDiff;
+  }, [messages, isFetchingNextPage, containerRef]);
+
   return (
     <div className={styles.messages_wrapper}>
       {isFetchingNextPage && (
         <div className={styles.loading}>Loading History ...</div>
       )}
-      {messages?.slice(0).reverse().map((message) => (
-        <React.Fragment key={message._id}>
-          {/* <DateDivider date={message.createdAt} /> */}
-          <MessageItem message={message} />
-        </React.Fragment>
-      ))}
+      {messages
+        ?.slice(0)
+        .reverse()
+        .map((message) => (
+          <React.Fragment key={message._id}>
+            {/* <DateDivider date={message.createdAt} /> */}
+            <MessageItem message={message} />
+          </React.Fragment>
+        ))}
       <div ref={messagesEndRef} />
     </div>
   );

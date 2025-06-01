@@ -7,7 +7,7 @@ import { setChannelMessages } from "../../redux_toolkit/api_data/messages/channe
 const useGetChannelMessages = (channel_id) => {
   const dispatch = useDispatch();
 
-  const limit = 5; // ثابت في كل الصفحات
+  const limit = 10; // ثابت في كل الصفحات
 
   const query = useInfiniteQuery({
     queryKey: ["channel-messages", channel_id],
