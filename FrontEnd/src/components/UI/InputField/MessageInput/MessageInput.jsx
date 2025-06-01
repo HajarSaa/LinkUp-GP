@@ -30,7 +30,7 @@ const MessageInput = ({ isThread, channelName}) => {
   const location = useLocation();
   const { id } = useParams();
   const isChannel = location.pathname.includes("/channels");
-  
+
   const handleToggleCheckbox = () => {
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
