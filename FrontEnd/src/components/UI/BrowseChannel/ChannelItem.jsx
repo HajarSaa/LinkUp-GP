@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { FaCheck } from "react-icons/fa";
 import styles from "./BrowseChannel.module.css";
 import PropTypes from "prop-types";
@@ -10,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useLeaveChannel from "../../../API/hooks/channel/useLeaveChannel";
 import Spinner from "../Spinner/Spinner";
+import useJoinChannel from "../../../API/hooks/channel/useJoinChannel";
 
 function ChannelItem({ channel }) {
   const [joined_text, set_joined_text] = useState("Joined");
@@ -22,6 +22,7 @@ function ChannelItem({ channel }) {
 
   // query
   const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
+  const { mutate: join_channel } = useJoinChannel(setIsJoining);
 
   function navgigate_to_channel() {
     navigateTo(`/channels/${channel.id}`);
@@ -36,6 +37,7 @@ function ChannelItem({ channel }) {
   function handle_join(e) {
     e.stopPropagation();
     console.log("join ✔");
+    join_channel(channel.id)
   }
   return (
     <div className={styles.channelItem} onClick={navgigate_to_channel}>

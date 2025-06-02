@@ -6,7 +6,11 @@ export const getChannelData = async (channel_id) => {
   const { data } = await axiosInstance.get(`/channels/${channel_id}`);
   return data.data;
 };
-// leave Channel ========================================
+// ===============join Channel ========================================
+export const joinThisChannel = async (channel_id) => {
+  return axiosInstance.post(`/channels/${channel_id}/join`, {});
+};
+// ===============leave Channel ========================================
 export const leaveThisChannel = async (channel_id) => {
   return axiosInstance.post(`/channels/${channel_id}/leave`, {});
 };
