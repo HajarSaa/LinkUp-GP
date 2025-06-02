@@ -6,14 +6,15 @@ import { Outlet, useLocation} from "react-router-dom";
 import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
 import InvitePeopleModal from "../../components/UI/Modal/InvitePeopleModal/InvitePeopleModal";
 import useCurrentWorkspace from "../../API/hooks/useCurrentWorkspace";
+import { useSelector } from "react-redux";
 
 
 function MainLayout() {
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
 
-  const {data} = useCurrentWorkspace();
-  const workspace = data?.workspace;
+  useCurrentWorkspace();
+  const {workspace} = useSelector((state)=> state.workspace);
 
 
   return (

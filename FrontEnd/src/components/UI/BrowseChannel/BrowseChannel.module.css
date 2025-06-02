@@ -1,44 +1,16 @@
-.container {
-  padding: 20px;
+.browseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.browseHeader > h2 {
+.browseHeader>.title {
   font-size: 1.5rem;
   font-weight: bold;
 }
 
-.browseHeader{
+.browseHeader {
   margin-bottom: 1rem;
-}
-
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 15px 0;
-}
-
-.filterIcon {
-  font-size: 0.75rem;
-}
-
-.filters>div {
-  background: var(--bg-white);
-  border: none;
-  padding: 7px 10px;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 0.85rem;
-  font-weight: bold;
-}
-
-.filters>div:hover {
-  background-color: var(--white-btn-hover-color);
-  box-shadow: var(--shadow);
 }
 
 .channelContainer {
@@ -47,6 +19,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--border-color);
 }
 
 .channelItem {
@@ -63,6 +36,7 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+  margin-bottom: 15px;
 }
 
 .headerText {
@@ -74,8 +48,8 @@
 .channelName {
   display: flex;
   font-weight: bold;
-  align-items: end;
-  gap: 10px;
+  align-items: center;
+  gap: 5px;
 }
 
 .viewChannel {
@@ -96,7 +70,7 @@
   cursor: context-menu;
 }
 
-.buttonGroups>button,
+.buttonGroups>.buttonGroups_btn,
 .createBtn {
   display: inline-block;
   font-size: 14px;
@@ -109,7 +83,7 @@
   background-color: var(--bg-white);
 }
 
-.buttonGroups>button:hover,
+.buttonGroups>.buttonGroups_btn:hover,
 .createBtn:hover {
   background-color: var(--white-btn-hover-color);
 }
@@ -128,6 +102,11 @@
   margin-top: 10px;
 }
 
+.channelInfo_text {
+  display: flex;
+  align-items: center;
+}
+
 .status {
   display: flex;
   align-items: center;
@@ -140,25 +119,41 @@
   color: var(--green-color);
 }
 
-.leaved {
-  display: none;
-}
 
 .joinedIcon {
   font-size: 11px;
 }
 
-/*  */
+/* Filter */
 
-.page_status{
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filterIcon {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  font-size: 0.75rem;
 }
 
-.error{
-  color: var(--error-color);
-  font-size: 40px;
+.filters>.filter_item {
+  background: var(--bg-white);
+  border: none;
+  padding: 7px 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.filters>.filter_item:hover {
+  background-color: var(--white-btn-hover-color);
+  box-shadow: var(--shadow);
 }

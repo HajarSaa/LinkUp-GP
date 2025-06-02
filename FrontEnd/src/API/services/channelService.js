@@ -8,6 +8,8 @@ export const getChannelData = async (channel_id) => {
   return data.data;
 };
 
+
+// leave Channel ========================================
 export const leaveThisChannel = async (channel_id) => {
   return axios.post(
     `${API_BASE_URL}/channels/${channel_id}/leave`,
@@ -15,7 +17,6 @@ export const leaveThisChannel = async (channel_id) => {
     { withCredentials: true }
   );
 };
-
 // ==============( get channel messages)===
 export const getChannelMessages = async ({
   channel_id,
