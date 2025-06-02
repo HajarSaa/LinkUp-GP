@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import { findMemberById } from "../../../../../../utils/workspaceUtils";
 import { formatDateToLong } from "../../../../../../utils/formatedDate";
 import { BsCopy } from "react-icons/bs";
-import Spinner from "../../../../../../routes/Spinner/Spinner";
+import Spinner from "../../../../Spinner/Spinner";
 import useLeaveChannel from "../../../../../../API/hooks/useLeaveChannel";
 import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";

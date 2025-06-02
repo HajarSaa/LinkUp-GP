@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 import useGetMe from "../API/hooks/useGetMe";
-import ProtectedLoading from "./ProtectedLoading/ProtectedLoading";
+import ProtectedLoading from "../components/UI/ProtectedLoading/ProtectedLoading";
 import { setUser } from "../API/redux_toolkit/api_data/userSlice";
 
 function ProtectedRoute() {

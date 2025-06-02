@@ -72,15 +72,18 @@
 
 .buttonGroups>.buttonGroups_btn,
 .createBtn {
-  display: inline-block;
-  font-size: 14px;
-  line-height: 100%;
-  font-weight: bold;
-  border-radius: var(--border-radius);
-  padding: 8px 14px;
-  cursor: pointer;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-white);
+  display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 100%;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    padding: 8px 14px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-white);
+    height: 32px;
 }
 
 .buttonGroups>.buttonGroups_btn:hover,

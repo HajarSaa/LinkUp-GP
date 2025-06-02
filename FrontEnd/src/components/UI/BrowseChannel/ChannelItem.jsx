@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { FaCheck } from "react-icons/fa";
 import styles from "./BrowseChannel.module.css";
 import PropTypes from "prop-types";
@@ -7,13 +8,20 @@ import { useState } from "react";
 import { findMemberByUserId } from "../../../utils/workspaceUtils";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import useLeaveChannel from "../../../API/hooks/channel/useLeaveChannel";
+import Spinner from "../Spinner/Spinner";
 
 function ChannelItem({ channel }) {
   const [joined_text, set_joined_text] = useState("Joined");
+  const [isLeaving, setIsLeaving] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const navigateTo = useNavigate();
   const { workspace } = useSelector((state) => state.workspace);
   const me = findMemberByUserId(workspace);
   const isJoin = channel.members.includes(me._id);
+
+  // query
+  const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
 
   function navgigate_to_channel() {
     navigateTo(`/channels/${channel.id}`);
@@ -21,7 +29,8 @@ function ChannelItem({ channel }) {
 
   function handle_leave(e) {
     e.stopPropagation();
-    console.log('leave ✔')
+    console.log("leave ✔ ");
+    leave_channel(channel.id);
   }
 
   function handle_join(e) {
@@ -50,7 +59,13 @@ function ChannelItem({ channel }) {
             onMouseLeave={() => set_joined_text("Joined")}
             onClick={isJoin ? handle_leave : handle_join}
           >
-            {isJoin ? joined_text : "Join"}
+            {isLeaving || isJoining ? (
+              <Spinner width={20} height={20} color="var(--primary-color)" />
+            ) : isJoin ? (
+              joined_text
+            ) : (
+              "Join"
+            )}
           </button>
         </div>
       </div>

@@ -3,9 +3,9 @@ import AuthInput from "../AuthInput/AuthInput";
 import styles from "./AuthForm.module.css";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import Spinner from "../../../routes/Spinner/Spinner";
+import Spinner from "../../UI/Spinner/Spinner";
 import { validateSignupForm } from "../../../utils/validation";
-import useSignup from "../../../API/hooks/useSignup"; // ✅
+import useSignup from "../../../API/hooks/useSignup";
 
 function SignupForm() {
   const [formData, setFormData] = useState({

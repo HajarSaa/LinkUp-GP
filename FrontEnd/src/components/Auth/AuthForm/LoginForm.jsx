@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./AuthForm.module.css";
 import AuthInput from "../AuthInput/AuthInput";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
-import Spinner from "../../../routes/Spinner/Spinner";
+import Spinner from "../../UI/Spinner/Spinner"
 import useLogin from "../../../API/hooks/useLogin";
 import { validateLoginForm } from "../../../utils/validation";
 import { useNavigate } from "react-router-dom";

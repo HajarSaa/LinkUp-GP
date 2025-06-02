@@ -18,7 +18,7 @@ import Landing from "./pages/Landing/Landing";
 import Step1 from "./pages/dashboard/CreateWorkspace/Step1";
 import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
 import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
-import ProtectedLoading from "./routes/ProtectedLoading/ProtectedLoading";
+import ProtectedLoading from "./components/UI/ProtectedLoading/ProtectedLoading";
 import Testing from "../Testing/Code/Testing";
 
 function App() {

@@ -4,7 +4,7 @@ import ChannelBody from "../../../components/UI/Channel/ChannelBody/ChannelBody"
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import { useParams } from "react-router-dom";
 import styles from "../dashboard.module.css";
-import Spinner from "../../../routes/Spinner/Spinner";
+import Spinner from "../../../components/UI/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
 import useGetChannel from "../../../API/hooks/useGetChannel";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";

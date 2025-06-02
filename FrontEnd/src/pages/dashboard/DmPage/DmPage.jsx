@@ -4,7 +4,7 @@ import MessageInput from "../../../components/UI/InputField/MessageInput/Message
 import UserCard from "../../../components/UI/UserDM/UserCard";
 import UserNavbar from "../../../components/UI/UserDM/Userbar";
 import useCurrentConvers from "../../../API/hooks/useCurrentConvers";
-import Spinner from "../../../routes/Spinner/Spinner";
+import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "../dashboard.module.css";
 import Panel from "../../../components/Layout/Panel/Panel";
 

@@ -1,5 +1,5 @@
 import useGetMe from "../../../API/hooks/useGetMe";
-import Spinner from "../../../routes/Spinner/Spinner";
+import Spinner from "../Spinner/Spinner";
 import { CiFaceFrown } from "react-icons/ci";
 import styles from "./Landing.module.css";
 import WorkspaceItem from "./WorkspaceItem";
