@@ -49,7 +49,7 @@ function MembersTab({ channelData }) {
           </div>
         ))}
       </div>
-      {/* <AddPeopleStep
+      {/* <InviteChannelModal
         workName={workspace?.name}
         channelName={channelData.name}
         onClose={closeModal}

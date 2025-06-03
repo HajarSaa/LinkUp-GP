@@ -1,13 +1,13 @@
-import styles from "./InvitePeopleModal.module.css";
+import styles from "./InviteWorkModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { closeInvitePeople } from "../../../../API/redux_toolkit/modals/modalsSlice";
+import { closeInviteWork } from "../../../../API/redux_toolkit/modals/modalsSlice";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import { FaLink } from "react-icons/fa";
 import { MdErrorOutline } from "react-icons/md";
 import { useState } from "react";
 
-const InvitePeopleModal = () => {
-  const { isOpen } = useSelector((state) => state.modals.invitePeople);
+const InviteWorkModal = () => {
+  const { isOpen } = useSelector((state) => state.modals.inviteToWork);
   const { workspace } = useSelector((state) => state.workspace);
   const dispatch = useDispatch();
 
@@ -40,13 +40,12 @@ const InvitePeopleModal = () => {
     setInput("");
   };
 
-
   const removeEmail = (index) => {
     setEmails(emails.filter((_, i) => i !== index));
   };
 
   const closeModal = () => {
-    dispatch(closeInvitePeople());
+    dispatch(closeInviteWork());
     handleRemoveData();
   };
 
@@ -166,4 +165,4 @@ const InvitePeopleModal = () => {
   );
 };
 
-export default InvitePeopleModal;
+export default InviteWorkModal;

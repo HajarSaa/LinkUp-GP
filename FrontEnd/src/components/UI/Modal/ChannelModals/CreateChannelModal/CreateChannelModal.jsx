@@ -7,158 +7,160 @@ import { IoMdSend } from "react-icons/io";
 import { FiHash } from "react-icons/fi";
 import ChatPreview from "./ChatPreview/ChatPreview";
 import { useDispatch, useSelector } from "react-redux";
-import { closeCreateChannel } from "../../../../../API/redux_toolkit/modals/modalsSlice";
-import AddPeopleStep from "./AddPeopleStep/AddPeopleStep";
+import {
+  closeCreateChannel,
+  openInviteChannel,
+} from "../../../../../API/redux_toolkit/modals/modalsSlice";
+import Overlay from "../Overlay/Overlay";
 
 const CreateChannelModal = () => {
   const { workspace } = useSelector((state) => state.workspace);
   const [channelName, setChannelName] = useState("");
   const [isPublic, setIsPublic] = useState(true);
-  const [step, setStep] = useState(1);
-
-  const {isOpen} = useSelector(
-    (state) => state.modals.createChannel
-  );
+  const { isOpen } = useSelector((state) => state.modals.createChannel);
 
   const dispatch = useDispatch();
 
   function handleClose(e) {
     if (e.currentTarget === e.target) {
-      closeModal()
+      closeModal();
     }
   }
 
   function closeModal() {
     dispatch(closeCreateChannel());
-    setStep(1);
     setIsPublic(true);
-    setChannelName("")
+    setChannelName("");
+  }
+
+  function handleCreation() {
+    dispatch(closeCreateChannel());
+    dispatch(
+      openInviteChannel({
+        name: channelName,
+        type: isPublic ? "public" : "private",
+      })
+    );
+    setIsPublic(true);
+    setChannelName("");
   }
 
   if (!isOpen) return null;
 
   return (
-    <div className="overlay" onClick={handleClose}>
-      {step === 1 ? (
-        <div className={styles.modal}>
-          <div className={styles.config}>
-            <h2>Channel details</h2>
-            <div className={styles.details}>
-              <p className={styles.label}>Channel name</p>
-              <input
-                type="text"
-                id="channelName"
-                placeholder="# e.g. FrontEnd"
-                value={channelName}
-                onChange={(e) =>
-                  setChannelName(e.target.value.split(" ").join("-"))
-                }
-              />
-              <p className={styles.description}>
-                Channels are where conversations happen around a topic. Use a
-                name that is easy to find and understand.
-              </p>
-              <div className={styles.visibility}>
-                <p className={styles.label}>Visibility</p>
-                <label>
-                  <input
-                    type="radio"
-                    name="visibility"
-                    checked={isPublic}
-                    onChange={() => setIsPublic(true)}
-                  />
-                  <div className={styles.visbText}>
-                    Public – Anyone in{" "}
-                    <span className={styles.workName}>{workspace?.name}</span>
-                  </div>
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="visibility"
-                    checked={!isPublic}
-                    onChange={() => setIsPublic(false)}
-                  />
-                  <div className={styles.visbText}>
-                    Private – Only specific people
-                    <span>Can only be viewed or joined by invitation</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-            <div className={styles.buttonContainer}>
-              <button
-                className={styles.createButton}
-                disabled={!channelName.trim()}
-                onClick={() => setStep(2)}
-              >
-                Create
-              </button>
+    <Overlay closeOverlay={handleClose} className={styles.overlay}>
+      <div className={styles.modal}>
+        <div className={styles.config}>
+          <h2>Channel details</h2>
+          <div className={styles.details}>
+            <p className={styles.label}>Channel name</p>
+            <input
+              type="text"
+              id="channelName"
+              placeholder="# e.g. FrontEnd"
+              value={channelName}
+              onChange={(e) =>
+                setChannelName(e.target.value.split(" ").join("-"))
+              }
+            />
+            <p className={styles.description}>
+              Channels are where conversations happen around a topic. Use a name
+              that is easy to find and understand.
+            </p>
+            <div className={styles.visibility}>
+              <p className={styles.label}>Visibility</p>
+              <label>
+                <input
+                  type="radio"
+                  name="visibility"
+                  checked={isPublic}
+                  onChange={() => setIsPublic(true)}
+                />
+                <div className={styles.visbText}>
+                  Public – Anyone in{" "}
+                  <span className={styles.workName}>{workspace?.name}</span>
+                </div>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="visibility"
+                  checked={!isPublic}
+                  onChange={() => setIsPublic(false)}
+                />
+                <div className={styles.visbText}>
+                  Private – Only specific people
+                  <span>Can only be viewed or joined by invitation</span>
+                </div>
+              </label>
             </div>
           </div>
+          <div className={styles.buttonContainer}>
+            <button
+              className={styles.createButton}
+              disabled={!channelName.trim()}
+              onClick={handleCreation}
+            >
+              Create
+            </button>
+          </div>
+        </div>
 
-          <div className={styles.preview}>
-            <div className={styles.prevHeader}>
-              <div>
-                <FaLink className={styles.headerIcon} />
-                <FaTimes className={styles.headerIcon} onClick={closeModal} />
-              </div>
+        <div className={styles.preview}>
+          <div className={styles.prevHeader}>
+            <div>
+              <FaLink className={styles.headerIcon} />
+              <FaTimes className={styles.headerIcon} onClick={closeModal} />
             </div>
-            <div className={styles.chatPreviewContainer}>
-              <div className={styles.previewHeader}>
-                <h3 className={styles.prevName}>
-                  {isPublic ? (
-                    <FiHash className={styles.icon} />
-                  ) : (
-                    <FaLock className={styles.icon} />
-                  )}
-                  {channelName || "channel-name"}
-                </h3>
+          </div>
+          <div className={styles.chatPreviewContainer}>
+            <div className={styles.previewHeader}>
+              <h3 className={styles.prevName}>
+                {isPublic ? (
+                  <FiHash className={styles.icon} />
+                ) : (
+                  <FaLock className={styles.icon} />
+                )}
+                {channelName || "channel-name"}
+              </h3>
+            </div>
+            <div className={styles.previewTabs}>
+              <span className={`${styles.tab} ${styles.activeTab}`}>
+                <LuMessageCircle
+                  style={{ transform: "rotateY(180deg)" }}
+                  className={styles.icon}
+                />{" "}
+                Messages
+              </span>
+              <span className={styles.tab}>
+                <RiStickyNoteAddLine className={styles.icon} /> Canvas
+              </span>
+            </div>
+            <div className={styles.chatPreview}>
+              <div className={styles.messages}>
+                {[...Array(8)].map((_, i) => (
+                  <ChatPreview key={i} />
+                ))}
               </div>
-              <div className={styles.previewTabs}>
-                <span className={`${styles.tab} ${styles.activeTab}`}>
-                  <LuMessageCircle
-                    style={{ transform: "rotateY(180deg)" }}
-                    className={styles.icon}
-                  />{" "}
-                  Messages
-                </span>
-                <span className={styles.tab}>
-                  <RiStickyNoteAddLine className={styles.icon} /> Canvas
-                </span>
-              </div>
-              <div className={styles.chatPreview}>
-                <div className={styles.messages}>
-                  {[...Array(8)].map((_, i) => (
-                    <ChatPreview key={i} />
-                  ))}
-                </div>
-                <div className={styles.inputContainer}>
-                  <button className={styles.plusButton}>
-                    <FaPlus />
-                  </button>
-                  <input
-                    type="text"
-                    className={styles.inputField}
-                    disabled
-                    placeholder=""
-                  />
-                  <button className={styles.sendButton} disabled>
-                    <IoMdSend className={styles.icon} />
-                  </button>
-                </div>
+              <div className={styles.inputContainer}>
+                <button className={styles.plusButton}>
+                  <FaPlus />
+                </button>
+                <input
+                  type="text"
+                  className={styles.inputField}
+                  disabled
+                  placeholder=""
+                />
+                <button className={styles.sendButton} disabled>
+                  <IoMdSend className={styles.icon} />
+                </button>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <AddPeopleStep
-          workName={workspace?.name}
-          channelName={channelName}
-          onClose={closeModal}
-        />
-      )}
-    </div>
+      </div>
+    </Overlay>
   );
 };
 
