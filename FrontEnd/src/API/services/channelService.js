@@ -6,13 +6,18 @@ export const getChannelData = async (channel_id) => {
   const { data } = await axiosInstance.get(`/channels/${channel_id}`);
   return data.data;
 };
-// ===============join Channel ========================================
+// ===============Join Channel ========================================
 export const joinThisChannel = async (channel_id) => {
   return axiosInstance.post(`/channels/${channel_id}/join`, {});
 };
-// ===============leave Channel ========================================
+// ===============Leave Channel ========================================
 export const leaveThisChannel = async (channel_id) => {
   return axiosInstance.post(`/channels/${channel_id}/leave`, {});
+};
+// ===============Create Channel ========================================
+export const createChannel = async (channel_data) => {
+  const { data } = await axiosInstance.post(`/channels`, channel_data);
+  return data.data;
 };
 // ==============( get channel messages)===
 export const getChannelMessages = async ({

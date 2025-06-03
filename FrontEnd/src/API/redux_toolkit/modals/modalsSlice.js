@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   createChannel: { isOpen: false },
   inviteToWork: { isOpen: false },
-  inviteToChannel: { isOpen: false, channelData: { name: null, type: null } },
+  inviteToChannel: { isOpen: false, channelData: null },
 };
 
 const modalsSlice = createSlice({
@@ -31,13 +31,11 @@ const modalsSlice = createSlice({
     //Start invite to channel
     openInviteChannel: (state, actions) => {
       state.inviteToChannel.isOpen = true;
-      state.inviteToChannel.channelData.name = actions.payload.name;
-      state.inviteToChannel.channelData.type = actions.payload.type;
+      state.inviteToChannel.channelData = actions.payload;
     },
     closeInviteChannel: (state) => {
       state.inviteToChannel.isOpen = false;
-      state.inviteToChannel.channelData.name = null;
-      state.inviteToChannel.channelData.type = null;
+      state.inviteToChannel.channelData = null;
     },
     //End invite to channel
   },

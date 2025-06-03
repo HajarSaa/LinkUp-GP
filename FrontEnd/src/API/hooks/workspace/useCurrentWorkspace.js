@@ -22,6 +22,7 @@ const useCurrentWorkspace = () => {
     staleTime: 0,
     retry: 1,
     // refetchInterval: 1000,
+    // refetchIntervalInBackground: false,
   });
 
   // Handle success

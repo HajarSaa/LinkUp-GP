@@ -21,6 +21,7 @@
   flex-direction: column;
   justify-content: space-between;
 }
+
 .config h2 {
   font-size: 20px;
   margin: 10px 0 25px 0;
@@ -30,7 +31,7 @@
   font-weight: bold;
 }
 
-.details > input {
+.details>input {
   width: 90%;
   padding: 8px;
   margin: 10px 0;
@@ -40,11 +41,12 @@
   font-family: inherit;
 }
 
-.details > input::placeholder {
+.details>input::placeholder {
   color: #6b6b6b;
 }
-.details > input:focus {
-  outline:none;
+
+.details>input:focus {
+  outline: none;
   box-shadow: var(--input-shadow);
 }
 
@@ -66,20 +68,25 @@
   cursor: pointer;
   user-select: none;
 }
+
 .visibility label span.workName {
   font-weight: bold;
   color: #000;
 }
+
 .visibility label span {
   color: var(--text-color-grey);
 }
+
 .visbText {
   display: flex;
   flex-wrap: wrap;
 }
+
 .buttonContainer {
   padding-right: 20px;
 }
+
 .createButton {
   width: 100%;
   padding: 10px;
@@ -92,6 +99,10 @@
   margin-top: 10px;
   cursor: pointer;
   transition: all var(--transition-time);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .createButton:hover {
@@ -107,16 +118,19 @@
   display: flex;
   flex-direction: column;
 }
+
 .prevHeader {
   display: flex;
   justify-content: end;
 }
+
 .prevName {
   display: flex;
   align-items: center;
   gap: 7px;
 }
-.prevHeader > div {
+
+.prevHeader>div {
   display: flex;
   gap: 18px;
   color: #acacac;
@@ -200,6 +214,7 @@
   gap: 10px;
   overflow: hidden;
 }
+
 .messages {
   display: flex;
   flex-direction: column;

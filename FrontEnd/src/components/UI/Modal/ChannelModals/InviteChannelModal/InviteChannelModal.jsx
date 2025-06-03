@@ -27,8 +27,10 @@ const InviteChannelModal = () => {
         <div className={styles.modalHeader}>
           <h3 className={styles.modalHeader_name}>
             <span>Add people to </span>
-            <ChannelType type={channelData?.type} />
-            <span>{channelData?.name}</span>
+            <div className={styles.channel_part}>
+              <ChannelType type={channelData?.type} />
+              <span>{channelData?.name}</span>
+            </div>
           </h3>
           <CloseIcon closeEvent={closeModal} />
         </div>

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import styles from "./CreateChannelModal.module.css";
-import { FaTimes, FaLink, FaPlus, FaLock } from "react-icons/fa";
+import { FaTimes, FaLink, FaPlus} from "react-icons/fa";
 import { RiStickyNoteAddLine } from "react-icons/ri";
 import { LuMessageCircle } from "react-icons/lu";
 import { IoMdSend } from "react-icons/io";
-import { FiHash } from "react-icons/fi";
 import ChatPreview from "./ChatPreview/ChatPreview";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,12 +11,16 @@ import {
   openInviteChannel,
 } from "../../../../../API/redux_toolkit/modals/modalsSlice";
 import Overlay from "../Overlay/Overlay";
+import useCreateChannel from "../../../../../API/hooks/channel/useCreateChannel";
+import Spinner from "../../../Spinner/Spinner";
+import ChannelType from '../../../Channel/ChannelType/ChannelType';
 
 const CreateChannelModal = () => {
   const { workspace } = useSelector((state) => state.workspace);
   const [channelName, setChannelName] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const { isOpen } = useSelector((state) => state.modals.createChannel);
+  const { mutate: create_channel, isPending } = useCreateChannel();
 
   const dispatch = useDispatch();
 
@@ -34,15 +37,20 @@ const CreateChannelModal = () => {
   }
 
   function handleCreation() {
-    dispatch(closeCreateChannel());
-    dispatch(
-      openInviteChannel({
+    create_channel(
+      {
         name: channelName,
         type: isPublic ? "public" : "private",
-      })
+      },
+      {
+        onSuccess: (data) => {
+          dispatch(closeCreateChannel());
+          dispatch(openInviteChannel(data?.channel));
+          setIsPublic(true);
+          setChannelName("");
+        },
+      }
     );
-    setIsPublic(true);
-    setChannelName("");
   }
 
   if (!isOpen) return null;
@@ -98,10 +106,14 @@ const CreateChannelModal = () => {
           <div className={styles.buttonContainer}>
             <button
               className={styles.createButton}
-              disabled={!channelName.trim()}
+              disabled={!channelName.trim() || isPending}
               onClick={handleCreation}
             >
-              Create
+              {isPending ? (
+                <Spinner width={30} height={30} color="var(--link-color)" />
+              ) : (
+                "Create"
+              )}
             </button>
           </div>
         </div>
@@ -115,14 +127,10 @@ const CreateChannelModal = () => {
           </div>
           <div className={styles.chatPreviewContainer}>
             <div className={styles.previewHeader}>
-              <h3 className={styles.prevName}>
-                {isPublic ? (
-                  <FiHash className={styles.icon} />
-                ) : (
-                  <FaLock className={styles.icon} />
-                )}
-                {channelName || "channel-name"}
-              </h3>
+              <div className={styles.prevName}>
+                <ChannelType type={isPublic ? "public" : "private"} />
+                <span>{channelName || "channel-name"}</span>
+              </div>
             </div>
             <div className={styles.previewTabs}>
               <span className={`${styles.tab} ${styles.activeTab}`}>

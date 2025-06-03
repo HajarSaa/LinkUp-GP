@@ -30,7 +30,7 @@
   font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .lockIcon {
@@ -75,4 +75,10 @@
 
 .skipButton:hover {
   background: #f5f5f5;
+}
+
+.channel_part{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

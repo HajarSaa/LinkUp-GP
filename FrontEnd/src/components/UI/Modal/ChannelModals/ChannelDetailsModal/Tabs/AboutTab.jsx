@@ -27,7 +27,6 @@ function AboutTab() {
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   const { workspace } = useSelector((state) => state.workspace);
   const { channel } = useSelector((state) => state.channel)
-  console.log(channel)
   const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
   const createdBy = findMemberById(workspace, channel?.createdBy);
   const createdAt = formatDateToLong(channel?.createdAt);
