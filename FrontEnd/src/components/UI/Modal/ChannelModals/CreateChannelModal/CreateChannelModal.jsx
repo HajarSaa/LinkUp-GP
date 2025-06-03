@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "./CreateChannelModal.module.css";
-import { FaTimes, FaLink, FaPlus} from "react-icons/fa";
+import { FaTimes, FaLink, FaPlus } from "react-icons/fa";
 import { RiStickyNoteAddLine } from "react-icons/ri";
 import { LuMessageCircle } from "react-icons/lu";
 import { IoMdSend } from "react-icons/io";
@@ -13,16 +13,16 @@ import {
 import Overlay from "../Overlay/Overlay";
 import useCreateChannel from "../../../../../API/hooks/channel/useCreateChannel";
 import Spinner from "../../../Spinner/Spinner";
-import ChannelType from '../../../Channel/ChannelType/ChannelType';
+import ChannelType from "../../../Channel/ChannelType/ChannelType";
 
 const CreateChannelModal = () => {
+  const dispatch = useDispatch();
+  const [error_message, setErrorMessage] = useState(null);
   const { workspace } = useSelector((state) => state.workspace);
   const [channelName, setChannelName] = useState("");
   const [isPublic, setIsPublic] = useState(true);
   const { isOpen } = useSelector((state) => state.modals.createChannel);
   const { mutate: create_channel, isPending } = useCreateChannel();
-
-  const dispatch = useDispatch();
 
   function handleClose(e) {
     if (e.currentTarget === e.target) {
@@ -37,6 +37,7 @@ const CreateChannelModal = () => {
   }
 
   function handleCreation() {
+    setErrorMessage(null);
     create_channel(
       {
         name: channelName,
@@ -49,6 +50,9 @@ const CreateChannelModal = () => {
           setIsPublic(true);
           setChannelName("");
         },
+        onError: (error) => {
+          setErrorMessage(error.response.data.message);
+        },
       }
     );
   }
@@ -59,22 +63,32 @@ const CreateChannelModal = () => {
     <Overlay closeOverlay={handleClose} className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.config}>
-          <h2>Channel details</h2>
+          <h2 className={styles.header_title}>Channel details</h2>
           <div className={styles.details}>
             <p className={styles.label}>Channel name</p>
             <input
+              className={`${styles.name_input} ${
+                error_message && styles.error_name_input
+              }`}
               type="text"
               id="channelName"
               placeholder="# e.g. FrontEnd"
               value={channelName}
-              onChange={(e) =>
-                setChannelName(e.target.value.split(" ").join("-"))
-              }
+              onChange={(e) => {
+                setErrorMessage(null);
+                setChannelName(e.target.value.split(" ").join("-"));
+              }}
             />
-            <p className={styles.description}>
-              Channels are where conversations happen around a topic. Use a name
-              that is easy to find and understand.
-            </p>
+            {error_message ? (
+              <p className={styles.error_message}>{error_message}</p>
+            ) : (
+              <>
+                <p className={styles.description}>
+                  Channels are where conversations happen around a topic. Use a
+                  name that is easy to find and understand.
+                </p>
+              </>
+            )}
             <div className={styles.visibility}>
               <p className={styles.label}>Visibility</p>
               <label>

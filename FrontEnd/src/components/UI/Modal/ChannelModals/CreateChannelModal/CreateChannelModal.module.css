@@ -20,40 +20,50 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: auto;
 }
 
-.config h2 {
+.header_title  {
   font-size: 20px;
-  margin: 10px 0 25px 0;
+  margin: 10px 0 10px 0;
 }
 
 .details .label {
   font-weight: bold;
 }
 
-.details>input {
+.name_input {
   width: 90%;
   padding: 8px;
   margin: 10px 0;
-  border: 1px solid var(--border-color, #ddd);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
 }
 
-.details>input::placeholder {
+.name_input::placeholder {
   color: #6b6b6b;
 }
 
-.details>input:focus {
+.name_input:focus {
   outline: none;
   box-shadow: var(--input-shadow);
 }
 
-.description {
+.error_name_input{
+  border-color:var(--error-color) ;
+  box-shadow: var(--input-error-shadow) !important;
+}
+
+.description,.error_message {
   font-size: 14px;
   color: var(--text-secondary, #666);
   line-height: 1.3;
+}
+
+.error_message{
+  color: var(--error-color);
 }
 
 .visibility {

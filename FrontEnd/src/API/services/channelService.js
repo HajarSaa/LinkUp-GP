@@ -1,6 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-
 // Get Channel
 export const getChannelData = async (channel_id) => {
   const { data } = await axiosInstance.get(`/channels/${channel_id}`);
