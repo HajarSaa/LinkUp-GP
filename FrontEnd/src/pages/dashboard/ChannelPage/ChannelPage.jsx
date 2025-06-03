@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import styles from "../dashboard.module.css";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
-import useGetChannel from "../../../API/hooks/useGetChannel";
+import useGetChannel from "../../../API/hooks/channel/useGetChannel";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { useSelector } from "react-redux";
 

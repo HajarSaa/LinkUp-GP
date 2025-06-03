@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Spinner from "../../UI/Spinner/Spinner";
 import { validateSignupForm } from "../../../utils/validation";
-import useSignup from "../../../API/hooks/useSignup";
+import useSignup from "../../../API/hooks/workspace/useSignup";
 
 function SignupForm() {
   const [formData, setFormData] = useState({

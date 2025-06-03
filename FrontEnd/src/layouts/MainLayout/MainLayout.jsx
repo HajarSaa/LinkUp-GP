@@ -5,7 +5,7 @@ import SideBar from "../../components/Layout/SideBar/SideBar";
 import { Outlet, useLocation } from "react-router-dom";
 import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
 import InviteWorkModal from "../../components/UI/Modal/InviteWorkModal/InviteWorkModal";
-import useCurrentWorkspace from "../../API/hooks/useCurrentWorkspace";
+import useCurrentWorkspace from "../../API/hooks/workspace/useCurrentWorkspace";
 import { useSelector } from "react-redux";
 import InviteChannelModal from "../../components/UI/Modal/ChannelModals/InviteChannelModal/InviteChannelModal";
 

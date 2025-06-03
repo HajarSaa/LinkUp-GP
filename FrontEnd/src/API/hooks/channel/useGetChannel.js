@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getChannelData } from "../services/channelService";
-import { setChannel } from "../redux_toolkit/api_data/channelSlice";
+import { getChannelData } from "../../services/channelService";
+import { setChannel } from "../../redux_toolkit/api_data/channelSlice";
 
 
 const useGetChannel = (channel_id) => {

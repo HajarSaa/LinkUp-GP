@@ -7,7 +7,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons/faPenToSquare";
 import PropTypes from "prop-types";
 import SidebarLists from "./SidebarLists";
 import { useSelector } from "react-redux";
-import useResize from "../../../API/hooks/useResize";
+import useResize from "../../../API/hooks/workspace/useResize";
 
 function SideBar() {
   const { workspace } = useSelector((state) => state.workspace);

@@ -3,14 +3,14 @@ import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import MessageInput from "../../../components/UI/InputField/MessageInput/MessageInput";
 import UserCard from "../../../components/UI/UserDM/UserCard";
 import UserNavbar from "../../../components/UI/UserDM/Userbar";
-import useCurrentConvers from "../../../API/hooks/useCurrentConvers";
+import useGetConvers from "../../../API/hooks/conversation/useGetConvers";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "../dashboard.module.css";
 import Panel from "../../../components/Layout/Panel/Panel";
 
 function DmPage() {
   const { id: convers_id } = useParams();
-  const { loading, error } = useCurrentConvers(convers_id);
+  const { loading, error } = useGetConvers(convers_id);
   if (loading)
     return (
       <div className={styles.status}>

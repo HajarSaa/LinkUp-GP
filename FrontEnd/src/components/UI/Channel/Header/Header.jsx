@@ -28,7 +28,7 @@ function Header() {
           <div
             className={styles.channel_name}
             onClick={() =>
-              dispatch(openChannelDetails({ channel, tab: "about" }))
+              dispatch(openChannelDetails({tab: "about" }))
             }
           >
             <ChannelType type={channel.type} />
@@ -38,7 +38,7 @@ function Header() {
             <div
               className={styles.membersContainer}
               onClick={() =>
-                dispatch(openChannelDetails({ channel, tab: "members" }))
+                dispatch(openChannelDetails({tab: "members" }))
               }
             >
               <div className={styles.avatars}>
@@ -73,7 +73,7 @@ function Header() {
               >
                 <BsThreeDotsVertical />
               </div>
-              <ChannelOptionModal channel={channel} />
+              <ChannelOptionModal />
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ function Header() {
         </div>
       </div>
       <NotificationsModal />
-      <ChannelDetailsModal/>
+      <ChannelDetailsModal />
     </>
   );
 }

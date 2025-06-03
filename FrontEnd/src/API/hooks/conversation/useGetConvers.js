@@ -4,10 +4,10 @@ import {
   setConvers,
   setConError,
   setConLoading,
-} from "../redux_toolkit/api_data/conversSlice";
-import { getConversData } from "../services/coversService";
+} from "../../redux_toolkit/api_data/conversSlice";
+import { getConversData } from "../../services/coversService";
 
-const useChannelData = (convers_id) => {
+const useGetConvers = (convers_id) => {
   const dispatch = useDispatch();
   const { convers, loading, error } = useSelector((state) => state.convers);
 
@@ -32,4 +32,4 @@ const useChannelData = (convers_id) => {
   return { convers, loading, error };
 };
 
-export default useChannelData;
+export default useGetConvers;

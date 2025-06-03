@@ -5,7 +5,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isOpen: false,
-  channelData: null,
   activeTab: "about",
   editModal: {
     renameChannel: false,
@@ -20,12 +19,10 @@ const channelDetailsSlice = createSlice({
   reducers: {
     openChannelDetails: (state, action) => {
       state.isOpen = true;
-      state.channelData = action.payload.channel;
       state.activeTab = action.payload.tab || "about";
     },
     closeChannelDetails: (state) => {
       state.isOpen = false;
-      state.channelData = null;
       state.activeTab = "about";
     },
     setActiveTab: (state, action) => {

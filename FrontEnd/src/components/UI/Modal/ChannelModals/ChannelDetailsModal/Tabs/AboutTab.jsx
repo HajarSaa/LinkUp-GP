@@ -12,44 +12,56 @@ import { findMemberById } from "../../../../../../utils/workspaceUtils";
 import { formatDateToLong } from "../../../../../../utils/formatedDate";
 import { BsCopy } from "react-icons/bs";
 import Spinner from "../../../../Spinner/Spinner";
-import useLeaveChannel from "../../../../../../API/hooks/useLeaveChannel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { isChannelOwner } from "../../../../../../utils/channelUtils";
 import InfoIcon from "../../../../Icons/InforIcon/InfoIcon";
+import useLeaveChannel from "../../../../../../API/hooks/channel/useLeaveChannel";
 
-function AboutTab({ channelData }) {
+function AboutTab() {
   const dispatch = useDispatch();
+  const [tooltipText, setTooltipText] = useState("Copy channel Id");
+  const [isLeaving, setIsLeaving] = useState(false);
+
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   const { workspace } = useSelector((state) => state.workspace);
-  const { leaveChannel, loading, error, success } = useLeaveChannel();
-  const createdBy = findMemberById(workspace, channelData?.createdBy);
-  const createdAt = formatDateToLong(channelData?.createdAt);
-  const [tooltipText, setTooltipText] = useState("Copy channel Id");
-  const isOwner = isChannelOwner(channelData, workspace);
+  const { channel } = useSelector((state) => state.channel)
+  console.log(channel)
+  const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
+  const createdBy = findMemberById(workspace, channel?.createdBy);
+  const createdAt = formatDateToLong(channel?.createdAt);
+  const isOwner = isChannelOwner(channel, workspace);
 
-  const handleLeaveChannel = () => {
-    leaveChannel(channelData.id);
-  };
+  function handle_leave(e) {
+    e.stopPropagation();
+    leave_channel(channel.id, {
+      onSuccess: close_leave,
+    });
+    console.log("leave ✔ ");
+  }
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText(channelData.id)
+      .writeText(channel.id)
       .then(() => {
         setTooltipText("Copied");
         setTimeout(() => setTooltipText("Copy channel Id"), 2000);
       })
       .catch(() => {
-        console.log("فشل النسخ ❌");
+        setTooltipText("try again");
       });
   };
 
-  useEffect(() => {
-    if (success) {
-      dispatch(closeChannelDetails());
-    }
-  }, [success, dispatch]);
+  // useEffect(() => {
+  //   if (success) {
+  //     dispatch(closeChannelDetails());
+  //   }
+  // }, [success, dispatch]);
+
+  function close_leave() {
+    dispatch(closeChannelDetails());
+  }
 
   function rename_channel() {
     if (isOwner) {
@@ -82,8 +94,8 @@ function AboutTab({ channelData }) {
           </div>
           <div className={styles.bottom}>
             <div className="align-items-center gap-3">
-              <ChannelType type={channelData.type} />
-              <span>{channelData.name}</span>
+              <ChannelType type={channel.type} />
+              <span>{channel.name}</span>
             </div>
           </div>
         </div>
@@ -125,25 +137,21 @@ function AboutTab({ channelData }) {
         </div>
         <div
           className={`${styles.infoTopic} ${styles.leaveItem}`}
-          onClick={handleLeaveChannel}
+          onClick={handle_leave}
         >
-          {!error ? (
-            <>
-              {loading ? (
-                <div className={styles.loading_status}>
-                  <Spinner width={20} height={20} color="var(--error-color)" />
-                </div>
-              ) : (
-                <span>Leave channel</span>
-              )}
-            </>
-          ) : (
-            <span>{error.message}</span>
-          )}
+          <>
+            {isLeaving ? (
+              <div className={styles.loading_status}>
+                <Spinner width={30} height={30} color="var(--error-color)" />
+              </div>
+            ) : (
+              <span>Leave channel</span>
+            )}
+          </>
         </div>
       </div>
       <div className={styles.chId}>
-        <span>Channel ID : {channelData.id}</span>
+        <span>Channel ID : {channel.id}</span>
         <span
           className={styles.chId_icon}
           onClick={handleCopy}
@@ -167,5 +175,5 @@ function AboutTab({ channelData }) {
 export default AboutTab;
 
 AboutTab.propTypes = {
-  channelData: PropTypes.any,
+  channel: PropTypes.any,
 };

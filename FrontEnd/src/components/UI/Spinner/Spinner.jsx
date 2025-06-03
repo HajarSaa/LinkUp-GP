@@ -7,14 +7,15 @@ const Spinner = ({
   color = "blue",
   secondaryColor = "#ccc",
   border = 2,
+  className
 }) => {
   return (
     <div
-      className={styles.spinner}
+      className={`${styles.spinner} ${className}`}
       style={{
         width: width,
         height: height,
-        borderColor:`${color} ${secondaryColor} ${secondaryColor}`,
+        borderColor: `${color} ${secondaryColor} ${secondaryColor}`,
         borderWidth: `${border}px`,
       }}
     />
@@ -27,6 +28,7 @@ Spinner.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   border: PropTypes.number,
+  className: PropTypes.string,
 };
 
 export default Spinner;

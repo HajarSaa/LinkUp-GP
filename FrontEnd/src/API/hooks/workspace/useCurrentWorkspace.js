@@ -3,12 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
-import { getWorkspace } from "../services/workspaceService";
-import { setWorkspace } from "../redux_toolkit/api_data/workspaceSlice";
+import { getWorkspace } from "../../services/workspaceService";
+import { setWorkspace } from "../../redux_toolkit/api_data/workspaceSlice";
 import {
   disableResizing,
   enableResizing,
-} from "../redux_toolkit/ui/resizeSlice";
+} from "../../redux_toolkit/ui/resizeSlice";
 
 const useCurrentWorkspace = () => {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const useCurrentWorkspace = () => {
     enabled: !!work_id,
     staleTime: 0,
     retry: 1,
+    // refetchInterval: 1000,
   });
 
   // Handle success

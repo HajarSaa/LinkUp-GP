@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import styles from "./ChannelOptionModal.module.css";
@@ -7,11 +6,16 @@ import { closeMenu } from "../../../../../API/redux_toolkit/chat/channel/channel
 import { openChannelDetails } from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import { openNotificationsModal } from "../../../../../API/redux_toolkit/modals/notificationsModalSlice";
 import Overlay from "../Overlay/Overlay";
+import useLeaveChannel from "../../../../../API/hooks/channel/useLeaveChannel";
+import Spinner from "../../../Spinner/Spinner";
 
-const ChannelOptionModal = ({ channel }) => {
+const ChannelOptionModal = () => {
     const dispatch = useDispatch();
-    const isMenuOpen = useSelector((state) => state.channelMenu.isOpen);
     const [copyList, setCopyList] = useState(false);
+    const [isLeaving, setIsLeaving] = useState(false);
+    const isMenuOpen = useSelector((state) => state.channelMenu.isOpen);
+    const { channel } = useSelector((state) => state.channel);
+    const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
 
     function handleClose(e) {
         if (e.target === e.currentTarget) dispatch(closeMenu());
@@ -23,6 +27,14 @@ const ChannelOptionModal = ({ channel }) => {
         setCopyList(false);
     }
 
+    function handle_leave(e) {
+        e.stopPropagation();
+        leave_channel(channel.id, {
+            onSuccess: handleClose,
+        });
+        console.log("leave ✔ ");
+    }
+
     if (!isMenuOpen) return;
     return (
         <>
@@ -32,7 +44,7 @@ const ChannelOptionModal = ({ channel }) => {
                     className={styles.menuItem}
                     onClick={() => {
                         dispatch(closeMenu());
-                        dispatch(openChannelDetails({ channel, tab: "about" }));
+                        dispatch(openChannelDetails({ tab: "about" }));
                     }}
                 >
                     Open channel details
@@ -55,7 +67,7 @@ const ChannelOptionModal = ({ channel }) => {
                     className={styles.menuItem}
                     onClick={() => {
                         dispatch(closeMenu());
-                        dispatch(openChannelDetails({ channel, tab: "settings" }));
+                        dispatch(openChannelDetails({ tab: "settings" }));
                     }}
                 >
                     Edit settings
@@ -85,8 +97,17 @@ const ChannelOptionModal = ({ channel }) => {
                 <div className={styles.menuItem}>Search in channel</div>
                 <div className={styles.menuItem}>Open in new window</div>
                 <hr className={styles.divider} />
-                <div className={`${styles.menuItem} ${styles.danger}`}>
-                    Leave channel
+                <div
+                    className={`${styles.menuItem} ${styles.danger}`}
+                    onClick={handle_leave}
+                >
+                    {isLeaving ? (
+                        <span className={styles.spinner_loading}>
+                            <Spinner width={20} height={20} color="var(--error-color)" />
+                        </span>
+                    ) : (
+                        "Leave channel"
+                    )}
                 </div>
             </div>
         </>
