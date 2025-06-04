@@ -1,3 +1,40 @@
+.browse_channel_list {
+  width: 100%;
+}
+
+.browse_channel_header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.browse_channel_header>div {
+  width: 90%;
+}
+
+
+.browse_channel_list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.browse_channel_list.scrolled{
+  border-top: 1px solid var(--border-color);
+}
+
+.channel_list_container {
+  width: 90%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-white);
+}
+
 .browseHeader {
   display: flex;
   justify-content: space-between;
@@ -5,7 +42,7 @@
 }
 
 .browseHeader>.title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
 }
 
@@ -13,14 +50,6 @@
   margin-bottom: 1rem;
 }
 
-.channelContainer {
-  background-color: var(--bg-white);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--border-color);
-}
 
 .channelItem {
   padding: 20px 10px;
@@ -73,17 +102,17 @@
 .buttonGroups>.buttonGroups_btn,
 .createBtn {
   display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    line-height: 100%;
-    font-weight: bold;
-    border-radius: var(--border-radius);
-    padding: 8px 14px;
-    cursor: pointer;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-white);
-    height: 32px;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 100%;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+  height: 32px;
 }
 
 .buttonGroups>.buttonGroups_btn:hover,

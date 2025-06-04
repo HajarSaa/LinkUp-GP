@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 
 function FullPageContent({children}) {
   return (
-    <div>
+    <>
       {children}
-    </div>
+    </>
   );
 }
 

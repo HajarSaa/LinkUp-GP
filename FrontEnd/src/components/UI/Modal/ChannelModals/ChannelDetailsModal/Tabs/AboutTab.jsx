@@ -52,11 +52,6 @@ function AboutTab() {
       });
   };
 
-  // useEffect(() => {
-  //   if (success) {
-  //     dispatch(closeChannelDetails());
-  //   }
-  // }, [success, dispatch]);
 
   function close_leave() {
     dispatch(closeChannelDetails());

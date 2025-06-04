@@ -6,9 +6,10 @@ import UpdateImage from "./UpdateImage"
 function Testing() {
   return (
     <>
-      {/* <UpdateImage /> */}
+      <UpdateImage />
       {/* <MessageInput/> */}
-      <MI/>
+      {/* this is rich text editor */}
+      {/* <MI/>  */}
     </>
   )
 }
