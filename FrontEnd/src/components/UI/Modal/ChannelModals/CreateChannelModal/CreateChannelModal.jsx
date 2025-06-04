@@ -14,9 +14,11 @@ import Overlay from "../Overlay/Overlay";
 import useCreateChannel from "../../../../../API/hooks/channel/useCreateChannel";
 import Spinner from "../../../Spinner/Spinner";
 import ChannelType from "../../../Channel/ChannelType/ChannelType";
+import { useNavigate } from "react-router-dom";
 
 const CreateChannelModal = () => {
   const dispatch = useDispatch();
+  const navigateTo = useNavigate();
   const [error_message, setErrorMessage] = useState(null);
   const { workspace } = useSelector((state) => state.workspace);
   const [channelName, setChannelName] = useState("");
@@ -46,6 +48,7 @@ const CreateChannelModal = () => {
       {
         onSuccess: (data) => {
           dispatch(closeCreateChannel());
+          navigateTo(`/channels/${data.channel.id}`);
           dispatch(openInviteChannel(data?.channel));
           setIsPublic(true);
           setChannelName("");
