@@ -17,7 +17,7 @@ import { BsLightning } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
 import UserModal from "../Modal/UserModal/UserModal";
 import { useSelector } from "react-redux";
-import { getConversationPartner } from "../../../utils/conversUtils";
+import { chatMate } from "../../../utils/conversUtils";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -28,10 +28,8 @@ const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { convers } = useSelector((state) => state.convers);
   const { workspace } = useSelector((state) => state.workspace);
-  const conversPartener = getConversationPartner(convers, workspace.members);
-  useEffect(() => {
-    console.log("convers partener =>", conversPartener);
-  }, [convers, conversPartener]);
+  const receiver = chatMate(convers, workspace.members);
+
 
   const menuItems = [
     {
@@ -75,18 +73,6 @@ const Navbar = () => {
     { label: "Workflow", icon: <BsLightning /> },
     { label: "Bookmark", icon: <IoBookmarkOutline /> },
   ];
-  // const userData = {
-  //   email: "alaaalsoudy832003@gmail.com",
-  //   phone: "",
-  // };
-  // const userData2 = {
-  //   fullName: "Alaa Alsoudy",
-  //   displayName: "Alaa Alsoudy",
-  //   title: "",
-  //   namePronunciation: "Zoe (pronounced 'zo-ee')",
-  //   timeZone: "(UTC+02:00) Cairo",
-  // };
-  // const [isPhotoModalOpen, setPhotoModalOpen] = useState(false);
   return (
     <div className={styles.navbar}>
       {/* 🟢 Profile Section */}

@@ -7,16 +7,14 @@ import useGetConvers from "../../../API/hooks/conversation/useGetConvers";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "../dashboard.module.css";
 import Panel from "../../../components/Layout/Panel/Panel";
+import { useSelector } from "react-redux";
 
 function DmPage() {
   const { id: convers_id } = useParams();
-  const {
-    isLoading: convers_loading,
-    isError,
-    error,
-  } = useGetConvers(convers_id);
-  
-  if (convers_loading)
+  const { isLoading, isError, error } = useGetConvers(convers_id);
+  const { convers } = useSelector((state) => state.convers);
+
+  if (isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -27,8 +25,11 @@ function DmPage() {
         />
       </div>
     );
+
   if (isError)
     return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
+
+  if (!convers) return;
   return (
     <PageContent>
       <div className={styles.page_content}>

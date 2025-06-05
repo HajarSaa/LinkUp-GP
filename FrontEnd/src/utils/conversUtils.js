@@ -1,4 +1,4 @@
-export const getConversationPartner = (conversation, workspaceMembers) => {
+export const chatMate = (conversation, workspaceMembers) => {
   if (!conversation || !workspaceMembers || !workspaceMembers.length)
     return null;
 

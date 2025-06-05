@@ -13,18 +13,10 @@ import { useSelector } from "react-redux";
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
   const { id: channel_id } = useParams();
-  const {
-    isLoading: channel_loading,
-    isError: channel_error,
-    ch_error,
-  } = useGetChannel(channel_id);
-  const {
-    isLoading: messages_loading,
-    isError: channel_ms_error,
-    ch_ms_error,
-  } = useGetChannelMessages(channel_id);
+  const channel_query = useGetChannel(channel_id);
+  const message_query = useGetChannelMessages(channel_id);
 
-  if (channel_loading || messages_loading)
+  if (channel_query.isLoading || message_query.isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -35,13 +27,18 @@ function ChannelPage() {
         />
       </div>
     );
-  if (channel_error)
-    return <div className={`${styles.status} ${styles.error}`}>{ch_error}</div>;
-  if (channel_ms_error)
+  if (channel_query.isError)
     return (
-      <div className={`${styles.status} ${styles.error}`}>{ch_ms_error}</div>
+      <div className={`${styles.status} ${styles.error}`}>
+        {channel_query.error}
+      </div>
     );
-
+  if (message_query.isError)
+    return (
+      <div className={`${styles.status} ${styles.error}`}>
+        {message_query.error}
+      </div>
+    );
 
   if (!channel) return;
   return (
