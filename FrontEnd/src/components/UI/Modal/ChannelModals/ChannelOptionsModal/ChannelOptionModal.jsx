@@ -8,14 +8,17 @@ import { openNotificationsModal } from "../../../../../API/redux_toolkit/modals/
 import Overlay from "../Overlay/Overlay";
 import useLeaveChannel from "../../../../../API/hooks/channel/useLeaveChannel";
 import Spinner from "../../../Spinner/Spinner";
+import { getNearestChannel } from "../../../../../utils/channelUtils";
+import { useNavigate } from "react-router-dom";
 
 const ChannelOptionModal = () => {
     const dispatch = useDispatch();
     const [copyList, setCopyList] = useState(false);
-    const [isLeaving, setIsLeaving] = useState(false);
     const isMenuOpen = useSelector((state) => state.channelMenu.isOpen);
     const { channel } = useSelector((state) => state.channel);
-    const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
+    const { workspace } = useSelector((state) => state.workspace);
+    const navigateTo = useNavigate();
+    const { mutate: leave_channel, isPending } = useLeaveChannel();
 
     function handleClose(e) {
         if (e.target === e.currentTarget) dispatch(closeMenu());
@@ -30,9 +33,12 @@ const ChannelOptionModal = () => {
     function handle_leave(e) {
         e.stopPropagation();
         leave_channel(channel.id, {
-            onSuccess: handleClose,
+            onSuccess: () => {
+                dispatch(closeMenu());
+                const nearestChannel = getNearestChannel(channel?.id, workspace);
+                navigateTo(`/channels/${nearestChannel}`);
+            },
         });
-        console.log("leave ✔ ");
     }
 
     if (!isMenuOpen) return;
@@ -101,7 +107,7 @@ const ChannelOptionModal = () => {
                     className={`${styles.menuItem} ${styles.danger}`}
                     onClick={handle_leave}
                 >
-                    {isLeaving ? (
+                    {isPending ? (
                         <span className={styles.spinner_loading}>
                             <Spinner width={20} height={20} color="var(--error-color)" />
                         </span>

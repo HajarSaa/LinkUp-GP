@@ -99,29 +99,6 @@ export const getMyConversations = (workspace) => {
   });
 };
 
-// ============(Get My Channels)================
-export const getMyChannelsOnly = (workspace) => {
-  if (!workspace || !workspace.channels || !workspace.members) return [];
-
-  let userId = null;
-
-  try {
-    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-    userId = storedUser?._id;
-  } catch (error) {
-    console.error("Error parsing user from localStorage:", error);
-    return [];
-  }
-
-  const myMember = workspace.members.find((member) => member.user === userId);
-  const myMemberId = myMember?._id;
-
-  if (!myMemberId) return [];
-
-  return workspace.channels.filter((channel) =>
-    channel.members.includes(myMemberId)
-  );
-};
 
 // ============(Get Channel Members)================
 export const getMembersData = (channel, workspace) => {

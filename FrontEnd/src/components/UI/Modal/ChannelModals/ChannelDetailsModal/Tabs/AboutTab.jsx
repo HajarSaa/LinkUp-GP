@@ -15,19 +15,19 @@ import Spinner from "../../../../Spinner/Spinner";
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { isChannelOwner } from "../../../../../../utils/channelUtils";
+import { getNearestChannel, isChannelOwner } from "../../../../../../utils/channelUtils";
 import InfoIcon from "../../../../Icons/InforIcon/InfoIcon";
 import useLeaveChannel from "../../../../../../API/hooks/channel/useLeaveChannel";
+import { useNavigate } from "react-router-dom";
 
 function AboutTab() {
   const dispatch = useDispatch();
   const [tooltipText, setTooltipText] = useState("Copy channel Id");
-  const [isLeaving, setIsLeaving] = useState(false);
-
+  const navigateTo = useNavigate();
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   const { workspace } = useSelector((state) => state.workspace);
-  const { channel } = useSelector((state) => state.channel)
-  const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
+  const { channel } = useSelector((state) => state.channel);
+  const { mutate: leave_channel , isPending } = useLeaveChannel();
   const createdBy = findMemberById(workspace, channel?.createdBy);
   const createdAt = formatDateToLong(channel?.createdAt);
   const isOwner = isChannelOwner(channel, workspace);
@@ -52,9 +52,10 @@ function AboutTab() {
       });
   };
 
-
   function close_leave() {
     dispatch(closeChannelDetails());
+    const nearestChannel = getNearestChannel(channel?.id, workspace);
+    navigateTo(`/channels/${nearestChannel}`);
   }
 
   function rename_channel() {
@@ -134,7 +135,7 @@ function AboutTab() {
           onClick={handle_leave}
         >
           <>
-            {isLeaving ? (
+            {isPending ? (
               <div className={styles.loading_status}>
                 <Spinner width={30} height={30} color="var(--error-color)" />
               </div>

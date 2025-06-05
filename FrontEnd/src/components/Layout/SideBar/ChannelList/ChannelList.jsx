@@ -3,7 +3,7 @@ import styles from "./ChannelList.module.css";
 import ChannelListItem from "./ChannelListItem";
 import AddButton from "../AddButton/AddButton.jsx";
 import { useParams } from "react-router-dom";
-import {getMyChannelsOnly} from "../../../../utils/workspaceUtils.js";
+import {getMyChannelsOnly} from "../../../../utils/channelUtils.js";
 
 function ChannelList() {
   const { workspace } = useSelector((state) => state.workspace);

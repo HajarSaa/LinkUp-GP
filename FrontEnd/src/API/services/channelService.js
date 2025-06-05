@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-// Get Channel
+// ===============Get Channel Data========================================
 export const getChannelData = async (channel_id) => {
   const { data } = await axiosInstance.get(`/channels/${channel_id}`);
   return data.data;
@@ -18,20 +18,9 @@ export const createChannel = async (channel_data) => {
   const { data } = await axiosInstance.post(`/channels`, channel_data);
   return data.data;
 };
-// ==============( get channel messages)===
-export const getChannelMessages = async ({
-  channel_id,
-  pageParam = 1,
-  limit,
-}) => {
-  const { data } = await axiosInstance.get(
-    `/messages/channelMessages/${channel_id}?limit=${limit}&page=${pageParam}`
-  );
-
-  return {
-    data: data.data.messages,
-    currentPage: pageParam,
-    limit,
-    hasNextPage: data.data.messages.length === limit,
-  };
+// ===============Delete Channel ========================================
+export const deleteThisChannel = async (channel_id) => {
+  const { data } = await axiosInstance.delete(`/channels/${channel_id}`);
+  return data.data;
 };
+

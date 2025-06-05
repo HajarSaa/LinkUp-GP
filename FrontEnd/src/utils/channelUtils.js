@@ -14,3 +14,38 @@ export const isChannelOwner = function (channel, workspace) {
 
   return channel.createdBy === member._id;
 };
+// =======================
+
+// use in leaving & deleting
+export const getNearestChannel = function (current_id, worspace) {
+  if (!current_id || !worspace) return;
+  const myChannels = getMyChannelsOnly(worspace);
+  const channel_el = myChannels?.find((channel) => channel.id === current_id);
+  const index = myChannels.indexOf(channel_el);
+  const next_index = index === 0 ? 1 : index - 1;
+  return myChannels[next_index].id;
+};
+
+// ============(Get My Channels)================
+export const getMyChannelsOnly = (workspace) => {
+  if (!workspace || !workspace.channels || !workspace.members) return [];
+
+  let userId = null;
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
+    userId = storedUser?._id;
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+    return [];
+  }
+
+  const myMember = workspace.members.find((member) => member.user === userId);
+  const myMemberId = myMember?._id;
+
+  if (!myMemberId) return [];
+
+  return workspace.channels.filter((channel) =>
+    channel.members.includes(myMemberId)
+  );
+};

@@ -6,4 +6,5 @@
   cursor: pointer;
   color: var(--primary-color);
   padding: 5px;
+  height: fit-content;
 }

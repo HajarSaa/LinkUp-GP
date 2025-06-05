@@ -11,6 +11,7 @@ import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMess
 import { useSelector } from "react-redux";
 
 function ChannelPage() {
+  const { channel } = useSelector((state) => state.channel);
   const { id: channel_id } = useParams();
   const {
     isLoading: channel_loading,
@@ -22,8 +23,6 @@ function ChannelPage() {
     isError: channel_ms_error,
     ch_ms_error,
   } = useGetChannelMessages(channel_id);
-
-  const channel = useSelector((state) => state.channel.channel);
 
   if (channel_loading || messages_loading)
     return (
@@ -43,11 +42,13 @@ function ChannelPage() {
       <div className={`${styles.status} ${styles.error}`}>{ch_ms_error}</div>
     );
 
+
+  if (!channel) return;
   return (
     <PageContent>
       <div className={styles.page_content}>
         <Header />
-        <ChannelBody/>
+        <ChannelBody />
         <MessageInput channelName={channel?.name} />
       </div>
       <Panel />

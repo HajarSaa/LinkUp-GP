@@ -1,15 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { leaveThisChannel } from "../../services/channelService";
 
-function useLeaveChannel(setIsLeaving) {
+function useLeaveChannel() {
   return useMutation({
-    mutationFn: (channel_id) => leaveThisChannel(channel_id),
-    onMutate: () => {
-      setIsLeaving(true);
-    },
-    onSettled: () => {
-      setIsLeaving(false);
-    }
+    mutationFn: (channel_id) => leaveThisChannel(channel_id)
   });
 }
 

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getChannelMessages } from "../../services/channelService";
+import { getChannelMessages } from "../../services/messages";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setChannelMessages } from "../../redux_toolkit/api_data/messages/channelMessagesSlice";
