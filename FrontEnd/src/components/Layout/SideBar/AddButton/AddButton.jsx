@@ -3,7 +3,7 @@ import styles from "./AddButton.module.css";
 import PropTypes from "prop-types";
 import AddButtonModal from "../../../UI/Modal/ChannelModals/AddButtonModal/AddButtonModal";
 import { useRef, useState } from "react";
-import { openInvitePeople } from "../../../../API/redux_toolkit/modals/modalsSlice";
+import { openInviteWork } from "../../../../API/redux_toolkit/modals/modalsSlice";
 import { useDispatch } from "react-redux";
 
 function AddButton({ text, type }) {
@@ -12,8 +12,8 @@ function AddButton({ text, type }) {
   const dispatch = useDispatch();
 
   function handleClick() {
-    if (type === 'channel') setOpenModal(true);
-    else dispatch(openInvitePeople())
+    if (type === "channel") setOpenModal(true);
+    else dispatch(openInviteWork());
   }
 
   return (

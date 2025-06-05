@@ -1,7 +1,5 @@
 /* .messages_wrapper {
-  background-color: var(--bg-white);
-  flex-grow: 1;
-  overflow-y: scroll;
+
 } */
 .message_container {
   width: 100%;
@@ -27,15 +25,10 @@
 .profileWrapper {
   width: 36px;
   height: 36px;
-  overflow: hidden;
   flex-shrink: 0;
-  object-fit: cover;
-  color: var(--active-color);
   background-color: var(--secondary-color);
   border-radius: var(--border-radius);
-  display: flex;
   justify-content: center;
-  align-items: center;
   cursor: pointer;
 }
 
@@ -282,3 +275,13 @@
 }
 
 /*End thread Part */
+
+.loading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  color: var(--text-color-grey);
+  font-weight: bold;
+}

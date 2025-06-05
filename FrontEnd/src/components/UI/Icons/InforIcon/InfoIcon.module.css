@@ -1,0 +1,10 @@
+.info_icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  cursor: pointer;
+  color: var(--primary-color);
+  padding: 5px;
+  height: fit-content;
+}

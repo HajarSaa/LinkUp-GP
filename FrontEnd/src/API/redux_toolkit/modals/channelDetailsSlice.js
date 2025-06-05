@@ -1,11 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import mockChannels from '../../services/mockChannels';
-const firstChannel = mockChannels[0];
+// import mockChannels from '../../services/mockChannels';
+// const firstChannel = mockChannels[0];
 
 const initialState = {
   isOpen: false,
-  channelData: firstChannel,
   activeTab: "about",
   editModal: {
     renameChannel: false,
@@ -20,16 +19,14 @@ const channelDetailsSlice = createSlice({
   reducers: {
     openChannelDetails: (state, action) => {
       state.isOpen = true;
-      state.channelData = action.payload.channel;
-      state.activeTab = action.payload.tab || "about"; // ✅ التاب يجي من الـ payload أو يكون "about" كافتراضي
+      state.activeTab = action.payload.tab || "about";
     },
     closeChannelDetails: (state) => {
       state.isOpen = false;
-      state.channelData = null;
-      state.activeTab = "about"; // ✅ عند الإغلاق، يرجع للتاب الافتراضي
+      state.activeTab = "about";
     },
     setActiveTab: (state, action) => {
-      state.activeTab = action.payload; // ✅ تحديث التاب المختار
+      state.activeTab = action.payload;
     },
     // Edit Modals
     openRenameModal: (state) => {

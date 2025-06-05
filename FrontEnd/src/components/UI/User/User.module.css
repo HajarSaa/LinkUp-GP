@@ -1,0 +1,27 @@
+/* user status */
+.user_status {
+  display: flex;
+  align-items: center;
+  width:10px;
+  height:10px;
+  border-radius: 50%;
+}
+.online {
+  background-color: var(--success-color);
+}
+.offline {
+  background-color: #666;
+}
+
+/* user status =====================*/
+
+/* User Image */
+.user_img {
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: center;
+  border-radius: inherit;
+}
+/* User Image======================= */

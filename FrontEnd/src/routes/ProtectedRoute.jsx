@@ -1,27 +1,42 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import PropTypes from "prop-types";
-import useCurrentUser from "../API/hooks/useCurrentUser";
-import ProtectedLoading from "./ProtectedLoading/ProtectedLoading";
+import useGetMe from "../API/hooks/workspace/useGetMe";
+import ProtectedLoading from "../components/UI/ProtectedLoading/ProtectedLoading";
+import { setUser } from "../API/redux_toolkit/api_data/userSlice";
 
 function ProtectedRoute() {
-  const { isAuthenticated, loading, error } =
-    useCurrentUser();
+  const dispatch = useDispatch();
+
+  const { data, isLoading, error, isError } = useGetMe();
 
 
-  if (error) console.log(error);
+  useEffect(() => {
+    if (data?.user) {
+      dispatch(setUser(data.user));
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+    }
+  }, [data, dispatch]);
 
-  if (loading) return <ProtectedLoading/>
+  useEffect(() => {
+    if (isError) {
+      const storedUser = localStorage.getItem("currentUser");
+      if (storedUser) {
+        dispatch(setUser(JSON.parse(storedUser)));
+      }
+    }
+  }, [isError, dispatch]);
 
-  if (!isAuthenticated) {
+  if (isLoading) return <ProtectedLoading />;
+
+  if (error) console.log(error.message);
+
+  if (!data?.user) {
     console.log("User not authenticated, redirecting to login...");
     return <Navigate to="/login" replace />;
   }
 
   return <Outlet />;
 }
-
-ProtectedRoute.propTypes = {
-  children: PropTypes.any,
-};
 
 export default ProtectedRoute;

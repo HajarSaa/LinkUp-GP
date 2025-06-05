@@ -29,7 +29,6 @@ function Step2({ onNext, workspace }) {
         localStorage.removeItem("selectedWorkspaceId");
       dispatch(clearWorkspace());
       localStorage.setItem("selectedWorkspaceId", workspace._id);
-      // navigate(`/`);
       onNext(userName);
     } catch (err) {
       setError(err.message);

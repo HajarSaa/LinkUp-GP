@@ -2,31 +2,19 @@ import styles from "./MainLayout.module.css";
 import NavBar from "../../components/Layout/Navbar/NavBar";
 import WorkBar from "../../components/Layout/Workbar/WorkBar";
 import SideBar from "../../components/Layout/SideBar/SideBar";
-
 import { Outlet, useLocation } from "react-router-dom";
-import useCurrentWork from "../../API/hooks/useCurrentWork";
-import { useDispatch } from "react-redux";
-import {
-  disableResizing,
-  enableResizing,
-} from "../../API/redux_toolkit/ui/resizeSlice";
-import { useEffect } from "react";
 import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
-import InvitePeopleModal from "../../components/UI/Modal/InvitePeopleModal/InvitePeopleModal";
+import InviteWorkModal from "../../components/UI/Modal/InviteWorkModal/InviteWorkModal";
+import useCurrentWorkspace from "../../API/hooks/workspace/useCurrentWorkspace";
+import { useSelector } from "react-redux";
+import InviteChannelModal from "../../components/UI/Modal/ChannelModals/InviteChannelModal/InviteChannelModal";
 
 function MainLayout() {
-  const dispatch = useDispatch();
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
-  const { loading, workspace } = useCurrentWork();
 
-  useEffect(() => {
-    if (loading) {
-      dispatch(disableResizing());
-    } else {
-      dispatch(enableResizing());
-    }
-  }, [loading, dispatch]);
+  useCurrentWorkspace();
+  const { workspace } = useSelector((state) => state.workspace);
 
   return (
     <div className={styles.main_layout}>
@@ -50,7 +38,8 @@ function MainLayout() {
         {/* Modals */}
         {/* Channel Modals */}
         <CreateChannelModal />
-        <InvitePeopleModal />
+        <InviteWorkModal />
+        <InviteChannelModal />
       </div>
     </div>
   );

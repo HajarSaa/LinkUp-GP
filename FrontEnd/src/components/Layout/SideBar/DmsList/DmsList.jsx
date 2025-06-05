@@ -5,13 +5,13 @@ import DmsListItem from "./DmsListItem";
 import { useNavigate, useParams } from "react-router-dom";
 import AddButton from "../AddButton/AddButton";
 import { closeAddButtonModal } from "../../../../API/redux_toolkit/modals/addButtonModal";
-import { getMyConversationsDetailed } from "../../../../utils/workspaceUtils";
+import { getMyConversations } from "../../../../utils/workspaceUtils";
 
 function DmsList() {
   const { workspace } = useSelector((state) => state.workspace);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const conversations = getMyConversationsDetailed(workspace);
+  const conversations = getMyConversations(workspace);
 
   function handleCreateBtn() {
     dispatch(closeAddButtonModal());

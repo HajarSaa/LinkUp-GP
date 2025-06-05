@@ -1,7 +1,7 @@
 import styles from "./ChannelList.module.css";
-import { FaLock, FaHashtag } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import ChannelType from "../../../UI/Channel/ChannelType/ChannelType";
 
 const ChannelListItem = ({ channelData, isActive }) => {
   const navigate = useNavigate();
@@ -16,9 +16,7 @@ const ChannelListItem = ({ channelData, isActive }) => {
       onClick={handleClick}
     >
       <div className={styles.left_side}>
-        <span className={styles.icon}>
-          {channelData.type === "private" ? <FaLock /> : <FaHashtag />}
-        </span>
+        <ChannelType type={channelData.type} />
       </div>
       <span className={styles.channel_name}>{channelData.name}</span>
     </div>

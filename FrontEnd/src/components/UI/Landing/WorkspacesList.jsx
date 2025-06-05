@@ -1,34 +1,39 @@
+import useGetMe from "../../../API/hooks/workspace/useGetMe";
+import Spinner from "../Spinner/Spinner";
+import { CiFaceFrown } from "react-icons/ci";
 import styles from "./Landing.module.css";
 import WorkspaceItem from "./WorkspaceItem";
-import useCurrentUser from "../../../API/hooks/useCurrentUser";
-import Spinner from "../../../routes/Spinner/Spinner";
-import { CiFaceFrown } from "react-icons/ci";
 
 function WorkspacesList() {
-  const { user, workspaces, loading, error } = useCurrentUser();
+  const { data, error, isError ,isFetching} = useGetMe();
 
-  if (loading)
+  if (isFetching)
     return (
       <div className={styles.loading}>
         <Spinner width={70} height={70} border={3} color={"#4285F4"} />
       </div>
     );
-  if (error)
+
+  if (isError)
     return (
       <div className={styles.error}>
-        <span>Something went wrong</span>
+        <span>{error}</span>
         <span>
           <CiFaceFrown />
         </span>
       </div>
     );
+
+  const user = data?.user || null;
+  const workspaces = data?.workspaces || [];
+
   return (
     <div className={styles.workspaces_list}>
       <div className={styles.workspace_list_header}>
-        Workspaces for <strong>{user.email}</strong>
+        Workspaces for <strong>{user?.email}</strong>
       </div>
       <div className={styles.workspace_list_items}>
-        {!loading && workspaces.length === 0 ? (
+        {workspaces.length === 0 ? (
           <div
             className={`${styles.workspaceItem} ${styles.empty_workspace_item}`}
           >

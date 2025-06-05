@@ -1,0 +1,14 @@
+.editorContent {
+  min-height: 40px;
+  border: none;
+  font-size: 14px;
+  padding: 8px;
+  line-height: 1.5;
+  outline: none;
+  background: transparent;
+  white-space: pre-wrap;
+}
+
+.editorContent:focus {
+  outline: none;
+}

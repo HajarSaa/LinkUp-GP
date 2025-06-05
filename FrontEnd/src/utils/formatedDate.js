@@ -1,4 +1,4 @@
-const formatDate = (date) => {
+export const formatDate = (date) => {
     const options = { weekday: 'long', month: 'long', day: 'numeric' };
     const formattedDate = new Date(date).toLocaleDateString('en-US', options);
 
@@ -11,4 +11,19 @@ const formatDate = (date) => {
     return `${formattedDate}${suffix}`;
 };
 
-export default formatDate;
+export const formatDateToLong = (isoDateString) => {
+    const date = new Date(isoDateString);
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    return date.toLocaleDateString('en-GB', options);
+};
+
+export const formatTimeTo12Hour = (isoDateString) => {
+    const date = new Date(isoDateString);
+    const options = {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+            timeZone: "Africa/Cairo",
+        };
+    return date.toLocaleTimeString("en-EG", options);
+};

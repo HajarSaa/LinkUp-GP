@@ -29,7 +29,7 @@
   --bg-light: #f8f8f8;
   --bg-light-grey: #f5f5f5;
   --bg-white-hover: #eaeaea;
-  --icons-hover:#ffffff33;
+  --icons-hover: #ffffff33;
   --overlay-bg: rgba(0, 0, 0, 0.4);
 
   /* color */
@@ -38,6 +38,7 @@
   /* shadows */
   --shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   --input-shadow: 0 0 0 4px rgba(0, 123, 255, 0.3);
+  --input-error-shadow: 0 0 0 4px rgb(255 0 0 / 25%);
 
   /* Sizes */
 

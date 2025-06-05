@@ -4,13 +4,14 @@ import styles from "./EditModals.module.css";
 import { closeEditModal } from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
+import ChannelType from "../../../Channel/ChannelType/ChannelType";
 
-const RenameChannelModal = ({ channelName = "#channel-name" }) => {
+const RenameChannelModal = ({ channelName = "#channel-name" , type }) => {
   const dispatch = useDispatch();
   const renameModal = useSelector(
     (state) => state.channelDetailsModal.editModal.renameChannel
   );
-  const [name, setName] = useState(channelName.slice(1));
+  const [name, setName] = useState(channelName);
   const [nameLength, setNameLength] = useState(80 - name.length);
 
   function handleCloseModal(e) {
@@ -36,7 +37,7 @@ const RenameChannelModal = ({ channelName = "#channel-name" }) => {
           </button>
         </div>
         <div className={styles.inputDiv}>
-          <span className={styles.type}>{channelName.at(0)}</span>
+          <ChannelType type={type} className={styles.type} />
           <input
             type="text"
             name="rename-channel"

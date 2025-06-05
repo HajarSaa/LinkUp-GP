@@ -18,6 +18,7 @@
     transition: all var(--transition-time);
     color: var(--text-color-grey);
     font-weight: bold;
+    background-color: white;
 }
 
 .input_label {
@@ -40,15 +41,9 @@
     color: var(--primary-color);
 }
 
-
 .input:focus {
     border-color: var(--primary-color);
 }
-
-.input.error {
-    border-color: var(--error-color);
-}
-
 
 .eyeIcon {
     display: flex;
@@ -67,19 +62,9 @@
     -ms-user-select: none;
 }
 
-.feedback {
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    transition: color var(--transition-time);
+input:-webkit-autofill+.input_label {
+    top: -8px;
+    left: 10px;
+    font-size: 0.75rem;
+    color: var(--primary-color);
 }
-
-.feedback.error {
-    color: var(--error-color);
-}
-
-.feedback.success {
-    color: var(--success-color);
-}
-
-
-/*  */

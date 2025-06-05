@@ -25,7 +25,8 @@ body {
   box-sizing: border-box;
 }
 
-#root , .app__body {
+#root,
+.app__body {
   width: 100%;
   height: 100%;
 }
@@ -48,13 +49,18 @@ p {
   line-height: 1.6;
 }
 
+input:focus {
+  outline: none;
+}
+input,textarea,button{
+  font-family: inherit;
+}
+
 /* Links */
 a {
   text-decoration: none;
 }
-input:focus{
-outline: none;
-}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
@@ -71,4 +77,18 @@ outline: none;
   background: var(--secondary-color);
 }
 
-/*  */
+/* Start Custom Tooltip */
+.custom-tooltip {
+  border-radius: 8px !important;
+  background-color: #111 !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.custom-tooltip.tooltip-success {
+  background-color: var(--success-color) !important;
+  color: white !important;
+}
+/* End Custom Tooltip */

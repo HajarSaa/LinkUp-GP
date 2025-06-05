@@ -1,0 +1,191 @@
+.browse_channel_list {
+  width: 100%;
+}
+
+.browse_channel_header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.browse_channel_header>div {
+  width: 90%;
+}
+
+
+.browse_channel_list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.browse_channel_list.scrolled{
+  border-top: 1px solid var(--border-color);
+}
+
+.channel_list_container {
+  width: 90%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-white);
+}
+
+.browseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.browseHeader>.title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.browseHeader {
+  margin-bottom: 1rem;
+}
+
+
+.channelItem {
+  padding: 20px 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.channelItem:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.headerText {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.channelName {
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  gap: 5px;
+}
+
+.viewChannel {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  display: none;
+  align-items: center;
+}
+
+/* buttonGroup */
+.buttonGroups {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 30px;
+  display: none;
+  gap: 8px;
+  cursor: context-menu;
+}
+
+.buttonGroups>.buttonGroups_btn,
+.createBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 100%;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+  height: 32px;
+}
+
+.buttonGroups>.buttonGroups_btn:hover,
+.createBtn:hover {
+  background-color: var(--white-btn-hover-color);
+}
+
+.channelItem:hover .viewChannel,
+.channelItem:hover .buttonGroups {
+  display: flex;
+}
+
+.channelInfo {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.channelInfo_text {
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.joined {
+  color: var(--green-color);
+}
+
+
+.joinedIcon {
+  font-size: 11px;
+}
+
+/* Filter */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filterIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.filters>.filter_item {
+  background: var(--bg-white);
+  border: none;
+  padding: 7px 10px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.filters>.filter_item:hover {
+  background-color: var(--white-btn-hover-color);
+  box-shadow: var(--shadow);
+}
