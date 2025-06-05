@@ -1,20 +1,6 @@
-import axios from "axios";
-
-const API_BASE_URL = "https://link-up-beige.vercel.app/api/v1";
+import axiosInstance from "./axiosInstance";
 
 export const getConversData = async (conver_id) => {
-  try {
-    const axios_response = await axios.get(
-      `${API_BASE_URL}/conversations/${conver_id}?page=1&limit=3`,
-      {
-        withCredentials: true,
-      }
-    );
-
-    const response = axios_response.data;
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching Conversation:", error.response.data);
-    return null;
-  }
+  const { data } = await axiosInstance.get(`/conversations/${conver_id}`);
+  return data.data;
 };
