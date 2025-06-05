@@ -10,8 +10,13 @@ import Panel from "../../../components/Layout/Panel/Panel";
 
 function DmPage() {
   const { id: convers_id } = useParams();
-  const { loading, error } = useGetConvers(convers_id);
-  if (loading)
+  const {
+    isLoading: convers_loading,
+    isError,
+    error,
+  } = useGetConvers(convers_id);
+  
+  if (convers_loading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -22,7 +27,7 @@ function DmPage() {
         />
       </div>
     );
-  if (error)
+  if (isError)
     return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
   return (
     <PageContent>

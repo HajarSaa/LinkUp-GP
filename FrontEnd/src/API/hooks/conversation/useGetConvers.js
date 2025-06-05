@@ -11,6 +11,7 @@ const useGetConvers = (convers_id) => {
     queryKey: ["convers", { convers_id }],
     queryFn: () => getConversData(convers_id),
     enabled: !!convers_id,
+    retry:1
   });
   useEffect(() => {
       if (query.data?.conversation) {
