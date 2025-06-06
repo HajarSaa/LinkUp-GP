@@ -9,7 +9,7 @@ import UserImage from "../User/UserImage";
 const UserCard = () => {
   const dispatch = useDispatch();
   const receiver = useSelector((state) => state.convers.chatMate);
-  console.log(receiver);
+
 
   function handelOpenUserPanel() {
     dispatch(openUserPanel(receiver.id || receiver._id));

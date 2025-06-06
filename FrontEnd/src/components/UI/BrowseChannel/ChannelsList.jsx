@@ -16,6 +16,8 @@ function ChannelsList() {
   // handle scrolling border
   useEffect(() => {
     const el = scrollRef.current;
+    if (!el) return;
+
     const handleScroll = () => {
       if (el.scrollTop > 20) {
         el.classList.add(styles.scrolled);
@@ -30,6 +32,7 @@ function ChannelsList() {
       el.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
 
   return (
     <div className={styles.browse_channel_list} ref={scrollRef}>

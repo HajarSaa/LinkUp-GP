@@ -15,6 +15,7 @@ import resizingReducer from "./ui/resizeSlice";
 import modalsReducer from "./modals/modalsSlice";
 import userReducer from "./api_data/userSlice";
 import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
+import userProfileSlice from './api_data/userProfileSlice';
 //======
 // ==============================(Conversation)
 //======
@@ -43,6 +44,7 @@ const store = configureStore({
     modals: modalsReducer,
     notificationsModal: notificationsModalReducer,
     emojiPicker: emojiPickerReducer,
+    userProfile:userProfileSlice,
   },
 });
 

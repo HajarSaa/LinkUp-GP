@@ -7,35 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import { useEffect, useRef } from "react";
-const ProfileCard = () => {
-  const { isOpen, userData } = useSelector(
+import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
+import Spinner from "../../Spinner/Spinner";
+
+const UserPanel = () => {
+  const dispatch = useDispatch();
+  const { isOpen, userData:user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
-  const dispatch = useDispatch();
-  const scrollRef = useRef();
+  const {
+    data: user_data,
+    isLoading,
+    isError,
+    error,
+  } = useGetUserProfile(user_id);
+
 
   const handleClose = () => {
     dispatch(closeChatPanel());
   };
 
-  console.log(userData);
-
-    useEffect(() => {
-      const el = scrollRef.current;
-      const handleScroll = () => {
-        if (el.scrollTop > 20) {
-          el.classList.add(styles.scrolled);
-        } else {
-          el.classList.remove(styles.scrolled);
-        }
-      };
-
-      el.addEventListener("scroll", handleScroll);
-
-      return () => {
-        el.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
 
   if (!isOpen) return null;
   return (
@@ -45,20 +36,30 @@ const ProfileCard = () => {
         <CloseIcon closeEvent={handleClose} />
       </div>
 
-      <div className={styles.panel_body} ref={scrollRef}>
-        <ProfileImage />
-        <ProfileInfo
-          name="User"
-          jobTitle="Backend Developer"
-          gender="He/Him"
-          status="Away"
-          localTime="6:20 AM local time"
-        />
-        <ProfileActions />
-        <ProfileAbout emailAddress="user@gmail.com" phone="01012345678" />
+      <div className={styles.panel_body}>
+        {isLoading ? (
+          <div className={styles.status}>
+            <Spinner width={50} height={50} color="var(--primary-color)" />
+          </div>
+        ) : isError ? (
+          <div className={styles.error}>{error}</div>
+        ) : (
+          <>
+            <ProfileImage />
+            <ProfileInfo
+              name="User"
+              jobTitle="Backend Developer"
+              gender="He/Him"
+              status="Away"
+              localTime="6:20 AM local time"
+            />
+            <ProfileActions />
+            <ProfileAbout emailAddress="user@gmail.com" phone="01012345678" />
+          </>
+        )}
       </div>
     </div>
   );
 };
 
-export default ProfileCard;
+export default UserPanel;
