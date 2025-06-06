@@ -94,7 +94,7 @@
 .profileSection {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   padding: 5px;
   border-radius: var(--border-radius);
 }
@@ -102,11 +102,13 @@
   background-color: var(--gray-light);
   cursor: pointer;
 }
-.profileImage {
-  font-size: 25px;
-  border-radius: var(--border-radius);
+.userbar_image {
+  width: 25px;
+  height: 25px;
+  border-radius: var(--border-radius-small);
   color: var(--active-color);
-  background-color: var(--secondary-color);
+  overflow: hidden;
+  background-color: #000;
 }
 
 .profileName {

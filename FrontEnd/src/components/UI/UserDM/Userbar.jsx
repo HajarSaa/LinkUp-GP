@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./UserDM.module.css";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { LuMessageCircle } from "react-icons/lu";
@@ -8,7 +8,6 @@ import { IoLayers } from "react-icons/io5";
 import { IoMdAdd } from "react-icons/io";
 import IconDropdown from "../Dropdown/IconDropdown";
 import MoreDropdown from "../Dropdown/MoreDropdown";
-import { BiSolidUser } from "react-icons/bi";
 import { FiHeadphones } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { FiFileText } from "react-icons/fi";
@@ -17,7 +16,7 @@ import { BsLightning } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
 import UserModal from "../Modal/UserModal/UserModal";
 import { useSelector } from "react-redux";
-import { chatMate } from "../../../utils/conversUtils";
+import UserImage from "../User/UserImage";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -26,10 +25,7 @@ import { chatMate } from "../../../utils/conversUtils";
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { convers } = useSelector((state) => state.convers);
-  const { workspace } = useSelector((state) => state.workspace);
-  const receiver = chatMate(convers, workspace.members);
-
+  const receiver = useSelector((state) => state.convers.chatMate);
 
   const menuItems = [
     {
@@ -81,8 +77,10 @@ const Navbar = () => {
           className={styles.profileSection}
           onClick={() => setIsModalOpen(true)}
         >
-          <BiSolidUser className={styles.profileImage} />
-          <span className={styles.profileName}>User</span>
+          <div className={styles.userbar_image}>
+            <UserImage src={receiver?.photo} alt={receiver?.userName} />
+          </div>
+          <span className={styles.profileName}>{receiver?.userName}</span>
         </div>
         {/* 🟢 Right Section */}
         <div className={styles.rightSection}>

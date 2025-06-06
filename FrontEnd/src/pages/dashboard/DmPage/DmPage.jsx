@@ -10,11 +10,11 @@ import Panel from "../../../components/Layout/Panel/Panel";
 import { useSelector } from "react-redux";
 
 function DmPage() {
-  const { id: convers_id } = useParams();
-  const { isLoading, isError, error } = useGetConvers(convers_id);
   const { convers } = useSelector((state) => state.convers);
+  const { id: convers_id } = useParams();
+  const convers_query = useGetConvers(convers_id);
 
-  if (isLoading)
+  if (convers_query.isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -26,8 +26,12 @@ function DmPage() {
       </div>
     );
 
-  if (isError)
-    return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
+  if (convers_query.isError)
+    return (
+      <div className={`${styles.status} ${styles.error}`}>
+        {convers_query.error}
+      </div>
+    );
 
   if (!convers) return;
   return (

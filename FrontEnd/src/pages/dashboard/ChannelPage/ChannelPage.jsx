@@ -39,7 +39,7 @@ function ChannelPage() {
         {message_query.error}
       </div>
     );
-
+  
   if (!channel) return;
   return (
     <PageContent>

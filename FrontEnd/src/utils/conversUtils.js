@@ -1,16 +1,12 @@
-export const chatMate = (conversation, workspaceMembers) => {
-  if (!conversation || !workspaceMembers || !workspaceMembers.length)
+export const chatMate = (conversation, workspaceMembers,logged_user) => {
+  if (
+    !conversation ||
+    !workspaceMembers ||
+    !logged_user
+  )
     return null;
 
-  let userId;
-
-  try {
-    const storedUser = JSON.parse(localStorage.getItem("currentUser"));
-    userId = storedUser?._id;
-  } catch (error) {
-    console.error("Error parsing user from localStorage:", error);
-    return null;
-  }
+  const userId = logged_user._id;
 
   const myMembership = workspaceMembers.find(
     (member) => member.user === userId
@@ -25,7 +21,8 @@ export const chatMate = (conversation, workspaceMembers) => {
       ? memberOneId
       : memberOneId === myMemberId
       ? memberTwoId
-      : memberOneId;
+        : memberOneId;
+
 
   return (
     workspaceMembers.find((member) => member._id === otherMemberId) || null
