@@ -3,9 +3,9 @@ import ProfileInfo from "./ProfileInfo";
 import ProfileActions from "./ProfileActions";
 import ProfileAbout from "./ProfileAbout";
 import styles from "./UserPanel.module.css";
-import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
+import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 const ProfileCard = () => {
   const { isOpen,userData } = useSelector((state) => state.chatPanel.userPanel);
   const dispatch = useDispatch();
@@ -22,9 +22,7 @@ const ProfileCard = () => {
       {/* Header Bar with Close Button */}
       <div className={styles.profileHeader}>
         <span>Profile</span>
-        <button className={styles.closeButton} onClick={handleClose}>
-          <IoCloseSharp />
-        </button>
+        <CloseIcon closeEvent={handleClose}/>
       </div>
 
       <ProfileImage />

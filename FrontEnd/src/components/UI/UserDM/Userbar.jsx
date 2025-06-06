@@ -18,6 +18,7 @@ import UserModal from "../Modal/UserModal/UserModal";
 import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../User/UserImage";
 import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
+import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -50,8 +51,18 @@ const Navbar = () => {
   ];
 
   const moreMenuItems = [
-    { label: "Open conversation details" },
-    { label: "View full profile" },
+    {
+      label: "Open conversation details",
+      clickAction: () => {
+        dispath(openUserDetailsModal(receiver));
+      },
+    },
+    {
+      label: "View full profile",
+      clickAction: () => {
+        dispath(openUserPanel(receiver.id || receiver._id));
+      },
+    },
     { label: "Add to VIP" },
     { label: "Star conversation" },
     { label: "Move conversation" },
@@ -77,7 +88,9 @@ const Navbar = () => {
         <div className={styles.upBar}>
           <div
             className={styles.profileSection}
-            onClick={() =>{dispath(openUserDetailsModal(receiver));}}
+            onClick={() => {
+              dispath(openUserDetailsModal(receiver));
+            }}
           >
             <div className={styles.userbar_image}>
               <UserImage src={receiver?.photo} alt={receiver?.userName} />
