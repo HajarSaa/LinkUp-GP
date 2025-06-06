@@ -6,17 +6,16 @@ import styles from "./UserPanel.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
-import { useEffect, useRef } from "react";
 import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
 import Spinner from "../../Spinner/Spinner";
 
 const UserPanel = () => {
   const dispatch = useDispatch();
+  const userProfile = useSelector((state) => state.userProfile.data);
   const { isOpen, userData:user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
   const {
-    data: user_data,
     isLoading,
     isError,
     error,
@@ -28,7 +27,7 @@ const UserPanel = () => {
   };
 
 
-  if (!isOpen) return null;
+  if (!isOpen || !userProfile) return null;
   return (
     <div className={styles.profileCard}>
       <div className={styles.profileHeader}>

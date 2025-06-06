@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userProfile: null,
+  data: null,
 };
 
 const userProfileSlice = createSlice({
@@ -9,10 +9,10 @@ const userProfileSlice = createSlice({
   initialState,
   reducers: {
     setUserProfile: (state, action) => {
-      state.userProfile = action.payload;
+      state.data = action.payload;
     },
     clearUserProfile: (state) => {
-      state.userProfile = null;
+      state.data = null;
     },
   },
 });
