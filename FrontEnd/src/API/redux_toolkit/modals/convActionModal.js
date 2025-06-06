@@ -4,11 +4,11 @@ const initialState = {
   isOpen: false,
 };
 
-const convActionModalSlice = createSlice({
-  name: "convActionModal",
+const sideBarModalSlice = createSlice({
+  name: "sideBarModalModal",
   initialState,
   reducers: {
-    openConvActionModal: (state) => {
+    openSideBarModal: (state) => {
       state.isOpen = true;
     },
     closeConvActionModal: (state) => {
@@ -17,6 +17,6 @@ const convActionModalSlice = createSlice({
   },
 });
 
-export const { openConvActionModal, closeConvActionModal } =
-  convActionModalSlice.actions;
-export default convActionModalSlice.reducer;
+export const { openSideBarModal, closeConvActionModal } =
+  sideBarModalSlice.actions;
+export default sideBarModalSlice.reducer;

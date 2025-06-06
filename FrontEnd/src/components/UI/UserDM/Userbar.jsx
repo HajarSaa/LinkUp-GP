@@ -15,8 +15,9 @@ import { LiaClipboardListSolid } from "react-icons/lia";
 import { BsLightning } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
 import UserModal from "../Modal/UserModal/UserModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../User/UserImage";
+import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -24,8 +25,8 @@ import UserImage from "../User/UserImage";
 // import SetStatusModal from "../Modal/SetStatusModal/SetStatus";
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const receiver = useSelector((state) => state.convers.chatMate);
+  const dispath = useDispatch();
 
   const menuItems = [
     {
@@ -70,69 +71,74 @@ const Navbar = () => {
     { label: "Bookmark", icon: <IoBookmarkOutline /> },
   ];
   return (
-    <div className={styles.navbar}>
-      {/* 🟢 Profile Section */}
-      <div className={styles.upBar}>
-        <div
-          className={styles.profileSection}
-          onClick={() => setIsModalOpen(true)}
-        >
-          <div className={styles.userbar_image}>
-            <UserImage src={receiver?.photo} alt={receiver?.userName} />
-          </div>
-          <span className={styles.profileName}>{receiver?.userName}</span>
-        </div>
-        {/* 🟢 Right Section */}
-        <div className={styles.rightSection}>
-          <IconDropdown icon={<FiHeadphones />} label="" items={huddleItems} />
-          <MoreDropdown items={moreMenuItems} />
-        </div>
-      </div>
-
-      {/* 🟢 Navigation Tabs */}
-      <div className={styles.tabs}>
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            className={`${styles.tabButton} ${
-              activeTab === item.id ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab(item.id)}
+    <>
+      <div className={styles.navbar}>
+        {/* 🟢 Profile Section */}
+        <div className={styles.upBar}>
+          <div
+            className={styles.profileSection}
+            onClick={() =>{dispath(openUserDetailsModal(receiver));}}
           >
-            {activeTab === item.id ? item.activeIcon : item.icon}
-            <span>{item.label}</span>
-          </button>
-        ))}
+            <div className={styles.userbar_image}>
+              <UserImage src={receiver?.photo} alt={receiver?.userName} />
+            </div>
+            <span className={styles.profileName}>{receiver?.userName}</span>
+          </div>
+          {/* 🟢 Right Section */}
+          <div className={styles.rightSection}>
+            <IconDropdown
+              icon={<FiHeadphones />}
+              label=""
+              items={huddleItems}
+            />
+            <MoreDropdown items={moreMenuItems} />
+          </div>
+        </div>
 
-        {/* ✅ Plus Button */}
-        <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
-      </div>
+        {/* 🟢 Navigation Tabs */}
+        <div className={styles.tabs}>
+          {menuItems.map((item) => (
+            <button
+              key={item.id}
+              className={`${styles.tabButton} ${
+                activeTab === item.id ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab(item.id)}
+            >
+              {activeTab === item.id ? item.activeIcon : item.icon}
+              <span>{item.label}</span>
+            </button>
+          ))}
 
-      <UserModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      {/* <EditContact
+          {/* ✅ Plus Button */}
+          <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
+        </div>
+        {/* <EditContact
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         userData={userData}
       /> */}
-      {/* <EditStartDate
+        {/* <EditStartDate
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         userData={userData}
       /> */}
-      {/* <ProfileEditModal
+        {/* <ProfileEditModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         userData={userData2}
       /> */}
-      {/* <UploadProfilePhotoModal
+        {/* <UploadProfilePhotoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       /> */}
-      {/* <SetStatusModal
+        {/* <SetStatusModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       /> */}
-    </div>
+      </div>
+      <UserModal />
+    </>
   );
 };
 

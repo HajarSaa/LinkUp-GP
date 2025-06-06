@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import styles from "./Modal.module.css";
-import { IoClose } from "react-icons/io5";
+import CloseIcon from "../Icons/CloseIcon/CloseIcon";
 
 const Modal = ({ isOpen, onClose, children, className, zIndex = 1000 }) => {
   if (!isOpen) return null;
@@ -14,7 +14,7 @@ const Modal = ({ isOpen, onClose, children, className, zIndex = 1000 }) => {
         onClick={onClose}
       ></div>
       <div className={`${styles.modal} ${className}`} style={{ zIndex }}>
-        <IoClose className={styles.closeModal} onClick={onClose} />
+        <CloseIcon className={styles.closeModal} closeEvent={onClose} />
         {children}
       </div>
     </>,

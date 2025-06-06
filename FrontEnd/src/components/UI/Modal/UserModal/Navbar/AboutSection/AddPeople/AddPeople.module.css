@@ -36,6 +36,7 @@
 }
 .smallModal {
   min-width: 30%;
+  width: 400px;
   padding: 20px;
   z-index: 1003;
 }

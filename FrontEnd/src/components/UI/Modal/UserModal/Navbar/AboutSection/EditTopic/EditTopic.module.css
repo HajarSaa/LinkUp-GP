@@ -52,6 +52,7 @@
 }
 .smallModal {
   min-width: 20%;
+  width: 530px;
   padding: 20px;
   z-index: 1003;
 }

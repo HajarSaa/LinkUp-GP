@@ -1,15 +1,16 @@
-// import React from "react";
 import styles from "./Profile.module.css";
 import IconDropdown from "../../../Dropdown/IconDropdown";
-import { BiSolidUser } from "react-icons/bi";
 import { FiHeadphones } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { FaRegStar } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
+// import { IoIosArrowDown } from "react-icons/io";
 import { FaRegBell } from "react-icons/fa";
 import { FiUserPlus } from "react-icons/fi";
 import { RiUserForbidLine } from "react-icons/ri";
-const UserProfile = () => {
+import UserImage from "../../../User/UserImage";
+import PropTypes from "prop-types";
+
+const UserProfile = ({ userData }) => {
   const huddleItems = [
     { label: "Start Huddle", icon: <FiHeadphones /> },
     { label: "Join Huddle", icon: <IoIosLink /> },
@@ -19,12 +20,16 @@ const UserProfile = () => {
       <div className={styles.profileContainer}>
         <div className={styles.frameWrapper}>
           <div className={styles.profileDetails}>
-            <BiSolidUser className={styles.profileImage} />
+            <div className={styles.profileImage}>
+              <UserImage src={userData?.photo} alt={userData?.userName} />
+            </div>
             <div className={styles.info}>
-              <div className={styles.name}>User</div>
-              <p className={styles.role}>
-                <span>Backend Developer</span>
-              </p>
+              <div className={styles.name}>{userData?.userName}</div>
+              {userData?.discription && (
+                <p className={styles.role}>
+                  <span>{userData?.discription}</span>
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -33,7 +38,8 @@ const UserProfile = () => {
         <IconDropdown
           icon={<FaRegStar />}
           label=""
-          items={<IoIosArrowDown />}
+          items={''}
+          // items={<IoIosArrowDown />}
         />
         <IconDropdown icon={<FaRegBell />} label="Mute" items={""} />
         <IconDropdown icon={<FiUserPlus />} label="VIP" items={""} />
@@ -46,6 +52,9 @@ const UserProfile = () => {
       </div>
     </div>
   );
+};
+UserProfile.propTypes = {
+  userData: PropTypes.object,
 };
 
 export default UserProfile;
