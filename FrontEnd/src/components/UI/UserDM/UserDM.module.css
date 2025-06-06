@@ -2,22 +2,22 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  gap: 5px;
 }
 
 .coverInfo {
   display: flex;
   align-items: center;
   margin-bottom: 25px;
+  gap: 10px;
 }
 
 .cover {
-  width: 102px;
-  height: 102px;
-  margin-right: 13px;
-  object-fit: cover;
-  color: var(--active-color);
-  background-color: var(--secondary-color);
+  width: 100px;
+  height: 100px;
+  background-color: #000;
   border-radius: var(--border-radius);
+  overflow: hidden;
 }
 
 .UserCard {
@@ -80,6 +80,7 @@
   background-color: #d2ebf6;
   cursor: pointer;
 }
+
 /*/////////////////////////////// User Bar ///////////////////////////////*/
 .navbar {
   display: flex;
@@ -98,10 +99,12 @@
   padding: 5px;
   border-radius: var(--border-radius);
 }
+
 .profileSection:hover {
   background-color: var(--gray-light);
   cursor: pointer;
 }
+
 .userbar_image {
   width: 25px;
   height: 25px;
@@ -184,6 +187,7 @@
   align-items: center;
   gap: 10px;
 }
+
 .upBar {
   display: flex;
   align-items: center;

@@ -1,10 +1,5 @@
-export const chatMate = (conversation, workspaceMembers,logged_user) => {
-  if (
-    !conversation ||
-    !workspaceMembers ||
-    !logged_user
-  )
-    return null;
+export const chatMate = (conversation, workspaceMembers, logged_user) => {
+  if (!conversation || !workspaceMembers || !logged_user) return null;
 
   const userId = logged_user._id;
 
@@ -21,10 +16,16 @@ export const chatMate = (conversation, workspaceMembers,logged_user) => {
       ? memberOneId
       : memberOneId === myMemberId
       ? memberTwoId
-        : memberOneId;
+      : memberOneId;
 
-
-  return (
-    workspaceMembers.find((member) => member._id === otherMemberId) || null
+  const foundMember = workspaceMembers.find(
+    (member) => member._id === otherMemberId
   );
+
+  if (!foundMember) return null;
+
+  return {
+    ...foundMember,
+    isMe: foundMember.user === userId,
+  };
 };
