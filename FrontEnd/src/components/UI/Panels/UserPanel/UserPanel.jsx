@@ -12,22 +12,16 @@ import Spinner from "../../Spinner/Spinner";
 const UserPanel = () => {
   const dispatch = useDispatch();
   const userProfile = useSelector((state) => state.userProfile.data);
-  const { isOpen, userData:user_id } = useSelector(
+  const { isOpen, userData: user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
-  const {
-    isLoading,
-    isError,
-    error,
-  } = useGetUserProfile(user_id);
-
+  const { isLoading, isError, error } = useGetUserProfile(user_id);
 
   const handleClose = () => {
     dispatch(closeChatPanel());
   };
 
-
-  if (!isOpen || !userProfile) return null;
+  if (!isOpen) return null;
   return (
     <div className={styles.profileCard}>
       <div className={styles.profileHeader}>
@@ -35,28 +29,24 @@ const UserPanel = () => {
         <CloseIcon closeEvent={handleClose} />
       </div>
 
-      <div className={styles.panel_body}>
-        {isLoading ? (
-          <div className={styles.status}>
-            <Spinner width={50} height={50} color="var(--primary-color)" />
-          </div>
-        ) : isError ? (
-          <div className={styles.error}>{error}</div>
-        ) : (
-          <>
-            <ProfileImage />
-            <ProfileInfo
-              name="User"
-              jobTitle="Backend Developer"
-              gender="He/Him"
-              status="Away"
-              localTime="6:20 AM local time"
-            />
-            <ProfileActions />
-            <ProfileAbout emailAddress="user@gmail.com" phone="01012345678" />
-          </>
-        )}
-      </div>
+      {userProfile && (
+        <div className={styles.panel_body}>
+          {isLoading ? (
+            <div className={styles.fetching_status}>
+              <Spinner width={50} height={50} color="var(--primary-color)" />
+            </div>
+          ) : isError ? (
+            <div className={styles.fetching_error}>{error}</div>
+          ) : (
+            <>
+              <ProfileImage />
+              <ProfileInfo />
+              <ProfileActions />
+              <ProfileAbout/>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
