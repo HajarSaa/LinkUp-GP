@@ -101,6 +101,11 @@
 
 .saveButton {
   padding: 10px;
+  width: 120px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   background-color: #007a5a;
   color: white;
@@ -215,7 +220,7 @@
   font-size: 22px;
 }
 
-.image_uploading{
+.image_uploading {
   position: absolute;
   top: 0;
   left: 0;

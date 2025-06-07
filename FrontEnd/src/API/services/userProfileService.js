@@ -19,3 +19,12 @@ export const updateUserImage = async (formData) => {
 
   return data.data;
 };
+// ====================(Update User Profile)
+export const updateUserProfile = async (user_data) => {
+  const { data } = await axiosInstance.patch(
+    "/userProfiles/updateMe",
+    user_data
+  );
+
+  return data.data;
+};

@@ -9,11 +9,14 @@ import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/convers/editUserProfie";
-import useUpdateUserProfile from "../../../../API/hooks/userProfile/useUpdateUserProfile";
+import useUpdateUserImage from "../../../../API/hooks/userProfile/useUpdateUserImage";
 import Spinner from "../../Spinner/Spinner";
+import useUpdateUserProfile from "../../../../API/hooks/userProfile/useUpdateUserProfile";
 const ProfileEditModal = () => {
-  const { isOpen, myData } = useSelector((state) => state.editUserProfile);
   const dispatch = useDispatch();
+  const { isOpen, myData } = useSelector((state) => state.editUserProfile);
+  const update_image = useUpdateUserImage();
+  const update_profile = useUpdateUserProfile();
   const [profileData, setProfileData] = useState({
     userName: "",
   });
@@ -35,7 +38,6 @@ const ProfileEditModal = () => {
 
   // =====================(Handle Image Uploading)
   const fileInputRef = useRef(null);
-  const { mutate: update_image, isPending } = useUpdateUserProfile();
 
   const handleUploadImage = () => {
     fileInputRef.current?.click();
@@ -45,7 +47,7 @@ const ProfileEditModal = () => {
     if (!image) return;
     const formData = new FormData();
     formData.append("photo", image);
-    update_image(formData);
+    update_image.mutate(formData);
   };
   // ==================================================
 
@@ -85,15 +87,22 @@ const ProfileEditModal = () => {
     setIsDropdownOpen(false);
   };
 
-
   const namePronunciationChange = (e) => {
     setInputsData({ ...inputsData, namePronunciation: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Data:", profileData);
-    handleClose();
+    const isDifferent = profileData?.userName !== myData?.userName;
+    if (isDifferent)
+      update_profile.mutate(profileData, {
+        onSuccess: () => {
+          handleClose();
+        },
+      });
+    else {
+      handleClose();
+    }
   };
 
   const dropdownRef = useRef(null);
@@ -170,7 +179,7 @@ const ProfileEditModal = () => {
             <div className={styles.profilePhotoSection}>
               <label> Profile photo</label>
               <div className={styles.profilePhotoPlaceholder}>
-                {isPending && (
+                {update_image.isPending && (
                   <div className={styles.image_uploading}>
                     <Spinner />
                   </div>
@@ -258,7 +267,11 @@ const ProfileEditModal = () => {
               Cancel
             </Button>
             <Button type="submit" className={styles.saveButton}>
-              Save Changes
+              {update_profile.isPending ? (
+                <Spinner color="var(--green-color)" />
+              ) : (
+                "Save Changes"
+              )}
             </Button>
           </div>
         </form>

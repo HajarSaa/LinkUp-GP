@@ -1,10 +1,10 @@
-import { useMutation } from "@tanstack/react-query"
-import { updateUserImage } from "../../services/userProfileService"
+import { useMutation } from "@tanstack/react-query";
+import {updateUserProfile } from "../../services/userProfileService";
 
 function useUpdateUserProfile() {
   return useMutation({
-    mutationFn: (formData) => updateUserImage(formData),
+    mutationFn: (user_data) => updateUserProfile(user_data),
   });
 }
 
-export default useUpdateUserProfile
+export default useUpdateUserProfile;
