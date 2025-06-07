@@ -22,11 +22,10 @@ const MessageItem = ({ message }) => {
   const [add_position, set_add_Position] = useState(null);
   const [messageHover, setMessageHover] = useState(false);
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { id: page_id } = useParams();
   const { workspace } = useSelector((state) => state.workspace);
   const sender = findMemberById(workspace, message?.createdBy);
   const message_time = formatTimeTo12Hour(message?.createdAt);
-  const userProfile = useSelector((state) => state.userProfile.data);
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
@@ -36,14 +35,13 @@ const MessageItem = ({ message }) => {
   }
 
   function openProfile() {
-    dispatch(openUserPanel());
-    // dispatch(
-    //   openUserPanel({
-    //     type: "userPanel",
-    //     panel_id: userProfile.id || userProfile._id,
-    //     page_id: id,
-    //   })
-    // );
+    dispatch(
+      openUserPanel({
+        type: "userPanel",
+        panel_id: sender.id || sender._id,
+        page_id: page_id,
+      })
+    );
   }
 
   const updatePosition = () => {

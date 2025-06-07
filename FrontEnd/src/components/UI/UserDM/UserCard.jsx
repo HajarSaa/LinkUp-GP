@@ -34,7 +34,9 @@ const UserCard = () => {
             <UserStatus status={receiver?.status} />
           </div>
           {receiver?.job && <span className={styles.job}>{receiver?.job}</span>}
-          {/* <span className={styles.gender}>• He/Him</span> */}
+          {receiver?.gender && (
+            <span className={styles.gender}>{receiver?.gender}</span>
+          )}
         </div>
       </div>
       <div className={styles.description}>
