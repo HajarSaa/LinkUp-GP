@@ -42,6 +42,7 @@ function Panel() {
   if (!threadPanel && !userPanel.isOpen) return;
   return (
     <div className={styles.panel}>
+      {console.log('opened')}
       <ThreadPanel selectedThread={selectedThread} />
       <UserPanel />
     </div>

@@ -17,7 +17,6 @@ const UserPanel = () => {
   const { isOpen, userData: user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
-  console.log(isOpen,user_id);
   const { isLoading, isError, error } = useGetUserProfile(user_id);
 
   const handleClose = () => {

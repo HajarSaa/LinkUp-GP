@@ -13,7 +13,7 @@ import {
   getUserPanelIdByPageId,
   isIdInOpenedUserPanelItems,
 } from "../../../utils/panelUtils";
-import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import { closeChatPanel, openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -24,7 +24,6 @@ function DmPage() {
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
     if (isUserPanel) {
-
       dispatch(
         openUserPanel({
           type: "userPanel",
@@ -32,6 +31,8 @@ function DmPage() {
           page_id: convers_id,
         })
       );
+    } else {
+      dispatch(closeChatPanel())
     }
   }, [convers_id, dispatch]);
 
