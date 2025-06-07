@@ -4,7 +4,7 @@ import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
 import Button from "../../Buttons/Button/Button";
 import { AiOutlineAudio } from "react-icons/ai";
-import UserImage from '../../User/UserImage';
+import UserImage from "../../User/UserImage";
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ const ProfileEditModal = () => {
     title: "",
     namePronunciation: "",
     timeZone: "",
-    photo:null
+    photo: null,
   });
 
   useEffect(() => {
@@ -30,11 +30,25 @@ const ProfileEditModal = () => {
         title: myData?.title || "",
         namePronunciation: myData?.namePronunciation || "",
         timeZone: myData?.timeZone || "(UTC+02:00) Cairo",
-        photo:myData?.photo
+        photo: myData?.photo,
       });
     }
   }, [myData]);
 
+  // =====================(Handle Image Uploading)
+  const fileInputRef = useRef(null);
+
+  const handleUploadImage = () => {
+    fileInputRef.current?.click();
+  };
+  const handleFileChange = (event) => {
+    const image = event.target.files[0];
+    if (!image) return;
+    const formData = new FormData();
+    formData.append("photo", image);
+    
+  };
+  // ==================================================
 
   const handleClose = function () {
     dispatch(closeEditUserProfile());
@@ -136,9 +150,20 @@ const ProfileEditModal = () => {
               <div className={styles.profilePhotoPlaceholder}>
                 <UserImage src={formData?.photo} alt={formData?.userName} />
               </div>
-              <Button type="button" className={styles.uploadButton}>
+              <Button
+                type="button"
+                className={styles.uploadButton}
+                onClick={handleUploadImage}
+              >
                 Upload Photo
               </Button>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
             </div>
           </div>
           <p className={styles.description}>Let people know what you do at :</p>
