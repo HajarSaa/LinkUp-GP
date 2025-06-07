@@ -195,3 +195,10 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.action_buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}

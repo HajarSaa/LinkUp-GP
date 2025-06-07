@@ -18,8 +18,9 @@ import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
 import userProfileSlice from './api_data/userProfileSlice';
 //======
 // ==============================(Conversation)
-//======
 import userDetailsReducer from './modals/convers/userDetailsModal'
+import editUserProfileReducer from './modals/convers/editUserProfie'
+//======
 
 const store = configureStore({
   reducer: {
@@ -38,10 +39,13 @@ const store = configureStore({
     // ==============================(conversation)
     // ====
     convers: conversReducer,
-    userDetailsModal : userDetailsReducer,
+    userDetailsModal: userDetailsReducer,
+    editUserProfile:editUserProfileReducer,
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
+    // ==============================(Global)
+    // ====
     notificationsModal: notificationsModalReducer,
     emojiPicker: emojiPickerReducer,
     userProfile:userProfileSlice,

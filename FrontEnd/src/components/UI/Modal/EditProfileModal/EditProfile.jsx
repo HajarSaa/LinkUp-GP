@@ -4,17 +4,46 @@ import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
 import Button from "../../Buttons/Button/Button";
 import { AiOutlineAudio } from "react-icons/ai";
-import { FaUser } from "react-icons/fa6";
+import UserImage from '../../User/UserImage';
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-const ProfileEditModal = ({ isOpen, onClose, userData }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/convers/editUserProfie";
+const ProfileEditModal = () => {
+  const { isOpen, myData } = useSelector((state) => state.editUserProfile);
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
-    fullName: userData.fullName || "",
-    displayName: userData.displayName || "",
-    title: userData.title || "",
-    namePronunciation: userData.namePronunciation || "",
-    timeZone: userData.timeZone || "(UTC+02:00) Cairo",
+    fullName: "",
+    displayName: "",
+    title: "",
+    namePronunciation: "",
+    timeZone: "",
+    photo:null
   });
+
+  useEffect(() => {
+    if (myData) {
+      setFormData({
+        fullName: myData?.userName || "",
+        displayName: myData?.displayName || myData?.userName,
+        title: myData?.title || "",
+        namePronunciation: myData?.namePronunciation || "",
+        timeZone: myData?.timeZone || "(UTC+02:00) Cairo",
+        photo:myData?.photo
+      });
+    }
+  }, [myData]);
+
+
+  const handleClose = function () {
+    dispatch(closeEditUserProfile());
+  };
+
+  const handleRecording = function () {
+    // e.stopPropagation();
+    console.log("Recooording");
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,7 +52,7 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Updated Data:", formData);
-    onClose();
+    handleClose();
   };
 
   const dropdownRef = useRef(null);
@@ -57,10 +86,11 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
     };
   }, [isDropdownOpen]);
 
+  if (!isOpen || !myData) return null;
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       className={styles.profileModal}
       zIndex={1002}
     >
@@ -104,19 +134,21 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
             <div className={styles.profilePhotoSection}>
               <label> Profile photo</label>
               <div className={styles.profilePhotoPlaceholder}>
-                <FaUser className={styles.photo} />
+                <UserImage src={formData?.photo} alt={formData?.userName} />
               </div>
               <Button type="button" className={styles.uploadButton}>
                 Upload Photo
               </Button>
             </div>
           </div>
-          <p className={styles.description}>
-            Let people know what you do at :)
-          </p>
+          <p className={styles.description}>Let people know what you do at :</p>
 
           <label>Name recording</label>
-          <Button className={styles.recordButton}>
+          <Button
+            type="button"
+            className={styles.recordButton}
+            onClick={handleRecording}
+          >
             <AiOutlineAudio />
             Record Audio Clip
           </Button>
@@ -166,7 +198,7 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
           <div className={styles.buttons}>
             <Button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className={styles.cancelButton}
             >
               Cancel

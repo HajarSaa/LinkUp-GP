@@ -22,7 +22,6 @@ import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { useParams } from "react-router-dom";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
-import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
 // import UploadProfilePhotoModal from "../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
 // import SetStatusModal from "../Modal/SetStatusModal/SetStatus";
 const Navbar = () => {
@@ -31,13 +30,6 @@ const Navbar = () => {
   const dispath = useDispatch();
   const { id } = useParams();
 
-    const userData = {
-      fullName: "Alaa Alsoudy",
-      displayName: "Alaa Alsoudy",
-      title: "",
-      namePronunciation: "Zoe (pronounced 'zo-ee')",
-      timeZone: "(UTC+02:00) Cairo",
-    };
 
   const menuItems = [
     {
@@ -152,10 +144,6 @@ const Navbar = () => {
         onClose={() => setIsModalOpen(false)}
         userData={userData}
       /> */}
-        <ProfileEditModal
-        isOpen={true}
-        userData={userData}
-      />
         {/* <UploadProfilePhotoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

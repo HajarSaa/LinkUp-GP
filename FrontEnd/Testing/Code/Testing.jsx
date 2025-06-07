@@ -2,11 +2,13 @@
 import MessageInput from "./MessageInput"
 import MI from "./MI"
 import UpdateImage from "./UpdateImage"
+import UploadPhotoButton from "./UploadPhotoButton"
 
 function Testing() {
   return (
     <>
-      <UpdateImage />
+      {/* <UpdateImage /> */}
+      <UploadPhotoButton/>
       {/* <MessageInput/> */}
       {/* this is rich text editor */}
       {/* <MI/>  */}
