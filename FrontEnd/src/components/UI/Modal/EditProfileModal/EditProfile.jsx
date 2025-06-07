@@ -9,34 +9,33 @@ import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/convers/editUserProfie";
+import useUpdateUserProfile from "../../../../API/hooks/userProfile/useUpdateUserProfile";
+import Spinner from "../../Spinner/Spinner";
 const ProfileEditModal = () => {
   const { isOpen, myData } = useSelector((state) => state.editUserProfile);
   const dispatch = useDispatch();
-
-  const [formData, setFormData] = useState({
-    fullName: "",
+  const [profileData, setProfileData] = useState({
+    userName: "",
+  });
+  const [inputsData, setInputsData] = useState({
     displayName: "",
     title: "",
     namePronunciation: "",
-    timeZone: "",
-    photo: null,
+    timeZone: "(UTC+02:00) Cairo",
   });
 
   useEffect(() => {
     if (myData) {
-      setFormData({
-        fullName: myData?.userName || "",
-        displayName: myData?.displayName || myData?.userName,
-        title: myData?.title || "",
-        namePronunciation: myData?.namePronunciation || "",
-        timeZone: myData?.timeZone || "(UTC+02:00) Cairo",
-        photo: myData?.photo,
-      });
+      setProfileData((prev) => ({
+        ...prev,
+        userName: myData.userName,
+      }));
     }
   }, [myData]);
 
   // =====================(Handle Image Uploading)
   const fileInputRef = useRef(null);
+  const { mutate: update_image, isPending } = useUpdateUserProfile();
 
   const handleUploadImage = () => {
     fileInputRef.current?.click();
@@ -46,7 +45,7 @@ const ProfileEditModal = () => {
     if (!image) return;
     const formData = new FormData();
     formData.append("photo", image);
-    
+    update_image(formData);
   };
   // ==================================================
 
@@ -54,18 +53,46 @@ const ProfileEditModal = () => {
     dispatch(closeEditUserProfile());
   };
 
-  const handleRecording = function () {
-    // e.stopPropagation();
+  const handleRecording = function (e) {
+    e.stopPropagation();
     console.log("Recooording");
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const userNameChange = (e) => {
+    setProfileData((prev) => ({
+      ...prev,
+      userName: e.target.value,
+    }));
+  };
+  const displayNameChange = (e) => {
+    setInputsData((prev) => ({
+      ...prev,
+      displayName: e.target.value,
+    }));
+  };
+  const titleChange = (e) => {
+    setInputsData((prev) => ({
+      ...prev,
+      title: e.target.value,
+    }));
+  };
+  const handleSelect = (zone) => {
+    console.log(zone);
+    setInputsData((prev) => ({
+      ...prev,
+      timeZone: zone,
+    }));
+    setIsDropdownOpen(false);
+  };
+
+
+  const namePronunciationChange = (e) => {
+    setInputsData({ ...inputsData, namePronunciation: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Data:", formData);
+    console.log("Updated Data:", profileData);
     handleClose();
   };
 
@@ -76,11 +103,6 @@ const ProfileEditModal = () => {
     "(UTC+03:00) Riyadh",
     "(UTC+01:00) London",
   ];
-
-  const handleSelect = (zone) => {
-    setFormData({ ...formData, timeZone: zone });
-    setIsDropdownOpen(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -118,8 +140,8 @@ const ProfileEditModal = () => {
               <input
                 type="text"
                 name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
+                value={profileData?.userName}
+                onChange={userNameChange}
                 placeholder="Full name"
               />
 
@@ -127,8 +149,8 @@ const ProfileEditModal = () => {
               <input
                 type="text"
                 name="displayName"
-                value={formData.displayName}
-                onChange={handleChange}
+                value={inputsData?.displayName || inputsData?.userName}
+                onChange={displayNameChange}
                 placeholder="Display name"
               />
               <p className={styles.description}>
@@ -140,15 +162,20 @@ const ProfileEditModal = () => {
               <input
                 type="text"
                 name="title"
-                value={formData.title}
-                onChange={handleChange}
+                value={inputsData?.title}
+                onChange={titleChange}
                 placeholder="Title"
               />
             </div>
             <div className={styles.profilePhotoSection}>
               <label> Profile photo</label>
               <div className={styles.profilePhotoPlaceholder}>
-                <UserImage src={formData?.photo} alt={formData?.userName} />
+                {isPending && (
+                  <div className={styles.image_uploading}>
+                    <Spinner />
+                  </div>
+                )}
+                <UserImage src={myData?.photo} alt={myData?.userName} />
               </div>
               <Button
                 type="button"
@@ -182,9 +209,11 @@ const ProfileEditModal = () => {
           <input
             type="text"
             name="namePronunciation"
-            // value={formData.namePronunciation}
-            onChange={handleChange}
-            placeholder={formData.namePronunciation}
+            value={inputsData?.namePronunciation}
+            onChange={namePronunciationChange}
+            placeholder={
+              inputsData?.namePronunciation || `Zoe (pronounce 'zo-ee')`
+            }
           />
 
           <label>Time zone</label>
@@ -193,7 +222,7 @@ const ProfileEditModal = () => {
               className={styles.dropdownHeader}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              {formData.timeZone}
+              {inputsData?.timeZone || "(UTC+02:00) Cairo"}
               <IoIosArrowDown className={styles.arrow} />
             </div>
             {isDropdownOpen && (
@@ -202,11 +231,11 @@ const ProfileEditModal = () => {
                   <li
                     key={zone}
                     className={`${styles.dropdownItem} ${
-                      formData.timeZone === zone ? styles.selected : ""
+                      inputsData?.timeZone === zone ? styles.selected : ""
                     }`}
                     onClick={() => handleSelect(zone)}
                   >
-                    {formData.timeZone === zone && (
+                    {inputsData?.timeZone === zone && (
                       <FaCheck className={styles.check} />
                     )}
                     {zone}
