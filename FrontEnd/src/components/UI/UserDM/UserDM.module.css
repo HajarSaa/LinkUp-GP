@@ -75,6 +75,7 @@
   padding: 5px 8px;
   border-radius: var(--border-radius);
   transition: background-color 0.2s ease-in-out;
+  text-wrap-mode: nowrap;
 }
 
 .userMention:hover {

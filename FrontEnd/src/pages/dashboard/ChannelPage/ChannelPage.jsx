@@ -8,13 +8,39 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
 import useGetChannel from "../../../API/hooks/channel/useGetChannel";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getUserPanelIdByPageId,
+  isIdInOpenedUserPanelItems,
+} from "../../../utils/panelUtils";
+import {
+  closeChatPanel,
+  openUserPanel,
+} from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
   const { id: channel_id } = useParams();
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
+    if (isUserPanel) {
+      dispatch(
+        openUserPanel({
+          type: "userPanel",
+          panel_id: getUserPanelIdByPageId(channel_id),
+          page_id: channel_id,
+        })
+      );
+    } else {
+      dispatch(closeChatPanel());
+    }
+  }, [channel_id, dispatch]);
 
   if (channel_query.isLoading || message_query.isLoading)
     return (
@@ -39,7 +65,7 @@ function ChannelPage() {
         {message_query.error}
       </div>
     );
-  
+
   if (!channel) return;
   return (
     <PageContent>

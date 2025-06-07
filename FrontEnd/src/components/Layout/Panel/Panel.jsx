@@ -37,12 +37,10 @@ function Panel() {
       timestamp: "2025-03-04T10:05:15Z",
     },
   ];
-  console.log(!threadPanel && !userPanel.isOpen);
 
   if (!threadPanel && !userPanel.isOpen) return;
   return (
     <div className={styles.panel}>
-      {console.log('opened')}
       <ThreadPanel selectedThread={selectedThread} />
       <UserPanel />
     </div>
