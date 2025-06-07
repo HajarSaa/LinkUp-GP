@@ -18,7 +18,8 @@ import UserModal from "../Modal/UserModal/UserModal";
 import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../User/UserImage";
 import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
-import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import { useParams } from "react-router-dom";
 // import EditContact from "../Modal/EditContactModal/EditContact";
 // import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
 // import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
@@ -28,6 +29,7 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const receiver = useSelector((state) => state.convers.chatMate);
   const dispath = useDispatch();
+  const { id } = useParams();
 
   const menuItems = [
     {
@@ -60,7 +62,13 @@ const Navbar = () => {
     {
       label: "View full profile",
       clickAction: () => {
-        dispath(openUserPanel(receiver.id || receiver._id));
+        dispath(
+          openUserPanel({
+            type: "userPanel",
+            panel_id: receiver.id || receiver._id,
+            page_id: id,
+          })
+        );
       },
     },
     { label: "Add to VIP" },

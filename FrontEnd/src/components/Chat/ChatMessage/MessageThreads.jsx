@@ -2,7 +2,7 @@ import { BiSolidUser } from "react-icons/bi";
 import styles from "./ChatMessage.module.css";
 import { GoChevronRight } from "react-icons/go";
 import { useDispatch } from "react-redux";
-import { openThreadPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { openThreadPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function MessageThreads() {
   const dispatch = useDispatch();

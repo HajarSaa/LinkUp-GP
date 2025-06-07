@@ -7,12 +7,33 @@ import useGetConvers from "../../../API/hooks/conversation/useGetConvers";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "../dashboard.module.css";
 import Panel from "../../../components/Layout/Panel/Panel";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getUserPanelIdByPageId,
+  isIdInOpenedUserPanelItems,
+} from "../../../utils/panelUtils";
+import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
+    if (isUserPanel) {
+
+      dispatch(
+        openUserPanel({
+          type: "userPanel",
+          panel_id: getUserPanelIdByPageId(convers_id),
+          page_id: convers_id,
+        })
+      );
+    }
+  }, [convers_id, dispatch]);
 
   if (convers_query.isLoading)
     return (

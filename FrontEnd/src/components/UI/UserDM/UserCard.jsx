@@ -2,17 +2,24 @@ import styles from "./UserDM.module.css";
 import Button from "../Buttons/Button/Button";
 import style from "../Buttons/Button/Button.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import UserStatus from "../User/UserStatus";
 import UserImage from "../User/UserImage";
+import { useParams } from "react-router-dom";
 
 const UserCard = () => {
   const dispatch = useDispatch();
   const receiver = useSelector((state) => state.convers.chatMate);
-
+  const { id } = useParams();
 
   function handelOpenUserPanel() {
-    dispatch(openUserPanel(receiver.id || receiver._id));
+    dispatch(
+      openUserPanel({
+        type: "userPanel",
+        panel_id: receiver.id || receiver._id,
+        page_id: id,
+      })
+    );
   }
 
   return (

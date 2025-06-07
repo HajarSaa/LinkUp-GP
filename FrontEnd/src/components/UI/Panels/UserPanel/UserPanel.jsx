@@ -4,21 +4,24 @@ import ProfileActions from "./ProfileActions";
 import ProfileAbout from "./ProfileAbout";
 import styles from "./UserPanel.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
+import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
 import Spinner from "../../Spinner/Spinner";
+import { useParams } from "react-router-dom";
 
 const UserPanel = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const userProfile = useSelector((state) => state.userProfile.data);
   const { isOpen, userData: user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
+  console.log(isOpen,user_id);
   const { isLoading, isError, error } = useGetUserProfile(user_id);
 
   const handleClose = () => {
-    dispatch(closeChatPanel());
+    dispatch(closeChatPanel({type:'userPanel',page_id:id}));
   };
 
   if (!isOpen) return null;
@@ -42,7 +45,7 @@ const UserPanel = () => {
               <ProfileImage />
               <ProfileInfo />
               <ProfileActions />
-              <ProfileAbout/>
+              <ProfileAbout />
             </>
           )}
         </div>

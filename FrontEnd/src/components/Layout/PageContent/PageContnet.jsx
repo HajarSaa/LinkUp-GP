@@ -3,7 +3,7 @@ import styles from "./PageContent.module.css";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { closeChatPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { closeChatPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function PageContent({ children }) {
   const dispatch = useDispatch();
