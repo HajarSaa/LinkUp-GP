@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import app from "./app.js";
 import http from "http";
-import socketServer from "./SocketServer.js";
+import socketServer from "./servers/socketServer.js";
 
 dotenv.config({ path: "./config.env" });
 

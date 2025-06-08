@@ -33,9 +33,16 @@ const userProfileSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["online", "offline"],
+    enum: ["online", "away", "busy", "offline"],
     default: "offline",
   },
+  customStatus: {
+    emoji: { type: String },
+    text: { type: String },
+    expiresAt: { type: Date },
+    dontClear: { type: Boolean, default: false },
+  },
+
   photo: {
     type: String,
   },
