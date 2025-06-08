@@ -2,14 +2,24 @@ import styles from "./UserPanel.module.css";
 import { IoMailOutline } from "react-icons/io5";
 import { FiPhone } from "react-icons/fi";
 import { FaRegCopy } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { openEditContactModal } from "../../../../API/redux_toolkit/modals/userProfile/editContactModal";
 const ProfileAbout = () => {
   const userProfile = useSelector((state) => state.userProfile.data);
+  const dispatch = useDispatch();
+
+  function handleOpenEditContact() {
+    dispatch(openEditContactModal(userProfile));
+  }
   return (
     <div className={styles.profileAbout}>
       <div className={styles.info_section}>
         <h3 className={styles.aboutTitle}>Contact Information</h3>
-        <span className={styles.edit_btn}>Edit</span>
+        {userProfile?.isMe && (
+          <span className={styles.edit_btn} onClick={handleOpenEditContact}>
+            Edit
+          </span>
+        )}
       </div>
       <div className={styles.aboutCard}>
         <div className={styles.aboutLeft}>
@@ -21,7 +31,6 @@ const ProfileAbout = () => {
         </div>
         <FaRegCopy className={styles.copyIcon} />
       </div>
-
       {userProfile?.phone && (
         <div className={styles.aboutCard}>
           <div className={styles.aboutLeft}>
@@ -32,6 +41,12 @@ const ProfileAbout = () => {
             </p>
           </div>
           <FaRegCopy className={styles.copyIcon} />
+        </div>
+      )}{" "}
+      {!userProfile?.phone && userProfile?.isMe && (
+        <div className={styles.add_phone} onClick={handleOpenEditContact}>
+          <span>+</span>
+          <span>Add phone</span>
         </div>
       )}
     </div>

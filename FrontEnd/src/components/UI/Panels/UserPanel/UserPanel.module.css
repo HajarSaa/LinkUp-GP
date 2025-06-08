@@ -274,7 +274,7 @@
   text-decoration: underline;
 }
 
-.user_pronounc{
+.user_pronounc,.add_phone{
   margin: 5px 0;
   color: var(--link-color);
   cursor: pointer;
@@ -282,7 +282,8 @@
   align-items: center;
   gap: 5px;
 }
-.user_pronounc > span:first-child{
+.user_pronounc > span:first-child,
+.add_phone > span:first-child{
   /* font-weight: bold; */
   font-size: 20px;
 }

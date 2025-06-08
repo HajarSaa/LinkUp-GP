@@ -15,11 +15,14 @@ import resizingReducer from "./ui/resizeSlice";
 import modalsReducer from "./modals/modalsSlice";
 import userReducer from "./api_data/userSlice";
 import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
-import userProfileSlice from './api_data/userProfileSlice';
+import userProfileSlice from "./api_data/userProfileSlice";
+//======
+// ==============================(User Profile)
+import editContactReducer from "./modals/userProfile/editContactModal";
 //======
 // ==============================(Conversation)
-import userDetailsReducer from './modals/convers/userDetailsModal'
-import editUserProfileReducer from './modals/userProfile/editUserProfie'
+import userDetailsReducer from "./modals/convers/userDetailsModal";
+import editUserProfileReducer from "./modals/userProfile/editUserProfie";
 //======
 
 const store = configureStore({
@@ -40,9 +43,10 @@ const store = configureStore({
     // ====
     convers: conversReducer,
     userDetailsModal: userDetailsReducer,
-    // ==============================(Modals)
+    // ==============================(User Profile)
     // ====
-    editUserProfile:editUserProfileReducer,
+    editUserProfile: editUserProfileReducer,
+    editContact: editContactReducer,
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
@@ -50,7 +54,7 @@ const store = configureStore({
     // ====
     notificationsModal: notificationsModalReducer,
     emojiPicker: emojiPickerReducer,
-    userProfile:userProfileSlice,
+    userProfile: userProfileSlice,
   },
 });
 

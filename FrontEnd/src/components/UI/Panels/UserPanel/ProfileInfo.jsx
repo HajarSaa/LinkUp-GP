@@ -14,6 +14,7 @@ const ProfileInfo = () => {
     );
   }
 
+
   return (
     <div className={styles.profileInfo}>
       <div className={styles.info}>
