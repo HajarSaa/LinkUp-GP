@@ -19,7 +19,7 @@ import userProfileSlice from './api_data/userProfileSlice';
 //======
 // ==============================(Conversation)
 import userDetailsReducer from './modals/convers/userDetailsModal'
-import editUserProfileReducer from './modals/convers/editUserProfie'
+import editUserProfileReducer from './modals/userProfile/editUserProfie'
 //======
 
 const store = configureStore({
@@ -40,6 +40,8 @@ const store = configureStore({
     // ====
     convers: conversReducer,
     userDetailsModal: userDetailsReducer,
+    // ==============================(Modals)
+    // ====
     editUserProfile:editUserProfileReducer,
     // ==============================(Modals)
     // ====

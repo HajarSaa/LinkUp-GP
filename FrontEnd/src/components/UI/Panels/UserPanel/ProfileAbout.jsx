@@ -7,7 +7,10 @@ const ProfileAbout = () => {
   const userProfile = useSelector((state) => state.userProfile.data);
   return (
     <div className={styles.profileAbout}>
-      <h3 className={styles.aboutTitle}>Contact Information</h3>
+      <div className={styles.info_section}>
+        <h3 className={styles.aboutTitle}>Contact Information</h3>
+        <span className={styles.edit_btn}>Edit</span>
+      </div>
       <div className={styles.aboutCard}>
         <div className={styles.aboutLeft}>
           <IoMailOutline className={styles.icons} />

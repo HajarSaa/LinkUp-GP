@@ -7,7 +7,7 @@ import UserStatus from "../User/UserStatus";
 import UserImage from "../User/UserImage";
 import { useParams } from "react-router-dom";
 import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
-import { openEditUserProfile } from "../../../API/redux_toolkit/modals/convers/editUserProfie";
+import { openEditUserProfile } from "../../../API/redux_toolkit/modals/userProfile/editUserProfie";
 
 const UserCard = () => {
   const dispatch = useDispatch();
@@ -24,8 +24,8 @@ const UserCard = () => {
     );
   }
 
-  function handleOpenEditUserProfile() {
-    dispatch(openEditUserProfile(receiver));
+  function handleOpenEditUserProfile(focusField = "fullName") {
+    dispatch(openEditUserProfile({ data: receiver, focusField: focusField }));
   }
 
   return (
@@ -76,7 +76,7 @@ const UserCard = () => {
           </Button>
           {receiver?.isMe && (
             <Button
-              onClick={handleOpenEditUserProfile}
+              onClick={() =>{ handleOpenEditUserProfile("fullName");}}
               className={style.button}
             >
               Edit profile

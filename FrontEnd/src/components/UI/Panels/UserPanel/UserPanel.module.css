@@ -57,7 +57,6 @@
   font-size: 22px;
   font-weight: 900;
   color: #1d1d1d;
-  margin-bottom: 5px;
 }
 
 .jobTitle,
@@ -246,7 +245,7 @@
   border-left: 1px solid #ddd;
 } */
 
-/*  */
+/* Ahmed Styles */
 .fetching_status,
 .fetching_error {
   width: 100%;
@@ -258,4 +257,32 @@
 
 .fetching_error {
   color: var(--error-color);
+}
+
+.info_section{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit_btn{
+  color: var(--link-color);
+  font-weight: bold;
+  cursor: pointer;
+}
+.edit_btn:hover{
+  text-decoration: underline;
+}
+
+.user_pronounc{
+  margin: 5px 0;
+  color: var(--link-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user_pronounc > span:first-child{
+  /* font-weight: bold; */
+  font-size: 20px;
 }

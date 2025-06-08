@@ -134,19 +134,10 @@ const Navbar = () => {
           {/* ✅ Plus Button */}
           <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
         </div>
-        {/* <EditContact
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        userData={userData}
-      /> */}
-        {/* <EditStartDate
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        userData={userData}
-      /> */}
+
         {/* <UploadProfilePhotoModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={true}
+        // onClose={() => setIsModalOpen(false)}
       /> */}
         {/* <SetStatusModal
         isOpen={isModalOpen}

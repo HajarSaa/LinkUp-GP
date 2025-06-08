@@ -9,6 +9,8 @@ import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
 import Spinner from "../../Spinner/Spinner";
 import { useParams } from "react-router-dom";
+import ProfileEditModal from "../../Modal/EditProfileModal/EditProfile";
+import EditContact from "../../Modal/EditContactModal/EditContact";
 
 const UserPanel = () => {
   const dispatch = useDispatch();
@@ -20,36 +22,46 @@ const UserPanel = () => {
   const { isLoading, isError, error } = useGetUserProfile(user_id);
 
   const handleClose = () => {
-    dispatch(closeChatPanel({type:'userPanel',page_id:id}));
+    dispatch(closeChatPanel({ type: "userPanel", page_id: id }));
   };
 
   if (!isOpen) return null;
   return (
-    <div className={styles.profileCard}>
-      <div className={styles.profileHeader}>
-        <span>Profile</span>
-        <CloseIcon closeEvent={handleClose} />
-      </div>
-
-      {userProfile && (
-        <div className={styles.panel_body}>
-          {isLoading ? (
-            <div className={styles.fetching_status}>
-              <Spinner width={50} height={50} color="var(--primary-color)" />
-            </div>
-          ) : isError ? (
-            <div className={styles.fetching_error}>{error}</div>
-          ) : (
-            <>
-              <ProfileImage />
-              <ProfileInfo />
-              <ProfileActions />
-              <ProfileAbout />
-            </>
-          )}
+    <>
+      <div className={styles.profileCard}>
+        <div className={styles.profileHeader}>
+          <span>Profile</span>
+          <CloseIcon closeEvent={handleClose} />
         </div>
-      )}
-    </div>
+
+        {userProfile && (
+          <div className={styles.panel_body}>
+            {isLoading ? (
+              <div className={styles.fetching_status}>
+                <Spinner width={50} height={50} color="var(--primary-color)" />
+              </div>
+            ) : isError ? (
+              <div className={styles.fetching_error}>{error}</div>
+            ) : (
+              <>
+                <ProfileImage />
+                <ProfileInfo />
+                <ProfileActions />
+                <ProfileAbout />
+              </>
+            )}
+          </div>
+        )}
+      </div>
+      {/* User panel Modals */}
+      <ProfileEditModal />
+      <EditContact />
+      {/* <EditStartDate
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        userData={userData}
+      /> */}
+    </>
   );
 };
 

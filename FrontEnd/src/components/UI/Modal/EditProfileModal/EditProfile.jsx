@@ -8,13 +8,15 @@ import UserImage from "../../User/UserImage";
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/convers/editUserProfie";
+import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/userProfile/editUserProfie";
 import useUpdateUserImage from "../../../../API/hooks/userProfile/useUpdateUserImage";
 import Spinner from "../../Spinner/Spinner";
 import useUpdateUserProfile from "../../../../API/hooks/userProfile/useUpdateUserProfile";
 const ProfileEditModal = () => {
   const dispatch = useDispatch();
-  const { isOpen, myData } = useSelector((state) => state.editUserProfile);
+  const { isOpen, myData, focusField } = useSelector(
+    (state) => state.editUserProfile
+  );
   const update_image = useUpdateUserImage();
   const update_profile = useUpdateUserProfile();
   const [profileData, setProfileData] = useState({
@@ -35,6 +37,27 @@ const ProfileEditModal = () => {
       }));
     }
   }, [myData]);
+  // =====================(Handle Inputs Focuses)
+  const fullNameRef = useRef(null);
+  const displayNameRef = useRef(null);
+  const titleRef = useRef(null);
+  const pronunciationRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && focusField) {
+      const refs = {
+        fullName: fullNameRef,
+        displayName: displayNameRef,
+        title: titleRef,
+        namePronunciation: pronunciationRef,
+      };
+
+      const targetRef = refs[focusField];
+      if (targetRef?.current) {
+        targetRef.current.focus();
+      }
+    }
+  }, [isOpen, focusField]);
 
   // =====================(Handle Image Uploading)
   const fileInputRef = useRef(null);
@@ -147,6 +170,7 @@ const ProfileEditModal = () => {
             <div className={styles.leftHS}>
               <label>Full name</label>
               <input
+                ref={fullNameRef}
                 type="text"
                 name="fullName"
                 value={profileData?.userName}
@@ -156,6 +180,7 @@ const ProfileEditModal = () => {
 
               <label>Display name</label>
               <input
+                ref={displayNameRef}
                 type="text"
                 name="displayName"
                 value={inputsData?.displayName || inputsData?.userName}
@@ -169,6 +194,7 @@ const ProfileEditModal = () => {
 
               <label>Title</label>
               <input
+                ref={titleRef}
                 type="text"
                 name="title"
                 value={inputsData?.title}
@@ -216,6 +242,7 @@ const ProfileEditModal = () => {
 
           <label>Name pronunciation</label>
           <input
+            ref={pronunciationRef}
             type="text"
             name="namePronunciation"
             value={inputsData?.namePronunciation}
