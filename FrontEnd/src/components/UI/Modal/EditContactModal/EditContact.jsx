@@ -36,8 +36,8 @@ const EditContactModal = () => {
       onClose={handleClose}
       className={styles.contactModal}
       zIndex={1002}
+      title="Edit Contact information"
     >
-      <h2 className={styles.contact_header}>Edit Contact information</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.mailLabel}>
           <span className={styles.icon}>

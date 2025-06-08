@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const uploadUserImageSlice = createSlice({
   name: "uploadUserImageSlice",
   initialState: {
-    isOpen: true,
+    isOpen: false,
     userData: null,
   },
   reducers: {
@@ -18,6 +18,6 @@ const uploadUserImageSlice = createSlice({
   },
 });
 
-export const { openUserDetailsModal, closeUserDetailsModal } =
+export const { openUploadUserImageModal, closeUploadUserImageModal } =
   uploadUserImageSlice.actions;
 export default uploadUserImageSlice.reducer;

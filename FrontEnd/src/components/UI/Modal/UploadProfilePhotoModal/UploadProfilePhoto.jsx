@@ -1,16 +1,19 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
 import styles from "./UploadProfilePhoto.module.css";
 import { FaUser } from "react-icons/fa";
 import { AiOutlineFileImage } from "react-icons/ai";
 import Button from "../../Buttons/Button/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { closeUploadUserImageModal } from "../../../../API/redux_toolkit/modals/userProfile/uploadUserImage";
 
-const UploadProfilePhotoModal = ({ onClose }) => {
-  const { isOpen, data } = useSelector((state) => state.uploadUserImage);
-  console.log(isOpen);
+const UploadProfilePhotoModal = () => {
+  const { isOpen, userData } = useSelector((state) => state.uploadUserImage);
+  useEffect(() => {
+    console.log(userData)
+  },[userData])
   const [selectedFile, setSelectedFile] = useState(null);
+  const dispatch = useDispatch();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -19,15 +22,24 @@ const UploadProfilePhotoModal = ({ onClose }) => {
     }
   };
 
-  if (!isOpen || data) return null;
+  function handleClose() {
+    dispatch(closeUploadUserImageModal());
+  }
+
+  function updateImage() {
+    console.log('Updated')
+    handleClose();
+  }
+
+  if (!isOpen || !userData) return null;
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       className={styles.modal}
-      zIndex="1002"
+      zIndex={1002}
+      title="Add a profile photo"
     >
-      <h2 className={styles.title}>Add a profile photo</h2>
 
       <div className={styles.uploadContainer}>
         <label htmlFor="fileUpload" className={styles.uploadBox}>
@@ -75,18 +87,16 @@ const UploadProfilePhotoModal = ({ onClose }) => {
       </div>
 
       <div className={styles.buttonContainer}>
-        <Button className={styles.cancelButton} onClick={onClose}>
+        <Button className={styles.cancelButton} onClick={handleClose}>
           Cancel
         </Button>
-        <Button className={styles.saveButton}>Save</Button>
+        <Button className={styles.saveButton} onClick={updateImage}>
+          Save
+        </Button>
       </div>
     </Modal>
   );
 };
 
-UploadProfilePhotoModal.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-};
 
 export default UploadProfilePhotoModal;

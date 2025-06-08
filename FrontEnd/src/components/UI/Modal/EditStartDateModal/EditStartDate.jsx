@@ -149,9 +149,9 @@ const EditDateModal = () => {
       onClose={handleClose}
       className={styles.contactModal}
       zIndex={1002}
+      title="Edit About me"
     >
       <div className={styles.container}>
-        <h2 className={styles.header_title}>Edit About me</h2>
         <label className={styles.label}>Start Date</label>
         <div className={styles.datePickerWrapper}>
           <DatePicker

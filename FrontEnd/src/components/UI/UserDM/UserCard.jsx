@@ -1,6 +1,5 @@
 import styles from "./UserDM.module.css";
 import Button from "../Buttons/Button/Button";
-import style from "../Buttons/Button/Button.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import UserStatus from "../User/UserStatus";
@@ -9,6 +8,7 @@ import { useParams } from "react-router-dom";
 import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
 import { openEditUserProfile } from "../../../API/redux_toolkit/modals/userProfile/editUserProfie";
 import UploadProfilePhotoModal from "../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
+import { openUploadUserImageModal } from "../../../API/redux_toolkit/modals/userProfile/uploadUserImage";
 
 const UserCard = () => {
   const dispatch = useDispatch();
@@ -27,6 +27,9 @@ const UserCard = () => {
 
   function handleOpenEditUserProfile(focusField = "fullName") {
     dispatch(openEditUserProfile({ data: receiver, focusField: focusField }));
+  }
+  function handleOpenUploadUserPhoto() {
+    dispatch(openUploadUserImageModal(receiver));
   }
 
   return (
@@ -72,18 +75,26 @@ const UserCard = () => {
         </div>
 
         <div className={styles.action_buttons}>
-          <Button onClick={handelOpenUserPanel} className={style.button}>
-            View profile
-          </Button>
-          {receiver?.isMe && (
-            <Button
-              onClick={() => {
-                handleOpenEditUserProfile("fullName");
-              }}
-              className={style.button}
-            >
-              Edit profile
+          {!receiver?.isMe && (
+            <Button onClick={handelOpenUserPanel}>
+              View profile
             </Button>
+          )}
+          {receiver?.isMe && (
+            <>
+              <Button
+                onClick={() => {
+                  handleOpenEditUserProfile("fullName");
+                }}
+              >
+                Edit profile
+              </Button>
+              <Button
+                onClick={handleOpenUploadUserPhoto}
+              >
+                Upload profile photo
+              </Button>
+            </>
           )}
         </div>
       </div>

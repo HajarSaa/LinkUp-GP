@@ -25,6 +25,7 @@ const UserModal = () => {
       onClose={closeModal}
       className={styles.largeModal}
       zIndex={1002}
+      title={userData?.userName}
     >
       <div className={styles.upper}>
         <UserProfile userData={userData} />

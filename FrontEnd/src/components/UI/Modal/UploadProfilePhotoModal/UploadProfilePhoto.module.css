@@ -1,21 +1,10 @@
 .modal {
   width: 450px;
-  height: 92%;
+  height: 90%;
   background: white;
   border-radius: 8px;
 }
 
-.title {
-  padding: 20px;
-  margin-bottom: 15px;
-  font-size: 22px;
-  font-weight: 900;
-  align-items: center;
-  position: sticky;
-  z-index: 10;
-  top: 0;
-  /* background-color: white; */
-}
 
 .uploadContainer {
   margin: 0 20px;

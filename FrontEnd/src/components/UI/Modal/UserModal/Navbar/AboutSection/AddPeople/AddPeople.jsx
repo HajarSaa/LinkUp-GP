@@ -9,8 +9,8 @@ const AddPeopleModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       className={styles.smallModal}
       zIndex={1004}
+      title="Add people to this conversation"
     >
-      <h2 className={styles.title}>Add people to this conversation</h2>
       <input
         type="text"
         placeholder="ex. Matt or @mbrewer"

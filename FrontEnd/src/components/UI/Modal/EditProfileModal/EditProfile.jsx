@@ -68,10 +68,9 @@ const ProfileEditModal = () => {
   const handleFileChange = (event) => {
     const image = event.target.files[0];
     if (!image) return;
-    console.log('selected')
-    // const formData = new FormData();
-    // formData.append("photo", image);
-    // update_image.mutate(formData);
+    const formData = new FormData();
+    formData.append("photo", image);
+    update_image.mutate(formData);
   };
   // ==================================================
 
@@ -162,9 +161,8 @@ const ProfileEditModal = () => {
       onClose={handleClose}
       className={styles.profileModal}
       zIndex={1002}
+      title="Edit your profile"
     >
-      <h2 className={styles.modalTitle}>Edit your profile</h2>
-
       <div className={styles.profileContainer}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.upperSection}>

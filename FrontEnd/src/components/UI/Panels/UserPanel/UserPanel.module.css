@@ -31,11 +31,14 @@
 
 
 .profileImageContainer {
+  position: relative;
   max-width: 100%;
+  width: 260px;
+  height: 260px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 15px;
+  margin: 0 auto 15px;
 }
 
 .profileImage {
@@ -129,7 +132,8 @@
   background: #083b6e;
 }
 
-.profileContact,.profile_contact {
+.profileContact,
+.profile_contact {
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -289,4 +293,11 @@
 .add_phone>span:first-child {
   /* font-weight: bold; */
   font-size: 20px;
+}
+
+.upload_image {
+  position: absolute;
+  background-color: #fff;
+  top: 6px;
+  right: 6px;
 }

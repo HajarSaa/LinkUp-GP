@@ -10,8 +10,8 @@ const EditTopic = ({ isOpen, onClose }) => {
       onClose={onClose}
       className={styles.smallModal}
       zIndex={1004}
+      title="Edit topic"
     >
-      <h2 className={styles.title}>Edit topic</h2>
       <textarea
         className={styles.textarea}
         placeholder="Add a topic"

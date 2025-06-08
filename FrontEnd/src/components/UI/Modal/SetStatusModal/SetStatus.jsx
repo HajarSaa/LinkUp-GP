@@ -19,9 +19,12 @@ const SetStatusModal = ({ isOpen, onClose }) => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className={styles.modal}>
-      <h2 className={styles.title}>Set a status</h2>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      className={styles.modal}
+      title="Set a status"
+    >
       <input
         type="text"
         placeholder="What's your status?"
