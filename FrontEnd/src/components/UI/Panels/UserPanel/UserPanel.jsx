@@ -1,7 +1,7 @@
 import ProfileImage from "./ProfileImage";
 import ProfileInfo from "./ProfileInfo";
 import ProfileActions from "./ProfileActions";
-import ProfileAbout from "./ProfileAbout";
+import ProfileContact from "./ProfileContact";
 import styles from "./UserPanel.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
@@ -11,6 +11,8 @@ import Spinner from "../../Spinner/Spinner";
 import { useParams } from "react-router-dom";
 import ProfileEditModal from "../../Modal/EditProfileModal/EditProfile";
 import EditContact from "../../Modal/EditContactModal/EditContact";
+import EditStartDate from "../../Modal/EditStartDateModal/EditStartDate";
+import ProfileAbout from "./ProfileAbout";
 
 const UserPanel = () => {
   const dispatch = useDispatch();
@@ -47,6 +49,7 @@ const UserPanel = () => {
                 <ProfileImage />
                 <ProfileInfo />
                 <ProfileActions />
+                <ProfileContact />
                 <ProfileAbout />
               </>
             )}
@@ -56,11 +59,7 @@ const UserPanel = () => {
       {/* User panel Modals */}
       <ProfileEditModal />
       <EditContact />
-      {/* <EditStartDate
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        userData={userData}
-      /> */}
+      <EditStartDate />
     </>
   );
 };

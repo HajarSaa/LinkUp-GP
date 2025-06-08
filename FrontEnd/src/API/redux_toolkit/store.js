@@ -18,11 +18,12 @@ import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
 import userProfileSlice from "./api_data/userProfileSlice";
 //======
 // ==============================(User Profile)
+import editUserProfileReducer from "./modals/userProfile/editUserProfie";
 import editContactReducer from "./modals/userProfile/editContactModal";
+import editStartDateReducer from "./modals/userProfile/editStartDateSlice";
 //======
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
-import editUserProfileReducer from "./modals/userProfile/editUserProfie";
 //======
 
 const store = configureStore({
@@ -47,6 +48,7 @@ const store = configureStore({
     // ====
     editUserProfile: editUserProfileReducer,
     editContact: editContactReducer,
+    editStartDate: editStartDateReducer,
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
