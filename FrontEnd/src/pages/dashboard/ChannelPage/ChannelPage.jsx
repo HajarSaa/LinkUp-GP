@@ -41,9 +41,6 @@ function ChannelPage() {
       dispatch(closeChatPanel());
     }
   }, [channel_id, dispatch]);
-  // Testing
-  
-  // Testing
 
   if (channel_query.isLoading || message_query.isLoading)
     return (
