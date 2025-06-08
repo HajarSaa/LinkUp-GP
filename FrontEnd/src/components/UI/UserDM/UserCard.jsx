@@ -8,6 +8,7 @@ import UserImage from "../User/UserImage";
 import { useParams } from "react-router-dom";
 import ProfileEditModal from "../Modal/EditProfileModal/EditProfile";
 import { openEditUserProfile } from "../../../API/redux_toolkit/modals/userProfile/editUserProfie";
+import UploadProfilePhotoModal from "../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
 
 const UserCard = () => {
   const dispatch = useDispatch();
@@ -76,7 +77,9 @@ const UserCard = () => {
           </Button>
           {receiver?.isMe && (
             <Button
-              onClick={() =>{ handleOpenEditUserProfile("fullName");}}
+              onClick={() => {
+                handleOpenEditUserProfile("fullName");
+              }}
               className={style.button}
             >
               Edit profile
@@ -86,6 +89,7 @@ const UserCard = () => {
       </div>
       {/* Modals */}
       <ProfileEditModal />
+      <UploadProfilePhotoModal />
     </>
   );
 };

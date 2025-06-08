@@ -5,8 +5,11 @@ import styles from "./UploadProfilePhoto.module.css";
 import { FaUser } from "react-icons/fa";
 import { AiOutlineFileImage } from "react-icons/ai";
 import Button from "../../Buttons/Button/Button";
+import { useSelector } from "react-redux";
 
-const UploadProfilePhotoModal = ({ isOpen, onClose }) => {
+const UploadProfilePhotoModal = ({ onClose }) => {
+  const { isOpen, data } = useSelector((state) => state.uploadUserImage);
+  console.log(isOpen);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -16,6 +19,7 @@ const UploadProfilePhotoModal = ({ isOpen, onClose }) => {
     }
   };
 
+  if (!isOpen || data) return null;
   return (
     <Modal
       isOpen={isOpen}

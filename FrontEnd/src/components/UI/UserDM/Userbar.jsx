@@ -20,16 +20,12 @@ import UserImage from "../User/UserImage";
 import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { useParams } from "react-router-dom";
-// import EditContact from "../Modal/EditContactModal/EditContact";
-// import EditStartDate from "../Modal/EditStartDateModal/EditStartDate";
-// import UploadProfilePhotoModal from "../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
 // import SetStatusModal from "../Modal/SetStatusModal/SetStatus";
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const receiver = useSelector((state) => state.convers.chatMate);
   const dispath = useDispatch();
   const { id } = useParams();
-
 
   const menuItems = [
     {
@@ -134,11 +130,6 @@ const Navbar = () => {
           {/* ✅ Plus Button */}
           <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
         </div>
-
-        {/* <UploadProfilePhotoModal
-        isOpen={true}
-        // onClose={() => setIsModalOpen(false)}
-      /> */}
         {/* <SetStatusModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

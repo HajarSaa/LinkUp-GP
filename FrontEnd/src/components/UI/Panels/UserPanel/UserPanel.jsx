@@ -13,6 +13,7 @@ import ProfileEditModal from "../../Modal/EditProfileModal/EditProfile";
 import EditContact from "../../Modal/EditContactModal/EditContact";
 import EditStartDate from "../../Modal/EditStartDateModal/EditStartDate";
 import ProfileAbout from "./ProfileAbout";
+import UploadProfilePhotoModal from "../../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
 
 const UserPanel = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const UserPanel = () => {
       <ProfileEditModal />
       <EditContact />
       <EditStartDate />
+      <UploadProfilePhotoModal />
     </>
   );
 };

@@ -68,9 +68,10 @@ const ProfileEditModal = () => {
   const handleFileChange = (event) => {
     const image = event.target.files[0];
     if (!image) return;
-    const formData = new FormData();
-    formData.append("photo", image);
-    update_image.mutate(formData);
+    console.log('selected')
+    // const formData = new FormData();
+    // formData.append("photo", image);
+    // update_image.mutate(formData);
   };
   // ==================================================
 

@@ -21,6 +21,7 @@ import userProfileSlice from "./api_data/userProfileSlice";
 import editUserProfileReducer from "./modals/userProfile/editUserProfie";
 import editContactReducer from "./modals/userProfile/editContactModal";
 import editStartDateReducer from "./modals/userProfile/editStartDateSlice";
+import uploadUserImageReducer from "./modals/userProfile/uploadUserImage";
 //======
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
@@ -49,6 +50,7 @@ const store = configureStore({
     editUserProfile: editUserProfileReducer,
     editContact: editContactReducer,
     editStartDate: editStartDateReducer,
+    uploadUserImage: uploadUserImageReducer,
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
