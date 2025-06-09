@@ -50,6 +50,10 @@ const messageSchema = new mongoose.Schema(
     ],
     edited: { type: Boolean, default: false },
     editedAt: { type: Date },
+    pinned: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
