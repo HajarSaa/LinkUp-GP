@@ -17,6 +17,7 @@ function MainLayout() {
   const isBrowseChannels = location.pathname === "/browse-channels";
   // const { id: page_id } = useParams();
 
+
   useCurrentWorkspace();
   const { workspace } = useSelector((state) => state.workspace);
 

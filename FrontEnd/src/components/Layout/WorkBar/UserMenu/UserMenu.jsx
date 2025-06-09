@@ -30,6 +30,7 @@ function UserMenu() {
 
   const handleSignOut = () => {
     navigate("/login");
+    dispatch(closeUserMenuModal());
   };
 
   if (!isOpen) return null;
