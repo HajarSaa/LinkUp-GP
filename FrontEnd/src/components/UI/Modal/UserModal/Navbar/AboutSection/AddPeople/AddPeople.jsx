@@ -11,15 +11,19 @@ const AddPeopleModal = ({ isOpen, onClose }) => {
       zIndex={1004}
       title="Add people to this conversation"
     >
-      <input
-        type="text"
-        placeholder="ex. Matt or @mbrewer"
-        className={styles.inputField}
-      />
-      <p className={styles.hint}>
-        DMs can have up to 9 people (including you).
-      </p>
-      <Button className={styles.nextButton}>Next</Button>
+      <div className={styles.add_body}>
+        <input
+          type="text"
+          placeholder="ex. Matt or @mbrewer"
+          className={styles.inputField}
+        />
+        <p className={styles.hint}>
+          DMs can have up to 9 people (including you).
+        </p>
+        <div className={styles.btns}>
+          <Button className={styles.nextButton}>Next</Button>
+        </div>
+      </div>
     </Modal>
   );
 };

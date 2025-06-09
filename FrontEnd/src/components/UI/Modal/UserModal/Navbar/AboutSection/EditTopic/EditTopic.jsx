@@ -12,21 +12,23 @@ const EditTopic = ({ isOpen, onClose }) => {
       zIndex={1004}
       title="Edit topic"
     >
-      <textarea
-        className={styles.textarea}
-        placeholder="Add a topic"
-        // value={topic}
-        // onChange={(e) => setTopic(e.target.value)}
-      />
-      <p className={styles.description}>
-        Add a topic to your conversation. This will be visible to both of you at
-        the top of your DM.
-      </p>
-      <div className={styles.buttons}>
-        <Button className={styles.cancelButton} onClick={onClose}>
-          Cancel
-        </Button>
-        <Button className={styles.saveButton}>Save</Button>
+      <div className={styles.edit_body}>
+        <textarea
+          className={styles.textarea}
+          placeholder="Add a topic"
+          // value={topic}
+          // onChange={(e) => setTopic(e.target.value)}
+        />
+        <p className={styles.description}>
+          Add a topic to your conversation. This will be visible to both of you
+          at the top of your DM.
+        </p>
+        <div className={styles.buttons}>
+          <Button className={styles.cancelButton} onClick={onClose}>
+            Cancel
+          </Button>
+          <Button className={styles.saveButton}>Save</Button>
+        </div>
       </div>
     </Modal>
   );

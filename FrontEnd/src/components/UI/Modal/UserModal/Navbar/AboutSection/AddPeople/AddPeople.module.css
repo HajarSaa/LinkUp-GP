@@ -18,10 +18,11 @@
   color: gray;
   margin-bottom: 15px;
 }
-
+.btns{
+  display: flex;
+  justify-content: end;
+}
 .nextButton {
-  /* width: 100%; */
-  align-self: self-end;
   padding: 10px 20px;
   background-color: #007a5a;
   color: white;
@@ -37,6 +38,9 @@
 .smallModal {
   min-width: 30%;
   width: 400px;
-  padding: 20px;
   z-index: 1003;
+}
+
+.add_body{
+  padding: 10px;
 }

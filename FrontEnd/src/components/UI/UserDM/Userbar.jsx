@@ -141,19 +141,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// import { useState } from "react";
-// import ProfileEditModal from "./ProfileEditModal";
-
-// const App = () => {
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   return (
-//     <div>
-//       <button onClick={() => setIsModalOpen(true)}>Edit Profile</button>
-//       <ProfileEditModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} userData={userData} />
-//     </div>
-//   );
-// };
-
-// export default App;

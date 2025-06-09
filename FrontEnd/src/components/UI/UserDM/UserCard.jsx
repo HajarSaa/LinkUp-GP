@@ -76,9 +76,7 @@ const UserCard = () => {
 
         <div className={styles.action_buttons}>
           {!receiver?.isMe && (
-            <Button onClick={handelOpenUserPanel}>
-              View profile
-            </Button>
+            <Button onClick={handelOpenUserPanel}>View profile</Button>
           )}
           {receiver?.isMe && (
             <>
@@ -89,9 +87,7 @@ const UserCard = () => {
               >
                 Edit profile
               </Button>
-              <Button
-                onClick={handleOpenUploadUserPhoto}
-              >
+              <Button onClick={handleOpenUploadUserPhoto}>
                 Upload profile photo
               </Button>
             </>
