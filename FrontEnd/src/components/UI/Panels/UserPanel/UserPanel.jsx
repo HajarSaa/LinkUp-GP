@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
-import Spinner from "../../Spinner/Spinner";
 import { useParams } from "react-router-dom";
 import ProfileEditModal from "../../Modal/EditProfileModal/EditProfile";
 import EditContact from "../../Modal/EditContactModal/EditContact";
@@ -19,10 +18,11 @@ const UserPanel = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const userProfile = useSelector((state) => state.userProfile.data);
+
   const { isOpen, userData: user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
-  const { isLoading, isError, error } = useGetUserProfile(user_id);
+  useGetUserProfile(user_id);
 
   const handleClose = () => {
     dispatch(closeChatPanel({ type: "userPanel", page_id: id }));
@@ -39,21 +39,11 @@ const UserPanel = () => {
 
         {userProfile && (
           <div className={styles.panel_body}>
-            {isLoading ? (
-              <div className={styles.fetching_status}>
-                <Spinner width={50} height={50} color="var(--primary-color)" />
-              </div>
-            ) : isError ? (
-              <div className={styles.fetching_error}>{error}</div>
-            ) : (
-              <>
-                <ProfileImage />
-                <ProfileInfo />
-                <ProfileActions />
-                <ProfileContact />
-                <ProfileAbout />
-              </>
-            )}
+            <ProfileImage />
+            <ProfileInfo />
+            <ProfileActions />
+            <ProfileContact />
+            <ProfileAbout />
           </div>
         )}
       </div>

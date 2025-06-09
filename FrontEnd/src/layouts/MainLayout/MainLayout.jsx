@@ -2,7 +2,7 @@ import styles from "./MainLayout.module.css";
 import NavBar from "../../components/Layout/Navbar/NavBar";
 import WorkBar from "../../components/Layout/Workbar/WorkBar";
 import SideBar from "../../components/Layout/SideBar/SideBar";
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation} from "react-router-dom";
 import CreateChannelModal from "../../components/UI/Modal/ChannelModals/CreateChannelModal/CreateChannelModal";
 import InviteWorkModal from "../../components/UI/Modal/InviteWorkModal/InviteWorkModal";
 import useCurrentWorkspace from "../../API/hooks/workspace/useCurrentWorkspace";
