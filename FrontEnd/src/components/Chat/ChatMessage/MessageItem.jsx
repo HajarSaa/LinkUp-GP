@@ -10,10 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import MessageActions from "./MessageActions";
 import MessageThreads from "./MessageThreads";
-import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanel";
+import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { findMemberById } from "../../../utils/workspaceUtils";
 import { formatTimeTo12Hour } from "../../../utils/formatedDate";
 import UserImage from "../../UI/User/UserImage";
+import { useParams } from "react-router-dom";
 
 const MessageItem = ({ message }) => {
   const [emoji, setEmoji] = useState("");
@@ -21,6 +22,7 @@ const MessageItem = ({ message }) => {
   const [add_position, set_add_Position] = useState(null);
   const [messageHover, setMessageHover] = useState(false);
   const dispatch = useDispatch();
+  const { id: page_id } = useParams();
   const { workspace } = useSelector((state) => state.workspace);
   const sender = findMemberById(workspace, message?.createdBy);
   const message_time = formatTimeTo12Hour(message?.createdAt);
@@ -33,7 +35,13 @@ const MessageItem = ({ message }) => {
   }
 
   function openProfile() {
-    dispatch(openUserPanel());
+    dispatch(
+      openUserPanel({
+        type: "userPanel",
+        panel_id: sender.id || sender._id,
+        page_id: page_id,
+      })
+    );
   }
 
   const updatePosition = () => {
@@ -67,7 +75,7 @@ const MessageItem = ({ message }) => {
         <div className={styles.message}>
           <div className={styles.message_leftSide}>
             <div className={styles.profileWrapper} onClick={openProfile}>
-              <UserImage src={sender.photo} alt={sender.userName}/>
+              <UserImage src={sender.photo} alt={sender.userName} />
             </div>
           </div>
           <div className={styles.message_rightSide}>

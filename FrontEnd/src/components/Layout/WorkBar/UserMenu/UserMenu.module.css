@@ -29,8 +29,27 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  border-bottom: 1px solid #3c4146;
+  border-bottom: 1px solid var(--border-color);
   font-weight: 600;
+}
+
+.profile_image {
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+}
+
+.profile_info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.user_status{
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
 
 .statusDot {

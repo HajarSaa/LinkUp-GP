@@ -41,6 +41,9 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.cancelButton:hover{
+  background: #e0e0e0ef;
+}
 
 .saveButton {
   background: #007a5a;
@@ -50,8 +53,15 @@
   border-radius: 5px;
   cursor: pointer;
 }
+.saveButton:hover{
+  background: #007a59e2;
+}
 .smallModal {
   min-width: 20%;
-  padding: 20px;
+  width: 530px;
   z-index: 1003;
+}
+
+.edit_body{
+  padding: 10px;
 }

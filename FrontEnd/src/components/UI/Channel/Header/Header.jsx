@@ -27,9 +27,7 @@ function Header() {
         <div className="justify-content-between w-100 topPart">
           <div
             className={styles.channel_name}
-            onClick={() =>
-              dispatch(openChannelDetails({tab: "about" }))
-            }
+            onClick={() => dispatch(openChannelDetails({ tab: "about" }))}
           >
             <ChannelType type={channel.type} />
             <span>{channel.name}</span>
@@ -37,9 +35,7 @@ function Header() {
           <div className={styles.rightSide}>
             <div
               className={styles.membersContainer}
-              onClick={() =>
-                dispatch(openChannelDetails({tab: "members" }))
-              }
+              onClick={() => dispatch(openChannelDetails({ tab: "members" }))}
             >
               <div className={styles.avatars}>
                 {members.slice(0, 3).map((member, index) => (

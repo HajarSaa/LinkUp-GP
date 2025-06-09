@@ -62,6 +62,13 @@ const MoreDropdown = ({ items = [] }) => {
     };
   }, [handleClickOutside]);
 
+  function handle_event(action) {
+    if (action) {
+      setIsOpen(false);
+      action()
+    }
+  }
+
   return (
     <div className={styles.dropdownContainer} ref={dropdownRef}>
       <Button onClick={() => setIsOpen(!isOpen)} icon={<IoMdMore />} />
@@ -72,6 +79,7 @@ const MoreDropdown = ({ items = [] }) => {
             <p
               key={index}
               className={item.isDanger ? styles.danger : styles.normal}
+              onClick={() =>{handle_event(item?.clickAction);}}
             >
               {item.label}
             </p>

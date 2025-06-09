@@ -1,15 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import chatPanelReducer from "./ui/chatPanel";
+import chatPanelReducer from "./ui/chatPanelSlice";
 import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
 import channelMenuReducer from "./chat/channel/channelMenuSlice";
-import channelsReducer from "./chat/channel/channelsSlice";
 // Modals
 import notificationsModalReducer from "./modals/notificationsModalSlice";
 import channelDetailsModalReducer from "./modals/channelDetailsSlice";
 import createChannelModalReducer from "./modals/createChannelmodalSlice";
-import convActionModalReducer from "./modals/convActionModal";
-import addButtonModalReducer from "./modals/addButtonModal";
 import emojiPickerReducer from "./modals/emojiPickerSlice";
 import workspaceReducer from "./api_data/workspaceSlice";
 import channelReducer from "./api_data/channelSlice";
@@ -18,6 +15,19 @@ import resizingReducer from "./ui/resizeSlice";
 import modalsReducer from "./modals/modalsSlice";
 import userReducer from "./api_data/userSlice";
 import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
+import userProfileSlice from "./api_data/userProfileSlice";
+//======
+// ==============================(User Profile)
+import editUserProfileReducer from "./modals/userProfile/editUserProfie";
+import editContactReducer from "./modals/userProfile/editContactModal";
+import editStartDateReducer from "./modals/userProfile/editStartDateSlice";
+import uploadUserImageReducer from "./modals/userProfile/uploadUserImage";
+import setStatusReducer from "./modals/userProfile/setStatusSlice";
+import userMenuReducer from "./modals/userProfile/userMenuSlice";
+//======
+// ==============================(Conversation)
+import userDetailsReducer from "./modals/convers/userDetailsModal";
+//======
 
 const store = configureStore({
   reducer: {
@@ -25,24 +35,34 @@ const store = configureStore({
     resizing: resizingReducer,
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,
-    // channel
+    // ==============================(channel)
+    // ====
     channel: channelReducer,
     channel_messages: channel_messages_reducer,
-    // convers
-    convers: conversReducer,
-
     addChannelMenu: addChannelMenuReducer,
     channelMenu: channelMenuReducer,
-    // Modals
-    modals: modalsReducer,
-    convActionModal: convActionModalReducer,
     channelDetailsModal: channelDetailsModalReducer,
     createChannelModal: createChannelModalReducer,
+    // ==============================(conversation)
+    // ====
+    convers: conversReducer,
+    userDetailsModal: userDetailsReducer,
+    // ==============================(User Profile)
+    // ====
+    editUserProfile: editUserProfileReducer,
+    editContact: editContactReducer,
+    editStartDate: editStartDateReducer,
+    uploadUserImage: uploadUserImageReducer,
+    setStatus: setStatusReducer,
+    userMenu: userMenuReducer,
+    // ==============================(Modals)
+    // ====
+    modals: modalsReducer,
+    // ==============================(Global)
+    // ====
     notificationsModal: notificationsModalReducer,
-    addButtonModal: addButtonModalReducer,
     emojiPicker: emojiPickerReducer,
-    // Channels List
-    channels: channelsReducer,
+    userProfile: userProfileSlice,
   },
 });
 

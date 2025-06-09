@@ -7,24 +7,30 @@ import { getMembersData } from "../../../../../../utils/workspaceUtils";
 import UserStatus from "../../../../User/UserStatus";
 import UserImage from "../../../../User/UserImage";
 import { closeChannelDetails } from "../../../../../../API/redux_toolkit/modals/channelDetailsSlice";
-import { openUserPanel } from "../../../../../../API/redux_toolkit/ui/chatPanel";
+import { openUserPanel } from "../../../../../../API/redux_toolkit/ui/chatPanelSlice";
 import { openInviteChannel } from "../../../../../../API/redux_toolkit/modals/modalsSlice";
+import { useParams } from "react-router-dom";
 
 function MembersTab({ channelData }) {
   const { workspace } = useSelector((state) => state.workspace);
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   const members = getMembersData(channelData, workspace);
   const dispatch = useDispatch();
+  const { id: channel_id } = useParams();
 
-  function open_user_panel() {
+  function open_user_panel(userProfile_id) {
     dispatch(closeChannelDetails());
-    dispatch(openUserPanel());
+    dispatch(
+      openUserPanel({
+        type: "userPanel",
+        panel_id: userProfile_id,
+        page_id: channel_id,
+      })
+    );
   }
 
   function handle_invitaion() {
-    dispatch(
-      openInviteChannel(channelData)
-    );
+    dispatch(openInviteChannel(channelData));
   }
 
   if (activeTab !== "members") return null;
@@ -43,7 +49,9 @@ function MembersTab({ channelData }) {
         <div
           className={styles.membersItem}
           key={index}
-          onClick={open_user_panel}
+          onClick={() => {
+            open_user_panel(member.id || member._id);
+          }}
         >
           <div className={styles.memberImg}>
             <UserImage src={member.photo} alt={member.userName} />

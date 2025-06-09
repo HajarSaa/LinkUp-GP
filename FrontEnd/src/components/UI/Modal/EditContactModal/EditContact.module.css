@@ -1,5 +1,6 @@
 .contactModal {
-  width: 35%;
+  width: 500px;
+  max-width: 90%;
   background: white;
   border-radius: 8px;
 }
@@ -10,7 +11,7 @@
   padding: 10px 0;
 }
 
-label {
+.form label {
   margin: 10px 20px;
 }
 .mailLabel {
@@ -26,7 +27,7 @@ label {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: var(--border-radius);
-  cursor: not-allowed;
+  cursor: default;
   margin: 0 20px 10px 20px;
   font-size: 15px;
   font-weight: 400;
@@ -66,7 +67,7 @@ button {
   font-size: 15px;
 }
 
-button[type="submit"] {
+.submit_btn {
   background-color: #007a5a;
   color: white;
   margin-right: 20px;
@@ -75,7 +76,7 @@ button[type="submit"] {
     background-color: #006e50;
   }
 }
-button[type="button"] {
+.cancel_btn {
   background-color: transparent;
   color: #1d1c1d;
   border: 1px solid var(--border-color);
@@ -85,7 +86,7 @@ button[type="button"] {
     background-color: #f8f8f8;
   }
 }
-h2 {
+.contact_header {
   font-size: 22px;
   font-weight: 900;
   padding: 20px;

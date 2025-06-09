@@ -1,5 +1,5 @@
 .contactModal {
-  width: 35%;
+  width: 450px;
   background: white;
   border-radius: 8px;
 }
@@ -8,7 +8,7 @@
   flex-direction: column;
   gap: 10px;
 }
-h2 {
+.header_title {
   font-size: 22px;
   font-weight: 900;
   padding: 20px;
@@ -99,6 +99,7 @@ h2 {
   gap: 15px;
   border-top: 1px solid var(--border-color);
   padding: 20px 0;
+  font-weight: normal;
 }
 
 .cancel {
@@ -113,6 +114,7 @@ h2 {
 }
 
 .save {
+  font-weight: normal;
   padding: 10px;
   border: none;
   background-color: #007a5a;

@@ -8,6 +8,10 @@ function UserStatus({ status }) {
       className={` ${styles.user_status} ${
         status === "online"
           ? styles.online
+          : status === "away"
+          ? styles.away
+          : status === "busy"
+          ? styles.busy
           : styles.offline
       }`}
     ></span>

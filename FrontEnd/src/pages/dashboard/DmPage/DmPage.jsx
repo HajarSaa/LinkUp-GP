@@ -7,16 +7,36 @@ import useGetConvers from "../../../API/hooks/conversation/useGetConvers";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "../dashboard.module.css";
 import Panel from "../../../components/Layout/Panel/Panel";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getUserPanelIdByPageId,
+  isIdInOpenedUserPanelItems,
+} from "../../../utils/panelUtils";
+import { closeChatPanel, openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function DmPage() {
+  const { convers } = useSelector((state) => state.convers);
   const { id: convers_id } = useParams();
-  const {
-    isLoading: convers_loading,
-    isError,
-    error,
-  } = useGetConvers(convers_id);
-  
-  if (convers_loading)
+  const convers_query = useGetConvers(convers_id);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
+    if (isUserPanel) {
+      dispatch(
+        openUserPanel({
+          type: "userPanel",
+          panel_id: getUserPanelIdByPageId(convers_id),
+          page_id: convers_id,
+        })
+      );
+    } else {
+      dispatch(closeChatPanel())
+    }
+  }, [convers_id, dispatch]);
+
+  if (convers_query.isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -27,8 +47,15 @@ function DmPage() {
         />
       </div>
     );
-  if (isError)
-    return <div className={`${styles.status} ${styles.error}`}>{error}</div>;
+
+  if (convers_query.isError)
+    return (
+      <div className={`${styles.status} ${styles.error}`}>
+        {convers_query.error}
+      </div>
+    );
+
+  if (!convers) return;
   return (
     <PageContent>
       <div className={styles.page_content}>

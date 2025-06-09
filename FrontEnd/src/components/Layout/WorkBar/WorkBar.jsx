@@ -13,23 +13,24 @@ import { IoIosMore } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import UserMenu from "./UserMenu/UserMenu";
 import styles from "./Workbar.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   findMemberByUserId,
   getWorkLabel,
 } from "../../../utils/workspaceUtils";
 import UserImage from "../../UI/User/UserImage";
 import { useNavigate } from "react-router-dom";
+import { closeUserMenuModal, openUserMenuModal } from "../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 
 function WorkBar() {
   const menuRef = useRef(null);
   const navigateTo = useNavigate();
   const { workspace } = useSelector((state) => state.workspace);
   const [activeIndex, setActiveIndex] = useState(null);
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const work_label = getWorkLabel(workspace?.name || "workspace name");
   const loggin_user = findMemberByUserId(workspace);
   const main_channel = workspace?.channels[0];
+  const dispatch = useDispatch();
 
   const sidebarItems = [
     {
@@ -63,7 +64,7 @@ function WorkBar() {
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowUserMenu(false);
+        dispatch(closeUserMenuModal());
       }
     }
 
@@ -71,7 +72,7 @@ function WorkBar() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [dispatch]);
 
   function handleClick(index, navigation) {
     setActiveIndex(index);
@@ -109,13 +110,13 @@ function WorkBar() {
         <div className={styles.profileWrapper} ref={menuRef}>
           <div
             className={styles.profilePhotoPlaceholder}
-            onClick={() => setShowUserMenu(!showUserMenu)}
+            onClick={() => dispatch(openUserMenuModal()) }
           >
             <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
           </div>
           <span className={styles.statusDot}></span>
 
-          {showUserMenu && <UserMenu />}
+          <UserMenu />
         </div>
       </div>
     </div>

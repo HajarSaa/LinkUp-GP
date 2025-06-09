@@ -49,10 +49,29 @@ import { IoTimeOutline } from "react-icons/io5";
 import { MdOutlineEmail } from "react-icons/md";
 import EditTopic from "./EditTopic/EditTopic";
 import AddPeopleModal from "./AddPeople/AddPeople";
+import LocalTime from "../../../../User/LocalTime";
+import { useDispatch, useSelector } from "react-redux";
+import { openUserPanel } from "../../../../../../API/redux_toolkit/ui/chatPanelSlice";
+import { closeUserDetailsModal } from "../../../../../../API/redux_toolkit/modals/convers/userDetailsModal";
+import { useParams } from "react-router-dom";
 
 const About = () => {
   const [isEditTopicOpen, setIsEditTopicOpen] = useState(false);
   const [isAddPeopleOpen, setIsAddPeopleOpen] = useState(false);
+  const { userData } = useSelector((state) => state.userDetailsModal);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const view_profile = function () {
+    dispatch(closeUserDetailsModal());
+    dispatch(
+      openUserPanel({
+        type: "userPanel",
+        panel_id: userData.id || userData._id,
+        page_id: id,
+      })
+    );
+  };
 
   return (
     <div className={styles.detailsContainer}>
@@ -67,13 +86,15 @@ const About = () => {
       <div className={styles.section2}>
         <div className={styles.subSection}>
           <IoTimeOutline className={styles.icon} />
-          <p className={styles.time}>11:57 AM local time</p>
+          <LocalTime />
         </div>
         <div className={styles.subSection2}>
           <MdOutlineEmail className={styles.icon} />
-          <p className={styles.mail}>user@gmail.com</p>
+          <p className={styles.mail}>{userData?.email}</p>
         </div>
-        <p className={styles.viewProfile}>View full profile</p>
+        <p className={styles.viewProfile} onClick={view_profile}>
+          View full profile
+        </p>
       </div>
 
       <div className={styles.section3} onClick={() => setIsAddPeopleOpen(true)}>

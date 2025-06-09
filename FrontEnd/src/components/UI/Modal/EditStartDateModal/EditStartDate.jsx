@@ -115,7 +115,6 @@
 // export default EditDateModal;
 
 import { useState } from "react";
-import PropTypes from "prop-types";
 import Modal from "../Modal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -128,20 +127,31 @@ import {
 } from "react-icons/fa";
 import styles from "./EditStartDate.module.css";
 import Button from "../../Buttons/Button/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { closeEditStartDateModal } from "../../../../API/redux_toolkit/modals/userProfile/editStartDateSlice";
 
-const EditDateModal = ({ isOpen, onClose }) => {
+const EditDateModal = () => {
   const [selectedDate, setSelectedDate] = useState(null);
+  const { isOpen, data } = useSelector((state) => state.editStartDate);
+  const dispatch = useDispatch();
 
+  function handleClose() {
+    dispatch(closeEditStartDateModal());
+  }
+  function handleSaveChanges() {
+    console.log("Date Saved:", selectedDate);
+    handleClose();
+  }
+  if (!isOpen || !data) return null;
   return (
-    // <Modal isOpen={isOpen} onClose={onClose} title="Edit About Me">
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       className={styles.contactModal}
       zIndex={1002}
+      title="Edit About me"
     >
       <div className={styles.container}>
-        <h2>Edit About me</h2>
         <label className={styles.label}>Start Date</label>
         <div className={styles.datePickerWrapper}>
           <DatePicker
@@ -191,24 +201,16 @@ const EditDateModal = ({ isOpen, onClose }) => {
           />
         </div>
         <div className={styles.actions}>
-          <Button className={styles.cancel} onClick={onClose}>
+          <Button className={styles.cancel} onClick={handleClose}>
             Cancel
           </Button>
-          <Button
-            className={styles.save}
-            onClick={() => console.log("Date Saved:", selectedDate)}
-          >
+          <Button className={styles.save} onClick={handleSaveChanges}>
             Save Changes
           </Button>
         </div>
       </div>
     </Modal>
   );
-};
-
-EditDateModal.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
 };
 
 export default EditDateModal;

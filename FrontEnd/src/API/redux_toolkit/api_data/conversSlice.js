@@ -4,22 +4,18 @@ const conversSlice = createSlice({
   name: "conversation",
   initialState: {
     convers: null,
-    loading: false,
-    error: null,
+    chatMate:null
   },
   reducers: {
     setConvers: (state, action) => {
       state.convers = action.payload;
     },
-    setConLoading: (state, action) => {
-      state.loading = action.payload;
-    },
-    setConError: (state, action) => {
-      state.error = action.payload;
-    },
+    setChatMat: (state, action) => {
+      state.chatMate = action.payload;
+    }
   },
 });
 
-export const { setConvers, setConLoading, setConError } = conversSlice.actions;
+export const { setConvers, setChatMat } = conversSlice.actions;
 
 export default conversSlice.reducer;

@@ -37,6 +37,7 @@ function Panel() {
       timestamp: "2025-03-04T10:05:15Z",
     },
   ];
+
   if (!threadPanel && !userPanel.isOpen) return;
   return (
     <div className={styles.panel}>

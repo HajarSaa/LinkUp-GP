@@ -1,10 +1,14 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
+import { useEffect, useRef, useState } from "react";
 import Modal from "../Modal";
 import styles from "./EditContact.module.css";
 import { FaLock } from "react-icons/fa";
-const EditContactModal = ({ isOpen, onClose, userData }) => {
-  const [phone, setPhone] = useState(userData.phone || "");
+import { useDispatch, useSelector } from "react-redux";
+import { closeEditContactModal } from "../../../../API/redux_toolkit/modals/userProfile/editContactModal";
+const EditContactModal = () => {
+  const { isOpen, data } = useSelector((state) => state.editContact);
+  const [phone, setPhone] = useState(data?.phone || "");
+  const dispatch = useDispatch();
+  const phoneRef = useRef();
 
   const handleChange = (e) => {
     setPhone(e.target.value);
@@ -13,32 +17,44 @@ const EditContactModal = ({ isOpen, onClose, userData }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Updated Phone:", phone);
-    onClose();
+    handleClose();
   };
 
+  const handleClose = () => {
+    dispatch(closeEditContactModal());
+    setPhone("");
+  };
+
+  useEffect(() => {
+    if (isOpen && phoneRef.current) phoneRef.current.focus();
+  }, [isOpen]);
+
+  if (!isOpen || !data) return null;
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       className={styles.contactModal}
       zIndex={1002}
+      title="Edit Contact information"
     >
-      <h2>Edit Contact information</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         <label className={styles.mailLabel}>
-          {" "}
-          <FaLock className={styles.icon} />
-          Email Address
+          <span className={styles.icon}>
+            <FaLock />
+          </span>
+          <span>Email Address</span>
         </label>
         <input
           type="email"
-          value={userData.email}
+          value={data?.email}
           readOnly
           className={styles.readOnlyInput}
         />
 
         <label>Phone</label>
         <input
+          ref={phoneRef}
           type="text"
           value={phone}
           onChange={handleChange}
@@ -46,23 +62,20 @@ const EditContactModal = ({ isOpen, onClose, userData }) => {
         />
 
         <div className={styles.buttons}>
-          <button type="button" onClick={onClose}>
+          <button
+            className={styles.cancel_btn}
+            type="button"
+            onClick={handleClose}
+          >
             Cancel
           </button>
-          <button type="submit">Save Changes</button>
+          <button className={styles.submit_btn} type="submit">
+            Save Changes
+          </button>
         </div>
       </form>
     </Modal>
   );
-};
-
-EditContactModal.propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func,
-  userData: PropTypes.shape({
-    email: PropTypes.string,
-    phone: PropTypes.string,
-  }),
 };
 
 export default EditContactModal;

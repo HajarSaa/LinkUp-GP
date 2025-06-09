@@ -2,15 +2,25 @@
 .user_status {
   display: flex;
   align-items: center;
-  width:10px;
-  height:10px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
+
 .online {
-  background-color: var(--success-color);
+  background-color: green;
 }
+
 .offline {
   background-color: #666;
+}
+
+.away {
+  background-color: #666;
+}
+
+.busy {
+  background-color: var(--error-color);
 }
 
 /* user status =====================*/
@@ -24,4 +34,5 @@
   object-position: center;
   border-radius: inherit;
 }
+
 /* User Image======================= */

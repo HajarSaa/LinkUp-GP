@@ -1,44 +1,59 @@
 import ProfileImage from "./ProfileImage";
 import ProfileInfo from "./ProfileInfo";
 import ProfileActions from "./ProfileActions";
-import ProfileAbout from "./ProfileAbout";
+import ProfileContact from "./ProfileContact";
 import styles from "./UserPanel.module.css";
-import { IoCloseSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
-const ProfileCard = () => {
-  const { isOpen,userData } = useSelector((state) => state.chatPanel.userPanel);
+import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
+import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
+import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
+import { useParams } from "react-router-dom";
+import ProfileEditModal from "../../Modal/EditProfileModal/EditProfile";
+import EditContact from "../../Modal/EditContactModal/EditContact";
+import EditStartDate from "../../Modal/EditStartDateModal/EditStartDate";
+import ProfileAbout from "./ProfileAbout";
+import UploadProfilePhotoModal from "../../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
+
+const UserPanel = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const userProfile = useSelector((state) => state.userProfile.data);
+
+  const { isOpen, userData: user_id } = useSelector(
+    (state) => state.chatPanel.userPanel
+  );
+  useGetUserProfile(user_id);
 
   const handleClose = () => {
-    dispatch(closeChatPanel());
+    dispatch(closeChatPanel({ type: "userPanel", page_id: id }));
   };
 
   if (!isOpen) return null;
-
   return (
-    <div className={styles.profileCard}>
-      {console.log(userData)}
-      {/* Header Bar with Close Button */}
-      <div className={styles.profileHeader}>
-        <span>Profile</span>
-        <button className={styles.closeButton} onClick={handleClose}>
-          <IoCloseSharp />
-        </button>
-      </div>
+    <>
+      <div className={styles.profileCard}>
+        <div className={styles.profileHeader}>
+          <span>Profile</span>
+          <CloseIcon closeEvent={handleClose} />
+        </div>
 
-      <ProfileImage />
-      <ProfileInfo
-        name="User"
-        jobTitle="Backend Developer"
-        gender="He/Him"
-        status="Away"
-        localTime="6:20 AM local time"
-      />
-      <ProfileActions />
-      <ProfileAbout emailAddress="user@gmail.com" phone="01012345678" />
-    </div>
+        {userProfile && (
+          <div className={styles.panel_body}>
+            <ProfileImage />
+            <ProfileInfo />
+            <ProfileActions />
+            <ProfileContact />
+            <ProfileAbout />
+          </div>
+        )}
+      </div>
+      {/* User panel Modals */}
+      <ProfileEditModal />
+      <EditContact />
+      <EditStartDate />
+      <UploadProfilePhotoModal />
+    </>
   );
 };
 
-export default ProfileCard;
+export default UserPanel;

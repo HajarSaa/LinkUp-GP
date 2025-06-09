@@ -1,21 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
-import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanel";
+import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import styles from "./ThreadPanel.module.css";
 import { FaTimes } from "react-icons/fa";
 import { BiSolidUser } from "react-icons/bi";
 import MessageInput from "../../InputField/MessageInput/MessageInput";
+import { useParams } from "react-router-dom";
 
 function ThreadPanel({ selectedThread }) {
   const { threadPanel: isOpen } = useSelector((state) => state.chatPanel);
   const dispatch = useDispatch();
+  const { id } = useParams();
+
   if (!isOpen) return null;
   return (
     <div className={styles.threadPanel}>
       <div className={styles.header}>
         <h3>Thread</h3>
         <FaTimes
-          onClick={() => dispatch(closeChatPanel())}
+          onClick={() => dispatch(closeChatPanel({type:'threadPanel',page_id:id}))}
           className={styles.closeIcon}
         />
       </div>

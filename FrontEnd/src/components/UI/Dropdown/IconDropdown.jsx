@@ -67,13 +67,14 @@ const IconDropdown = ({ icon, label, items }) => {
     };
   }, [handleClickOutside]);
 
+
   return (
     <div className={styles.dropdownContainer} ref={dropdownRef}>
       <Button onClick={() => setIsOpen(!isOpen)} icon={icon}>
         {label}
       </Button>
 
-      {isOpen && (
+      {(isOpen && items.length !== 0) && (
         <div className={styles.iconDropdownMenu}>
           {items.map((item, index) => (
             <p
@@ -95,15 +96,9 @@ const IconDropdown = ({ icon, label, items }) => {
 
 // ✅ إضافة PropTypes لمنع الأخطاء
 IconDropdown.propTypes = {
-  icon: PropTypes.node, // أيقونة الزر الرئيسي لازم تكون عنصر React
-  label: PropTypes.string, // النص الرئيسي للزر لازم يكون string
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string, // كل عنصر لازم يكون فيه `label`
-      icon: PropTypes.node, // الأيقونة اختيارية
-      onClick: PropTypes.func, // onClick اختيارية
-    })
-  ),
+  icon: PropTypes.node,
+  label: PropTypes.string,
+  items: PropTypes.any,
 };
 
 export default IconDropdown;

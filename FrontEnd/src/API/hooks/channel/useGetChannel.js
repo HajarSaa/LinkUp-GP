@@ -12,6 +12,7 @@ const useGetChannel = (channel_id) => {
     queryKey: ["channel", { channel_id }],
     queryFn: () => getChannelData(channel_id),
     enabled: !!channel_id,
+    retry:1
   });
 
   useEffect(() => {

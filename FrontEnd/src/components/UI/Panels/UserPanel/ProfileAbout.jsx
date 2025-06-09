@@ -1,38 +1,43 @@
-// import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./UserPanel.module.css";
-import PropTypes from "prop-types";
-import { IoMailOutline } from "react-icons/io5";
-import { FiPhone } from "react-icons/fi";
-import { FaRegCopy } from "react-icons/fa6";
-const ProfileAbout = ({ emailAddress, phone }) => {
+import { openEditStartDateModal } from "../../../../API/redux_toolkit/modals/userProfile/editStartDateSlice";
+
+function ProfileAbout() {
+  const userProfile = useSelector((state) => state.userProfile.data);
+  const dispatch = useDispatch();
+
+  function handleOpen() {
+    dispatch(openEditStartDateModal(userProfile));
+  }
+
+  if (!userProfile?.startDate && !userProfile?.isMe) return null;
   return (
-    <div className={styles.profileAbout}>
-      <h3 className={styles.aboutTitle}>Contact Information</h3>
-      <div className={styles.aboutCard}>
-        <div className={styles.aboutLeft}>
-          <IoMailOutline className={styles.icons} />
-          <p className={styles.aboutText}>
-            <strong>Email Address</strong> <br /> <span> {emailAddress} </span>
-          </p>
-        </div>
-        <FaRegCopy className={styles.copyIcon} />
+    <div className={styles.profile_contact}>
+      <div className={styles.info_section}>
+        <h3 className={styles.aboutTitle}>About me</h3>
+        {userProfile?.isMe && (
+          <span className={styles.edit_btn} onClick={handleOpen}>
+            Edit
+          </span>
+        )}
       </div>
-      <div className={styles.aboutCard}>
-        <div className={styles.aboutLeft}>
-          <FiPhone className={styles.icons} />
-          <p className={styles.aboutText}>
-            <strong>Phone</strong> <br />
-            <span> {phone} </span>
-          </p>
+      {userProfile?.startDate ? (
+        <div className={styles.aboutCard}>
+          <div className={styles.aboutLeft}>
+            <p className={styles.aboutText}>
+              <strong>Start Date</strong> <br />{" "}
+              <span> {userProfile?.startDate} </span>
+            </p>
+          </div>
         </div>
-        <FaRegCopy className={styles.copyIcon} />
-      </div>
+      ) : (
+        <div className={styles.add_phone} onClick={handleOpen}>
+          <span>+</span>
+          <span>Add start date</span>
+        </div>
+      )}
     </div>
   );
-};
-ProfileAbout.propTypes = {
-  children: PropTypes.node,
-  emailAddress: PropTypes.string,
-  phone: PropTypes.string,
-};
+}
+
 export default ProfileAbout;

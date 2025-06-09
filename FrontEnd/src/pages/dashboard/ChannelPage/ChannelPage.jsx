@@ -8,23 +8,47 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import Panel from "../../../components/Layout/Panel/Panel";
 import useGetChannel from "../../../API/hooks/channel/useGetChannel";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  getUserPanelIdByPageId,
+  isIdInOpenedUserPanelItems,
+} from "../../../utils/panelUtils";
+import {
+  closeChatPanel,
+  openUserPanel,
+} from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import { isAChannelMember } from "../../../utils/channelUtils";
+import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth";
+import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
+  const { workspace } = useSelector((state) => state.workspace);
   const { id: channel_id } = useParams();
-  const {
-    isLoading: channel_loading,
-    isError: channel_error,
-    ch_error,
-  } = useGetChannel(channel_id);
-  const {
-    isLoading: messages_loading,
-    isError: channel_ms_error,
-    ch_ms_error,
-  } = useGetChannelMessages(channel_id);
+  const channel_query = useGetChannel(channel_id);
+  const message_query = useGetChannelMessages(channel_id);
+  const isMember =
+    channel && workspace ? isAChannelMember(workspace, channel) : false;
 
-  if (channel_loading || messages_loading)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
+    if (isUserPanel) {
+      dispatch(
+        openUserPanel({
+          type: "userPanel",
+          panel_id: getUserPanelIdByPageId(channel_id),
+          page_id: channel_id,
+        })
+      );
+    } else {
+      dispatch(closeChatPanel());
+    }
+  }, [channel_id, dispatch]);
+
+  if (channel_query.isLoading || message_query.isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -35,23 +59,38 @@ function ChannelPage() {
         />
       </div>
     );
-  if (channel_error)
-    return <div className={`${styles.status} ${styles.error}`}>{ch_error}</div>;
-  if (channel_ms_error)
+  if (channel_query.isError)
     return (
-      <div className={`${styles.status} ${styles.error}`}>{ch_ms_error}</div>
+      <div className={`${styles.status} ${styles.error}`}>
+        {channel_query.error}
+      </div>
     );
-
+  if (message_query.isError)
+    return (
+      <div className={`${styles.status} ${styles.error}`}>
+        {message_query.error}
+      </div>
+    );
 
   if (!channel) return;
   return (
     <PageContent>
-      <div className={styles.page_content}>
-        <Header />
-        <ChannelBody />
-        <MessageInput channelName={channel?.name} />
-      </div>
-      <Panel />
+      {channel?.type === "private" && !isMember ? (
+        <PrivateChAuth />
+      ) : (
+        <>
+          <div className={styles.page_content}>
+            <Header />
+            <ChannelBody />
+            {isMember ? (
+              <MessageInput channelName={channel?.name} />
+            ) : (
+              <ChannelAuth channel={channel} />
+            )}
+          </div>
+          <Panel />
+        </>
+      )}
     </PageContent>
   );
 }

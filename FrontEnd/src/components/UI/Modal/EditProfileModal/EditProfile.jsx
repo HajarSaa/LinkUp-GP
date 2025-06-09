@@ -4,26 +4,128 @@ import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
 import Button from "../../Buttons/Button/Button";
 import { AiOutlineAudio } from "react-icons/ai";
-import { FaUser } from "react-icons/fa6";
+import UserImage from "../../User/UserImage";
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-const ProfileEditModal = ({ isOpen, onClose, userData }) => {
-  const [formData, setFormData] = useState({
-    fullName: userData.fullName || "",
-    displayName: userData.displayName || "",
-    title: userData.title || "",
-    namePronunciation: userData.namePronunciation || "",
-    timeZone: userData.timeZone || "(UTC+02:00) Cairo",
+import { useDispatch, useSelector } from "react-redux";
+import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/userProfile/editUserProfie";
+import useUpdateUserImage from "../../../../API/hooks/userProfile/useUpdateUserImage";
+import Spinner from "../../Spinner/Spinner";
+import useUpdateUserProfile from "../../../../API/hooks/userProfile/useUpdateUserProfile";
+const ProfileEditModal = () => {
+  const dispatch = useDispatch();
+  const { isOpen, myData, focusField } = useSelector(
+    (state) => state.editUserProfile
+  );
+  const update_image = useUpdateUserImage();
+  const update_profile = useUpdateUserProfile();
+  const [profileData, setProfileData] = useState({
+    userName: "",
+  });
+  const [inputsData, setInputsData] = useState({
+    displayName: "",
+    title: "",
+    namePronunciation: "",
+    timeZone: "(UTC+02:00) Cairo",
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (myData) {
+      setProfileData((prev) => ({
+        ...prev,
+        userName: myData.userName,
+      }));
+    }
+  }, [myData]);
+  // =====================(Handle Inputs Focuses)
+  const fullNameRef = useRef(null);
+  const displayNameRef = useRef(null);
+  const titleRef = useRef(null);
+  const pronunciationRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen && focusField) {
+      const refs = {
+        fullName: fullNameRef,
+        displayName: displayNameRef,
+        title: titleRef,
+        namePronunciation: pronunciationRef,
+      };
+
+      const targetRef = refs[focusField];
+      if (targetRef?.current) {
+        targetRef.current.focus();
+      }
+    }
+  }, [isOpen, focusField]);
+
+  // =====================(Handle Image Uploading)
+  const fileInputRef = useRef(null);
+
+  const handleUploadImage = () => {
+    fileInputRef.current?.click();
+  };
+  const handleFileChange = (event) => {
+    const image = event.target.files[0];
+    if (!image) return;
+    const formData = new FormData();
+    formData.append("photo", image);
+    update_image.mutate(formData);
+  };
+  // ==================================================
+
+  const handleClose = function () {
+    dispatch(closeEditUserProfile());
+  };
+
+  const handleRecording = function (e) {
+    e.stopPropagation();
+    console.log("Recooording");
+  };
+
+  const userNameChange = (e) => {
+    setProfileData((prev) => ({
+      ...prev,
+      userName: e.target.value,
+    }));
+  };
+  const displayNameChange = (e) => {
+    setInputsData((prev) => ({
+      ...prev,
+      displayName: e.target.value,
+    }));
+  };
+  const titleChange = (e) => {
+    setInputsData((prev) => ({
+      ...prev,
+      title: e.target.value,
+    }));
+  };
+  const handleSelect = (zone) => {
+    console.log(zone);
+    setInputsData((prev) => ({
+      ...prev,
+      timeZone: zone,
+    }));
+    setIsDropdownOpen(false);
+  };
+
+  const namePronunciationChange = (e) => {
+    setInputsData({ ...inputsData, namePronunciation: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Data:", formData);
-    onClose();
+    const isDifferent = profileData?.userName !== myData?.userName;
+    if (isDifferent)
+      update_profile.mutate(profileData, {
+        onSuccess: () => {
+          handleClose();
+        },
+      });
+    else {
+      handleClose();
+    }
   };
 
   const dropdownRef = useRef(null);
@@ -33,11 +135,6 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
     "(UTC+03:00) Riyadh",
     "(UTC+01:00) London",
   ];
-
-  const handleSelect = (zone) => {
-    setFormData({ ...formData, timeZone: zone });
-    setIsDropdownOpen(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,34 +154,36 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
     };
   }, [isDropdownOpen]);
 
+  if (!isOpen || !myData) return null;
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       className={styles.profileModal}
       zIndex={1002}
+      title="Edit your profile"
     >
-      <h2 className={styles.modalTitle}>Edit your profile</h2>
-
       <div className={styles.profileContainer}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.upperSection}>
             <div className={styles.leftHS}>
               <label>Full name</label>
               <input
+                ref={fullNameRef}
                 type="text"
                 name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
+                value={profileData?.userName}
+                onChange={userNameChange}
                 placeholder="Full name"
               />
 
               <label>Display name</label>
               <input
+                ref={displayNameRef}
                 type="text"
                 name="displayName"
-                value={formData.displayName}
-                onChange={handleChange}
+                value={inputsData?.displayName || inputsData?.userName}
+                onChange={displayNameChange}
                 placeholder="Display name"
               />
               <p className={styles.description}>
@@ -94,40 +193,62 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
 
               <label>Title</label>
               <input
+                ref={titleRef}
                 type="text"
                 name="title"
-                value={formData.title}
-                onChange={handleChange}
+                value={inputsData?.title}
+                onChange={titleChange}
                 placeholder="Title"
               />
             </div>
             <div className={styles.profilePhotoSection}>
               <label> Profile photo</label>
               <div className={styles.profilePhotoPlaceholder}>
-                <FaUser className={styles.photo} />
+                {update_image.isPending && (
+                  <div className={styles.image_uploading}>
+                    <Spinner />
+                  </div>
+                )}
+                <UserImage src={myData?.photo} alt={myData?.userName} />
               </div>
-              <Button type="button" className={styles.uploadButton}>
+              <Button
+                type="button"
+                className={styles.uploadButton}
+                onClick={handleUploadImage}
+              >
                 Upload Photo
               </Button>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: "none" }}
+              />
             </div>
           </div>
-          <p className={styles.description}>
-            Let people know what you do at :)
-          </p>
+          <p className={styles.description}>Let people know what you do at :</p>
 
           <label>Name recording</label>
-          <Button className={styles.recordButton}>
+          <Button
+            type="button"
+            className={styles.recordButton}
+            onClick={handleRecording}
+          >
             <AiOutlineAudio />
             Record Audio Clip
           </Button>
 
           <label>Name pronunciation</label>
           <input
+            ref={pronunciationRef}
             type="text"
             name="namePronunciation"
-            // value={formData.namePronunciation}
-            onChange={handleChange}
-            placeholder={formData.namePronunciation}
+            value={inputsData?.namePronunciation}
+            onChange={namePronunciationChange}
+            placeholder={
+              inputsData?.namePronunciation || `Zoe (pronounce 'zo-ee')`
+            }
           />
 
           <label>Time zone</label>
@@ -136,7 +257,7 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
               className={styles.dropdownHeader}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
-              {formData.timeZone}
+              {inputsData?.timeZone || "(UTC+02:00) Cairo"}
               <IoIosArrowDown className={styles.arrow} />
             </div>
             {isDropdownOpen && (
@@ -145,11 +266,11 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
                   <li
                     key={zone}
                     className={`${styles.dropdownItem} ${
-                      formData.timeZone === zone ? styles.selected : ""
+                      inputsData?.timeZone === zone ? styles.selected : ""
                     }`}
                     onClick={() => handleSelect(zone)}
                   >
-                    {formData.timeZone === zone && (
+                    {inputsData?.timeZone === zone && (
                       <FaCheck className={styles.check} />
                     )}
                     {zone}
@@ -166,13 +287,17 @@ const ProfileEditModal = ({ isOpen, onClose, userData }) => {
           <div className={styles.buttons}>
             <Button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className={styles.cancelButton}
             >
               Cancel
             </Button>
             <Button type="submit" className={styles.saveButton}>
-              Save Changes
+              {update_profile.isPending ? (
+                <Spinner color="var(--green-color)" />
+              ) : (
+                "Save Changes"
+              )}
             </Button>
           </div>
         </form>
