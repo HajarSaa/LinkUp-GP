@@ -1,3 +1,5 @@
+import { findMemberByUserId } from "./workspaceUtils";
+
 export const isChannelOwner = function (channel, workspace) {
   if (!channel || !workspace) return null;
 
@@ -48,4 +50,10 @@ export const getMyChannelsOnly = (workspace) => {
   return workspace.channels.filter((channel) =>
     channel.members.includes(myMemberId)
   );
+};
+
+// ======================(is Member in this channel)
+export const isAChannelMember = (workspace, channel) => {
+  const me = findMemberByUserId(workspace);
+  return channel.members.includes(me._id);
 };

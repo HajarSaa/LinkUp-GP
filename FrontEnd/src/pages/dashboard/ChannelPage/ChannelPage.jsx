@@ -18,12 +18,18 @@ import {
   closeChatPanel,
   openUserPanel,
 } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import { isAChannelMember } from "../../../utils/channelUtils";
+import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth";
+import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
+  const { workspace } = useSelector((state) => state.workspace);
   const { id: channel_id } = useParams();
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
+  const isMember =
+    channel && workspace ? isAChannelMember(workspace, channel) : false;
 
   const dispatch = useDispatch();
 
@@ -69,12 +75,22 @@ function ChannelPage() {
   if (!channel) return;
   return (
     <PageContent>
-      <div className={styles.page_content}>
-        <Header />
-        <ChannelBody />
-        <MessageInput channelName={channel?.name} />
-      </div>
-      <Panel />
+      {channel?.type === "private" && !isMember ? (
+        <PrivateChAuth />
+      ) : (
+        <>
+          <div className={styles.page_content}>
+            <Header />
+            <ChannelBody />
+            {isMember ? (
+              <MessageInput channelName={channel?.name} />
+            ) : (
+              <ChannelAuth channel={channel} />
+            )}
+          </div>
+          <Panel />
+        </>
+      )}
     </PageContent>
   );
 }

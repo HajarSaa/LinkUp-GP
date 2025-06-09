@@ -13,16 +13,14 @@ import useJoinChannel from "../../../API/hooks/channel/useJoinChannel";
 
 function ChannelItem({ channel }) {
   const [joined_text, set_joined_text] = useState("Joined");
-  const [isLeaving, setIsLeaving] = useState(false);
-  const [isJoining, setIsJoining] = useState(false);
   const navigateTo = useNavigate();
   const { workspace } = useSelector((state) => state.workspace);
   const me = findMemberByUserId(workspace);
   const isJoin = channel.members.includes(me._id);
 
   // query
-  const { mutate: leave_channel } = useLeaveChannel(setIsLeaving);
-  const { mutate: join_channel } = useJoinChannel(setIsJoining);
+  const leave_channel= useLeaveChannel();
+  const join_channel = useJoinChannel();
 
   function navgigate_to_channel() {
     navigateTo(`/channels/${channel.id}`);
@@ -31,13 +29,12 @@ function ChannelItem({ channel }) {
   function handle_leave(e) {
     e.stopPropagation();
     console.log("leave ✔ ");
-    leave_channel(channel.id);
+    leave_channel.mutate(channel.id);
   }
 
   function handle_join(e) {
     e.stopPropagation();
-    console.log("join ✔");
-    join_channel(channel.id)
+    join_channel.mutate(channel.id)
   }
   return (
     <div className={styles.channelItem} onClick={navgigate_to_channel}>
@@ -61,7 +58,7 @@ function ChannelItem({ channel }) {
             onMouseLeave={() => set_joined_text("Joined")}
             onClick={isJoin ? handle_leave : handle_join}
           >
-            {isLeaving || isJoining ? (
+            {leave_channel.isPending || join_channel.isPending ? (
               <Spinner width={20} height={20} color="var(--primary-color)" />
             ) : isJoin ? (
               joined_text

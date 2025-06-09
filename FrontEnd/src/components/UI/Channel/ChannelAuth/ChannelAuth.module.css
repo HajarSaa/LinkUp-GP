@@ -1,0 +1,72 @@
+.channel_auth {
+  padding: 20px;
+}
+
+.auth_container {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #eeeeee5e;
+  gap: 30px;
+}
+
+.channel_name {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.btns {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.btns>button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 112px;
+  height: 38px;
+  font-weight: normal;
+}
+
+.details {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+}
+
+.details:hover {
+  background-color: #ffffff5b;
+}
+
+.join {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.join:hover {
+  background-color: var(--secondary-color);
+}
+
+/* =====================(Private CHannel)====== */
+.private_auth {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #444;
+}
