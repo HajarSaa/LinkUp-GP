@@ -1,35 +1,80 @@
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "../Modal";
 import styles from "./UploadProfilePhoto.module.css";
-import { FaUser } from "react-icons/fa";
 import { AiOutlineFileImage } from "react-icons/ai";
 import Button from "../../Buttons/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { closeUploadUserImageModal } from "../../../../API/redux_toolkit/modals/userProfile/uploadUserImage";
+import UserImage from "../../User/UserImage";
+import { currentFormatedTime } from "../../../../utils/formatedDate";
+import useUpdateUserImage from "../../../../API/hooks/userProfile/useUpdateUserImage";
+import Spinner from "../../Spinner/Spinner";
 
 const UploadProfilePhotoModal = () => {
   const { isOpen, userData } = useSelector((state) => state.uploadUserImage);
-  useEffect(() => {
-    console.log(userData)
-  },[userData])
-  const [selectedFile, setSelectedFile] = useState(null);
-  const dispatch = useDispatch();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [image, setImage] = useState(null);
+  const update_image = useUpdateUserImage();
 
+  const time = currentFormatedTime();
+  const dispatch = useDispatch();
+  const uploadRef = useRef();
+
+  const handleSelectImage = () => {
+    uploadRef.current?.click();
+  };
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(URL.createObjectURL(file));
+    const image = event.target.files[0];
+    if (!image) return;
+    setImage(image);
+    if (image) {
+      setSelectedImage(URL.createObjectURL(image));
     }
   };
 
   function handleClose() {
     dispatch(closeUploadUserImageModal());
+    setSelectedImage(null);
+    setIsDragging(false);
   }
 
   function updateImage() {
-    console.log('Updated')
-    handleClose();
+    const formData = new FormData();
+    formData.append("photo", image);
+    update_image.mutate(formData, {
+      onSuccess: () => {
+        console.log("Updated");
+        handleClose();
+      },
+    });
   }
+  // handle drag & drop
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedImage = e.dataTransfer.files[0];
+    if (droppedImage && droppedImage.type.startsWith("image/")) {
+      setImage(droppedImage)
+      setSelectedImage(URL.createObjectURL(droppedImage));
+    }
+  };
+
+  // handle drag & drop
 
   if (!isOpen || !userData) return null;
   return (
@@ -40,48 +85,50 @@ const UploadProfilePhotoModal = () => {
       zIndex={1002}
       title="Add a profile photo"
     >
-
-      <div className={styles.uploadContainer}>
-        <label htmlFor="fileUpload" className={styles.uploadBox}>
-          {selectedFile ? (
-            <img src={selectedFile} alt="Preview" className={styles.preview} />
-          ) : (
-            <div className={styles.uploadPlaceholder}>
-              <AiOutlineFileImage className={styles.placeholderPhoto} />
-              <p>Drag your photo here, or...</p>
-              <Button className={styles.browseButton}>
-                <label htmlFor="fileUpload">Browse Files</label>
-              </Button>
-            </div>
-          )}
-          <input
-            type="file"
-            id="fileUpload"
-            className={styles.fileInput}
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </label>
+      <div
+        className={`${styles.uploadContainer} ${
+          isDragging ? styles.dragging : ""
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {selectedImage ? (
+          <UserImage src={selectedImage} alt={"Preview"} />
+        ) : (
+          <div className={`${styles.uploadPlaceholder}`}>
+            <AiOutlineFileImage className={styles.placeholderPhoto} />
+            <p>Drag your photo here, or...</p>
+            <Button className={styles.browseButton} onClick={handleSelectImage}>
+              Browse Files
+            </Button>
+            <input
+              ref={uploadRef}
+              type="file"
+              id="fileUpload"
+              className={styles.fileInput}
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
+        )}
       </div>
 
       <div className={styles.previewContainer}>
         <p>Preview</p>
         <div className={styles.profilePreview}>
-          {selectedFile ? (
+          {selectedImage ? (
             <div className={styles.image}>
-              <img
-                src={selectedFile}
-                alt="Profile"
-                className={styles.profileImg}
-              />
+              <UserImage src={selectedImage} alt={"Profile"} />
             </div>
           ) : (
             <div className={styles.image}>
-              <FaUser className={styles.profileIcon} />
+              <UserImage src={userData?.photo} alt={userData?.userName} />
             </div>
           )}
           <span className={styles.name}>
-            Alaa Alsoudy <span className={styles.time}>9:41 AM</span>
+            <span>{userData?.userName}</span>
+            <span className={styles.time}>{time}</span>
           </span>
         </div>
       </div>
@@ -91,12 +138,16 @@ const UploadProfilePhotoModal = () => {
           Cancel
         </Button>
         <Button className={styles.saveButton} onClick={updateImage}>
-          Save
+          {update_image.isPending ? (
+            <Spinner width={20} height={20} color="var(--green-color)" />
+          ) : (
+            "Save"
+          )}
         </Button>
+        {update_image.isError && console.log(update_image.error)}
       </div>
     </Modal>
   );
 };
-
 
 export default UploadProfilePhotoModal;

@@ -27,3 +27,10 @@ export const formatTimeTo12Hour = (isoDateString) => {
         };
     return date.toLocaleTimeString("en-EG", options);
 };
+
+export const currentFormatedTime = (locale="en-EG")=>{
+    return new Date().toLocaleTimeString(locale, {
+        hour: "numeric",
+        minute: "2-digit"
+    })
+}
