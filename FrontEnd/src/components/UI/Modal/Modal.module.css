@@ -39,6 +39,10 @@
   box-shadow: var(--shadow);
 }
 
+.title{
+  color: #333;
+}
+
 .modal_body{
   flex: 1;
   width: 100%;

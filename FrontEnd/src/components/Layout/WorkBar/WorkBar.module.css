@@ -73,13 +73,13 @@
   position: relative;
   width: 40px;
   height: 40px;
-  cursor: pointer;
 }
 
 .profilePhotoPlaceholder {
   width: 40px;
   height: 40px;
   border-radius: var(--border-radius);
+  cursor: pointer;
 }
 
 .work_label {

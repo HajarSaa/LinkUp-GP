@@ -8,6 +8,7 @@ import InviteWorkModal from "../../components/UI/Modal/InviteWorkModal/InviteWor
 import useCurrentWorkspace from "../../API/hooks/workspace/useCurrentWorkspace";
 import { useSelector } from "react-redux";
 import InviteChannelModal from "../../components/UI/Modal/ChannelModals/InviteChannelModal/InviteChannelModal";
+import SetStatusModal from "../../components/UI/Modal/SetStatusModal/SetStatus";
 
 function MainLayout() {
   const location = useLocation();
@@ -40,6 +41,7 @@ function MainLayout() {
         <CreateChannelModal />
         <InviteWorkModal />
         <InviteChannelModal />
+        <SetStatusModal />
       </div>
     </div>
   );

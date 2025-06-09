@@ -20,7 +20,6 @@ import UserImage from "../User/UserImage";
 import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { useParams } from "react-router-dom";
-// import SetStatusModal from "../Modal/SetStatusModal/SetStatus";
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState("messages");
   const receiver = useSelector((state) => state.convers.chatMate);
@@ -130,10 +129,6 @@ const Navbar = () => {
           {/* ✅ Plus Button */}
           <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
         </div>
-        {/* <SetStatusModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      /> */}
       </div>
       <UserModal />
     </>

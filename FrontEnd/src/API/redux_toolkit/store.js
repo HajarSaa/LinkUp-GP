@@ -22,6 +22,8 @@ import editUserProfileReducer from "./modals/userProfile/editUserProfie";
 import editContactReducer from "./modals/userProfile/editContactModal";
 import editStartDateReducer from "./modals/userProfile/editStartDateSlice";
 import uploadUserImageReducer from "./modals/userProfile/uploadUserImage";
+import setStatusReducer from "./modals/userProfile/setStatusSlice";
+import userMenuReducer from "./modals/userProfile/userMenuSlice";
 //======
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
@@ -51,6 +53,8 @@ const store = configureStore({
     editContact: editContactReducer,
     editStartDate: editStartDateReducer,
     uploadUserImage: uploadUserImageReducer,
+    setStatus: setStatusReducer,
+    userMenu: userMenuReducer,
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
