@@ -8,7 +8,7 @@ const socketServer = (httpServer) => {
     pingTimeout: 10000,
     pingInterval: 20000,
     cors: {
-      origin: process.env.BASE_URL || "http://localhost:5000",
+      origin: process.env.BASE_URL || "http://localhost:3000",
       methods: ["GET", "POST"],
     },
     connectionStateRecovery: {

@@ -84,7 +84,7 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   // check if the workspace exists
   if (!workspace) {
     return next(
-      new AppError(`Cannot find document with ID: ${workspaceId}`, 404)
+      new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
     );
   }
 

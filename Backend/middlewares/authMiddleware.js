@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import UserProfile from "../models/userProfile.model.js";
 import Workspace from "../models/workspace.model.js";
+import APIFeatures from "../utils/apiFeatures.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { verifyToken } from "../utils/jwt.js";
@@ -62,8 +63,16 @@ export const protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // Verify the token
-  const decoded = verifyToken(token);
+  // Verify the token with error handling
+  let decoded;
+  try {
+    decoded = verifyToken(token);
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return next(new AppError("Token expired. Please log in again.", 401));
+    }
+    return next(new AppError("Token is invalid. Please log in again.", 401));
+  }
 
   // Check if the user still exists
   const currentUser = await User.findById(decoded.id);
