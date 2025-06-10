@@ -5,7 +5,7 @@ import { RiStickyNoteAddLine } from "react-icons/ri";
 import { AiOutlinePlus } from "react-icons/ai";
 import {TbMessageFilled } from "react-icons/tb";
 import ChannelOptionModal from "../../../UI/Modal/ChannelModals/ChannelOptionsModal/ChannelOptionModal";
-import { openMenu } from "../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
+import { openMenu } from "../../../../API/redux_toolkit/modals/channel/channelMenuSlice";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ChannelDetailsModal from "../../Modal/ChannelModals/ChannelDetailsModal/ChannelDetailsModal";
 import NotificationsModal from "../../Modal/ChannelModals/NotifiactionModal/NotificationsModal";

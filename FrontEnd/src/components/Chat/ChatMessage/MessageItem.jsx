@@ -15,6 +15,9 @@ import { findMemberById } from "../../../utils/workspaceUtils";
 import { formatTimeTo12Hour } from "../../../utils/formatedDate";
 import UserImage from "../../UI/User/UserImage";
 import { useParams } from "react-router-dom";
+import MessageMenu from "../MessageMenu/MessageMenu";
+import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/messageMenu";
+import { calculateSafePosition } from "../../../utils/modalsUtils";
 
 const MessageItem = ({ message }) => {
   const [emoji, setEmoji] = useState("");
@@ -26,6 +29,7 @@ const MessageItem = ({ message }) => {
   const { workspace } = useSelector((state) => state.workspace);
   const sender = findMemberById(workspace, message?.createdBy);
   const message_time = formatTimeTo12Hour(message?.createdAt);
+  const { activeMessageId } = useSelector((state) => state.messageMenu);
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
@@ -55,6 +59,17 @@ const MessageItem = ({ message }) => {
       });
     }
   };
+
+  const handelOpenMenu = (e, message_id) => {
+    e.preventDefault();
+    const menuWidth = 240;
+    const padding = 0;
+    const position = calculateSafePosition(e, menuWidth, null, padding);
+    dispatch(
+      openMessageMenuModal({ position: position, activeMessageId: message_id })
+    );
+  };
+
   useEffect(() => {
     updatePosition();
     window.addEventListener("resize", updatePosition);
@@ -68,9 +83,14 @@ const MessageItem = ({ message }) => {
   return (
     <>
       <div
-        className={styles.message_container}
+        className={`${styles.message_container} ${
+          activeMessageId === message._id && styles.active
+        }`}
         onMouseEnter={() => setMessageHover(true)}
         onMouseLeave={() => setMessageHover(false)}
+        onContextMenu={(e) => {
+          handelOpenMenu(e, message._id);
+        }}
       >
         <div className={styles.message} id={`message-${message._id}`}>
           <div className={styles.message_leftSide}>
@@ -102,9 +122,10 @@ const MessageItem = ({ message }) => {
             )}
           </div>
         </div>
-        <MessageActions messageHover={messageHover} />
+        <MessageActions message={message} messageHover={messageHover} />
       </div>
       <EmojiPicker position={add_position} onSelect={handleEmojiSelect} />
+      <MessageMenu />
     </>
   );
 };

@@ -16,7 +16,7 @@
   color: #1d1c1d;
 }
 
-.message_container:hover {
+.message_container:hover,.active {
   background-color: #f8f8f8;
 }
 
