@@ -11,8 +11,8 @@ function Testing() {
       {/* <UploadPhotoButton/> */}
       {/* <MessageInput/> */}
       {/* this is rich text editor */}
-      {/* <MI/> */}
-      <Later/>
+      <MI/>
+      {/* <Later/> */}
     </>
   )
 }

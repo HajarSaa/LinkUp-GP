@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import styles from "./ChatMessage.module.css";
 import MessageItem from "./MessageItem";
 import React, { useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
@@ -12,6 +12,8 @@ function ChatMessage({ containerRef }) {
   const messages = useSelector((state) =>
     selectMessagesByChannel(state, channel_id)
   );
+  const { search } = useLocation();
+  const targetMessageId = new URLSearchParams(search).get("later_message");
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChannelMessages(channel_id);
@@ -39,11 +41,52 @@ function ChatMessage({ containerRef }) {
 
   // اول مره هفتح الصفحه يوقفني عند اخر رسالة
   useEffect(() => {
-    if (messages?.length && isInitialLoad.current) {
+    if (messages?.length && isInitialLoad.current && !targetMessageId) {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
       isInitialLoad.current = false;
     }
-  }, [messages]);
+  }, [messages, targetMessageId]);
+
+  // روح لل later message
+  useEffect(() => {
+    if (!targetMessageId || !messages?.length) return;
+
+    const tryScrollToTarget = async () => {
+      const MAX_TRIES = 20;
+      let tries = 0;
+
+      while (tries < MAX_TRIES) {
+        const element = document.getElementById(`message-${targetMessageId}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+          // ✨ أضف الكلاس
+          element.classList.add(styles.highlight);
+
+          // ⏱️ شيل الكلاس بعد 2 ثانية
+          setTimeout(() => {
+            element.classList.remove(styles.highlight);
+          }, 2000);
+
+          break;
+        }
+
+        if (!hasNextPage || isFetchingNextPage) break;
+
+        await fetchNextPage();
+        tries++;
+      }
+    };
+
+    tryScrollToTarget();
+  }, [
+    targetMessageId,
+    messages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ]);
+
 
   // بعد تحميل الرسائل القديمة، نحافظ على مكان المستخدم
   useEffect(() => {

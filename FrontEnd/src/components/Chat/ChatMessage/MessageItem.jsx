@@ -72,7 +72,7 @@ const MessageItem = ({ message }) => {
         onMouseEnter={() => setMessageHover(true)}
         onMouseLeave={() => setMessageHover(false)}
       >
-        <div className={styles.message}>
+        <div className={styles.message} id={`message-${message._id}`}>
           <div className={styles.message_leftSide}>
             <div className={styles.profileWrapper} onClick={openProfile}>
               <UserImage src={sender.photo} alt={sender.userName} />
