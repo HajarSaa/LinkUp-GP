@@ -8,9 +8,9 @@ const socketServer = (httpServer) => {
     pingTimeout: 10000,
     pingInterval: 20000,
     cors: {
-      origin: process.env.BASE_URL || "http://localhost:3000",
+      origin: ["http://localhost:3000", "https://link-up-beige.vercel.app"],
       methods: ["GET", "POST"],
-      credentials: true
+      credentials: true,
     },
     connectionStateRecovery: {
       maxDisconnectionDuration: 120000,
