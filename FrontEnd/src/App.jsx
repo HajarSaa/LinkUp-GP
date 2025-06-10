@@ -30,24 +30,24 @@ function App() {
   const navigate = useNavigate();
   // testing sockets
 
-  // useEffect(() => {
-  //   // Connect socket
-  //   socket.connect();
+  useEffect(() => {
+    // Connect socket
+    socket.connect();
 
-  //   socket.on("connect", () => {
-  //     console.log("✅ Connected to socket server:", socket.id);
-  //   });
+    socket.on("connect", () => {
+      console.log("✅ Connected to socket server:", socket.id);
+    });
 
-  //   // Handle disconnection
-  //   socket.on("disconnect", () => {
-  //     console.log("❌ Disconnected from socket server");
-  //   });
+    // Handle disconnection
+    socket.on("disconnect", () => {
+      console.log("❌ Disconnected from socket server");
+    });
 
-  //   // Clean up on unmount
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
+    // Clean up on unmount
+    // return () => {
+    //   socket.disconnect();
+    // };
+  }, []);
 
   // testing sockets
 

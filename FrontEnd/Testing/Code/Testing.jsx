@@ -6,8 +6,8 @@ import MI from "./MI"
 function Testing() {
   return (
     <>
-      <MI/>
-      {/* <Later/> */}
+      {/* <MI/> */}
+      <Later/>
     </>
   )
 }
