@@ -10,6 +10,7 @@ const socketServer = (httpServer) => {
     cors: {
       origin: process.env.BASE_URL || "http://localhost:3000",
       methods: ["GET", "POST"],
+      credentials: true
     },
     connectionStateRecovery: {
       maxDisconnectionDuration: 120000,
