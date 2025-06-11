@@ -125,8 +125,10 @@ export const leaveChannel = catchAsync(async (req, res, next) => {
   // Send response
   res.status(200).json({
     status: "success",
+    message: "Successfully left the channel",
     data: {
-      channel,
+      channelId: channel._id,
+      channelName: channel.name,
     },
   });
 });
