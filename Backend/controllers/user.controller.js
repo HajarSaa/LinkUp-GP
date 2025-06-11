@@ -25,10 +25,12 @@ export const getMe = catchAsync(async (req, res, next) => {
     return next(new AppError("User not found", 404));
   }
 
-  // Extract all workspaces from the user
-  const workspaces = user.workspaceProfiles.map((el) =>
-    el.workspace ? el.workspace : el
-  );
+  // Extract all workspaces from the user and attach userProfileId
+  const workspaces = user.workspaceProfiles.map((el) => {
+    const workspace = el.workspace ? el.workspace.toObject() : el.toObject();
+    workspace.userProfileId = el._id; // Attach only the id
+    return workspace;
+  });
 
   // Send the response
   res.status(200).json({

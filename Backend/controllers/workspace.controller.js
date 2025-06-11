@@ -107,7 +107,6 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
       );
     }
   );
-  console.log(filteredConversations);
 
   // Replace the conversations array with the filtered one
   workspace.conversations = filteredConversations;
