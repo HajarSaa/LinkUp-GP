@@ -16,6 +16,7 @@ function MainLayout() {
 
   useCurrentWorkspace();
   const { workspace } = useSelector((state) => state.workspace);
+  console.log(workspace);
   return (
     <div className={styles.main_layout}>
       <NavBar />

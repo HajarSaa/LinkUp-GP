@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import "@fontsource/lato";
 import "./styles/variables.css";
 import "./styles/classes.css";
