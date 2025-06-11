@@ -88,7 +88,45 @@
 .right_icons,
 .left_icons {
   display: flex;
-  /* gap: 15px; */
+  gap: 10px;
+}
+
+.small_left_icons {
+  gap: 5px;
+}
+
+.tool_wrapper {
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.small_left_icons .tool_wrapper {
+  padding: 3px;
+
+}
+
+.tool_wrapper:hover {
+  background-color: var(--bg-white-hover);
+}
+
+.tool_icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: inherit;
+}
+
+.small_left_icons .tool_icon {
+  font-size: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .left_icons {
@@ -175,6 +213,7 @@
   color: var(--text-color-grey);
   font-size: 15px;
 }
+
 .checkBox_channelName {
   font-weight: bold;
 }

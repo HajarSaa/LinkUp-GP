@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import styles from "./ThreadPanel.module.css";
-import MessageInput from "../../InputField/MessageInput/MessageInput";
 import MessageItem from "../../../Chat/ChatMessage/MessageItem";
 import { useParams } from "react-router-dom";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import useGetThreads from "../../../../API/hooks/messages/useGetThreads";
 import Spinner from "../../Spinner/Spinner";
+import ThreadMessageInput from "../../InputField/MessageInput/ThreadMessageInput";
 
 function ThreadPanel() {
   const dispatch = useDispatch();
@@ -79,7 +79,7 @@ function ThreadPanel() {
           </div>
         </div>
       )}
-      <MessageInput isThread={true} />
+      <ThreadMessageInput />
     </div>
   );
 }

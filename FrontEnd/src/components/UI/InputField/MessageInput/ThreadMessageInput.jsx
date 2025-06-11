@@ -11,16 +11,27 @@ import { IoCodeSlash } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
+import PropTypes from "prop-types";
 import { useLocation, useParams } from "react-router-dom";
 import { sendMessage } from "../../../../API/services/messageService";
+import { useSelector } from "react-redux";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 
-const MessageInput = () => {
+const ThreadMessageInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
+  const [isChecked, setIsChecked] = useState(false);
   const location = useLocation();
   const { id } = useParams();
+  const { channel } = useSelector((state) => state.channel);
   const isChannel = location.pathname.includes("/channels");
+  let send_also_to = null;
+  if (isChannel) send_also_to = channel.name;
+
+  const handleToggleCheckbox = () => {
+    const newCheckedState = !isChecked;
+    setIsChecked(newCheckedState);
+  };
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -79,8 +90,19 @@ const MessageInput = () => {
           onInput={handlInputHeight}
         />
 
+        <label className={styles.checkBox}>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleToggleCheckbox}
+            className={styles.checkBox_input}
+          />
+          <span className={styles.checkBox_text}>Also send to</span>
+          <span className={styles.checkBox_channelName}>{send_also_to}</span>
+        </label>
+
         <div className={styles.lower_row_icons}>
-          <LowerToolbar isEditMessage={false} />
+          <LowerToolbar isThread={true} isEditMessage={false}/>
           <div
             className={`${styles.right_icons} ${
               message.trim() && styles.activeSend
@@ -115,7 +137,12 @@ const MessageInput = () => {
   );
 };
 
-export default MessageInput;
+export default ThreadMessageInput;
+
+ThreadMessageInput.propTypes = {
+  channelName: PropTypes.string,
+  isThread: PropTypes.bool,
+};
 
 const upperIcons = [
   { icon: HiMiniBold },

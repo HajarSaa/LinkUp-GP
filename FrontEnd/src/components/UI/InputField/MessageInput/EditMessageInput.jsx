@@ -15,7 +15,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { sendMessage } from "../../../../API/services/messageService";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 
-const MessageInput = () => {
+const EditMessageInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const location = useLocation();
@@ -80,7 +80,7 @@ const MessageInput = () => {
         />
 
         <div className={styles.lower_row_icons}>
-          <LowerToolbar isEditMessage={false} />
+          <LowerToolbar isEditMessage={true}  />
           <div
             className={`${styles.right_icons} ${
               message.trim() && styles.activeSend
@@ -115,7 +115,7 @@ const MessageInput = () => {
   );
 };
 
-export default MessageInput;
+export default EditMessageInput;
 
 const upperIcons = [
   { icon: HiMiniBold },
