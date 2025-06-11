@@ -4,7 +4,9 @@ const messageSchema = new mongoose.Schema(
   {
     content: {
       type: String,
-      required: true,
+      required: function () {
+        return !this.attachments || this.attachments.length === 0;
+      }, // Content required if no attachments
     },
     createdBy: {
       type: mongoose.Schema.ObjectId,
@@ -23,7 +25,7 @@ const messageSchema = new mongoose.Schema(
     },
     parentMessageId: {
       type: mongoose.Schema.ObjectId,
-      refPath: "parentType",
+      ref: "Message",
       default: null,
     },
     threadCount: {
@@ -37,9 +39,21 @@ const messageSchema = new mongoose.Schema(
         default: [],
       },
     ],
-    parentType: {
+    lastRepliedAt:{
+      type:Date,
+      default:null
+    },
+    attachments: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "File",
+        default: [],
+      },
+    ],
+    messageType: {
       type: String,
-      enum: ["Message", "File"],
+      enum: ["text", "file", "mixed"], // text-only, file-only, or text+files
+      default: "text",
     },
     readBy: [
       {
@@ -48,8 +62,13 @@ const messageSchema = new mongoose.Schema(
         default: [],
       },
     ],
-    edited: { type: Boolean, default: false },
-    editedAt: { type: Date },
+    edited: {
+      type: Boolean,
+      default: false,
+    },
+    editedAt: {
+      type: Date,
+    },
     pinned: {
       type: Boolean,
       default: false,
@@ -64,13 +83,6 @@ messageSchema.pre("validate", function (next) {
       "channelId",
       "Either channelId or conversationId is required"
     );
-  }
-  next();
-});
-
-messageSchema.pre("validate", function (next) {
-  if (this.parentMessageId && !this.parentType) {
-    this.parentType = "Message";
   }
   next();
 });

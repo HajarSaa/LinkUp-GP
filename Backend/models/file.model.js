@@ -40,16 +40,14 @@ const fileSchema = new mongoose.Schema(
       ref: "Conversation",
       default: null,
     },
-
-    // file reply to message OR file
-    parentId: {
+    parentMessageId: {
       type: mongoose.Schema.ObjectId,
-      refPath: "parentType",
+      ref: "Message",
       default: null,
     },
-    parentType: {
-      type: String,
-      enum: ["Message", "File"],
+    attachedToMessage: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Message",
       default: null,
     },
     pinned: {
@@ -62,7 +60,7 @@ const fileSchema = new mongoose.Schema(
 
 // Indexes
 // All replies to a message or file (Threads) — Oldest first
-fileSchema.index({ parentId: 1, createdAt: 1 }, { sparse: true });
+fileSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
 // Channel files — Newest first
 fileSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
 // Conversation files — Newest first

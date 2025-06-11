@@ -11,15 +11,9 @@ const notificationSchema = new mongoose.Schema(
     },
     messageId: {
       type: mongoose.Schema.ObjectId,
-      refPath: "messageType",
+      ref: "Message",
       default: null,
     },
-    messageType: {
-      type: String,
-      enum: ["Message", "File"],
-    },
-    // createdAt
-    // updatedAt
   },
   { timestamps: true }
 );

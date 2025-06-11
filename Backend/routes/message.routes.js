@@ -8,6 +8,8 @@ import {
   getChannelMessages,
   getConversationMessages,
   getThread,
+  getChannelMedia,
+  getConversationMedia,
 } from "../controllers/message.controller.js";
 import {
   protect,
@@ -22,7 +24,9 @@ router.use(protectAttchWorkspace);
 router
   .get("/", getAllMessages)
   .get("/channelMessages/:id", getChannelMessages)
+  .get("/channelMedia/:id", getChannelMedia)
   .get("/conversationMessages/:id", getConversationMessages)
+  .get("/conversationMedia/:id", getConversationMedia)
   .get("/thread/:id", getThread)
   .get("/:id", getMessage)
   .post("/", createMessage)
