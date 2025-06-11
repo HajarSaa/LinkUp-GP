@@ -30,6 +30,12 @@ const MessageItem = ({ message }) => {
   const sender = findMemberById(workspace, message?.createdBy);
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
+  const threadData = {
+    count: message?.threadCount,
+    participants: message?.threadParticipants,
+    id: message?._id,
+    lastRepliedAt: message?.lastRepliedAt,
+  };
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
@@ -108,6 +114,7 @@ const MessageItem = ({ message }) => {
               </div>
               <div className={styles.message_text}>{message.content}</div>
             </div>
+            {/* Reactions */}
             {message.reactions && (
               <div className={styles.reactions}>
                 <Reaction reactions={message.reactions} />
@@ -123,6 +130,9 @@ const MessageItem = ({ message }) => {
           </div>
         </div>
         <MessageActions message={message} messageHover={messageHover} />
+        {message?.threadCount !== 0 && (
+          <MessageThreads threadData={threadData} />
+        )}
       </div>
       <EmojiPicker position={add_position} onSelect={handleEmojiSelect} />
       <MessageMenu />

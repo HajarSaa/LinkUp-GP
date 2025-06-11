@@ -48,17 +48,16 @@ const MessageInput = ({ isThread, channelName}) => {
 
   const handleSend = async () => {
     if (!message.trim()) return;
-    console.log(message)
-    // try {
-    //   const type = isChannel ? "channel" : "conversation";
-    //   await sendMessage(type, id, message);
-    //   setMessage("");
-    //   const textarea = textareaRef.current;
-    //   textarea.style.height = "40px";
-    // } catch (error) {
-    //   console.error("Failed to send message", error);
-    //   // show message error
-    // }
+    try {
+      const type = isChannel ? "channel" : "conversation";
+      await sendMessage(type, id, message);
+      setMessage("");
+      const textarea = textareaRef.current;
+      textarea.style.height = "40px";
+    } catch (error) {
+      console.error("Failed to send message", error);
+      // show message error
+    }
   };
 
 
