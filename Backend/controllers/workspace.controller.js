@@ -98,6 +98,20 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
     return next(new AppError("You are not a member of this workspace", 403));
   }
 
+  // Filter conversations to only include those where the user is a member
+  const filteredConversations = workspace.conversations.filter(
+    (conversation) => {
+      return (
+        conversation.memberOneId._id.equals(userProfile._id) ||
+        conversation.memberTwoId._id.equals(userProfile._id)
+      );
+    }
+  );
+  console.log(filteredConversations);
+
+  // Replace the conversations array with the filtered one
+  workspace.conversations = filteredConversations;
+
   // Send the workspace id as a cookie
   res.cookie("workspace", workspaceId, {
     expires: new Date(
