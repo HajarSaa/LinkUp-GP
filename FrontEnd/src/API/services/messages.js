@@ -17,3 +17,8 @@ export const getChannelMessages = async ({
     hasNextPage: data.data.messages.length === limit,
   };
 };
+// ==============( Delete  message)===
+export const deleteThisMessage = async (message_id) => {
+  const { data } = await axiosInstance.delete(`/messages/${message_id}`);
+  return data.data;
+};

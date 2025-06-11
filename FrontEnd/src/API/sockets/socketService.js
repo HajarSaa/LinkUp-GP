@@ -1,5 +1,7 @@
 import { io } from "socket.io-client";
-const socket = io("https://link-up-beige.vercel.app/api/v1", {
+const socket = io("http://127.0.0.1:5000", {
   withCredentials: true,
+  autoConnect: false,
+  transports: ["websocket"],
 });
 export default socket;

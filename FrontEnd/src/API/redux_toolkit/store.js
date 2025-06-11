@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import chatPanelReducer from "./ui/chatPanelSlice";
-import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
-import channelMenuReducer from "./chat/channel/channelMenuSlice";
+// import addChannelMenuReducer from "./chat/channel/addChannelMenuSlice";
+import channelMenuReducer from "./modals/channel/channelMenuSlice";
 // Modals
 import notificationsModalReducer from "./modals/notificationsModalSlice";
 import channelDetailsModalReducer from "./modals/channelDetailsSlice";
@@ -28,6 +28,10 @@ import userMenuReducer from "./modals/userProfile/userMenuSlice";
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
 //======
+//======
+// ==============================(Messages)
+import messageMenuReducer from "./modals/chat/messageMenu";
+//======
 
 const store = configureStore({
   reducer: {
@@ -39,7 +43,6 @@ const store = configureStore({
     // ====
     channel: channelReducer,
     channel_messages: channel_messages_reducer,
-    addChannelMenu: addChannelMenuReducer,
     channelMenu: channelMenuReducer,
     channelDetailsModal: channelDetailsModalReducer,
     createChannelModal: createChannelModalReducer,
@@ -58,6 +61,9 @@ const store = configureStore({
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
+    // ==============================(Messages)
+    // ====
+    messageMenu: messageMenuReducer,
     // ==============================(Global)
     // ====
     notificationsModal: notificationsModalReducer,

@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
 
-const API_BASE_URL = "https://link-up-beige.vercel.app/api/v1";
+const API_BASE_URL = "http://127.0.0.1:5000/api/v1";
 
 // ================= (Get workspace)
 export const getWorkspace = async (work_id) => {

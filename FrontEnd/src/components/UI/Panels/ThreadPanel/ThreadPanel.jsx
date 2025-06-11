@@ -44,11 +44,6 @@ function ThreadPanel({ selectedThread }) {
       <div className={styles.replies}>
         {selectedThread.map((reply) => (
           <div key={reply.id} className={styles.reply}>
-            {/* <img
-              src={`/assets/avatars/${reply.sender.toLowerCase()}.png`}
-              alt={reply.sender}
-              className={styles.avatar}
-            /> */}
             <BiSolidUser />
             <div className={styles.messageContent}>
               <div className={styles.messageHeader}>
