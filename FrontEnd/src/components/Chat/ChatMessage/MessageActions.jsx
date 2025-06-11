@@ -9,6 +9,8 @@ import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSl
 import { useDispatch } from "react-redux";
 import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/messageMenu";
 import { calculateSafePosition } from "../../../utils/modalsUtils";
+import { openThreadPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import { useParams } from "react-router-dom";
 
 function MessageActions({
   children,
@@ -16,8 +18,10 @@ function MessageActions({
   message,
   isThreadParent = false,
   isThread = false,
+  threadData, parentMessage
 }) {
   const dispatch = useDispatch();
+  const { id: page_id } = useParams();
 
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
@@ -28,6 +32,17 @@ function MessageActions({
       openMessageMenuModal({ position: position, activeMessageId: message_id })
     );
   };
+  function openThreads() {
+    console.log(threadData);
+    dispatch(
+      openThreadPanel({
+        threadID: threadData.id,
+        parentMessage: parentMessage,
+        type: "threadPanel",
+        page_id: page_id,
+      })
+    );
+  }
   const style = { top: 0, right: 0 };
 
   if (!messageHover) return;
@@ -46,7 +61,7 @@ function MessageActions({
         <MdOutlineAddReaction />
       </div>
       {!isThread && (
-        <div className={styles.action_icon}>
+        <div className={styles.action_icon} onClick={openThreads}>
           <BiMessageRoundedDetail />
         </div>
       )}
@@ -74,5 +89,7 @@ MessageActions.propTypes = {
   message: PropTypes.object.isRequired,
   isThread: PropTypes.bool,
   isThreadParent: PropTypes.bool,
+  threadData: PropTypes.object,
+  parentMessage: PropTypes.object,
 };
 export default MessageActions;

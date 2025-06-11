@@ -138,6 +138,8 @@ const MessageItem = ({
           message={message}
           messageHover={messageHover}
           isThreadParent={isThreadParent}
+          threadData={threadData}
+          parentMessage={message}
         />
         {message?.threadCount !== 0 && !isInThreadPanel && (
           <MessageThreads threadData={threadData} parentMessage={message} />

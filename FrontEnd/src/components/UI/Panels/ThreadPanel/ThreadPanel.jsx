@@ -16,6 +16,12 @@ function ThreadPanel() {
   );
   const get_thread = useGetThreads(threadID);
   const { threads } = useSelector((state) => state.threads);
+  let error_message = null;
+
+  if (get_thread.error)
+    if (get_thread.error.response.status) error_message = "";
+    else error_message = get_thread.error.message;
+
 
   function handleClose() {
     dispatch(closeChatPanel({ type: "threadPanel", page_id: id }));
@@ -29,21 +35,21 @@ function ThreadPanel() {
         <CloseIcon closeEvent={handleClose} />
       </div>
 
+      <MessageItem
+        message={parentMessage}
+        isThreadParent={true}
+        isInThreadPanel={true}
+      />
       {get_thread.isLoading || !threads ? (
         <div className={styles.status}>
           <Spinner />
         </div>
       ) : get_thread.isError ? (
         <div className={styles.status}>
-          <span className={styles.error}>{get_thread.error.message}</span>
+          <span className={styles.error}>{error_message}</span>
         </div>
       ) : (
         <div className={styles.thread_body}>
-          <MessageItem
-            message={parentMessage}
-            isThreadParent={true}
-            isInThreadPanel={true}
-          />
           <div className={styles.divider}>
             <span>{`${threads.length} replie${
               threads.length === 0 ? "" : "s"
