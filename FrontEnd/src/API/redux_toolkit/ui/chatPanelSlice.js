@@ -8,11 +8,11 @@ const chatPanel = createSlice({
   name: "chatPanel",
   initialState: {
     userPanel: { isOpen: false, userData: null },
-    threadPanel: false,
+    threadPanel: { isOpen: false, parentMessage: null, threadID: null },
   },
   reducers: {
     openUserPanel: (state, action) => {
-      state.threadPanel = false;
+      state.threadPanel.isOpen = false;
       state.userPanel.isOpen = true;
       state.userPanel.userData = action.payload.panel_id;
       addToOpenedUserPanelItems(
@@ -20,17 +20,23 @@ const chatPanel = createSlice({
         action.payload?.panel_id
       );
     },
-    openThreadPanel: (state) => {
+    openThreadPanel: (state, action) => {
       state.userPanel.isOpen = false;
-      state.threadPanel = true;
+      state.threadPanel.isOpen = true;
+      state.threadPanel.threadID = action.payload.threadID;
+      state.threadPanel.parentMessage = action.payload.parentMessage;
     },
     closeChatPanel: (state, action) => {
+      // profile
       state.userPanel.isOpen = false;
       state.userPanel.userData = null;
-      state.threadPanel = false;
       if (action?.payload?.type === "userPanel") {
         RemoveFromOpenedUserPanelItems(action?.payload?.page_id);
       }
+      // Threads
+      state.threadPanel.isOpen = false;
+      state.threadPanel.threadID = null;
+      state.threadPanel.parentMessage = null;
     },
   },
 });

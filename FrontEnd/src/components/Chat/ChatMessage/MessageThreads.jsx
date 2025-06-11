@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import UserImage from "../../UI/User/UserImage";
 import { findMemberById } from "../../../utils/workspaceUtils";
 
-function MessageThreads({ threadData }) {
+function MessageThreads({ threadData , parentMessage }) {
   const dispatch = useDispatch();
   const { workspace } = useSelector((state) => state.workspace);
   const usersImage = threadData.participants
@@ -18,7 +18,9 @@ function MessageThreads({ threadData }) {
 
   function openThreads() {
     console.log(threadData);
-    dispatch(openThreadPanel());
+    dispatch(
+      openThreadPanel({ threadID: threadData.id, parentMessage: parentMessage })
+    );
   }
 
   return (
@@ -49,6 +51,7 @@ function MessageThreads({ threadData }) {
 }
 MessageThreads.propTypes = {
   threadData: PropTypes.object,
+  parentMessage: PropTypes.object,
 };
 
 export default MessageThreads;

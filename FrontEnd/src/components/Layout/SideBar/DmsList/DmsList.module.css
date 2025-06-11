@@ -13,22 +13,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30px;
-    min-width: 30px;
-    height: 30px;
-    min-height: 30px;
+    width: 25px;
+    min-width: 25px;
+    height: 25px;
+    min-height: 25px;
+    border-radius: var(--border-radius-small);
     flex-shrink: 0;
 }
 
 .dms_item {
     display: flex;
-        gap: 2px;
-        align-items: center;
-        padding: 2px 5px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-        color: var(--text-white);
+    gap: 2px;
+    align-items: center;
+    padding: 2px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    color: var(--text-white);
+    height: 35px;
 }
 
 .dms_item:hover {
@@ -56,7 +58,7 @@
     flex-shrink: 0;
 }
 
-.dms_item:hover .right_side{
+.dms_item:hover .right_side {
     display: flex;
 }
 

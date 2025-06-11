@@ -31,6 +31,7 @@ import userDetailsReducer from "./modals/convers/userDetailsModal";
 //======
 // ==============================(Messages)
 import messageMenuReducer from "./modals/chat/messageMenu";
+import threadsReducer from './api_data/messages/threadsSlice';
 //======
 
 const store = configureStore({
@@ -64,6 +65,7 @@ const store = configureStore({
     // ==============================(Messages)
     // ====
     messageMenu: messageMenuReducer,
+    threads : threadsReducer,
     // ==============================(Global)
     // ====
     notificationsModal: notificationsModalReducer,

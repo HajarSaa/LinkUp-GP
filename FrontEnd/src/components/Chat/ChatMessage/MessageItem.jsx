@@ -19,7 +19,11 @@ import MessageMenu from "../MessageMenu/MessageMenu";
 import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/messageMenu";
 import { calculateSafePosition } from "../../../utils/modalsUtils";
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({
+  message,
+  isInThreadPanel = false,
+  isThreadParent = false,
+}) => {
   const [emoji, setEmoji] = useState("");
   const add_react_ref = useRef(null);
   const [add_position, set_add_Position] = useState(null);
@@ -129,9 +133,14 @@ const MessageItem = ({ message }) => {
             )}
           </div>
         </div>
-        <MessageActions message={message} messageHover={messageHover} />
-        {message?.threadCount !== 0 && (
-          <MessageThreads threadData={threadData} />
+        <MessageActions
+          isThread={isInThreadPanel}
+          message={message}
+          messageHover={messageHover}
+          isThreadParent={isThreadParent}
+        />
+        {message?.threadCount !== 0 && !isInThreadPanel && (
+          <MessageThreads threadData={threadData} parentMessage={message} />
         )}
       </div>
       <EmojiPicker position={add_position} onSelect={handleEmojiSelect} />
@@ -143,6 +152,8 @@ const MessageItem = ({ message }) => {
 MessageItem.propTypes = {
   isFirstMessage: PropTypes.bool,
   message: PropTypes.object,
+  isInThreadPanel: PropTypes.bool,
+  isThreadParent: PropTypes.bool,
 };
 
 export default MessageItem;

@@ -1,6 +1,5 @@
 import styles from "./UserPanel.module.css";
 import { LuMessageCircle } from "react-icons/lu";
-import { HiOutlineUserAdd } from "react-icons/hi";
 import IconDropdown from "../../Dropdown/IconDropdown";
 import MoreDropdown from "../../Dropdown/MoreDropdown";
 import { FiHeadphones } from "react-icons/fi";
@@ -30,9 +29,9 @@ const ProfileActions = () => {
       <IconDropdown icon={<FiHeadphones />} label="Huddle" items={items}>
         {/* <IoIosArrowDown /> */}
       </IconDropdown>
-      <Button className={styles.button} icon={<HiOutlineUserAdd />}>
+      {/* <Button className={styles.button} icon={<HiOutlineUserAdd />}>
         VIP
-      </Button>
+      </Button> */}
 
       <MoreDropdown items={moreMenuItems} />
     </div>
