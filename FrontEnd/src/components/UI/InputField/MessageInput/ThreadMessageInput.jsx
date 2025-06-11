@@ -13,11 +13,11 @@ import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import PropTypes from "prop-types";
 import { useLocation, useParams } from "react-router-dom";
-import { sendMessage } from "../../../../API/services/messageService";
 import { useSelector } from "react-redux";
 import LowerToolbar from "./InputComponents/LowerToolbar";
+import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 
-const ThreadMessageInput = () => {
+const ThreadMessageInput = ({ parentMessageId }) => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const [isChecked, setIsChecked] = useState(false);
@@ -27,6 +27,7 @@ const ThreadMessageInput = () => {
   const isChannel = location.pathname.includes("/channels");
   let send_also_to = null;
   if (isChannel) send_also_to = channel.name;
+  const send_message = useSendMessage();
 
   const handleToggleCheckbox = () => {
     const newCheckedState = !isChecked;
@@ -43,18 +44,40 @@ const ThreadMessageInput = () => {
     setMessage(e.target.value);
   };
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!message.trim()) return;
-    try {
-      const type = isChannel ? "channel" : "conversation";
-      await sendMessage(type, id, message);
-      setMessage("");
-      const textarea = textareaRef.current;
-      textarea.style.height = "40px";
-    } catch (error) {
-      console.error("Failed to send message", error);
-      // show message error
-    }
+    const messageContent = {
+      content: message,
+      parentMessageId: parentMessageId,
+    };
+    const type = isChannel ? "channel" : "conversation";
+
+    send_message.mutate(
+      {
+        type,
+        id,
+        messageContent,
+      },
+      {
+        onSuccess: () => {
+          if (isChecked) {
+            const messageContent = {
+              content: message,
+            };
+
+            send_message.mutate({
+              type,
+              id,
+              messageContent,
+            });
+          }
+          setMessage("");
+          setIsChecked(false)
+          const textarea = textareaRef.current;
+          textarea.style.height = "40px";
+        },
+      }
+    );
   };
 
   const handleKeyDown = (e) => {
@@ -90,8 +113,9 @@ const ThreadMessageInput = () => {
           onInput={handlInputHeight}
         />
 
-        <label className={styles.checkBox}>
+        <label htmlFor="checkbox" className={styles.checkBox}>
           <input
+            id="checkbox"
             type="checkbox"
             checked={isChecked}
             onChange={handleToggleCheckbox}
@@ -102,7 +126,7 @@ const ThreadMessageInput = () => {
         </label>
 
         <div className={styles.lower_row_icons}>
-          <LowerToolbar isThread={true} isEditMessage={false}/>
+          <LowerToolbar isThread={true} isEditMessage={false} />
           <div
             className={`${styles.right_icons} ${
               message.trim() && styles.activeSend
@@ -142,6 +166,7 @@ export default ThreadMessageInput;
 ThreadMessageInput.propTypes = {
   channelName: PropTypes.string,
   isThread: PropTypes.bool,
+  parentMessageId: PropTypes.any.isRequired,
 };
 
 const upperIcons = [
@@ -155,7 +180,6 @@ const upperIcons = [
   { icon: IoCodeSlash },
   { icon: PiCodeBlockBold },
 ];
-
 
 const renderIcons = (icons, positions, iconClass, customClass) => {
   return icons.map(({ icon: IconComponent }, index) => (

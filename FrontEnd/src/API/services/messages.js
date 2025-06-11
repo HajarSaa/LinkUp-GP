@@ -39,3 +39,14 @@ export const deleteThisMessage = async (message_id) => {
   const { data } = await axiosInstance.delete(`/messages/${message_id}`);
   return data.data;
 };
+// ================( Send Message in Channel or Convers)
+export const sendMessage = async (type, id, messageContent) => {
+  const endpoint = type === "channel" ? "channels" : "conversations";
+
+  const { data } = await axiosInstance.post(
+    `/${endpoint}/${id}/messages`,
+    messageContent
+  );
+
+  return data.data;
+};

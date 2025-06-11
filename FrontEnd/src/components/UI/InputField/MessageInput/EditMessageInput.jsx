@@ -11,16 +11,15 @@ import { IoCodeSlash } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
-import { useLocation, useParams } from "react-router-dom";
-import { sendMessage } from "../../../../API/services/messageService";
+// import { useLocation, useParams } from "react-router-dom";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 
 const EditMessageInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
-  const location = useLocation();
-  const { id } = useParams();
-  const isChannel = location.pathname.includes("/channels");
+  // const location = useLocation();
+  // const { id } = useParams();
+  // const isChannel = location.pathname.includes("/channels");
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -34,16 +33,7 @@ const EditMessageInput = () => {
 
   const handleSend = async () => {
     if (!message.trim()) return;
-    try {
-      const type = isChannel ? "channel" : "conversation";
-      await sendMessage(type, id, message);
-      setMessage("");
-      const textarea = textareaRef.current;
-      textarea.style.height = "40px";
-    } catch (error) {
-      console.error("Failed to send message", error);
-      // show message error
-    }
+    console.log(`edit this message`)
   };
 
   const handleKeyDown = (e) => {

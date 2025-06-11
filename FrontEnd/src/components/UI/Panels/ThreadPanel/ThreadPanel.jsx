@@ -79,7 +79,7 @@ function ThreadPanel() {
           </div>
         </div>
       )}
-      <ThreadMessageInput />
+      <ThreadMessageInput parentMessageId={threadID} />
     </div>
   );
 }

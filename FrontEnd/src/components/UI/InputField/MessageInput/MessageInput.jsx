@@ -12,8 +12,8 @@ import { PiCodeBlockBold } from "react-icons/pi";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { useLocation, useParams } from "react-router-dom";
-import { sendMessage } from "../../../../API/services/messageService";
 import LowerToolbar from "./InputComponents/LowerToolbar";
+import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
@@ -21,6 +21,7 @@ const MessageInput = () => {
   const location = useLocation();
   const { id } = useParams();
   const isChannel = location.pathname.includes("/channels");
+  const send_message = useSendMessage();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -32,18 +33,27 @@ const MessageInput = () => {
     setMessage(e.target.value);
   };
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!message.trim()) return;
-    try {
-      const type = isChannel ? "channel" : "conversation";
-      await sendMessage(type, id, message);
-      setMessage("");
-      const textarea = textareaRef.current;
-      textarea.style.height = "40px";
-    } catch (error) {
-      console.error("Failed to send message", error);
-      // show message error
-    }
+    const messageContent = {
+      content: message,
+    };
+    const type = isChannel ? "channel" : "conversation";
+    console.log("Type:", type, "ID:", id, "Message:", messageContent);
+    send_message.mutate(
+      {
+        type,
+        id,
+        messageContent,
+      },
+      {
+        onSuccess: () => {
+          setMessage("");
+          const textarea = textareaRef.current;
+          textarea.style.height = "40px";
+        },
+      }
+    );
   };
 
   const handleKeyDown = (e) => {
@@ -128,7 +138,6 @@ const upperIcons = [
   { icon: IoCodeSlash },
   { icon: PiCodeBlockBold },
 ];
-
 
 const renderIcons = (icons, positions, iconClass, customClass) => {
   return icons.map(({ icon: IconComponent }, index) => (
