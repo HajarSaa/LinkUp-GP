@@ -11,11 +11,15 @@ import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMess
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  getParentMessageByPageId,
+  getThreadPanelIdByPageId,
   getUserPanelIdByPageId,
+  isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
 } from "../../../utils/panelUtils";
 import {
   closeChatPanel,
+  openThreadPanel,
   openUserPanel,
 } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { isAChannelMember } from "../../../utils/channelUtils";
@@ -35,11 +39,21 @@ function ChannelPage() {
 
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
+    const isThreadPanel = isIdInOpenedThreadPanelItems(channel_id);
     if (isUserPanel) {
       dispatch(
         openUserPanel({
           type: "userPanel",
           panel_id: getUserPanelIdByPageId(channel_id),
+          page_id: channel_id,
+        })
+      );
+    } else if (isThreadPanel) {
+      dispatch(
+        openThreadPanel({
+          threadID: getThreadPanelIdByPageId(channel_id),
+          parentMessage: getParentMessageByPageId(channel_id),
+          type: "threadPanel",
           page_id: channel_id,
         })
       );

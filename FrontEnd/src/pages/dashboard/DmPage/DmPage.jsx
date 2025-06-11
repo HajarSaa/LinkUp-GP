@@ -10,10 +10,17 @@ import Panel from "../../../components/Layout/Panel/Panel";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  getParentMessageByPageId,
+  getThreadPanelIdByPageId,
   getUserPanelIdByPageId,
+  isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
 } from "../../../utils/panelUtils";
-import { closeChatPanel, openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import {
+  closeChatPanel,
+  openThreadPanel,
+  openUserPanel,
+} from "../../../API/redux_toolkit/ui/chatPanelSlice";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -23,6 +30,7 @@ function DmPage() {
 
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
+    const isThreadPanel = isIdInOpenedThreadPanelItems(convers_id);
     if (isUserPanel) {
       dispatch(
         openUserPanel({
@@ -31,8 +39,17 @@ function DmPage() {
           page_id: convers_id,
         })
       );
+    } else if (isThreadPanel) {
+      dispatch(
+        openThreadPanel({
+          threadID: getThreadPanelIdByPageId(convers_id),
+          parentMessage: getParentMessageByPageId(convers_id),
+          type: "threadPanel",
+          page_id: convers_id,
+        })
+      );
     } else {
-      dispatch(closeChatPanel())
+      dispatch(closeChatPanel());
     }
   }, [convers_id, dispatch]);
 

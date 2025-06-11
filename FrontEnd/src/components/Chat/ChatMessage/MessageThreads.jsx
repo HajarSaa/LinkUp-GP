@@ -5,21 +5,26 @@ import { openThreadPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import PropTypes from "prop-types";
 import UserImage from "../../UI/User/UserImage";
 import { findMemberById } from "../../../utils/workspaceUtils";
+import { useParams } from "react-router-dom";
 
-function MessageThreads({ threadData , parentMessage }) {
+function MessageThreads({ threadData, parentMessage }) {
   const dispatch = useDispatch();
+  const { id: page_id } = useParams();
   const { workspace } = useSelector((state) => state.workspace);
-  const usersImage = threadData.participants
-    .slice(-3)
-    .map((member_id) => {
-      const member_data = findMemberById(workspace, member_id);
-      return member_data.photo;
-    });
+  const usersImage = threadData.participants.slice(-3).map((member_id) => {
+    const member_data = findMemberById(workspace, member_id);
+    return member_data.photo;
+  });
 
   function openThreads() {
     console.log(threadData);
     dispatch(
-      openThreadPanel({ threadID: threadData.id, parentMessage: parentMessage })
+      openThreadPanel({
+        threadID: threadData.id,
+        parentMessage: parentMessage,
+        type: "threadPanel",
+        page_id: page_id,
+      })
     );
   }
 
