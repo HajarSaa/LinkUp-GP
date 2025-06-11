@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import UserProfile from "../models/userProfile.model.js";
 import { initializeSocketHandlers } from "./socketHandlers/index.js";
+import { startReminderWatcher } from "../utils/reminderJob.js";
 
 const socketServer = (httpServer) => {
   const io = new Server(httpServer, {
@@ -59,7 +60,7 @@ const socketServer = (httpServer) => {
 
     initializeSocketHandlers(socket, io);
   });
-
+  startReminderWatcher(io);
   return io;
 };
 

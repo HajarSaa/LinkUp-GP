@@ -50,6 +50,9 @@ export default function connectionHandler(socket, io) {
         workspace: workspaceId,
       }).lean();
 
+      //Adding userProfileId to socket for later use in other handlers
+      socket.userProfileId = userProfile?._id;
+
       io.to(`workspace:${workspaceId}`).emit("presenceUpdate", {
         userIds: Array.from(presenceSet),
         workspaceId,
