@@ -90,7 +90,7 @@ const MessageInput = () => {
         />
 
         <div className={styles.lower_row_icons}>
-          <LowerToolbar isEditMessage={false} />
+          <LowerToolbar/>
           <div
             className={`${styles.right_icons} ${
               message.trim() && styles.activeSend

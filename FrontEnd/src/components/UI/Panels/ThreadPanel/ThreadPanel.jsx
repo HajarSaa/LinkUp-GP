@@ -7,6 +7,7 @@ import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import useGetThreads from "../../../../API/hooks/messages/useGetThreads";
 import Spinner from "../../Spinner/Spinner";
 import ThreadMessageInput from "../../InputField/MessageInput/ThreadMessageInput";
+import EditMessageInput from "../../InputField/MessageInput/EditMessageInput";
 
 function ThreadPanel() {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ function ThreadPanel() {
   const { isOpen, threadID, parentMessage } = useSelector(
     (state) => state.chatPanel.threadPanel
   );
+  const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const get_thread = useGetThreads(threadID);
   const { threads } = useSelector((state) => state.threads);
   let error_message = null;
@@ -21,7 +23,6 @@ function ThreadPanel() {
   if (get_thread.error)
     if (get_thread.error.response.status) error_message = "";
     else error_message = get_thread.error.message;
-
 
   function handleClose() {
     dispatch(closeChatPanel({ type: "threadPanel", page_id: id }));
@@ -85,7 +86,11 @@ function ThreadPanel() {
           </div>
         </div>
       )}
-      <ThreadMessageInput parentMessageId={threadID} />
+      {isEditing && isInThread ? (
+        <EditMessageInput />
+      ) : (
+        <ThreadMessageInput parentMessageId={threadID} />
+      )}
     </div>
   );
 }

@@ -25,10 +25,12 @@ import {
 import { isAChannelMember } from "../../../utils/channelUtils";
 import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth";
 import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
+import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
   const { workspace } = useSelector((state) => state.workspace);
+  const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: channel_id } = useParams();
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
@@ -97,7 +99,11 @@ function ChannelPage() {
             <Header />
             <ChannelBody />
             {isMember ? (
-              <MessageInput channelName={channel?.name} />
+              isEditing && !isInThread ? (
+                <EditMessageInput />
+              ) : (
+                <MessageInput channelName={channel?.name} />
+              )
             ) : (
               <ChannelAuth channel={channel} />
             )}

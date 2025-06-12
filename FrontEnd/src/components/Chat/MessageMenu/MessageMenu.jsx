@@ -4,13 +4,15 @@ import { closeMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/me
 import { useCallback, useEffect } from "react";
 import Spinner from "../../UI/Spinner/Spinner";
 import useDeleteMessage from "../../../API/hooks/messages/useDeleteMessage";
+import { showEditMessageInput } from "../../../API/redux_toolkit/api_data/messages/editMessageSlice";
+import PropTypes from "prop-types";
 
 const MessageMenu = () => {
-  const { isOpen, position, activeMessageId, isSender } = useSelector(
-    (state) => state.messageMenu
-  );
+  const { isOpen, position, activeMessageId, isSender, isInThread } =
+    useSelector((state) => state.messageMenu);
   const delete_message = useDeleteMessage();
   const dispatch = useDispatch();
+
 
   function handleClose(e) {
     if (e.target === e.currentTarget) {
@@ -54,10 +56,26 @@ const MessageMenu = () => {
   // handle cediting
   const handleEdit = useCallback(() => {
     if (isSender) {
-      console.log("Edit");
+      dispatch(closeMessageMenuModal());
+      const messageElement = document.getElementById(
+        `message-${activeMessageId}`
+      );
+
+      const messageText = messageElement
+        ? messageElement.querySelector(`#message-content-${activeMessageId}`)
+            .textContent
+        : "";
+
+      dispatch(
+        showEditMessageInput({
+          messageId: activeMessageId,
+          messageText: messageText,
+          isInThread: isInThread,
+        })
+      );
       closeModal();
     }
-  }, [isSender, closeModal]);
+  }, [isSender, activeMessageId, closeModal, dispatch, isInThread]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -106,13 +124,13 @@ const MessageMenu = () => {
             </li>
             {isSender && (
               <>
-                <li className={styles.item} onClick={isSender && handleEdit}>
+                <li className={styles.item} onClick={handleEdit}>
                   <span>Edit Message</span>
                   <span>E</span>
                 </li>
                 <li
                   className={`${styles.item} ${styles.delete_item}`}
-                  onClick={isSender && handleDelete}
+                  onClick={handleDelete}
                 >
                   {delete_message.isPending ? (
                     <span className={styles.delete_loading}>
@@ -136,6 +154,9 @@ const MessageMenu = () => {
       </div>
     </>
   );
+};
+MessageMenu.propTypes = {
+  isInThread: PropTypes.bool,
 };
 
 export default MessageMenu;

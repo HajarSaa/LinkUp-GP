@@ -35,6 +35,7 @@ function MessageActions({
         position: position,
         activeMessageId: message_id,
         isSender: isSender,
+        isInThread: isThread,
       })
     );
   };

@@ -109,7 +109,7 @@ function ChatMessage({ containerRef }) {
         .map((message) => (
           <React.Fragment key={message._id}>
             {/* <DateDivider date={message.createdAt} /> */}
-            <MessageItem message={message} />
+            <MessageItem isInThreadPanel={false} message={message} />
           </React.Fragment>
         ))}
       <div ref={messagesEndRef} />

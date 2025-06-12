@@ -126,7 +126,7 @@ const ThreadMessageInput = ({ parentMessageId }) => {
         </label>
 
         <div className={styles.lower_row_icons}>
-          <LowerToolbar isThread={true} isEditMessage={false} />
+          <LowerToolbar isThread={true} />
           <div
             className={`${styles.right_icons} ${
               message.trim() && styles.activeSend

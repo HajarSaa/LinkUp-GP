@@ -9,17 +9,14 @@ import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { RiQuoteText } from "react-icons/ri";
 import { IoCodeSlash } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
-import { IoSend } from "react-icons/io5";
-import { IoIosArrowDown } from "react-icons/io";
-// import { useLocation, useParams } from "react-router-dom";
 import LowerToolbar from "./InputComponents/LowerToolbar";
+import { closeEditMessageInput } from "../../../../API/redux_toolkit/api_data/messages/editMessageSlice";
+import { useDispatch } from "react-redux";
 
 const EditMessageInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
-  // const location = useLocation();
-  // const { id } = useParams();
-  // const isChannel = location.pathname.includes("/channels");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -31,15 +28,20 @@ const EditMessageInput = () => {
     setMessage(e.target.value);
   };
 
-  const handleSend = async () => {
+  const handleSave = async () => {
     if (!message.trim()) return;
-    console.log(`edit this message`)
+    console.log(`edit this message`);
+    dispatch(closeEditMessageInput());
+  };
+  const handleCancel = async () => {
+    console.log(`cancel this edit`);
+    dispatch(closeEditMessageInput());
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      handleSave();
     }
   };
 
@@ -70,23 +72,14 @@ const EditMessageInput = () => {
         />
 
         <div className={styles.lower_row_icons}>
-          <LowerToolbar isEditMessage={true}  />
-          <div
-            className={`${styles.right_icons} ${
-              message.trim() && styles.activeSend
-            }`}
-          >
-            <div
-              className={`${styles.sendBtns} ${styles.sendBtns_send}`}
-              onClick={handleSend}
-            >
-              <IoSend />
-            </div>
-            <div className={styles.box11}></div>
-
-            <div className={`${styles.sendBtns} ${styles.sendBtns_dropdown}`}>
-              <IoIosArrowDown />
-            </div>
+          <LowerToolbar isEditing={true} />
+          <div className={styles.right_btns}>
+            <button type="button" className={styles.cancel_edit} onClick={handleCancel}>
+              <span>cancel</span>
+            </button>
+            <button type="button" className={styles.save_edit} onClick={handleSave}>
+              <span>save</span>
+            </button>
           </div>
         </div>
       </div>
@@ -118,7 +111,6 @@ const upperIcons = [
   { icon: IoCodeSlash },
   { icon: PiCodeBlockBold },
 ];
-
 
 const renderIcons = (icons, positions, iconClass, customClass) => {
   return icons.map(({ icon: IconComponent }, index) => (

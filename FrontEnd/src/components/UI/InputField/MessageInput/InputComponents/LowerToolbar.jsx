@@ -7,7 +7,8 @@ import { AiOutlineAudio } from "react-icons/ai";
 import { CgShortcut } from "react-icons/cg";
 import PropTypes from "prop-types";
 
-function LowerToolbar({ isThread, isEditMessage }) {
+
+function LowerToolbar({ isThread ,isEditing }) {
   const icons = [
     { icon: FaPlus },
     { icon: RxLetterCaseCapitalize },
@@ -16,7 +17,7 @@ function LowerToolbar({ isThread, isEditMessage }) {
     { icon: AiOutlineAudio },
     { icon: CgShortcut },
   ];
-  const lowerIcons = isEditMessage ? icons.slice(1, 3) : icons;
+  const lowerIcons = isEditing ? icons.slice(1, 3) : icons;
   return (
     <div
       className={`${styles.left_icons} ${isThread && styles.small_left_icons}`}
@@ -36,7 +37,7 @@ function LowerToolbar({ isThread, isEditMessage }) {
 }
 LowerToolbar.propTypes = {
   isThread: PropTypes.bool,
-  isEditMessage: PropTypes.bool,
+  isEditing: PropTypes.bool,
 };
 
 export default LowerToolbar;

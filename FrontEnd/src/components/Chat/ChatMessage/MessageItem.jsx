@@ -74,6 +74,7 @@ const MessageItem = ({
     }
   };
 
+
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
     const menuWidth = 240;
@@ -84,6 +85,7 @@ const MessageItem = ({
         position: position,
         activeMessageId: message_id,
         isSender: isMessageSender,
+        isInThread: isInThreadPanel,
       })
     );
   };
@@ -124,7 +126,12 @@ const MessageItem = ({
                 </div>
                 <div className={styles.message_time}>{message_time}</div>
               </div>
-              <div className={styles.message_text} id={`message-content-${message._id}`}>{message.content}</div>
+              <div
+                className={styles.message_text}
+                id={`message-content-${message._id}`}
+              >
+                {message.content}
+              </div>
             </div>
             {/* Reactions */}
             {message.reactions && (

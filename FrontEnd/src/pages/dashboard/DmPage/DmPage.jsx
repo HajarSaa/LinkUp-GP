@@ -21,14 +21,17 @@ import {
   openThreadPanel,
   openUserPanel,
 } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
+  const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
     const isThreadPanel = isIdInOpenedThreadPanelItems(convers_id);
     if (isUserPanel) {
@@ -78,7 +81,7 @@ function DmPage() {
       <div className={styles.page_content}>
         <UserNavbar />
         <UserCard />
-        <MessageInput />
+        {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
       </div>
       <Panel />
     </PageContent>
