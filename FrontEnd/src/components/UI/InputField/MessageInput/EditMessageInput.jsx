@@ -11,12 +11,20 @@ import { IoCodeSlash } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 import { closeEditMessageInput } from "../../../../API/redux_toolkit/api_data/messages/editMessageSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import useUpdateMessage from "../../../../API/hooks/messages/useUpdateMessage";
+import Spinner from "../../Spinner/Spinner";
 
 const EditMessageInput = () => {
+  const { messageId, messageText } = useSelector((state) => state.editMessage);
+  const update_message = useUpdateMessage();
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setMessage(messageText);
+  }, [messageText]);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -29,10 +37,23 @@ const EditMessageInput = () => {
   };
 
   const handleSave = async () => {
-    if (!message.trim()) return;
-    console.log(`edit this message`);
-    dispatch(closeEditMessageInput());
+    if (!message.trim() || message.trim() === messageText.trim()) {
+      dispatch(closeEditMessageInput());
+      return;
+    }
+    update_message.mutate(
+      {
+        message_id: messageId,
+        content: { content: message },
+      },
+      {
+        onSuccess: () => {
+          dispatch(closeEditMessageInput());
+        },
+      }
+    );
   };
+
   const handleCancel = async () => {
     console.log(`cancel this edit`);
     dispatch(closeEditMessageInput());
@@ -47,8 +68,10 @@ const EditMessageInput = () => {
 
   const handlInputHeight = () => {
     const textarea = textareaRef.current;
+    textarea.style.height = "auto"; // Reset height
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
+
   return (
     <div className={styles.messageInputContainer}>
       <div className={styles.input_field}>
@@ -74,11 +97,25 @@ const EditMessageInput = () => {
         <div className={styles.lower_row_icons}>
           <LowerToolbar isEditing={true} />
           <div className={styles.right_btns}>
-            <button type="button" className={styles.cancel_edit} onClick={handleCancel}>
+            <button
+              type="button"
+              className={styles.cancel_edit}
+              onClick={handleCancel}
+            >
               <span>cancel</span>
             </button>
-            <button type="button" className={styles.save_edit} onClick={handleSave}>
-              <span>save</span>
+            <button
+              type="button"
+              className={styles.save_edit}
+              onClick={handleSave}
+            >
+              <span>
+                {update_message.isPending ? (
+                  <Spinner width={20} height={20} color="var(--green-color)" />
+                ) : (
+                  "save"
+                )}
+              </span>
             </button>
           </div>
         </div>

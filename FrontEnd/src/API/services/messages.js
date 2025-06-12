@@ -50,3 +50,8 @@ export const sendMessage = async (type, id, messageContent) => {
 
   return data.data;
 };
+// ================( Send Message in Channel or Convers)
+export const updateThisMessage = async (message_id, content) => {
+  const { data } = await axiosInstance.patch(`/messages/${message_id}`, content);
+  return data.data;
+};

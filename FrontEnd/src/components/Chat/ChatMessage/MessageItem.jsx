@@ -38,12 +38,15 @@ const MessageItem = ({
   const isMessageSender = sender._id === loggin_user._id;
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
+  const { messageId, isEditing } = useSelector((state) => state.editMessage);
+
   const threadData = {
     count: message?.threadCount,
     participants: message?.threadParticipants,
     id: message?._id,
     lastRepliedAt: message?.lastRepliedAt,
   };
+  const editingMessage = messageId === message._id;
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
@@ -73,7 +76,6 @@ const MessageItem = ({
       });
     }
   };
-
 
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
@@ -105,7 +107,7 @@ const MessageItem = ({
       <div
         className={`${styles.message_container} ${
           activeMessageId === message._id && styles.active
-        }`}
+        } ${editingMessage && isEditing ? styles.editingMessage : ""}`}
         onMouseEnter={() => setMessageHover(true)}
         onMouseLeave={() => setMessageHover(false)}
         onContextMenu={(e) => {
@@ -131,6 +133,9 @@ const MessageItem = ({
                 id={`message-content-${message._id}`}
               >
                 {message.content}
+                {message.edited && (
+                  <span className={styles.edited_label}>(edited)</span>
+                )}
               </div>
             </div>
             {/* Reactions */}
