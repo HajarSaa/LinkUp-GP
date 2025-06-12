@@ -50,7 +50,6 @@ function Step2({ onNext, workspace }) {
     }
   };
 
-  // 🔁 الضغط على Next
   const handleNextClick = async () => {
     if (!workspace || !workspace._id) {
       setError("Workspace ID is missing.");
@@ -70,18 +69,21 @@ function Step2({ onNext, workspace }) {
 
       if (profilePhoto) {
         const reader = new FileReader();
-        const readFileAsBase64 = new Promise((resolve, reject) => {
+        photoBase64 = await new Promise((resolve, reject) => {
           reader.onloadend = () => resolve(reader.result);
           reader.onerror = reject;
           reader.readAsDataURL(profilePhoto);
         });
-
-        photoBase64 = await readFileAsBase64;
       }
 
+      console.log("userName:", userName);
+      console.log("photoBase64:", photoBase64.slice(0, 100) + "...");
+
       const requestBody = {
-        userName: userName,
-        photo: photoBase64,
+        userName: userName.trim(),
+        email: "", // إذا فيه إيميل تقدر تضيفه هنا
+        about: "", // أو معلومات إضافية
+        photo: photoBase64, // string (حتى لو فاضي مش مشكلة)
       };
 
       await joinWorkspace(workspace._id, requestBody);
@@ -95,6 +97,8 @@ function Step2({ onNext, workspace }) {
       setLoading(false);
     }
   };
+
+
 
   return (
     <PageContent>

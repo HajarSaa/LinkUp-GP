@@ -125,3 +125,15 @@ export const getMembersData = (channel, workspace) => {
   return memebersArray.sort((a, b) => (b.isMe === true) - (a.isMe === true));
 };
 
+//====================(updateCreationDataField)========
+export function updateCreationDataField(key, value) {
+  const existing = JSON.parse(localStorage.getItem("creation_data")) || {};
+  const updated = {
+    ...existing,
+    [key]: {
+      ...existing[key],
+      ...value,
+    },
+  };
+  localStorage.setItem("creation_data", JSON.stringify(updated));
+}
