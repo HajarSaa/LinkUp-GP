@@ -1,23 +1,64 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import { FaUser } from "react-icons/fa6";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
 import { joinWorkspace } from "../../../API/services/workspaceService";
-import { useDispatch } from "react-redux";
 import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
+import PropTypes from "prop-types";
+import UserImage from '../../../components/UI/User/UserImage'
+
+const avatarImages = [
+  "/assets/avatars/image-1.jpeg",
+  "/assets/avatars/image-2.jpeg",
+  "/assets/avatars/image-3.jpeg",
+  "/assets/avatars/image-4.jpeg",
+  "/assets/avatars/image-5.jpeg",
+];
+
 function Step2({ onNext, workspace }) {
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null); // File
+  const [preview, setPreview] = useState(""); // preview path
+  const dispatch = useDispatch();
 
   const isButtonDisabled = userName.trim() === "" || loading;
 
-  const dispatch = useDispatch();
+  // ❗ اختر صورة عشوائية عند التحميل
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * avatarImages.length);
+    const randomImagePath = avatarImages[randomIndex];
+    setPreview(randomImagePath);
+
+    fetch(randomImagePath)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], "default-avatar.jpeg", {
+          type: blob.type,
+        });
+        setProfilePhoto(file);
+      });
+  }, []);
+
+  // ✅ رفع صورة يدويًا
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePhoto(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  // 🔁 الضغط على Next
   const handleNextClick = async () => {
     if (!workspace || !workspace._id) {
-      console.log(workspace);
       setError("Workspace ID is missing.");
+      return;
+    }
+
+    if (userName.trim() === "") {
+      setError("Name is required.");
       return;
     }
 
@@ -25,14 +66,31 @@ function Step2({ onNext, workspace }) {
     setError("");
 
     try {
-      await joinWorkspace(workspace._id, userName);
-      if (localStorage.getItem("selectedWorkspaceId"))
-        localStorage.removeItem("selectedWorkspaceId");
-      dispatch(clearWorkspace());
+      let photoBase64 = "";
+
+      if (profilePhoto) {
+        const reader = new FileReader();
+        const readFileAsBase64 = new Promise((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(profilePhoto);
+        });
+
+        photoBase64 = await readFileAsBase64;
+      }
+
+      const requestBody = {
+        userName: userName,
+        photo: photoBase64,
+      };
+
+      await joinWorkspace(workspace._id, requestBody);
+
       localStorage.setItem("selectedWorkspaceId", workspace._id);
+      dispatch(clearWorkspace());
       onNext(userName);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -46,7 +104,7 @@ function Step2({ onNext, workspace }) {
           <h2 className={styles.heading}>What is your name?</h2>
           <p className={styles.subheading}>
             Adding your name and profile photo helps your teammates recognize
-            and connect with you more easily.
+            you.
           </p>
 
           <input
@@ -59,18 +117,25 @@ function Step2({ onNext, workspace }) {
 
           <div className={styles.profilePhotoSection}>
             <label>
-              {" "}
               Your profile photo <span>(optional)</span>
             </label>
             <p className={styles.subheading}>
-              Help your teammates know they’re talking to the right person.
+              Help your teammates know who you are.
             </p>
+
             <div className={styles.profilePhotoPlaceholder}>
-              <FaUser className={styles.photo} />
+              <UserImage src={preview} alt={'preview'}/>
             </div>
-            <button type="button" className={styles.uploadButton}>
+
+            <label className={styles.uploadButton}>
               Upload Photo
-            </button>
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </label>
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
@@ -89,5 +154,11 @@ function Step2({ onNext, workspace }) {
     </PageContent>
   );
 }
+Step2.propTypes = {
+  onNext: PropTypes.func.isRequired,
+  workspace: PropTypes.shape({
+    _id: PropTypes.string,
+  }),
+};
 
 export default Step2;

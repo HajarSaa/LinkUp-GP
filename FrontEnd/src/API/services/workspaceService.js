@@ -18,11 +18,11 @@ export const createWorkspaceService = async (name) => {
   return response.data;
 };
 ////////////////////////////////////////////////////////////////////
-export async function joinWorkspace(workspaceId, userName) {
+export async function joinWorkspace(workspaceId, data) {
   try {
     const response = await axios.post(
       `${API_BASE_URL}/workspaces/${workspaceId}/join`,
-      { userName },
+      data, // ده بقى: { userName, photo }
       { withCredentials: true }
     );
     return response.data;
@@ -33,4 +33,5 @@ export async function joinWorkspace(workspaceId, userName) {
     throw new Error("Failed to join workspace.");
   }
 }
+
 ////////////////////////////////////////////////////////////////////
