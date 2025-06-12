@@ -6,7 +6,7 @@ import Spinner from "../../UI/Spinner/Spinner";
 import useDeleteMessage from "../../../API/hooks/messages/useDeleteMessage";
 
 const MessageMenu = () => {
-  const { isOpen, position, activeMessageId } = useSelector(
+  const { isOpen, position, activeMessageId, isSender } = useSelector(
     (state) => state.messageMenu
   );
   const delete_message = useDeleteMessage();
@@ -18,22 +18,54 @@ const MessageMenu = () => {
     }
   }
 
+  // handle closing
   const closeModal = useCallback(() => {
     dispatch(closeMessageMenuModal());
   }, [dispatch]);
 
-  const handleDelete = useCallback(() => {
-    delete_message.mutate(activeMessageId);
-  }, [delete_message, activeMessageId]);
+  // handle copying
+  const handleCopy = useCallback(() => {
+    const messageElement = document.getElementById(
+      `message-${activeMessageId}`
+    );
+    if (messageElement) {
+      const messageTextEl = messageElement.querySelector(
+        `#message-content-${activeMessageId}`
+      );
+      const text = messageTextEl?.innerText || "";
+      if (text) {
+        navigator.clipboard.writeText(text);
+      }
+    }
+    closeModal();
+  }, [activeMessageId, closeModal]);
 
-  function handleEdit() {
-    console.log("Edit");
-  }
+  // handle deleting
+  const handleDelete = useCallback(() => {
+    if (isSender) {
+      delete_message.mutate(activeMessageId, {
+        onSuccess: () => {
+          closeModal();
+        },
+      });
+    }
+  }, [delete_message, activeMessageId, isSender, closeModal]);
+
+  // handle cediting
+  const handleEdit = useCallback(() => {
+    if (isSender) {
+      console.log("Edit");
+      closeModal();
+    }
+  }, [isSender, closeModal]);
 
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (event) => {
+      if (event.key.toLowerCase() === "c") {
+        handleCopy();
+      }
       if (event.key.toLowerCase() === "e") {
         handleEdit();
       }
@@ -50,7 +82,7 @@ const MessageMenu = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, closeModal, handleDelete]);
+  }, [isOpen, closeModal, handleDelete, handleEdit, handleCopy]);
 
   if (!isOpen || !position) return null;
 
@@ -68,25 +100,37 @@ const MessageMenu = () => {
           }}
         >
           <ul className={styles.list}>
-            <li className={styles.item} onClick={handleEdit}>
-              <span>Edit Message</span>
-              <span>E</span>
+            <li className={styles.item} onClick={handleCopy}>
+              <span>Copy Message</span>
+              <span>C</span>
             </li>
-            <li
-              className={`${styles.item} ${styles.delete_item}`}
-              onClick={handleDelete}
-            >
-              {delete_message.isPending ? (
-                <span className={styles.delete_loading}>
-                  <Spinner width={20} height={20} color="var(--error-color)" />
-                </span>
-              ) : (
-                <>
-                  <span>Delete Message</span>
-                  <span>Delete</span>
-                </>
-              )}
-            </li>
+            {isSender && (
+              <>
+                <li className={styles.item} onClick={isSender && handleEdit}>
+                  <span>Edit Message</span>
+                  <span>E</span>
+                </li>
+                <li
+                  className={`${styles.item} ${styles.delete_item}`}
+                  onClick={isSender && handleDelete}
+                >
+                  {delete_message.isPending ? (
+                    <span className={styles.delete_loading}>
+                      <Spinner
+                        width={20}
+                        height={20}
+                        color="var(--error-color)"
+                      />
+                    </span>
+                  ) : (
+                    <>
+                      <span>Delete Message</span>
+                      <span>Delete</span>
+                    </>
+                  )}
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

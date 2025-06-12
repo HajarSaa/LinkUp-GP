@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { BiSolidUser } from "react-icons/bi";
 import styles from "./ChatMessage.module.css";
 import { MdOutlineAddReaction } from "react-icons/md";
 import Reaction from "./Reaction";
@@ -11,7 +10,10 @@ import PropTypes from "prop-types";
 import MessageActions from "./MessageActions";
 import MessageThreads from "./MessageThreads";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
-import { findMemberById } from "../../../utils/workspaceUtils";
+import {
+  findMemberById,
+  findMemberByUserId,
+} from "../../../utils/workspaceUtils";
 import { formatTimeTo12Hour } from "../../../utils/formatedDate";
 import UserImage from "../../UI/User/UserImage";
 import { useParams } from "react-router-dom";
@@ -32,6 +34,8 @@ const MessageItem = ({
   const { id: page_id } = useParams();
   const { workspace } = useSelector((state) => state.workspace);
   const sender = findMemberById(workspace, message?.createdBy);
+  const loggin_user = findMemberByUserId(workspace);
+  const isMessageSender = sender._id === loggin_user._id;
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
   const threadData = {
@@ -76,7 +80,11 @@ const MessageItem = ({
     const padding = 0;
     const position = calculateSafePosition(e, menuWidth, null, padding);
     dispatch(
-      openMessageMenuModal({ position: position, activeMessageId: message_id })
+      openMessageMenuModal({
+        position: position,
+        activeMessageId: message_id,
+        isSender: isMessageSender,
+      })
     );
   };
 
@@ -116,7 +124,7 @@ const MessageItem = ({
                 </div>
                 <div className={styles.message_time}>{message_time}</div>
               </div>
-              <div className={styles.message_text}>{message.content}</div>
+              <div className={styles.message_text} id={`message-content-${message._id}`}>{message.content}</div>
             </div>
             {/* Reactions */}
             {message.reactions && (
@@ -140,6 +148,7 @@ const MessageItem = ({
           isThreadParent={isThreadParent}
           threadData={threadData}
           parentMessage={message}
+          isSender={isMessageSender}
         />
         {message?.threadCount !== 0 && !isInThreadPanel && (
           <MessageThreads threadData={threadData} parentMessage={message} />

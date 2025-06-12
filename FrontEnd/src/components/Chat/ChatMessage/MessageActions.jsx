@@ -18,7 +18,9 @@ function MessageActions({
   message,
   isThreadParent = false,
   isThread = false,
-  threadData, parentMessage
+  threadData,
+  parentMessage,
+  isSender = true
 }) {
   const dispatch = useDispatch();
   const { id: page_id } = useParams();
@@ -29,7 +31,11 @@ function MessageActions({
     const padding = 0;
     const position = calculateSafePosition(e, menuWidth, null, padding);
     dispatch(
-      openMessageMenuModal({ position: position, activeMessageId: message_id })
+      openMessageMenuModal({
+        position: position,
+        activeMessageId: message_id,
+        isSender: isSender,
+      })
     );
   };
   function openThreads() {
@@ -91,5 +97,6 @@ MessageActions.propTypes = {
   isThreadParent: PropTypes.bool,
   threadData: PropTypes.object,
   parentMessage: PropTypes.object,
+  isSender: PropTypes.bool,
 };
 export default MessageActions;
