@@ -1,6 +1,6 @@
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useCreateWorkspace from "../../../API/hooks/workspace/useCreateWorkspace";
 import {
@@ -8,28 +8,20 @@ import {
   setWorkspace,
 } from "../../../API/redux_toolkit/ui/creationsStep";
 import { updateCreationDataField } from "../../../utils/workspaceUtils";
+import { useNavigate } from "react-router-dom";
 
 function Step1() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const savedWorkspace = useSelector(
     (state) => state.createWorkspace.workspace
   );
+  const [teamName, setTeamName] = useState(savedWorkspace?.work_name || "");
 
-  const [teamName, setTeamName] = useState("");
   const [error, setError] = useState(null);
 
   const { mutateAsync: createWorkspace, isPending } = useCreateWorkspace();
 
-  useEffect(() => {
-    if (savedWorkspace?.work_name) {
-      setTeamName(savedWorkspace.work_name);
-    } else {
-      const localData = JSON.parse(localStorage.getItem("creation_data"));
-      if (localData?.workspace?.work_name) {
-        setTeamName(localData.workspace.work_name);
-      }
-    }
-  }, [savedWorkspace]);
 
   const isButtonDisabled = teamName.trim() === "" || isPending;
 
@@ -40,6 +32,7 @@ function Step1() {
       onSuccess: (workspace) => {
         dispatch(setWorkspace(workspace));
         dispatch(setStepIndex(1));
+        navigate("/create-workspace/step-2");
       },
       onError: (error) => {
         setError(error.response?.data?.message);

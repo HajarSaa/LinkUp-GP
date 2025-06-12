@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
-import { joinWorkspace } from "../../../API/services/workspaceService";
-import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
-import PropTypes from "prop-types";
-import UserImage from '../../../components/UI/User/UserImage'
+import UserImage from "../../../components/UI/User/UserImage";
+import {
+  setStepIndex,
+  setUser,
+} from "../../../API/redux_toolkit/ui/creationsStep";
+import useJoinWorkspace from "../../../API/hooks/workspace/useJoinWorkspace";
+import { updateCreationDataField } from "../../../utils/workspaceUtils";
 
 const avatarImages = [
   "/assets/avatars/image-1.jpeg",
@@ -15,90 +19,132 @@ const avatarImages = [
   "/assets/avatars/image-5.jpeg",
 ];
 
-function Step2({ onNext, workspace }) {
-  const [userName, setUserName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [profilePhoto, setProfilePhoto] = useState(null); // File
-  const [preview, setPreview] = useState(""); // preview path
+function Step2() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const isButtonDisabled = userName.trim() === "" || loading;
+  const { workspace } = useSelector((state) => state.createWorkspace.workspace);
+  const savedUser = useSelector((state) => state.createWorkspace.user);
+  const [userName, setUserName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [preview, setPreview] = useState("");
+  const [error, setError] = useState("");
 
-  // ❗ اختر صورة عشوائية عند التحميل
+  const { mutate: join_workspace, isPending } = useJoinWorkspace();
+  const isButtonDisabled = userName.trim() === "" || isPending;
+
+  // ✅ استرجاع البيانات المحفوظة من localStorage
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * avatarImages.length);
-    const randomImagePath = avatarImages[randomIndex];
-    setPreview(randomImagePath);
+    const savedName = savedUser?.userName;
+    if (savedName) setUserName(savedName);
 
-    fetch(randomImagePath)
-      .then((res) => res.blob())
-      .then((blob) => {
-        const file = new File([blob], "default-avatar.jpeg", {
-          type: blob.type,
+    const savedPreview = savedUser?.preview;
+    if (savedPreview?.startsWith("data:image")) {
+      setPreview(savedPreview);
+
+      fetch(savedPreview)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], "user-photo.jpeg", { type: blob.type });
+          setProfilePhoto(file);
         });
-        setProfilePhoto(file);
-      });
-  }, []);
+    } else {
+      // fallback لصورة عشوائية
+      const randomIndex = Math.floor(Math.random() * avatarImages.length);
+      const randomImagePath = avatarImages[randomIndex];
 
-  // ✅ رفع صورة يدويًا
+      fetch(randomImagePath)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const file = new File([blob], "default-avatar.jpeg", {
+            type: blob.type,
+          });
+
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64 = reader.result;
+            setPreview(base64);
+            setProfilePhoto(file);
+
+            updateCreationDataField("user", {
+              userName: savedName || "",
+              preview: base64,
+              photoBase64: base64,
+            });
+          };
+          reader.readAsDataURL(file);
+        });
+    }
+  }, [savedUser]);
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfilePhoto(file);
-      setPreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result;
+        setPreview(base64);
+        setProfilePhoto(file);
+
+        updateCreationDataField("user", {
+          userName,
+          preview: base64,
+          photoBase64: base64,
+        });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setUserName(value);
+    updateCreationDataField("user", { userName: value });
+  };
+
   const handleNextClick = async () => {
-    if (!workspace || !workspace._id) {
+    if (!workspace?._id) {
       setError("Workspace ID is missing.");
       return;
     }
 
-    if (userName.trim() === "") {
-      setError("Name is required.");
-      return;
-    }
-
-    setLoading(true);
     setError("");
 
-    try {
-      let photoBase64 = "";
-
-      if (profilePhoto) {
-        const reader = new FileReader();
-        photoBase64 = await new Promise((resolve, reject) => {
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(profilePhoto);
-        });
-      }
-
-      console.log("userName:", userName);
-      console.log("photoBase64:", photoBase64.slice(0, 100) + "...");
-
-      const requestBody = {
-        userName: userName.trim(),
-        email: "", // إذا فيه إيميل تقدر تضيفه هنا
-        about: "", // أو معلومات إضافية
-        photo: photoBase64, // string (حتى لو فاضي مش مشكلة)
-      };
-
-      await joinWorkspace(workspace._id, requestBody);
-
-      localStorage.setItem("selectedWorkspaceId", workspace._id);
-      dispatch(clearWorkspace());
-      onNext(userName);
-    } catch (err) {
-      setError(err.message || "Something went wrong.");
-    } finally {
-      setLoading(false);
+    let photoBase64 = "";
+    if (profilePhoto) {
+      const reader = new FileReader();
+      photoBase64 = await new Promise((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(profilePhoto);
+      });
     }
+
+    updateCreationDataField("user", {
+      userName,
+      preview,
+      photoBase64,
+    });
+
+    const requestBody = {
+      userName: userName.trim(),
+      photo: photoBase64,
+    };
+
+    join_workspace(
+      { workspaceId: workspace._id, data: requestBody },
+      {
+        onSuccess: () => {
+          dispatch(setUser({ userName }));
+          dispatch(setStepIndex(2));
+          navigate("/create-workspace/step-3");
+        },
+        onError: (err) => {
+          setError(err.response?.data?.message || "Something went wrong.");
+        },
+      }
+    );
   };
-
-
 
   return (
     <PageContent>
@@ -114,7 +160,7 @@ function Step2({ onNext, workspace }) {
           <input
             type="text"
             value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={handleNameChange}
             placeholder="Enter your name"
             className={styles.input}
           />
@@ -128,7 +174,7 @@ function Step2({ onNext, workspace }) {
             </p>
 
             <div className={styles.profilePhotoPlaceholder}>
-              <UserImage src={preview} alt={'preview'}/>
+              <UserImage src={preview} alt="preview" />
             </div>
 
             <label className={styles.uploadButton}>
@@ -151,18 +197,12 @@ function Step2({ onNext, workspace }) {
               isButtonDisabled ? styles.disabled : ""
             }`}
           >
-            {loading ? "Joining..." : "Next"}
+            {isPending ? "Joining..." : "Next"}
           </button>
         </div>
       </div>
     </PageContent>
   );
 }
-Step2.propTypes = {
-  onNext: PropTypes.func.isRequired,
-  workspace: PropTypes.shape({
-    _id: PropTypes.string,
-  }),
-};
 
 export default Step2;

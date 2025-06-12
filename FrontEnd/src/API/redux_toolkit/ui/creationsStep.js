@@ -1,10 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+function saveToLocalStorage(state) {
+  localStorage.setItem("creation_data", JSON.stringify(state));
+}
+
+function loadFromLocalStorage() {
+  const data = localStorage.getItem("creation_data");
+  return data ? JSON.parse(data) : null;
+}
+
+const local = loadFromLocalStorage();
+
 const initialState = {
-  stepIndex: 0,
-  workspace: null,
-  user: null,
-  emails: null,
+  stepIndex: local?.stepIndex ?? 0,
+  workspace: local?.workspace ?? null,
+  user: local?.user ?? null,
+  emails: local?.emails ?? null,
 };
 
 const creationStepsSlice = createSlice({
@@ -27,37 +38,23 @@ const creationStepsSlice = createSlice({
       state.stepIndex = action.payload;
       saveToLocalStorage(state);
     },
-    restoreFromStorage(state) {
-      const stored = loadFromLocalStorage();
-      if (stored) {
-        state.workspace = stored.workspace;
-        state.user = stored.user;
-        state.emails = stored.emails;
-        state.stepIndex = stored.stepIndex ?? 0;
-      }
-    },
     clearCreationSteps(state) {
-      Object.assign(state, initialState);
+      Object.assign(state, {
+        stepIndex: 0,
+        workspace: null,
+        user: null,
+        emails: null,
+      });
       localStorage.removeItem("creation_data");
     },
   },
 });
-
-function saveToLocalStorage(state) {
-  localStorage.setItem("creation_data", JSON.stringify(state));
-}
-
-function loadFromLocalStorage() {
-  const data = localStorage.getItem("creation_data");
-  return data ? JSON.parse(data) : null;
-}
 
 export const {
   setWorkspace,
   setUser,
   setEmails,
   setStepIndex,
-  restoreFromStorage,
   clearCreationSteps,
 } = creationStepsSlice.actions;
 
