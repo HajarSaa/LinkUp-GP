@@ -4,13 +4,15 @@ import { closeMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/me
 import { useCallback, useEffect } from "react";
 import Spinner from "../../UI/Spinner/Spinner";
 import useDeleteMessage from "../../../API/hooks/messages/useDeleteMessage";
+import { showEditMessageInput } from "../../../API/redux_toolkit/api_data/messages/editMessageSlice";
+import PropTypes from "prop-types";
 
 const MessageMenu = () => {
-  const { isOpen, position, activeMessageId } = useSelector(
-    (state) => state.messageMenu
-  );
+  const { isOpen, position, activeMessageId, isSender, isInThread } =
+    useSelector((state) => state.messageMenu);
   const delete_message = useDeleteMessage();
   const dispatch = useDispatch();
+
 
   function handleClose(e) {
     if (e.target === e.currentTarget) {
@@ -18,22 +20,70 @@ const MessageMenu = () => {
     }
   }
 
+  // handle closing
   const closeModal = useCallback(() => {
     dispatch(closeMessageMenuModal());
   }, [dispatch]);
 
-  const handleDelete = useCallback(() => {
-    delete_message.mutate(activeMessageId);
-  }, [delete_message, activeMessageId]);
+  // handle copying
+  const handleCopy = useCallback(() => {
+    const messageElement = document.getElementById(
+      `message-${activeMessageId}`
+    );
+    if (messageElement) {
+      const messageTextEl = messageElement.querySelector(
+        `#message-content-${activeMessageId}`
+      );
+      const text = messageTextEl?.innerText || "";
+      if (text) {
+        navigator.clipboard.writeText(text);
+      }
+    }
+    closeModal();
+  }, [activeMessageId, closeModal]);
 
-  function handleEdit() {
-    console.log("Edit");
-  }
+  // handle deleting
+  const handleDelete = useCallback(() => {
+    if (isSender) {
+      delete_message.mutate(activeMessageId, {
+        onSuccess: () => {
+          closeModal();
+        },
+      });
+    }
+  }, [delete_message, activeMessageId, isSender, closeModal]);
+
+  // handle cediting
+  const handleEdit = useCallback(() => {
+    if (isSender) {
+      dispatch(closeMessageMenuModal());
+      const messageElement = document.getElementById(
+        `message-${activeMessageId}`
+      );
+
+      const messageText = messageElement
+        ? messageElement.querySelector(`#message-content-${activeMessageId}`)
+            .textContent
+        : "";
+
+      dispatch(
+        showEditMessageInput({
+          messageId: activeMessageId,
+          messageText: messageText,
+          isInThread: isInThread,
+        })
+      );
+      closeModal();
+    }
+  }, [isSender, activeMessageId, closeModal, dispatch, isInThread]);
 
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (event) => {
+      if (event.key.toLowerCase() === "c") {
+        handleCopy();
+      }
       if (event.key.toLowerCase() === "e") {
         handleEdit();
       }
@@ -50,7 +100,7 @@ const MessageMenu = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, closeModal, handleDelete]);
+  }, [isOpen, closeModal, handleDelete, handleEdit, handleCopy]);
 
   if (!isOpen || !position) return null;
 
@@ -68,30 +118,45 @@ const MessageMenu = () => {
           }}
         >
           <ul className={styles.list}>
-            <li className={styles.item} onClick={handleEdit}>
-              <span>Edit Message</span>
-              <span>E</span>
+            <li className={styles.item} onClick={handleCopy}>
+              <span>Copy Message</span>
+              <span>C</span>
             </li>
-            <li
-              className={`${styles.item} ${styles.delete_item}`}
-              onClick={handleDelete}
-            >
-              {delete_message.isPending ? (
-                <span className={styles.delete_loading}>
-                  <Spinner width={20} height={20} color="var(--error-color)" />
-                </span>
-              ) : (
-                <>
-                  <span>Delete Message</span>
-                  <span>Delete</span>
-                </>
-              )}
-            </li>
+            {isSender && (
+              <>
+                <li className={styles.item} onClick={handleEdit}>
+                  <span>Edit Message</span>
+                  <span>E</span>
+                </li>
+                <li
+                  className={`${styles.item} ${styles.delete_item}`}
+                  onClick={handleDelete}
+                >
+                  {delete_message.isPending ? (
+                    <span className={styles.delete_loading}>
+                      <Spinner
+                        width={20}
+                        height={20}
+                        color="var(--error-color)"
+                      />
+                    </span>
+                  ) : (
+                    <>
+                      <span>Delete Message</span>
+                      <span>Delete</span>
+                    </>
+                  )}
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
     </>
   );
+};
+MessageMenu.propTypes = {
+  isInThread: PropTypes.bool,
 };
 
 export default MessageMenu;

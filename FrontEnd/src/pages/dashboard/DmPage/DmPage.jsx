@@ -10,19 +10,30 @@ import Panel from "../../../components/Layout/Panel/Panel";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  getParentMessageByPageId,
+  getThreadPanelIdByPageId,
   getUserPanelIdByPageId,
+  isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
 } from "../../../utils/panelUtils";
-import { closeChatPanel, openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import {
+  closeChatPanel,
+  openThreadPanel,
+  openUserPanel,
+} from "../../../API/redux_toolkit/ui/chatPanelSlice";
+import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
+  const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
+    const isThreadPanel = isIdInOpenedThreadPanelItems(convers_id);
     if (isUserPanel) {
       dispatch(
         openUserPanel({
@@ -31,8 +42,17 @@ function DmPage() {
           page_id: convers_id,
         })
       );
+    } else if (isThreadPanel) {
+      dispatch(
+        openThreadPanel({
+          threadID: getThreadPanelIdByPageId(convers_id),
+          parentMessage: getParentMessageByPageId(convers_id),
+          type: "threadPanel",
+          page_id: convers_id,
+        })
+      );
     } else {
-      dispatch(closeChatPanel())
+      dispatch(closeChatPanel());
     }
   }, [convers_id, dispatch]);
 
@@ -61,7 +81,7 @@ function DmPage() {
       <div className={styles.page_content}>
         <UserNavbar />
         <UserCard />
-        <MessageInput />
+        {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
       </div>
       <Panel />
     </PageContent>

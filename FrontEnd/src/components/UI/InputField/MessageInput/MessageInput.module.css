@@ -88,7 +88,45 @@
 .right_icons,
 .left_icons {
   display: flex;
-  /* gap: 15px; */
+  gap: 10px;
+}
+
+.small_left_icons {
+  gap: 5px;
+}
+
+.tool_wrapper {
+  padding: 5px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.small_left_icons .tool_wrapper {
+  padding: 3px;
+
+}
+
+.tool_wrapper:hover {
+  background-color: var(--bg-white-hover);
+}
+
+.tool_icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: inherit;
+}
+
+.small_left_icons .tool_icon {
+  font-size: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .left_icons {
@@ -168,6 +206,7 @@
   padding: 0 8px;
   user-select: none;
   margin-bottom: 5px;
+  cursor: pointer;
 }
 
 .checkBox_text,
@@ -175,8 +214,47 @@
   color: var(--text-color-grey);
   font-size: 15px;
 }
+
 .checkBox_channelName {
   font-weight: bold;
 }
 
 /* thread checkbox */
+.right_btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.right_btns>button {
+  padding: 7px 14px;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  height: 33px;
+  width: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.right_btns>button span{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cancel_edit {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+}
+
+.cancel_edit:hover {
+  background-color: #00000021;
+}
+
+.save_edit {
+  border: 1px solid var(--green-color);
+  background-color: var(--green-color);
+  color: #fff;
+}

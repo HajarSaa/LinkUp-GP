@@ -9,7 +9,7 @@ import EmptyLayout from "./layouts/MainLayout/EmptyLayout";
 import BrowseChannels from "./pages/dashboard/BrowseChannels/BrowseChannels";
 import DmPage from "./pages/dashboard/DmPage/DmPage";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import ChannelPage from "./pages/dashboard/ChannelPage/ChannelPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -20,35 +20,14 @@ import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
 import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 import ProtectedLoading from "./components/UI/ProtectedLoading/ProtectedLoading";
 import Testing from "../Testing/Code/Testing";
-import socket from "./API/sockets/socketService";
+
 
 
 function App() {
   const [workspace, setWorkspace] = useState(null);
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
-  // testing sockets
 
-  useEffect(() => {
-    // Connect socket
-    socket.connect();
-
-    socket.on("connect", () => {
-      console.log("✅ Connected to socket server:", socket.id);
-    });
-
-    // Handle disconnection
-    socket.on("disconnect", () => {
-      console.log("❌ Disconnected from socket server");
-    });
-
-    // Clean up on unmount
-    // return () => {
-    //   socket.disconnect();
-    // };
-  }, []);
-
-  // testing sockets
 
   // Step 1: Save workspace
   const handleStep1Next = (createdWorkspace) => {

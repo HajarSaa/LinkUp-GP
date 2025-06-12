@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { BiSolidUser } from "react-icons/bi";
 import styles from "./ChatMessage.module.css";
 import { MdOutlineAddReaction } from "react-icons/md";
 import Reaction from "./Reaction";
@@ -11,7 +10,10 @@ import PropTypes from "prop-types";
 import MessageActions from "./MessageActions";
 import MessageThreads from "./MessageThreads";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
-import { findMemberById } from "../../../utils/workspaceUtils";
+import {
+  findMemberById,
+  findMemberByUserId,
+} from "../../../utils/workspaceUtils";
 import { formatTimeTo12Hour } from "../../../utils/formatedDate";
 import UserImage from "../../UI/User/UserImage";
 import { useParams } from "react-router-dom";
@@ -19,7 +21,11 @@ import MessageMenu from "../MessageMenu/MessageMenu";
 import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/messageMenu";
 import { calculateSafePosition } from "../../../utils/modalsUtils";
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({
+  message,
+  isInThreadPanel = false,
+  isThreadParent = false,
+}) => {
   const [emoji, setEmoji] = useState("");
   const add_react_ref = useRef(null);
   const [add_position, set_add_Position] = useState(null);
@@ -28,8 +34,19 @@ const MessageItem = ({ message }) => {
   const { id: page_id } = useParams();
   const { workspace } = useSelector((state) => state.workspace);
   const sender = findMemberById(workspace, message?.createdBy);
+  const loggin_user = findMemberByUserId(workspace);
+  const isMessageSender = sender._id === loggin_user._id;
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
+  const { messageId, isEditing } = useSelector((state) => state.editMessage);
+
+  const threadData = {
+    count: message?.threadCount,
+    participants: message?.threadParticipants,
+    id: message?._id,
+    lastRepliedAt: message?.lastRepliedAt,
+  };
+  const editingMessage = messageId === message._id;
 
   const handleEmojiSelect = (emoji) => {
     setEmoji((prev) => prev + emoji.native);
@@ -66,7 +83,12 @@ const MessageItem = ({ message }) => {
     const padding = 0;
     const position = calculateSafePosition(e, menuWidth, null, padding);
     dispatch(
-      openMessageMenuModal({ position: position, activeMessageId: message_id })
+      openMessageMenuModal({
+        position: position,
+        activeMessageId: message_id,
+        isSender: isMessageSender,
+        isInThread: isInThreadPanel,
+      })
     );
   };
 
@@ -85,7 +107,7 @@ const MessageItem = ({ message }) => {
       <div
         className={`${styles.message_container} ${
           activeMessageId === message._id && styles.active
-        }`}
+        } ${editingMessage && isEditing ? styles.editingMessage : ""}`}
         onMouseEnter={() => setMessageHover(true)}
         onMouseLeave={() => setMessageHover(false)}
         onContextMenu={(e) => {
@@ -106,8 +128,17 @@ const MessageItem = ({ message }) => {
                 </div>
                 <div className={styles.message_time}>{message_time}</div>
               </div>
-              <div className={styles.message_text}>{message.content}</div>
+              <div
+                className={styles.message_text}
+                id={`message-content-${message._id}`}
+              >
+                {message.content}
+                {message.edited && (
+                  <span className={styles.edited_label}>(edited)</span>
+                )}
+              </div>
             </div>
+            {/* Reactions */}
             {message.reactions && (
               <div className={styles.reactions}>
                 <Reaction reactions={message.reactions} />
@@ -122,7 +153,18 @@ const MessageItem = ({ message }) => {
             )}
           </div>
         </div>
-        <MessageActions message={message} messageHover={messageHover} />
+        <MessageActions
+          isThread={isInThreadPanel}
+          message={message}
+          messageHover={messageHover}
+          isThreadParent={isThreadParent}
+          threadData={threadData}
+          parentMessage={message}
+          isSender={isMessageSender}
+        />
+        {message?.threadCount !== 0 && !isInThreadPanel && (
+          <MessageThreads threadData={threadData} parentMessage={message} />
+        )}
       </div>
       <EmojiPicker position={add_position} onSelect={handleEmojiSelect} />
       <MessageMenu />
@@ -133,6 +175,8 @@ const MessageItem = ({ message }) => {
 MessageItem.propTypes = {
   isFirstMessage: PropTypes.bool,
   message: PropTypes.object,
+  isInThreadPanel: PropTypes.bool,
+  isThreadParent: PropTypes.bool,
 };
 
 export default MessageItem;

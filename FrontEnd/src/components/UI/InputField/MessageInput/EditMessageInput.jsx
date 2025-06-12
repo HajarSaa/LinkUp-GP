@@ -9,19 +9,22 @@ import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { RiQuoteText } from "react-icons/ri";
 import { IoCodeSlash } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
-import { IoSend } from "react-icons/io5";
-import { IoIosArrowDown } from "react-icons/io";
-import { useLocation, useParams } from "react-router-dom";
 import LowerToolbar from "./InputComponents/LowerToolbar";
-import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
+import { closeEditMessageInput } from "../../../../API/redux_toolkit/api_data/messages/editMessageSlice";
+import { useDispatch, useSelector } from "react-redux";
+import useUpdateMessage from "../../../../API/hooks/messages/useUpdateMessage";
+import Spinner from "../../Spinner/Spinner";
 
-const MessageInput = () => {
+const EditMessageInput = () => {
+  const { messageId, messageText } = useSelector((state) => state.editMessage);
+  const update_message = useUpdateMessage();
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
-  const location = useLocation();
-  const { id } = useParams();
-  const isChannel = location.pathname.includes("/channels");
-  const send_message = useSendMessage();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setMessage(messageText);
+  }, [messageText]);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -33,40 +36,42 @@ const MessageInput = () => {
     setMessage(e.target.value);
   };
 
-  const handleSend = () => {
-    if (!message.trim()) return;
-    const messageContent = {
-      content: message,
-    };
-    const type = isChannel ? "channel" : "conversation";
-    console.log("Type:", type, "ID:", id, "Message:", messageContent);
-    send_message.mutate(
+  const handleSave = async () => {
+    if (!message.trim() || message.trim() === messageText.trim()) {
+      dispatch(closeEditMessageInput());
+      return;
+    }
+    update_message.mutate(
       {
-        type,
-        id,
-        messageContent,
+        message_id: messageId,
+        content: { content: message },
       },
       {
         onSuccess: () => {
-          setMessage("");
-          const textarea = textareaRef.current;
-          textarea.style.height = "40px";
+          dispatch(closeEditMessageInput());
         },
       }
     );
   };
 
+  const handleCancel = async () => {
+    console.log(`cancel this edit`);
+    dispatch(closeEditMessageInput());
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSend();
+      handleSave();
     }
   };
 
   const handlInputHeight = () => {
     const textarea = textareaRef.current;
+    textarea.style.height = "auto"; // Reset height
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
+
   return (
     <div className={styles.messageInputContainer}>
       <div className={styles.input_field}>
@@ -90,23 +95,28 @@ const MessageInput = () => {
         />
 
         <div className={styles.lower_row_icons}>
-          <LowerToolbar/>
-          <div
-            className={`${styles.right_icons} ${
-              message.trim() && styles.activeSend
-            }`}
-          >
-            <div
-              className={`${styles.sendBtns} ${styles.sendBtns_send}`}
-              onClick={handleSend}
+          <LowerToolbar isEditing={true} />
+          <div className={styles.right_btns}>
+            <button
+              type="button"
+              className={styles.cancel_edit}
+              onClick={handleCancel}
             >
-              <IoSend />
-            </div>
-            <div className={styles.box11}></div>
-
-            <div className={`${styles.sendBtns} ${styles.sendBtns_dropdown}`}>
-              <IoIosArrowDown />
-            </div>
+              <span>cancel</span>
+            </button>
+            <button
+              type="button"
+              className={styles.save_edit}
+              onClick={handleSave}
+            >
+              <span>
+                {update_message.isPending ? (
+                  <Spinner width={20} height={20} color="var(--green-color)" />
+                ) : (
+                  "save"
+                )}
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -125,7 +135,7 @@ const MessageInput = () => {
   );
 };
 
-export default MessageInput;
+export default EditMessageInput;
 
 const upperIcons = [
   { icon: HiMiniBold },

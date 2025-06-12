@@ -16,7 +16,8 @@
   color: #1d1c1d;
 }
 
-.message_container:hover,.active {
+.message_container:hover,
+.active {
   background-color: #f8f8f8;
 }
 
@@ -188,11 +189,13 @@
 /*Start thread Part */
 .thread_user {
   width: 24px;
-  position: relative;
   height: 24px;
-  color: var(--active-color);
-  background-color: var(--secondary-color);
+  background-color: #000;
   border-radius: var(--border-radius-small);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .thread_users {
@@ -289,4 +292,16 @@
 .highlight {
   background-color: #fff3cd;
   transition: background-color 0.6s ease;
+}
+
+
+.edited_label {
+  margin-left: 5px;
+  font-weight: bold;
+  color: var(--text-color-grey);
+  font-size: 13px;
+}
+
+.editingMessage {
+  background-color: var(--active-color);
 }
