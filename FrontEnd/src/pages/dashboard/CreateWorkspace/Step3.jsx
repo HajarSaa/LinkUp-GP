@@ -1,20 +1,51 @@
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { IoIosLink } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
 import SkipConfirmationModal from "../../../components/UI/Modal/SkipConfirmationModal/SkipConfirmationModal";
+import {
+  setEmails,
+  clearCreationSteps,
+} from "../../../API/redux_toolkit/ui/creationsStep";
+import { updateCreationDataField } from "../../../utils/workspaceUtils";
 
-function Step3({ onNext, workspace }) {
-  const [email, setEmail] = useState("");
+function Step3() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const workspace = useSelector((state) => {
+    const w = state.createWorkspace.workspace;
+    return w?.workspace ?? w ?? null;
+  });
+  const savedEmails = useSelector((state) => state.createWorkspace.emails);
+
+  // ✅ عرض الإيميلات كـ نص مفصول بفواصل
+  const [emailText, setEmailText] = useState(
+    Array.isArray(savedEmails) ? savedEmails.join(", ") : ""
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const isButtonDisabled = email.trim() === "";
+  const isButtonDisabled = emailText.trim() === "";
+
+  // ✅ تحويل النص إلى array وحفظه
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setEmailText(value);
+
+    const emailArray = value
+      .split(",")
+      .map((email) => email.trim())
+      .filter((email) => email.length > 0);
+
+    dispatch(setEmails(emailArray));
+    updateCreationDataField("emails", emailArray);
+  };
 
   const handleNextClick = () => {
-    if (!isButtonDisabled && onNext) {
-      onNext(email);
-    }
+    dispatch(clearCreationSteps());
+    navigate("/"); // ✅ إنهاء وإنقال
   };
 
   const handleSkipClick = () => {
@@ -27,7 +58,10 @@ function Step3({ onNext, workspace }) {
 
   const handleModalConfirm = () => {
     setIsModalOpen(false);
-    onNext([]);
+    dispatch(setEmails([]));
+    updateCreationDataField("emails", []);
+    dispatch(clearCreationSteps());
+    navigate("/");
   };
 
   if (!workspace) {
@@ -51,9 +85,9 @@ function Step3({ onNext, workspace }) {
 
           <textarea
             className={styles.textarea}
-            placeholder="Ex. User1@gmail.com, User2@gmail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Ex. user1@gmail.com, user2@gmail.com"
+            value={emailText}
+            onChange={handleInputChange}
           />
 
           <p className={styles.subheading}>
@@ -78,7 +112,7 @@ function Step3({ onNext, workspace }) {
             </button>
 
             <button
-              type="skipButton"
+              type="button"
               onClick={handleSkipClick}
               className={styles.skipButton}
             >
