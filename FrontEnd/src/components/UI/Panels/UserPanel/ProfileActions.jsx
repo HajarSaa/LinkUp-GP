@@ -5,9 +5,16 @@ import MoreDropdown from "../../Dropdown/MoreDropdown";
 import { FiHeadphones } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import Button from "../../Buttons/Button/Button";
-// import { IoIosArrowDown } from "react-icons/io";
+// import { useDispatch, useSelector } from "react-redux";
+// import { openSetStatusModal } from "../../../../API/redux_toolkit/modals/userProfile/setStatusSlice";
 
 const ProfileActions = () => {
+  // const userProfile = useSelector((state) => state.userProfile.data);
+  // const dispatch = useDispatch();
+
+  // function handleOpen() {
+  //   dispatch(openSetStatusModal(userProfile));
+  // }
   const moreMenuItems = [
     { label: "Copy display name: @user" },
     { label: "Share contact" },
@@ -22,17 +29,19 @@ const ProfileActions = () => {
   ];
   return (
     <div className={styles.profileActions}>
-      <Button className={styles.button} icon={<LuMessageCircle />}>
-        Message
-      </Button>
+      {/* {userProfile?.isMe ? (
+        <button className={styles.button} onClick={handleOpen}>
+          Set Status
+        </button>
+      ) : (
+        <> */}
+          <Button className={styles.button} icon={<LuMessageCircle />}>
+            Message
+          </Button>
 
-      <IconDropdown icon={<FiHeadphones />} label="Huddle" items={items}>
-        {/* <IoIosArrowDown /> */}
-      </IconDropdown>
-      {/* <Button className={styles.button} icon={<HiOutlineUserAdd />}>
-        VIP
-      </Button> */}
-
+          <IconDropdown icon={<FiHeadphones />} label="Huddle" items={items} />
+        {/* </>
+      )} */}
       <MoreDropdown items={moreMenuItems} />
     </div>
   );

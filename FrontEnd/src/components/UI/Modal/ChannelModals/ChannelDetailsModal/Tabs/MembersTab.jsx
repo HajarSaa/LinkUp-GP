@@ -58,7 +58,7 @@ function MembersTab({ channelData }) {
           </div>
           <div className={styles.memberName}>
             <span>{`${member.userName} ${member.isMe ? "(You)" : ""}`}</span>
-            <UserStatus status={member.status} />
+            <UserStatus userId={member.user} />
           </div>
         </div>
       ))}

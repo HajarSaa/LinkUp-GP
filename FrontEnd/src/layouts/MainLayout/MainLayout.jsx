@@ -9,13 +9,15 @@ import useCurrentWorkspace from "../../API/hooks/workspace/useCurrentWorkspace";
 import { useSelector } from "react-redux";
 import InviteChannelModal from "../../components/UI/Modal/ChannelModals/InviteChannelModal/InviteChannelModal";
 import SetStatusModal from "../../components/UI/Modal/SetStatusModal/SetStatus";
-
+import useSocketConnection from "../../API/sockets/useSocketConnection"
 function MainLayout() {
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
 
   useCurrentWorkspace();
   const { workspace } = useSelector((state) => state.workspace);
+
+    useSocketConnection();
   return (
     <div className={styles.main_layout}>
       <NavBar />

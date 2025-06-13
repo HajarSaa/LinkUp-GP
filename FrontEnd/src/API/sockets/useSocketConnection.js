@@ -12,9 +12,7 @@ const useSocketConnection = () => {
   useEffect(() => {
     if (!currentUser || !workspace?._id) return;
 
-    if (!socket.connected) {
-      socket.connect();
-    }
+    socket.connect();
 
     socket.emit(
       "userConnected",
@@ -30,11 +28,9 @@ const useSocketConnection = () => {
     socket.on("presenceUpdate", ({ userIds }) => {
       dispatch(setOnlineUsers(userIds));
     });
-
+    
     return () => {
-      if (socket.connected) {
-        socket.disconnect();
-      }
+      socket.disconnect();
     };
   }, [currentUser, workspace]);
 };

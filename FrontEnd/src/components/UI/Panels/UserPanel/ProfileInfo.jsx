@@ -6,6 +6,8 @@ import UserStatus from "../../User/UserStatus";
 import LocalTime from "../../User/LocalTime";
 const ProfileInfo = () => {
   const userProfile = useSelector((state) => state.userProfile.data);
+  const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
+  const userStatus = onlineUsers.includes(userProfile?.user) ? "online" : "offline";
   const dispatch = useDispatch();
 
   function handleOpenEditUserProfile(focusField = "fullName") {
@@ -13,7 +15,6 @@ const ProfileInfo = () => {
       openEditUserProfile({ data: userProfile, focusField: focusField })
     );
   }
-
 
   return (
     <div className={styles.profileInfo}>
@@ -51,8 +52,8 @@ const ProfileInfo = () => {
           )}
         </div>
         <p className={styles.status}>
-          <UserStatus status={userProfile?.status} />
-          <span> {userProfile?.status}</span>
+          <UserStatus userId={userProfile?.user} />
+          <span> {userStatus}</span>
         </p>
         <div className={styles.local}>
           <LuClock3 className={styles.clockIcon} />
