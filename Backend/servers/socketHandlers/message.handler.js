@@ -7,6 +7,7 @@ import UserProfile from "../../models/userProfile.model.js";
 import AppError from "../../utils/appError.js";
 import { socketAsync } from "../../utils/socketAsyncWrapper.js";
 import { userConnections } from "./connection.handler.js";
+import { validateMessageInput } from "../../utils/validateMessageInput.js";
 
 const MAX_MESSAGE_LENGTH = 4000;
 const EDIT_WINDOW_MS = 15 * 60 * 1000;
@@ -17,14 +18,14 @@ export default function messageHandler(socket, io) {
     "sendMessage",
     socketAsync(async (data, callback) => {
       const now = Date.now();
-      const lastMessageTime = lastMessageTimestamps.get(socket.id) || 0;
+      const lastMessageTime = lastMessageTimestamps.get(socket.userId) || 0;
       if (now - lastMessageTime < 1000) {
         throw new AppError(
           "Message rate limit exceeded (1 message per second)",
           429
         );
       }
-      lastMessageTimestamps.set(socket.id, now);
+      lastMessageTimestamps.set(socket.userId, now);
 
       const {
         content,
@@ -33,22 +34,30 @@ export default function messageHandler(socket, io) {
         channelId,
         tempId,
         parentMessageId,
-        parentType,
+        fileIds,
       } = data;
-      if (!content?.trim())
-        throw new AppError("Message content cannot be empty", 400);
-      if (!mongoose.Types.ObjectId.isValid(senderId))
-        throw new AppError("Invalid sender ID", 400);
-      if (tempId && typeof tempId !== "string")
-        throw new AppError("Invalid tempId format", 400);
+      const sanitizedFileIds = Array.isArray(fileIds) ? fileIds : [];
+
+      validateMessageInput({
+        content,
+        senderId,
+        tempId,
+        conversationId,
+        channelId,
+        fileIds: sanitizedFileIds,
+      });
 
       let message, room, workspaceId, recipientId;
       const messagePayload = {
-        content,
+        content: content?.trim() || "",
         createdBy: senderId,
         readBy: [senderId],
         metadata: { tempId },
       };
+
+      if (fileIds?.length) {
+        messagePayload.media = fileIds;
+      }
 
       if (conversationId) {
         const conversation = await Conversation.findById(conversationId)
@@ -72,7 +81,6 @@ export default function messageHandler(socket, io) {
         messagePayload.conversationId = conversationId;
         if (parentMessageId) {
           messagePayload.parentMessageId = parentMessageId;
-          messagePayload.parentType = parentType || "Message";
         }
 
         message = await Message.create(messagePayload);
@@ -101,13 +109,10 @@ export default function messageHandler(socket, io) {
         messagePayload.channelId = channelId;
         if (parentMessageId) {
           messagePayload.parentMessageId = parentMessageId;
-          messagePayload.parentType = parentType || "Message";
         }
 
         message = await Message.create(messagePayload);
         room = `channel:${channelId}`;
-      } else {
-        throw new AppError("conversationId or channelId required", 400);
       }
 
       const messageData = message.toObject();
@@ -133,17 +138,15 @@ export default function messageHandler(socket, io) {
       if (message.parentMessageId) {
         const involvedUserIds = new Set();
 
-        if (message.parentType === "File") {
-          const parentFile = await File.findById(
-            message.parentMessageId
-          ).select("uploadedBy");
-          if (parentFile) involvedUserIds.add(parentFile.uploadedBy.toString());
-        } else {
-          const parentMessage = await Message.findById(
-            message.parentMessageId
-          ).select("createdBy");
-          if (parentMessage)
-            involvedUserIds.add(parentMessage.createdBy.toString());
+        const [parentMessage, parentFile] = await Promise.all([
+          Message.findById(message.parentMessageId).select("createdBy"),
+          File.findById(message.parentMessageId).select("uploadedBy"),
+        ]);
+
+        if (parentMessage) {
+          involvedUserIds.add(parentMessage.createdBy.toString());
+        } else if (parentFile) {
+          involvedUserIds.add(parentFile.uploadedBy.toString());
         }
 
         const threadReplies = await Message.find({
@@ -154,9 +157,6 @@ export default function messageHandler(socket, io) {
         );
 
         involvedUserIds.delete(senderId.toString());
-        const senderProfile = await UserProfile.findOne({
-          user: senderId,
-        }).lean();
 
         involvedUserIds.forEach((userId) => {
           const recipientSockets = userConnections.get(userId);
