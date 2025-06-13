@@ -6,27 +6,6 @@ export const getWorkLabel = (name) => {
     .join("");
 };
 
-export const getRandomColor = () => {
-  return `#${Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, "0")}`;
-};
-
-export const getRandomColorFromPalette = (colorPalette = null) => {
-  const defaultPalette = [
-    "#FF5733",
-    "#33FF57",
-    "#3357FF",
-    "#FF33A6",
-    "#FF9633",
-    "#33FFF6",
-    "#8D33FF",
-    "#FFDB33",
-  ];
-
-  const palette = colorPalette || defaultPalette;
-  return palette[Math.floor(Math.random() * palette.length)];
-};
 
 // find member by Id
 export const findMemberById = (workspace, memberId) => {
@@ -125,3 +104,15 @@ export const getMembersData = (channel, workspace) => {
   return memebersArray.sort((a, b) => (b.isMe === true) - (a.isMe === true));
 };
 
+//====================(updateCreationDataField)========
+export function updateCreationDataField(key, value) {
+  const existing = JSON.parse(localStorage.getItem("creation_data")) || {};
+  const updated = {
+    ...existing,
+    [key]: {
+      ...existing[key],
+      ...value,
+    },
+  };
+  localStorage.setItem("creation_data", JSON.stringify(updated));
+}

@@ -20,7 +20,7 @@
 }
 
 .heading {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 700;
   margin-bottom: 20px;
   color: #1d1c1d;
@@ -104,19 +104,14 @@
   }
 
   .profilePhotoPlaceholder {
-    width: 25%;
-    height: 100%;
-    background: var(--secondary-color);
+    width: 150px;
+    height: 150px;
+    background: #000;
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .photo {
-      color: var(--active-color);
-      font-size: 150px;
-      padding: 10px 0;
-    }
+    overflow: hidden;
   }
 }
 
