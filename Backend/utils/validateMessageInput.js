@@ -1,13 +1,13 @@
-const AppError = require("../utils/appError");
+import AppError from "./appError.js";
 
-const validateMessageInput = ({
+export function validateMessageInput({
   content,
   senderId,
   conversationId,
   channelId,
   tempId,
   fileIds,
-}) => {
+}) {
   if (!senderId) {
     throw new AppError("Sender ID is required", 400);
   }
@@ -33,6 +33,4 @@ const validateMessageInput = ({
       400
     );
   }
-};
-
-module.exports = validateMessageInput;
+}
