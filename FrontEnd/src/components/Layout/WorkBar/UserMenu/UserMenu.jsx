@@ -45,7 +45,8 @@ function UserMenu() {
           <span>{loggin_user?.userName}</span>
           <div className={styles.user_status}>
             <span>{userStatus}</span>
-            <UserStatus userId={loggin_user?.user} />
+            {/* <UserStatus status={loggin_user?.user} /> */}
+            <UserStatus status={loggin_user?.status} />
           </div>
         </div>
       </div>
