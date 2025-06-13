@@ -10,6 +10,7 @@ import {
   clearCreationSteps,
 } from "../../../API/redux_toolkit/ui/creationsStep";
 import { updateCreationDataField } from "../../../utils/workspaceUtils";
+import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
 
 function Step3() {
   const dispatch = useDispatch();
@@ -20,8 +21,6 @@ function Step3() {
     return w?.workspace ?? w ?? null;
   });
   const savedEmails = useSelector((state) => state.createWorkspace.emails);
-
-  // ✅ عرض الإيميلات كـ نص مفصول بفواصل
   const [emailText, setEmailText] = useState(
     Array.isArray(savedEmails) ? savedEmails.join(", ") : ""
   );
@@ -29,7 +28,7 @@ function Step3() {
 
   const isButtonDisabled = emailText.trim() === "";
 
-  // ✅ تحويل النص إلى array وحفظه
+  //   تحويل النص إلى array وحفظه
   const handleInputChange = (e) => {
     const value = e.target.value;
     setEmailText(value);
@@ -44,8 +43,12 @@ function Step3() {
   };
 
   const handleNextClick = () => {
+    if (localStorage.getItem("selectedWorkspaceId"))
+      localStorage.removeItem("selectedWorkspaceId");
+    dispatch(clearWorkspace());
+    localStorage.setItem("selectedWorkspaceId", workspace.id);
     dispatch(clearCreationSteps());
-    navigate("/"); // ✅ إنهاء وإنقال
+    navigate("/"); //   إنهاء وإنقال
   };
 
   const handleSkipClick = () => {
@@ -60,8 +63,7 @@ function Step3() {
     setIsModalOpen(false);
     dispatch(setEmails([]));
     updateCreationDataField("emails", []);
-    dispatch(clearCreationSteps());
-    navigate("/");
+    handleNextClick();
   };
 
   if (!workspace) {

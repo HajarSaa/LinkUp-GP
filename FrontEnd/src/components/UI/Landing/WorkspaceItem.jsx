@@ -1,7 +1,4 @@
-import {
-  getWorkLabel,
-  getRandomColorFromPalette,
-} from "../../../utils/workspaceUtils";
+import { getWorkLabel } from "../../../utils/workspaceUtils";
 import { BiSolidUser } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 import styles from "./Landing.module.css";
@@ -12,7 +9,7 @@ import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSli
 
 function WorkspaceItem({ workspace }) {
   const work_title = getWorkLabel(workspace?.name || "workspace name");
-  const work_background = getRandomColorFromPalette();
+  const work_background = "#888";
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
