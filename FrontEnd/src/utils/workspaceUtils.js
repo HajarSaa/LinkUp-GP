@@ -124,3 +124,4 @@ export const getMembersData = (channel, workspace) => {
 
   return memebersArray.sort((a, b) => (b.isMe === true) - (a.isMe === true));
 };
+

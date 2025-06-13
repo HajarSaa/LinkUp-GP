@@ -1,8 +1,8 @@
 import styles from "./DmsList.module.css";
-import { BiSolidUser } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import UserImage from "../../../UI/User/UserImage";
 
 const DmsListItem = ({ dmData, isActive }) => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const DmsListItem = ({ dmData, isActive }) => {
       onClick={handleClick}
     >
       <div className={styles.left_side}>
-        <BiSolidUser />
+        <UserImage src={dmData.member.photo} alt={'conv member'}/>
       </div>
       <div className={styles.user_name}>
         <span>{dmData.member.userName}</span>

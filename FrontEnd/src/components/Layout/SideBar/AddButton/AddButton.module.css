@@ -1,12 +1,13 @@
 .add_button {
   display: flex;
   gap: var(--gap-8);
-  /* align-items: center; */
-  padding: 6px 8px;
+  align-items: center;
+  padding: 2px 5px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.2s ease;
   color: var(--text-white);
+  height: 35px;
 }
 
 .add_button:hover {
@@ -20,8 +21,8 @@
   background-color: rgb(38 105 173);
 }
 
-.add_button_text{
-      white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+.add_button_text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

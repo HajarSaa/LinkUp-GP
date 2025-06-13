@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import styles from "./UserDM.module.css";
 import Button from "../Buttons/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,8 +14,8 @@ import { openUploadUserImageModal } from "../../../API/redux_toolkit/modals/user
 const UserCard = () => {
   const dispatch = useDispatch();
   const receiver = useSelector((state) => state.convers.chatMate);
+  // const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
   const { id } = useParams();
-
   function handelOpenUserPanel() {
     dispatch(
       openUserPanel({
@@ -31,7 +32,6 @@ const UserCard = () => {
   function handleOpenUploadUserPhoto() {
     dispatch(openUploadUserImageModal(receiver));
   }
-
   return (
     <>
       <div className={styles.UserCard}>
@@ -42,7 +42,7 @@ const UserCard = () => {
           <div className={styles.info}>
             <div className={styles.user} onClick={handelOpenUserPanel}>
               <span className={styles.name}>{receiver.userName}</span>
-              <UserStatus status={receiver?.status} />
+              <UserStatus userId={receiver?.user} />
             </div>
             {receiver?.job && (
               <span className={styles.job}>{receiver?.job}</span>

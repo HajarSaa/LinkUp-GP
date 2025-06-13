@@ -16,6 +16,7 @@ function Step2({ onNext, workspace }) {
   const dispatch = useDispatch();
   const handleNextClick = async () => {
     if (!workspace || !workspace._id) {
+      console.log(workspace);
       setError("Workspace ID is missing.");
       return;
     }

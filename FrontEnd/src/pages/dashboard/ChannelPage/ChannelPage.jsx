@@ -11,20 +11,26 @@ import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMess
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
+  getParentMessageByPageId,
+  getThreadPanelIdByPageId,
   getUserPanelIdByPageId,
+  isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
 } from "../../../utils/panelUtils";
 import {
   closeChatPanel,
+  openThreadPanel,
   openUserPanel,
 } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { isAChannelMember } from "../../../utils/channelUtils";
 import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth";
 import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
+import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
   const { workspace } = useSelector((state) => state.workspace);
+  const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: channel_id } = useParams();
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
@@ -35,11 +41,21 @@ function ChannelPage() {
 
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
+    const isThreadPanel = isIdInOpenedThreadPanelItems(channel_id);
     if (isUserPanel) {
       dispatch(
         openUserPanel({
           type: "userPanel",
           panel_id: getUserPanelIdByPageId(channel_id),
+          page_id: channel_id,
+        })
+      );
+    } else if (isThreadPanel) {
+      dispatch(
+        openThreadPanel({
+          threadID: getThreadPanelIdByPageId(channel_id),
+          parentMessage: getParentMessageByPageId(channel_id),
+          type: "threadPanel",
           page_id: channel_id,
         })
       );
@@ -83,7 +99,11 @@ function ChannelPage() {
             <Header />
             <ChannelBody />
             {isMember ? (
-              <MessageInput channelName={channel?.name} />
+              isEditing && !isInThread ? (
+                <EditMessageInput />
+              ) : (
+                <MessageInput channelName={channel?.name} />
+              )
             ) : (
               <ChannelAuth channel={channel} />
             )}

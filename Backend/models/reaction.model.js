@@ -8,18 +8,12 @@ const reactionSchema = new mongoose.Schema(
     },
     messageId: {
       type: mongoose.Schema.ObjectId,
-      refPath: "messageType",
-    },
-    messageType: {
-      type: String,
-      enum: ["Message", "File"],
+      ref: "Message",
     },
     member: {
       type: mongoose.Schema.ObjectId,
       ref: "UserProfile",
     },
-    // createdAt
-    // updatedAt
   },
   { timestamps: true }
 );

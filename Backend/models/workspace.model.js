@@ -86,7 +86,6 @@ workspaceSchema.methods.createMemberConversations = async function () {
 };
 
 workspaceSchema.methods.deleteConversationsAndChannels = async function () {
-  console.log("deleteConversationsAndChannels is called");
   const workspaceId = this._id;
 
   // Find all conversations associated with the workspace
@@ -94,7 +93,6 @@ workspaceSchema.methods.deleteConversationsAndChannels = async function () {
 
   // Loop over each conversation and delete it individually to trigger pre-hooks
   for (const conversation of conversations) {
-    console.log("Deleting conversation:", conversation._id);
     await Conversation.findByIdAndDelete(conversation._id); // This will trigger the pre("findOneAndDelete") hook
   }
 
@@ -103,7 +101,6 @@ workspaceSchema.methods.deleteConversationsAndChannels = async function () {
 
   // Loop over each channel and delete it individually to trigger pre-hooks
   for (const channel of channels) {
-    console.log("Deleting channel:", channel._id);
     await Channel.findByIdAndDelete(channel._id); // This will trigger the pre("findOneAndDelete") hook
   }
 };

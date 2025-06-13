@@ -37,6 +37,32 @@ export const getChannelMessages = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getChannelMedia = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+  // Check if the channel exists
+  const channel = await Channel.findById(channelId);
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Get all media in channel that are attached to messages
+  const media = await File.find({
+    channelId,
+    attachedToMessage: { $ne: null },
+  });
+  if (media.length === 0) {
+    return next(new AppError("No media found for this channel", 404));
+  }
+
+  // send response
+  res.status(200).json({
+    status: "success",
+    data: {
+      media,
+    },
+  });
+});
+
 export const getConversationMessages = catchAsync(async (req, res, next) => {
   const conversationId = req.params.id;
 
@@ -62,6 +88,32 @@ export const getConversationMessages = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       messages,
+    },
+  });
+});
+
+export const getConversationMedia = catchAsync(async (req, res, next) => {
+  const conversationId = req.params.id;
+  // Check if the channel exists
+  const conversation = await Conversation.findById(conversationId);
+  if (!conversation) {
+    return next(new AppError("No conversation found with that ID", 404));
+  }
+
+  // Get all media in conversation that are attached to messages
+  const media = await File.find({
+    conversationId,
+    attachedToMessage: { $ne: null },
+  });
+  if (media.length === 0) {
+    return next(new AppError("No media found for this conversation", 404));
+  }
+
+  // send response
+  res.status(200).json({
+    status: "success",
+    data: {
+      media,
     },
   });
 });
@@ -114,8 +166,25 @@ export const getMessage = catchAsync(async (req, res, next) => {
 });
 
 export const createMessage = catchAsync(async (req, res, next) => {
+  const { content, attachmentIds = [] } = req.body;
+
+  // Validate that either content or attachments exist
+  if (!content && attachmentIds.length === 0) {
+    return next(new AppError("Message must have content or attachments", 400));
+  }
+
+  // Determine message type
+  let messageType = "text";
+  if (attachmentIds.length > 0 && content) {
+    messageType = "mixed";
+  } else if (attachmentIds.length > 0 && !content) {
+    messageType = "file";
+  }
+
   // Attach data into request body
   req.body.createdBy = req.userProfile.id;
+  req.body.messageType = messageType;
+  req.body.attachments = attachmentIds;
 
   // Attach channelId or conversationId from request parameters
   if (req.params.channelId) {
@@ -154,26 +223,55 @@ export const createMessage = catchAsync(async (req, res, next) => {
 
   // If this message is a reply (has a parentMessageId)
   if (req.body.parentMessageId) {
-    // Check if the parent message is a message
+    // Check if the parent message exists
     const parentMessage = await Message.findById(req.body.parentMessageId);
-    if (parentMessage) req.body.parentType = "Message";
-    // Check if the parent message is a file
-    else if (await File.findById(req.body.parentMessageId))
-      req.body.parentType = "File";
-    // If neither exists, retyrn an error
-    else {
-      return next(
-        new AppError("No parent message or file found with that ID", 404)
-      );
+    if (!parentMessage) {
+      return next(new AppError("No parent message found with that ID", 404));
     }
 
-    // Increment threadCount and add user to threadParticipants
+    // Increment threadCount and add user to threadParticipants if not already present and if the user is already a participant make him the last in threadParticipants
+    await Message.findByIdAndUpdate(req.body.parentMessageId, [
+      {
+        $set: {
+          threadCount: { $add: ["$threadCount", 1] },
+          threadParticipants: {
+            $cond: [
+              { $in: [req.userProfile.id, "$threadParticipants"] },
+              {
+                $concatArrays: [
+                  {
+                    $filter: {
+                      input: "$threadParticipants",
+                      cond: { $ne: ["$$this", req.userProfile.id] },
+                    },
+                  },
+                  [req.userProfile.id],
+                ],
+              },
+              { $concatArrays: ["$threadParticipants", [req.userProfile.id]] },
+            ],
+          },
+        },
+      },
+    ]);
+
+    // Update last repliedAt
     await Message.findByIdAndUpdate(req.body.parentMessageId, {
-      $inc: { threadCount: 1 },
-      $addToSet: { threadParticipants: req.userProfile.id },
+      lastRepliedAt: new Date(),
     });
   }
   const message = await Message.create(req.body);
+
+  // Update attached files
+  if (attachmentIds.length > 0) {
+    await File.updateMany(
+      { _id: { $in: attachmentIds } },
+      {
+        attachedToMessage: message._id,
+        status: "attachment",
+      }
+    );
+  }
 
   res.status(201).json({
     status: "success",
@@ -245,6 +343,12 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
         $pull: { threadParticipants: message.createdBy },
       });
     }
+  }
+
+  // Check if the message has any attachments
+  if (message.attachments && message.attachments.length > 0) {
+    // delete the attachments
+    await File.deleteMany({ _id: { $in: message.attachments } });
   }
 
   // Delete the message

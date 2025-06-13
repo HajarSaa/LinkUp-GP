@@ -9,7 +9,7 @@ import EmptyLayout from "./layouts/MainLayout/EmptyLayout";
 import BrowseChannels from "./pages/dashboard/BrowseChannels/BrowseChannels";
 import DmPage from "./pages/dashboard/DmPage/DmPage";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {useState } from "react";
 import ChannelPage from "./pages/dashboard/ChannelPage/ChannelPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -21,10 +21,13 @@ import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 import ProtectedLoading from "./components/UI/ProtectedLoading/ProtectedLoading";
 import Testing from "../Testing/Code/Testing";
 
-function App() {
-  const [workspace, setWorkspace] = useState(null);
-  const [userName, setUserName] = useState("");
-  const navigate = useNavigate();
+import OnlineUsersList from "./API/sockets/socketTesting";
+// ...
+  function App() {
+    const [workspace, setWorkspace] = useState(null);
+    const [userName, setUserName] = useState("");
+    const navigate = useNavigate();
+
 
   // Step 1: Save workspace
   const handleStep1Next = (createdWorkspace) => {
@@ -47,6 +50,8 @@ function App() {
     });
     navigate("/");
   };
+
+
   return (
     <div className="app__body">
       <Routes>
@@ -85,6 +90,8 @@ function App() {
           </Route>
         </Route>
       </Routes>
+{/* <OnlineUsersList /> */}
+
     </div>
   );
 }

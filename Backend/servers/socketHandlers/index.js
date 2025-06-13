@@ -5,6 +5,7 @@ import messageHandler from "./message.handler.js";
 import typingHandler from "./typing.handler.js";
 import readReceiptHandler from "./readReceipt.handler.js";
 import pinningHandler from "./pinning.handler.js";
+import laterItemHandler from "./later.handler.js";
 import historyHandler from "./history.handler.js";
 
 export const initializeSocketHandlers = (socket, io) => {
@@ -15,5 +16,6 @@ export const initializeSocketHandlers = (socket, io) => {
   typingHandler(socket, io);
   readReceiptHandler(socket, io);
   pinningHandler(socket, io);
+  laterItemHandler(socket, io);
   historyHandler(socket, io);
 };

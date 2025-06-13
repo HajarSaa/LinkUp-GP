@@ -2,7 +2,7 @@ import { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import styles from "./ChannelOptionModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { closeMenu } from "../../../../../API/redux_toolkit/chat/channel/channelMenuSlice";
+import { closeMenu } from "../../../../../API/redux_toolkit/modals/channel/channelMenuSlice";
 import { openChannelDetails } from "../../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import { openNotificationsModal } from "../../../../../API/redux_toolkit/modals/notificationsModalSlice";
 import Overlay from "../Overlay/Overlay";

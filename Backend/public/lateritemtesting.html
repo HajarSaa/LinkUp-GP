@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Later Items Testing</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 1rem;
+      }
+      .btn {
+        margin: 0.5rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        border: 1px solid #ccc;
+      }
+      input {
+        margin: 0.25rem;
+        padding: 0.4rem;
+      }
+      #toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: #fff;
+        padding: 1rem;
+        border-radius: 6px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>🧪 Test Save for Later</h2>
+    <div>
+      <label>Item ID: <input id="itemId" /></label>
+      <label
+        >Type:
+        <select id="itemType">
+          <option value="Message">Message</option>
+          <option value="File">File</option>
+        </select>
+      </label>
+    </div>
+
+    <button class="btn" onclick="toggleSave()">🔄 Toggle Save</button>
+    <button class="btn" onclick="markCompleted()">✅ Mark Completed</button>
+    <button class="btn" onclick="markInProgress()">🔁 Mark In Progress</button>
+    <button class="btn" onclick="setReminder()">⏰ Set Reminder (+5min)</button>
+    <button class="btn" onclick="getAll()">📥 Get All Later Items</button>
+    <button class="btn" onclick="getInProgress()">🕓 Get In Progress</button>
+    <button class="btn" onclick="getCompleted()">✅ Get Completed</button>
+
+    <pre id="output"></pre>
+    <div id="toast"></div>
+
+    <script>
+      const socket = io("http://localhost:5000", {
+        withCredentials: true,
+      });
+
+      const output = document.getElementById("output");
+      const toast = document.getElementById("toast");
+
+      const getInputs = () => {
+        return {
+          itemId: document.getElementById("itemId").value.trim(),
+          itemType: document.getElementById("itemType").value,
+        };
+      };
+
+      const show = (label, data) => {
+        output.textContent = `${label}:\n` + JSON.stringify(data, null, 2);
+      };
+
+      function toggleSave() {
+        const { itemId, itemType } = getInputs();
+        socket.emit("toggleSaveForLater", { itemId, itemType }, (res) => {
+          show("Toggle Save", res);
+        });
+      }
+
+      function markCompleted() {
+        const { itemId, itemType } = getInputs();
+        socket.emit(
+          "markLaterItemStatus",
+          { itemId, itemType, status: "completed" },
+          (res) => show("Mark Completed", res)
+        );
+      }
+
+      function markInProgress() {
+        const { itemId, itemType } = getInputs();
+        socket.emit(
+          "markLaterItemStatus",
+          { itemId, itemType, status: "in-progress" },
+          (res) => show("Mark In Progress", res)
+        );
+      }
+
+      function setReminder() {
+        const { itemId, itemType } = getInputs();
+        const reminderAt = new Date(Date.now() + 5 * 60 * 1000); // +5 min
+        socket.emit(
+          "setLaterReminder",
+          { itemId, itemType, reminderAt },
+          (res) => show("Set Reminder", res)
+        );
+      }
+
+      function getAll() {
+        socket.emit("getLaterItems", {}, (res) => show("All Later Items", res));
+      }
+
+      function getInProgress() {
+        socket.emit("getLaterItems", { status: "in-progress" }, (res) =>
+          show("In Progress", res)
+        );
+      }
+
+      function getCompleted() {
+        socket.emit("getLaterItems", { status: "completed" }, (res) =>
+          show("Completed", res)
+        );
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 5000);
+      }
+
+      // 🟣 Listen to reminderDue socket event
+      socket.on("reminderDue", (data) => {
+        console.log("🔔 Reminder Due:", data);
+        showToast(`Reminder: ${data.itemType} is due now!`);
+      });
+
+      socket.on("connect", () => {
+        console.log("Connected to server");
+        const mockUserId = "68091cefc422c24ab4fd6524"; // ← User موجود فعلا
+        const mockWorkspaceId = "68091d28c422c24ab4fd6528"; // ← Workspace موجود فعلا
+
+        socket.emit("userConnected", mockUserId, mockWorkspaceId, (res) => {
+          console.log("✅ userConnected response:", res);
+        });
+      });
+      socket.on("reminderDue", (data) => {
+        console.log("⏰ Reminder Due!", data);
+      });
+    </script>
+  </body>
+</html>

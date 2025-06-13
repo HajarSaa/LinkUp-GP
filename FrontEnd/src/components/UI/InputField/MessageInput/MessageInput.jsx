@@ -9,32 +9,19 @@ import { MdOutlineFormatListBulleted } from "react-icons/md";
 import { RiQuoteText } from "react-icons/ri";
 import { IoCodeSlash } from "react-icons/io5";
 import { PiCodeBlockBold } from "react-icons/pi";
-import { FaPlus } from "react-icons/fa6";
-import { RxLetterCaseCapitalize } from "react-icons/rx";
-import { BsEmojiSmile } from "react-icons/bs";
-import { GoMention } from "react-icons/go";
-import { IoVideocamOutline } from "react-icons/io5";
-import { AiOutlineAudio } from "react-icons/ai";
-import { CgShortcut } from "react-icons/cg";
 import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
-import PropTypes from "prop-types";
 import { useLocation, useParams } from "react-router-dom";
-import { sendMessage } from "../../../../API/services/messageService";
+import LowerToolbar from "./InputComponents/LowerToolbar";
+import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 
-
-const MessageInput = ({ isThread, channelName}) => {
+const MessageInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
-  const [isChecked, setIsChecked] = useState(false);
   const location = useLocation();
   const { id } = useParams();
   const isChannel = location.pathname.includes("/channels");
-
-  const handleToggleCheckbox = () => {
-    const newCheckedState = !isChecked;
-    setIsChecked(newCheckedState);
-  };
+  const send_message = useSendMessage();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -46,21 +33,28 @@ const MessageInput = ({ isThread, channelName}) => {
     setMessage(e.target.value);
   };
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!message.trim()) return;
-    console.log(message)
-    // try {
-    //   const type = isChannel ? "channel" : "conversation";
-    //   await sendMessage(type, id, message);
-    //   setMessage("");
-    //   const textarea = textareaRef.current;
-    //   textarea.style.height = "40px";
-    // } catch (error) {
-    //   console.error("Failed to send message", error);
-    //   // show message error
-    // }
+    const messageContent = {
+      content: message,
+    };
+    const type = isChannel ? "channel" : "conversation";
+    console.log("Type:", type, "ID:", id, "Message:", messageContent);
+    send_message.mutate(
+      {
+        type,
+        id,
+        messageContent,
+      },
+      {
+        onSuccess: () => {
+          setMessage("");
+          const textarea = textareaRef.current;
+          textarea.style.height = "40px";
+        },
+      }
+    );
   };
-
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -95,32 +89,8 @@ const MessageInput = ({ isThread, channelName}) => {
           onInput={handlInputHeight}
         />
 
-        {isThread && (
-            <label className={styles.checkBox}>
-              <input
-                type="checkbox"
-                checked={isChecked}
-                onChange={handleToggleCheckbox}
-                className={styles.checkBox_input}
-              />
-              <span className={styles.checkBox_text}>Also send to</span>
-              {channelName && (
-                <span className={styles.checkBox_channelName}>
-                  {channelName}
-                </span>
-              )}
-            </label>
-        )}
-
         <div className={styles.lower_row_icons}>
-          <div className={styles.left_icons}>
-            {renderIcons(
-              lowerIcons,
-              [4, 6],
-              styles.lower_icons,
-              styles.lower_icon_style
-            )}
-          </div>
+          <LowerToolbar/>
           <div
             className={`${styles.right_icons} ${
               message.trim() && styles.activeSend
@@ -157,11 +127,6 @@ const MessageInput = ({ isThread, channelName}) => {
 
 export default MessageInput;
 
-MessageInput.propTypes = {
-  channelName: PropTypes.string,
-  isThread: PropTypes.bool,
-};
-
 const upperIcons = [
   { icon: HiMiniBold },
   { icon: FiItalic },
@@ -172,16 +137,6 @@ const upperIcons = [
   { icon: RiQuoteText },
   { icon: IoCodeSlash },
   { icon: PiCodeBlockBold },
-];
-
-const lowerIcons = [
-  { icon: FaPlus },
-  { icon: RxLetterCaseCapitalize },
-  { icon: BsEmojiSmile },
-  { icon: GoMention },
-  { icon: IoVideocamOutline },
-  { icon: AiOutlineAudio },
-  { icon: CgShortcut },
 ];
 
 const renderIcons = (icons, positions, iconClass, customClass) => {

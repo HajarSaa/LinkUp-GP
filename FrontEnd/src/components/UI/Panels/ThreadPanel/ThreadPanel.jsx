@@ -1,73 +1,96 @@
-/* eslint-disable react/prop-types */
 import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import styles from "./ThreadPanel.module.css";
-import { FaTimes } from "react-icons/fa";
-import { BiSolidUser } from "react-icons/bi";
-import MessageInput from "../../InputField/MessageInput/MessageInput";
+import MessageItem from "../../../Chat/ChatMessage/MessageItem";
 import { useParams } from "react-router-dom";
+import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
+import useGetThreads from "../../../../API/hooks/messages/useGetThreads";
+import Spinner from "../../Spinner/Spinner";
+import ThreadMessageInput from "../../InputField/MessageInput/ThreadMessageInput";
+import EditMessageInput from "../../InputField/MessageInput/EditMessageInput";
 
-function ThreadPanel({ selectedThread }) {
-  const { threadPanel: isOpen } = useSelector((state) => state.chatPanel);
+function ThreadPanel() {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const { isOpen, threadID, parentMessage } = useSelector(
+    (state) => state.chatPanel.threadPanel
+  );
+  const { isEditing, isInThread } = useSelector((state) => state.editMessage);
+  const get_thread = useGetThreads(threadID);
+  const { threads } = useSelector((state) => state.threads);
+  let error_message = null;
+
+  if (get_thread.error)
+    if (get_thread.error.response.status) error_message = "";
+    else error_message = get_thread.error.message;
+
+  function handleClose() {
+    dispatch(closeChatPanel({ type: "threadPanel", page_id: id }));
+  }
 
   if (!isOpen) return null;
   return (
     <div className={styles.threadPanel}>
       <div className={styles.header}>
         <h3>Thread</h3>
-        <FaTimes
-          onClick={() => dispatch(closeChatPanel({type:'threadPanel',page_id:id}))}
-          className={styles.closeIcon}
-        />
+        <CloseIcon closeEvent={handleClose} />
       </div>
 
-      <div className={styles.originalMessage}>
-        <BiSolidUser />
-        <div className={styles.messageContent}>
-          <div className={styles.messageHeader}>
-            <p>
-              <strong>Ahemd</strong>
-            </p>
-            <p className={styles.timestamp}>
-              {new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
-          </div>
-          <p>Hello</p>
+      <MessageItem
+        message={parentMessage}
+        isThreadParent={true}
+        isInThreadPanel={true}
+      />
+      {get_thread.isLoading || !threads ? (
+        <div className={styles.status}>
+          <Spinner />
         </div>
-      </div>
-
-      <div className={styles.replies}>
-        {selectedThread.map((reply) => (
-          <div key={reply.id} className={styles.reply}>
-            {/* <img
-              src={`/assets/avatars/${reply.sender.toLowerCase()}.png`}
-              alt={reply.sender}
-              className={styles.avatar}
-            /> */}
-            <BiSolidUser />
-            <div className={styles.messageContent}>
-              <div className={styles.messageHeader}>
-                <p>
-                  <strong>{reply.sender}</strong>
-                </p>
-                <p className={styles.timestamp}>
-                  {new Date(reply.timestamp).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
-              </div>
-              <p>{reply.text}</p>
-            </div>
+      ) : get_thread.isError ? (
+        <div className={styles.status}>
+          <span className={styles.error}>{error_message}</span>
+        </div>
+      ) : (
+        <div className={styles.thread_body}>
+          <div className={styles.divider}>
+            <span>{`${threads.length} replie${
+              threads.length === 0 ? "" : "s"
+            }`}</span>
+            <span className={styles.line}></span>
           </div>
-        ))}
-      </div>
-      <MessageInput isThread={true} />
+          <div className={styles.replies}>
+            {threads.map((thread) => (
+              // <div key={reply.id} className={styles.reply}>
+              //   <BiSolidUser />
+              //   {console.log(threads)}
+              //   <div className={styles.messageContent}>
+              //     <div className={styles.messageHeader}>
+              //       <p>
+              //         <strong>{reply.sender}</strong>
+              //       </p>
+              //       <p className={styles.timestamp}>
+              //         {new Date(reply.timestamp).toLocaleTimeString([], {
+              //           hour: "2-digit",
+              //           minute: "2-digit",
+              //         })}
+              //       </p>
+              //     </div>
+              //     <p>{reply.text}</p>
+              //   </div>
+              // </div>
+              <MessageItem
+                isInThreadPanel={true}
+                key={thread._id}
+                message={thread}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      {isEditing && isInThread ? (
+        <EditMessageInput />
+      ) : (
+        <ThreadMessageInput parentMessageId={threadID} />
+      )}
     </div>
   );
 }

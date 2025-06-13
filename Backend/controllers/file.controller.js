@@ -21,7 +21,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
 
   // extract and validate data
   const userId = req.user.id;
-  const { conversationId, channelId, parentId, parentType } = req.body;
+  const { conversationId, channelId, parentMessageId, parentType } = req.body;
   //const workspaceId = req.workspace._id;
   const userProfile = req.userProfile;
 
@@ -33,7 +33,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
     return next(new AppError("Invalid channel ID", 400));
   }
 
-  if (parentId && !mongoose.Types.ObjectId.isValid(parentId)) {
+  if (parentMessageId && !mongoose.Types.ObjectId.isValid(parentMessageId)) {
     return next(new AppError("Invalid parent ID", 400));
   }
 
@@ -60,7 +60,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         uploadedBy: userProfile._id,
         channelId: channelId || null,
         conversationId: conversationId || null,
-        parentId: parentId || null,
+        parentMessageId: parentMessageId || null,
         parentType: parentType || null,
       })
     )
@@ -97,7 +97,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
           avatar: userProfile.photo,
         },
         timestamp: new Date().toISOString(),
-        parentId: parentId || null,
+        parentMessageId: parentMessageId || null,
         parentType: parentType || null,
       },
       (err) => {
@@ -161,7 +161,7 @@ export const getAllFiles = catchAsync(async (req, res, next) => {
             lastActive: uploader.lastActive,
           }
         : null,
-      parentId: file.parentId,
+      parentMessageId: file.parentMessageId,
       parentType: file.parentType,
     };
   });

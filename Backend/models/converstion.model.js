@@ -43,7 +43,6 @@ conversationSchema.index({ workspaceId: 1 });
 
 // pre-hook to delete messages when a conversation is deleted
 conversationSchema.pre("findOneAndDelete", async function (next) {
-  console.log("Deleting messages associated with the conversation...");
   // Access the query filter
   const filter = this.getFilter();
 

@@ -48,7 +48,6 @@ channelSchema.index({ type: 1 });
 
 // pre-hook to delete messages when a channel is deleted
 channelSchema.pre("findOneAndDelete", async function (next) {
-  console.log("Deleting messages associated with the channel...");
   // Access the query filter
   const filter = this.getFilter(); 
 

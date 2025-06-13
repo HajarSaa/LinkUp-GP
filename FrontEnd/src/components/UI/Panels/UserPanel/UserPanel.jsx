@@ -27,7 +27,6 @@ const UserPanel = () => {
   const handleClose = () => {
     dispatch(closeChatPanel({ type: "userPanel", page_id: id }));
   };
-
   if (!isOpen) return null;
   return (
     <>

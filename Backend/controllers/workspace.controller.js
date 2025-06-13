@@ -74,11 +74,26 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
 
 export const getWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
+
+  // First find the user's profile in this workspace
+  const userProfile = await UserProfile.findOne({
+    user: req.user.id,
+    workspace: workspaceId,
+  });
+
+  if (!userProfile) {
+    return next(new AppError("You are not a member of this workspace", 403));
+  }
+
+  // Get the workspace with populated data
   const workspace = await Workspace.findById(workspaceId)
     .populate({
       path: "members",
     })
-    .populate("channels")
+    .populate({
+      path: "channels",
+      match: { members: userProfile._id }, // Only channels where user is a member
+    })
     .populate("conversations");
 
   // check if the workspace exists
@@ -88,15 +103,19 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
     );
   }
 
-  // check if the user is a member of the workspace
-  const userProfile = await UserProfile.findOne({
-    user: req.user.id,
-    workspace: workspaceId,
-  });
+  // Filter conversations to only include those where the user is a member
+  const filteredConversations = workspace.conversations.filter(
+    (conversation) => {
+      return (
+        conversation.memberOneId._id.equals(userProfile._id) ||
+        conversation.memberTwoId._id.equals(userProfile._id)
+      );
+    }
+  );
 
-  if (!userProfile) {
-    return next(new AppError("You are not a member of this workspace", 403));
-  }
+  // Replace the arrays with filtered ones
+  workspace.conversations = filteredConversations;
+  // Note: Channels are already filtered by the match condition in populate
 
   // Send the workspace id as a cookie
   res.cookie("workspace", workspaceId, {

@@ -35,7 +35,6 @@ export const searchMessages = catchAsync(async (req, res, next) => {
     if (endDate) query.createdAt.$lte = new Date(endDate);
   }
 
-  //   console.log("Final query:", query); // For debugging
 
   // Execute the query
   const results = await Message.find(query)
