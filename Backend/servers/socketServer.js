@@ -27,6 +27,11 @@ const socketServer = (httpServer) => {
       methods: ["GET", "POST"],
       credentials: true,
     },
+    // cors: {
+    //   // origin: ["http://localhost:5500", "http://127.0.0.1:5500"],
+    //   methods: ["GET", "POST"],
+    //   credentials: true,
+    // },
     connectionStateRecovery: {
       maxDisconnectionDuration: 120000,
       skipMiddlewares: true,

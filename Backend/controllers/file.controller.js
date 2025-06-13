@@ -21,7 +21,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
 
   // extract and validate data
   const userId = req.user.id;
-  const { conversationId, channelId, parentMessageId, parentType } = req.body;
+  const { conversationId, channelId, parentMessageId } = req.body;
   //const workspaceId = req.workspace._id;
   const userProfile = req.userProfile;
 
@@ -35,12 +35,6 @@ export const uploadFile = catchAsync(async (req, res, next) => {
 
   if (parentMessageId && !mongoose.Types.ObjectId.isValid(parentMessageId)) {
     return next(new AppError("Invalid parent ID", 400));
-  }
-
-  if (parentType && !["Message", "File"].includes(parentType)) {
-    return next(
-      new AppError("Invalid parentType — must be 'Message' or 'File'", 400)
-    );
   }
 
   // create files in database
@@ -61,7 +55,8 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         channelId: channelId || null,
         conversationId: conversationId || null,
         parentMessageId: parentMessageId || null,
-        parentType: parentType || null,
+        attachedToMessage: parentMessageId || null,
+        pinned: false,
       })
     )
   );
@@ -82,7 +77,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
 
   if (io && roomId) {
     const roomType = conversationId ? "conversation" : "channel";
-    const fullRoomId = `${roomType}:${roomId}`;
+    const fullRoomId = ${roomType}:${roomId};
 
     io.to(fullRoomId).emit(
       "fileShared",
@@ -98,7 +93,6 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         },
         timestamp: new Date().toISOString(),
         parentMessageId: parentMessageId || null,
-        parentType: parentType || null,
       },
       (err) => {
         if (err) console.error("Socket emission failed:", err);
@@ -111,7 +105,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
     message:
       files.length === 1
         ? "File uploaded successfully!"
-        : `${files.length} files uploaded successfully!`,
+        : ${files.length} files uploaded successfully!,
     data: files.map(formatFile),
   });
 });
@@ -143,8 +137,7 @@ export const getAllFiles = catchAsync(async (req, res, next) => {
   const formatted = files.map((file) => {
     const uploader = file.uploadedBy;
     const user = uploader?.user;
-
-    return {
+return {
       _id: file._id,
       fileName: file.fileName,
       fileUrl: file.fileUrl,
@@ -162,7 +155,6 @@ export const getAllFiles = catchAsync(async (req, res, next) => {
           }
         : null,
       parentMessageId: file.parentMessageId,
-      parentType: file.parentType,
     };
   });
 
