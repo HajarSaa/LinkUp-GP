@@ -20,7 +20,9 @@ function UserMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
-  const userStatus = onlineUsers.includes(loggin_user?.user) ? "online" : "offline";
+  const userStatus = onlineUsers.includes(loggin_user?.user)
+    ? "online"
+    : "offline";
   const show_profile = () => {
     dispatch(openUserPanel({ panel_id: loggin_user._id, page_id: page_id }));
     dispatch(closeUserMenuModal());
@@ -47,7 +49,7 @@ function UserMenu() {
           <span>{loggin_user?.userName}</span>
           <div className={styles.user_status}>
             <span>{userStatus}</span>
-            <UserStatus userId={loggin_user?.user} />
+            <UserStatus status={loggin_user?.status} />
           </div>
         </div>
       </div>
