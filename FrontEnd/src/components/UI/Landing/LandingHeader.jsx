@@ -6,6 +6,8 @@ function LandingHeader() {
   const navigateTo = useNavigate();
 
   function handleCreateWork() {
+    if (localStorage.getItem("creation_data"))
+      localStorage.removeItem("creation_data");
     navigateTo("/create-workspace/step-1");
   }
   return (

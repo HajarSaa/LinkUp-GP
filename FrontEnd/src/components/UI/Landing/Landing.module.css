@@ -1,6 +1,7 @@
 .landing_header {
   margin-bottom: 15px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .header_welcome {
@@ -68,12 +69,20 @@
   border-radius: var(--border-radius);
   margin-bottom: 30px;
   overflow: hidden;
+  max-height: 100%;
+  min-height: 0;
 }
 
 .workspace_list_header {
   padding: 20px;
-  text-align: start;
-  /* border-bottom: 1px solid var(--border-color); */
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.workspace_list_items {
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .workspaceItem {
@@ -87,9 +96,6 @@
   cursor: pointer;
 }
 
-.workspaceItem:first-child {
-  border-top: 1px solid var(--border-color);
-}
 
 .workspaceItem:not(:last-child)::after {
   content: '';
@@ -127,6 +133,7 @@
   align-items: center;
   font-weight: bold;
   font-size: 20;
+  background-color: #888;
 }
 
 .workspace_details {
@@ -142,7 +149,8 @@
 
 .workspace_details_members_imgs {
   display: flex;
-  gap: 1px;
+  gap: 2px;
+  margin-right: 6px;
 }
 
 .member_image {
@@ -150,9 +158,8 @@
   width: 20px;
   height: 20px;
   border-radius: var(--border-radius-small);
-  object-fit: cover;
-  border: 1px solid var(--border-color);
-  margin-right: 7px;
+  overflow: hidden;
+  background-color: #000;
 }
 
 .member_image_avatar {

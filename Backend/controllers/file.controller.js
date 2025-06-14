@@ -207,3 +207,4 @@ export const deleteFile = catchAsync(async (req, res, next) => {
     message: "File deleted successfully",
   });
 });
+

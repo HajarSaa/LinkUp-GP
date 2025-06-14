@@ -13,7 +13,7 @@ function ChannelBody() {
   const body_ref = useRef();
   return (
     <div className={styles.channelBody} ref={body_ref}>
-      <ChannelIntro title={channel?.name} />
+      <ChannelIntro channel={channel} />
       {isMember && <ChatMessage containerRef={body_ref} />}
     </div>
   );

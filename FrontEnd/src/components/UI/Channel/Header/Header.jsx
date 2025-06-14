@@ -1,25 +1,58 @@
-import { useDispatch, useSelector} from "react-redux";
+/* eslint-disable no-unused-vars */
+import { useDispatch, useSelector } from "react-redux";
 import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
-import { RiStickyNoteAddLine } from "react-icons/ri";
-import { AiOutlinePlus } from "react-icons/ai";
-import {TbMessageFilled } from "react-icons/tb";
+import { TbMessageCircleFilled } from "react-icons/tb";
 import ChannelOptionModal from "../../../UI/Modal/ChannelModals/ChannelOptionsModal/ChannelOptionModal";
 import { openMenu } from "../../../../API/redux_toolkit/modals/channel/channelMenuSlice";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsLightning, BsThreeDotsVertical } from "react-icons/bs";
 import ChannelDetailsModal from "../../Modal/ChannelModals/ChannelDetailsModal/ChannelDetailsModal";
 import NotificationsModal from "../../Modal/ChannelModals/NotifiactionModal/NotificationsModal";
 import ChannelType from "../ChannelType/ChannelType";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiFileText, FiLayers } from "react-icons/fi";
 import { MdHeadset } from "react-icons/md";
 import { getMembersData } from "../../../../utils/workspaceUtils";
 import UserImage from "../../User/UserImage";
+import IconDropdown from "../../Dropdown/IconDropdown";
+import { IoMdAdd } from "react-icons/io";
+import { LuMessageCircle } from "react-icons/lu";
+import { FaRegFileAlt } from "react-icons/fa";
+import { IoBookmarkOutline, IoLayers } from "react-icons/io5";
+import { useState } from "react";
+import { LiaClipboardListSolid } from "react-icons/lia";
+import PropTypes from "prop-types";
 
-function Header() {
+function Header({ activeTab, setActiveTab }) {
   const dispatch = useDispatch();
-  const { workspace } = useSelector((state) => state.workspace)
+  const { workspace } = useSelector((state) => state.workspace);
   const channel = useSelector((state) => state.channel.channel);
   const members = getMembersData(channel, workspace);
+  const menuItems = [
+    {
+      id: "messages",
+      label: "Messages",
+      icon: <LuMessageCircle />,
+      activeIcon: <TbMessageCircleFilled />,
+    },
+    // {
+    //   id: "weekly",
+    //   label: "Weekly Sync",
+    //   icon: <FaRegFileAlt />,
+    //   activeIcon: <FaRegFileAlt />,
+    // },
+    {
+      id: "files",
+      label: "Files",
+      icon: <FiLayers />,
+      activeIcon: <IoLayers />,
+    },
+  ];
+  const PlusItems = [
+    { label: "Canvas", icon: <FiFileText /> },
+    { label: "List", icon: <LiaClipboardListSolid /> },
+    { label: "Workflow", icon: <BsLightning /> },
+    { label: "Bookmark", icon: <IoBookmarkOutline /> },
+  ];
   if (!channel) return;
   return (
     <>
@@ -74,21 +107,23 @@ function Header() {
           </div>
         </div>
         <div className={`w-100 align-items-center ${styles.bottomPart}`}>
-          <div className={`${styles.tab} ${styles.activeTab}`}>
-            <span className="align-items-center">
-              <TbMessageFilled />
-            </span>
-            <span className={styles.tab_text}>Messages</span>
+          <div className={styles.tabs}>
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                className={`${styles.tabButton} ${
+                  activeTab === item.id ? styles.active : ""
+                }`}
+                onClick={() => setActiveTab(item.id)}
+              >
+                {activeTab === item.id ? item.activeIcon : item.icon}
+                <span>{item.label}</span>
+              </button>
+            ))}
+
+            {/* ✅ Plus Button */}
+            <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
           </div>
-          <div className={styles.tab}>
-            <span className="align-items-center">
-              <RiStickyNoteAddLine />
-            </span>
-            <span className={styles.tab_text}>Add canvas</span>
-          </div>
-          <span className={styles.plus}>
-            <AiOutlinePlus />
-          </span>
         </div>
       </div>
       <NotificationsModal />
@@ -96,6 +131,9 @@ function Header() {
     </>
   );
 }
-
+Header.propTypes = {
+  activeTab: PropTypes.string.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
+};
 
 export default Header;

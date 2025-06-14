@@ -1,5 +1,5 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { IoIosLink } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
@@ -11,6 +11,7 @@ import {
 } from "../../../API/redux_toolkit/ui/creationsStep";
 import { updateCreationDataField } from "../../../utils/workspaceUtils";
 import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
+import CreationInvite from "../../../components/UI/CreationWork/CreationInvite";
 
 function Step3() {
   const dispatch = useDispatch();
@@ -29,18 +30,18 @@ function Step3() {
   const isButtonDisabled = emailText.trim() === "";
 
   //   تحويل النص إلى array وحفظه
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setEmailText(value);
+  // const handleInputChange = (e) => {
+  //   const value = e.target.value;
+  //   setEmailText(value);
 
-    const emailArray = value
-      .split(",")
-      .map((email) => email.trim())
-      .filter((email) => email.length > 0);
+  //   const emailArray = value
+  //     .split(",")
+  //     .map((email) => email.trim())
+  //     .filter((email) => email.length > 0);
 
-    dispatch(setEmails(emailArray));
-    updateCreationDataField("emails", emailArray);
-  };
+  //   dispatch(setEmails(emailArray));
+  //   updateCreationDataField("emails", emailArray);
+  // };
 
   const handleNextClick = () => {
     if (localStorage.getItem("selectedWorkspaceId"))
@@ -83,47 +84,13 @@ function Step3() {
             team?
           </h1>
 
-          <label className={styles.label}>Add coworker by email</label>
-
-          <textarea
-            className={styles.textarea}
-            placeholder="Ex. user1@gmail.com, user2@gmail.com"
-            value={emailText}
-            onChange={handleInputChange}
+          <CreationInvite
+            handleSkipClick={handleSkipClick}
+            handleNextClick={handleNextClick}
+            isButtonDisabled={isButtonDisabled}
           />
-
-          <p className={styles.subheading}>
-            Keep in mind that invitations expire in 30 days. You can always
-            extend that deadline.
-          </p>
-
-          <div className={styles.actions}>
-            <button
-              onClick={handleNextClick}
-              disabled={isButtonDisabled}
-              className={`${styles.button} ${
-                isButtonDisabled ? styles.disabled : ""
-              }`}
-            >
-              Next
-            </button>
-
-            <button className={styles.copyButton}>
-              <IoIosLink />
-              Copy Invite Link
-            </button>
-
-            <button
-              type="button"
-              onClick={handleSkipClick}
-              className={styles.skipButton}
-            >
-              Skip this step
-            </button>
-          </div>
         </div>
       </div>
-
       <SkipConfirmationModal
         isOpen={isModalOpen}
         onCancel={handleModalCancel}

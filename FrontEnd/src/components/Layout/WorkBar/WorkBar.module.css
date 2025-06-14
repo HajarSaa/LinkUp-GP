@@ -80,6 +80,7 @@
   height: 40px;
   border-radius: var(--border-radius);
   cursor: pointer;
+  overflow: hidden;
 }
 
 .work_label {
@@ -96,13 +97,4 @@
   letter-spacing: 2px;
 }
 
-/* .statusDot {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background-color: #2bac76;
-  border: 2px solid #0b3a58;
-  border-radius: 50%;
-} */
+/* ===================== */

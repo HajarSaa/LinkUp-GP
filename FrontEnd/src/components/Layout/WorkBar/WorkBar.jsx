@@ -20,7 +20,11 @@ import {
 } from "../../../utils/workspaceUtils";
 import UserImage from "../../UI/User/UserImage";
 import { useNavigate } from "react-router-dom";
-import { closeUserMenuModal, openUserMenuModal } from "../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
+import {
+  closeUserMenuModal,
+  openUserMenuModal,
+} from "../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
+import UserStatusDot from "../../UI/User/UserStatusDot";
 
 function WorkBar() {
   const menuRef = useRef(null);
@@ -110,12 +114,11 @@ function WorkBar() {
         <div className={styles.profileWrapper} ref={menuRef}>
           <div
             className={styles.profilePhotoPlaceholder}
-            onClick={() => dispatch(openUserMenuModal()) }
+            onClick={() => dispatch(openUserMenuModal())}
           >
             <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
           </div>
-          <span className={styles.statusDot}></span>
-
+          <UserStatusDot status={loggin_user?.status}/>
           <UserMenu />
         </div>
       </div>

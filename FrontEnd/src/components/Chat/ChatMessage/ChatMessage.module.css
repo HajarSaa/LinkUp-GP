@@ -31,6 +31,7 @@
   border-radius: var(--border-radius);
   justify-content: center;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .profile {
@@ -304,4 +305,37 @@
 
 .editingMessage {
   background-color: var(--active-color);
+}
+
+/* =================== */
+.attachments {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attachmentItem {
+  max-width: 300px;
+}
+
+.imageAttachment {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.audioAttachment,
+.videoAttachment {
+  width: 100%;
+}
+.audioAttachment {
+  width: 300px;
+  height: 40px;
+  display: block;
+  margin-top: 10px;
+}
+.fileLink {
+  color: var(--primary-color);
+  text-decoration: underline;
+  display: inline-block;
 }

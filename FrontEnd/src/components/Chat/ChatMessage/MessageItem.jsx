@@ -20,6 +20,8 @@ import { useParams } from "react-router-dom";
 import MessageMenu from "../MessageMenu/MessageMenu";
 import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/messageMenu";
 import { calculateSafePosition } from "../../../utils/modalsUtils";
+import { getAttachedFiles } from "../../../utils/mediaUtils";
+import AttachmentRenderer from "./AttachmentRender";
 
 const MessageItem = ({
   message,
@@ -39,6 +41,8 @@ const MessageItem = ({
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
+  const { channelMedia } = useSelector((state) => state.channelMedia);
+  const messageFiles = getAttachedFiles(message, channelMedia);
 
   const threadData = {
     count: message?.threadCount,
@@ -137,6 +141,15 @@ const MessageItem = ({
                   <span className={styles.edited_label}>(edited)</span>
                 )}
               </div>
+              {messageFiles.length > 0 && (
+                <div className={styles.attachments}>
+                  {messageFiles.map((file) => (
+                    <div key={file._id} className={styles.attachmentItem}>
+                      <AttachmentRenderer file={file} />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             {/* Reactions */}
             {message.reactions && (
