@@ -9,7 +9,7 @@ import Panel from "../../../components/Layout/Panel/Panel";
 import useGetChannel from "../../../API/hooks/channel/useGetChannel";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getParentMessageByPageId,
   getThreadPanelIdByPageId,
@@ -26,6 +26,7 @@ import { isAChannelMember } from "../../../utils/channelUtils";
 import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth";
 import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
 import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
+import FilesContainer from "../../../components/UI/FilesContainer/FilesContainer";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
@@ -36,9 +37,10 @@ function ChannelPage() {
   const message_query = useGetChannelMessages(channel_id);
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
-
+  const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
 
+  // handle opened Panels
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
     const isThreadPanel = isIdInOpenedThreadPanelItems(channel_id);
@@ -62,6 +64,8 @@ function ChannelPage() {
     } else {
       dispatch(closeChatPanel());
     }
+    // reset active tab
+    setActiveTab("messages");
   }, [channel_id, dispatch]);
 
   if (channel_query.isLoading || message_query.isLoading)
@@ -96,16 +100,22 @@ function ChannelPage() {
       ) : (
         <>
           <div className={styles.page_content}>
-            <Header />
-            <ChannelBody />
-            {isMember ? (
-              isEditing && !isInThread ? (
-                <EditMessageInput />
-              ) : (
-                <MessageInput channelName={channel?.name} />
-              )
+            <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+            {activeTab === "messages" ? (
+              <>
+                <ChannelBody />
+                {isMember ? (
+                  isEditing && !isInThread ? (
+                    <EditMessageInput />
+                  ) : (
+                    <MessageInput channelName={channel?.name} />
+                  )
+                ) : (
+                  <ChannelAuth channel={channel} />
+                )}
+              </>
             ) : (
-              <ChannelAuth channel={channel} />
+              <FilesContainer files={[]} type="channel" />
             )}
           </div>
           <Panel />
