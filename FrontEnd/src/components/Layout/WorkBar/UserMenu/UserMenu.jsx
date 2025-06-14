@@ -9,6 +9,7 @@ import UserStatus from "../../../UI/User/UserStatus";
 import { openSetStatusModal } from "../../../../API/redux_toolkit/modals/userProfile/setStatusSlice";
 import { closeUserMenuModal } from "../../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 import { openUserPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
+import { removeAllPanels } from "../../../../utils/panelUtils";
 
 function UserMenu() {
   const { isOpen } = useSelector((state) => state.userMenu);
@@ -30,6 +31,7 @@ function UserMenu() {
   };
 
   const handleSignOut = () => {
+    removeAllPanels();
     navigate("/login");
     dispatch(closeUserMenuModal());
   };

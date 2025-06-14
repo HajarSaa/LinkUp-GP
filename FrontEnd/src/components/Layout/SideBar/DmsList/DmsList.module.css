@@ -19,6 +19,7 @@
     min-height: 25px;
     border-radius: var(--border-radius-small);
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 .dms_item {

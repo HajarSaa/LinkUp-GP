@@ -80,6 +80,7 @@
   height: 40px;
   border-radius: var(--border-radius);
   cursor: pointer;
+  overflow: hidden;
 }
 
 .work_label {
@@ -106,3 +107,5 @@
   border: 2px solid #0b3a58;
   border-radius: 50%;
 } */
+
+/* ===================== */

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import styles from "./UserDM.module.css";
 import Button from "../Buttons/Button/Button";
 import { useDispatch, useSelector } from "react-redux";

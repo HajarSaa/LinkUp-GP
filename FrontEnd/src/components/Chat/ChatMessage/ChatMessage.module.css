@@ -31,6 +31,7 @@
   border-radius: var(--border-radius);
   justify-content: center;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .profile {
