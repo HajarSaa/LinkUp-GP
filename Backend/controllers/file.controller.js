@@ -77,7 +77,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
 
   if (io && roomId) {
     const roomType = conversationId ? "conversation" : "channel";
-    const fullRoomId = ${roomType}:${roomId};
+    const fullRoomId = `${roomType}:${roomId}`;
 
     io.to(fullRoomId).emit(
       "fileShared",
@@ -105,7 +105,7 @@ export const uploadFile = catchAsync(async (req, res, next) => {
     message:
       files.length === 1
         ? "File uploaded successfully!"
-        : ${files.length} files uploaded successfully!,
+        :` ${files.length} files uploaded successfully!`,
     data: files.map(formatFile),
   });
 });
@@ -137,7 +137,8 @@ export const getAllFiles = catchAsync(async (req, res, next) => {
   const formatted = files.map((file) => {
     const uploader = file.uploadedBy;
     const user = uploader?.user;
-return {
+
+    return {
       _id: file._id,
       fileName: file.fileName,
       fileUrl: file.fileUrl,
@@ -204,5 +205,5 @@ export const deleteFile = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "File deleted successfully",
-  });
+  });
 });

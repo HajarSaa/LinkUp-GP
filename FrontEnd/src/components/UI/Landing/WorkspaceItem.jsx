@@ -1,15 +1,14 @@
 import { getWorkLabel } from "../../../utils/workspaceUtils";
-import { BiSolidUser } from "react-icons/bi";
 import { FaArrowRight } from "react-icons/fa6";
 import styles from "./Landing.module.css";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
+import UserImage from '../User/UserImage';
 
 function WorkspaceItem({ workspace }) {
   const work_title = getWorkLabel(workspace?.name || "workspace name");
-  const work_background = "#888";
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ function WorkspaceItem({ workspace }) {
           {workspace?.image ? (
             <img src={workspace?.image.src} />
           ) : (
-            <span style={{ backgroundColor: work_background }}>
+            <span >
               {work_title}
             </span>
           )}
@@ -47,14 +46,8 @@ function WorkspaceItem({ workspace }) {
             <div className={styles.workspace_details_members_imgs}>
               {workspace.members.slice(0, 5).map((member, index) => (
                 <span key={index} className={styles.member_image}>
-                  <BiSolidUser className={styles.member_image_avatar} />
+                  <UserImage src={member?.photo} alt=''/>
                 </span>
-                // <img
-                //   key={index}
-                //   src={member.image}
-                //   alt={member.name}
-                //   className={styles.member_image}
-                // />
               ))}
             </div>
 
