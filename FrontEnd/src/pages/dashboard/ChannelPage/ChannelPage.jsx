@@ -27,6 +27,7 @@ import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth"
 import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
 import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
 import FilesContainer from "../../../components/UI/FilesContainer/FilesContainer";
+import useGetConversMedia from "../../../API/hooks/conversation/useGetConversMedia";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
@@ -35,6 +36,7 @@ function ChannelPage() {
   const { id: channel_id } = useParams();
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
+  const media_query = useGetConversMedia(channel_id);
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
   const [activeTab, setActiveTab] = useState("messages");
@@ -115,7 +117,12 @@ function ChannelPage() {
                 )}
               </>
             ) : (
-              <FilesContainer files={[]} type="channel" />
+              <FilesContainer
+                files={media_query?.data?.media}
+                isLoading={media_query.isLoading}
+                isError={media_query.isError}
+                error={media_query.error}
+              />
             )}
           </div>
           <Panel />

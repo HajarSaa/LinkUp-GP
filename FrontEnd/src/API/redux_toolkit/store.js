@@ -17,6 +17,9 @@ import userReducer from "./api_data/userSlice";
 import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
 import userProfileSlice from "./api_data/userProfileSlice";
 //======
+// ==============================(channels)
+import channelMediaReducer from "./api_data/media/channelMediaSlice";
+//======
 // ==============================(Worskpace)
 import createWorkspaceReducer from './ui/creationsStep';
 //======
@@ -51,6 +54,7 @@ const store = configureStore({
     channelMenu: channelMenuReducer,
     channelDetailsModal: channelDetailsModalReducer,
     createChannelModal: createChannelModalReducer,
+    channelMedia:channelMediaReducer,
     // ==============================(workspace)
     // ====
     createWorkspace:createWorkspaceReducer,

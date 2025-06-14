@@ -10,21 +10,25 @@
 }
 
 .left_side {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
+}
+
+.photo_wrapper {
     width: 25px;
     min-width: 25px;
     height: 25px;
     min-height: 25px;
     border-radius: var(--border-radius-small);
-    flex-shrink: 0;
     overflow: hidden;
 }
 
 .dms_item {
     display: flex;
-    gap: 2px;
+    gap: 5px;
     align-items: center;
     padding: 2px 5px;
     border-radius: 5px;
