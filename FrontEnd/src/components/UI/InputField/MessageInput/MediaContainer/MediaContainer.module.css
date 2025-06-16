@@ -1,3 +1,52 @@
-.media_container{
+.media_container {
   padding: 0 10px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+
+
+.media_item {
+  position: relative;
+  width: 70px;
+  height: 70px;
+}
+
+.media_item:has(audio) {
+  width: 200px;
+}
+
+.media_image,
+.media_video,
+.media_audio {
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+}
+
+
+.media_item {
+  position: relative;
+  /* بقية التنسيقات */
+}
+
+.media_icon {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  top: -13px;
+  right: -13px;
+  z-index: 14;
+  background-color: rgb(140 133 133);
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.close_icon {
+  color: #fff;
 }

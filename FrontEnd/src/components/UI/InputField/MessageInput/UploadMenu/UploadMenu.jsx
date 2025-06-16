@@ -2,13 +2,28 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./UploadMenu.module.css";
 import { FcAudioFile, FcFile, FcImageFile, FcVideoFile } from "react-icons/fc";
 import { closeInputMenuModal } from "../../../../../API/redux_toolkit/modals/chat/inputMenu";
+import { useParams, useLocation } from "react-router-dom";
+import {
+  addFile,
+  addResponse,
+  setFileStatus,
+} from "../../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
+import useUploadMedia from "../../../../../API/hooks/media/useUploadMedia";
 
 function UploadMenu() {
   const { isOpen, position } = useSelector((state) => state.inputMenu);
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const location = useLocation();
+  const isChannel = location.pathname.includes("/channels");
 
-  function handleFileUpload(acceptType) {
+  const uploadMutation = useUploadMedia();
+
+  const closeModal = () => dispatch(closeInputMenuModal());
+
+  const handleFileUpload = (acceptType) => {
     dispatch(closeInputMenuModal());
+
     const input = document.createElement("input");
     input.type = "file";
     input.accept = acceptType;
@@ -16,30 +31,56 @@ function UploadMenu() {
 
     input.onchange = (event) => {
       const file = event.target.files[0];
-      if (file) {
-        console.log("Selected file:", file);
-      }
+      if (!file) return;
+
+      const previewURL = URL.createObjectURL(file);
+
+      const fileMeta = {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        previewURL,
+        progress: 1,
+        tempId: `${file.name}-${Date.now()}`,
+      };
+
+
+      dispatch(addFile(fileMeta));
+
+      const formData = new FormData();
+      formData.append("files", file);
+      formData.append(isChannel ? "channelId" : "conversationId", id);
+
+      uploadMutation.mutate(
+        {
+          formData,
+        },
+        {
+          onSuccess: (data) => {
+            dispatch(addResponse(data));
+            dispatch(setFileStatus({ previewURL, status: "done" }));
+          },
+          onError: (err) => {
+            console.error("❌ Upload failed:", err);
+            dispatch(setFileStatus({ previewURL, status: "done" })); // أو "failed" لو هتتعامل معاها
+          },
+        }
+      );
+
     };
 
     document.body.appendChild(input);
     input.click();
     document.body.removeChild(input);
-  }
-
-  function handleClose(e) {
-    if (e.target === e.currentTarget) {
-      closeModal();
-    }
-  }
-
-  
-  const closeModal = () => {
-    dispatch(closeInputMenuModal());
   };
 
   if (!isOpen) return null;
+
   return (
-    <div className={styles.overlay} onClick={handleClose}>
+    <div
+      className={styles.overlay}
+      onClick={(e) => e.target === e.currentTarget && closeModal()}
+    >
       <div
         className={styles.modal}
         onClick={(e) => e.stopPropagation()}

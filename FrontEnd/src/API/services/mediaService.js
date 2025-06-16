@@ -17,3 +17,15 @@ export const getConversationMedia = async (conversation_id) => {
   );
   return data.data;
 };
+// ====================(Upload Media)
+export const uploadMedia = async ({ formData, onUploadProgress }) => {
+  const { data } = await axiosInstance.post("/files/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    onUploadProgress,
+    withCredentials: true,
+  });
+
+  return data.data;
+};
