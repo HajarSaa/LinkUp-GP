@@ -17,6 +17,7 @@ import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 import MediaContainer from "./MediaContainer/MediaContainer";
 import UploadMenu from "./UploadMenu/UploadMenu";
+import { useSelector } from "react-redux";
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
@@ -25,6 +26,11 @@ const MessageInput = () => {
   const { id } = useParams();
   const isChannel = location.pathname.includes("/channels");
   const send_message = useSendMessage();
+  // files logic
+  const { files, responseData } = useSelector((state) => state.fileUpload);
+  const hasMedia = files.length > 0;
+  const hasPendingMedia = files.some((f) => f.status === "pending");
+  const canSend = (message.trim() || hasMedia) && !hasPendingMedia;
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -37,13 +43,14 @@ const MessageInput = () => {
   };
 
   const handleSend = () => {
-    if (!message.trim()) return;
+    if (!canSend) return;
     const messageContent = {
       content: message,
     };
     const type = isChannel ? "channel" : "conversation";
     console.log("Type:", type, "ID:", id, "Message:", messageContent);
     console.log(messageContent);
+    console.log(responseData);
     // send_message.mutate(
     //   {
     //     type,
@@ -99,7 +106,7 @@ const MessageInput = () => {
             <LowerToolbar />
             <div
               className={`${styles.right_icons} ${
-                message.trim() && styles.activeSend
+                canSend && styles.activeSend
               }`}
             >
               <div
@@ -116,14 +123,10 @@ const MessageInput = () => {
             </div>
           </div>
         </div>
-        <div
-          className={`${styles.newLineHint} ${
-            !message.trim() && styles.hidden
-          }`}
-        >
+        <div className={`${styles.newLineHint} ${!canSend && styles.hidden}`}>
           <span
             className={`${styles.hintText} ${
-              message.trim() ? styles.showHint : styles.hideHint
+              canSend ? styles.showHint : styles.hideHint
             }`}
           >
             Shift + Enter for new line

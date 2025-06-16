@@ -29,8 +29,8 @@ const fileUploadSlice = createSlice({
     },
 
     addResponse: (state, action) => {
-      console.log(action.payload);
-      state.responseData.push(action.payload);
+      console.log(action.payload)
+      state.responseData.push(...action.payload.map((file) => file._id));
     },
     clearFiles(state) {
       state.files = [];
