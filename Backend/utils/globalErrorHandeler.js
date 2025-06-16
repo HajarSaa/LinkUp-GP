@@ -23,6 +23,14 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+// Handles Multer Errors
+const handleMulterError = (err) => {
+  if (err.code === "LIMIT_FILE_SIZE") {
+    return new AppError("File too large. Maximum allowed size is 15MB.", 400);
+  }
+  return new AppError(err.message, 400);
+};
+
 // Handels JWT Errors
 const handleJWTError = () => {
   return new AppError("Invalid token, please log in again", 401);
@@ -85,6 +93,7 @@ export const globalErrorHandeler = (err, req, res, next) => {
     if (error.code === 11000) error = handleDublicateFieldDB(error);
     if (error.name === "ValidationError")
       error = handleValidationErrorDB(error);
+    if (error.name === "MulterError") error = handleMulterError(error);
     if (error.name === "JsonWebTokenError") error = handleJWTError();
     if (error.name === "TokenExpiredError") error = handleJWTExpiresError();
 

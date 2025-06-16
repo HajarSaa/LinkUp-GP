@@ -10,9 +10,15 @@ const uploader = () => {
       console.log("📂 File Received:", file.originalname);
 
       const ext = path.extname(file.originalname);
-      const baseName = path.basename(file.originalname, ext);
+      const rawBaseName = path.basename(file.originalname, ext);
+
+      const sanitizedBaseName = rawBaseName
+        .trim()
+        .replace(/[^\w\- ]+/g, "")
+        .replace(/\s+/g, "-");
+
       const timestamp = Date.now();
-      const finalName = `${timestamp}-${baseName}`;
+      const finalName = `${timestamp}-${sanitizedBaseName}`;
 
       const mimeTopLevel = file.mimetype.split("/")[0];
       const resourceType =
@@ -31,7 +37,12 @@ const uploader = () => {
     },
   });
 
-  return multer({ storage });
+  return multer({
+    storage,
+    limits: {
+      fileSize: 15 * 1024 * 1024,
+    },
+  });
 };
 
 export default uploader;
