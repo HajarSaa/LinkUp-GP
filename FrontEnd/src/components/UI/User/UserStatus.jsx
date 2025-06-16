@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 function UserStatus({ status }) {
   // status can be 'Online', 'Offline', 'Away'
-  console.log(status);
+  
   return (
     // <span
     //   className={` ${styles.user_status} ${
@@ -19,7 +19,13 @@ function UserStatus({ status }) {
 
         <span
       className={` ${styles.user_status} ${
-        status === "online" ? styles.online : styles.offline
+        status === "online"
+          ? styles.online
+          : status === "away"
+          ? styles.away
+          : status === "busy"
+          ? styles.busy
+          : styles.offline
       }`}
     ></span>
   );
