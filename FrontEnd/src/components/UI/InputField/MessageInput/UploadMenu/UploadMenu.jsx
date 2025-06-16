@@ -16,6 +16,7 @@ function UploadMenu() {
   const { id } = useParams();
   const location = useLocation();
   const isChannel = location.pathname.includes("/channels");
+  const pageId = `${isChannel ? "channel" : "conversation"}-${id}`;
 
   const uploadMutation = useUploadMedia();
 
@@ -44,8 +45,7 @@ function UploadMenu() {
         tempId: `${file.name}-${Date.now()}`,
       };
 
-
-      dispatch(addFile(fileMeta));
+      dispatch(addFile({ pageId, file: fileMeta }));
 
       const formData = new FormData();
       formData.append("files", file);
@@ -57,16 +57,15 @@ function UploadMenu() {
         },
         {
           onSuccess: (data) => {
-            dispatch(addResponse(data));
-            dispatch(setFileStatus({ previewURL, status: "done" }));
+            dispatch(addResponse({ pageId, responseFiles: data }));
+            dispatch(setFileStatus({ pageId, previewURL, status: "done" }));
           },
           onError: (err) => {
             console.error("❌ Upload failed:", err);
-            dispatch(setFileStatus({ previewURL, status: "done" })); // أو "failed" لو هتتعامل معاها
+            dispatch(setFileStatus({ pageId, previewURL, status: "done" }));
           },
         }
       );
-
     };
 
     document.body.appendChild(input);

@@ -18,17 +18,24 @@ import MediaContainer from "./MediaContainer/MediaContainer";
 import UploadMenu from "./UploadMenu/UploadMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { clearFiles } from "../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
+import { clearDraft, saveDraft } from "../../../../API/redux_toolkit/api_data/messages/messageDraftSlice";
 
 const MessageInput = () => {
-  const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const location = useLocation();
   const { id } = useParams();
   const dispatch = useDispatch();
   const isChannel = location.pathname.includes("/channels");
+  const pageId = `${isChannel ? "channel" : "conversation"}-${id}`;
   const send_message = useSendMessage();
+  // local storage logic
+  const messageDraft = useSelector((state) => state.messageDraft[pageId] || "");
+  const [message, setMessage] = useState(messageDraft);
   // files logic
-  const { files, responseData } = useSelector((state) => state.fileUpload);
+  const { pages } = useSelector((state) => state.fileUpload);
+  const files = pages[pageId]?.files || [];
+  const responseData = pages[pageId]?.responseData || [];
+  // ==
   const hasMedia = files.length > 0;
   const hasPendingMedia = files.some((f) => f.status === "pending");
   const canSend = (message.trim() || hasMedia) && !hasPendingMedia;
@@ -39,15 +46,27 @@ const MessageInput = () => {
     }
   }, []);
 
+  useEffect(() => {
+    setMessage(messageDraft);
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const el = textareaRef.current;
+        el.selectionStart = el.selectionEnd = el.value.length;
+      }
+    }, 0);
+  }, [pageId, messageDraft]);
+
+
   const handleChange = (e) => {
     setMessage(e.target.value);
+    dispatch(saveDraft({ pageId, text: e.target.value }));
   };
 
   const handleSend = () => {
     if (!canSend) return;
     const messageContent = {
       content: message,
-      attachmentIds :responseData|| [],
+      attachmentIds: responseData || [],
     };
     const type = isChannel ? "channel" : "conversation";
     // console.log("Type:", type, "ID:", id, "Message:", messageContent);
@@ -62,7 +81,8 @@ const MessageInput = () => {
           setMessage("");
           const textarea = textareaRef.current;
           textarea.style.height = "40px";
-          dispatch(clearFiles());
+          dispatch(clearFiles({ pageId }));
+          dispatch(clearDraft({ pageId }));
         },
       }
     );
