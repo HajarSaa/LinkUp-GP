@@ -67,6 +67,7 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+  /* border: 1px solid currentColor; */
 }
 
 .button:hover:enabled {
@@ -81,7 +82,7 @@
 
 /**********************************Step2****************************************/
 .profilePhotoSection {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   /* width: 25%; */
   height: 100%;
   display: flex;
@@ -106,7 +107,6 @@
   .profilePhotoPlaceholder {
     width: 150px;
     height: 150px;
-    background: #000;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -116,7 +116,6 @@
 }
 
 .uploadButton {
-  margin-top: 10px;
   width: 25%;
   padding: 10px;
   font-size: 15px;
@@ -220,3 +219,15 @@
 }
 
 /*************************************************************************/
+
+.btns_group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: fit-content;
+}
+
+.btns_group>* {
+  width: 150px;
+  height: 40px;
+}

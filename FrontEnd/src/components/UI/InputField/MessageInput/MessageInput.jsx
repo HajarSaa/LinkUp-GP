@@ -40,20 +40,21 @@ const MessageInput = () => {
     };
     const type = isChannel ? "channel" : "conversation";
     console.log("Type:", type, "ID:", id, "Message:", messageContent);
-    send_message.mutate(
-      {
-        type,
-        id,
-        messageContent,
-      },
-      {
-        onSuccess: () => {
-          setMessage("");
-          const textarea = textareaRef.current;
-          textarea.style.height = "40px";
-        },
-      }
-    );
+    console.log(messageContent)
+    // send_message.mutate(
+    //   {
+    //     type,
+    //     id,
+    //     messageContent,
+    //   },
+    //   {
+    //     onSuccess: () => {
+    //       setMessage("");
+    //       const textarea = textareaRef.current;
+    //       textarea.style.height = "40px";
+    //     },
+    //   }
+    // );
   };
 
   const handleKeyDown = (e) => {

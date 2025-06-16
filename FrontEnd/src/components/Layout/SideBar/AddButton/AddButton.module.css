@@ -18,7 +18,7 @@
   display: flex;
   padding: 3px;
   border-radius: 3px;
-  background-color: rgb(38 105 173);
+  background-color: var(--sidebar-hover);
 }
 
 .add_button_text {
