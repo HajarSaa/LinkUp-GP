@@ -96,6 +96,7 @@
 }
 
 .tool_wrapper {
+  position: relative;
   padding: 5px;
   border-radius: 10px;
   display: flex;
@@ -258,3 +259,5 @@
   background-color: var(--green-color);
   color: #fff;
 }
+
+/* Media Container */

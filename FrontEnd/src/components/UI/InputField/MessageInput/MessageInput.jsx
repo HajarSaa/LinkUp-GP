@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MessageInput.module.css";
 import { HiMiniBold } from "react-icons/hi2";
@@ -14,6 +15,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useLocation, useParams } from "react-router-dom";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
+import MediaContainer from "./MediaContainer/MediaContainer";
+import UploadMenu from "./UploadMenu/UploadMenu";
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
@@ -40,7 +43,7 @@ const MessageInput = () => {
     };
     const type = isChannel ? "channel" : "conversation";
     console.log("Type:", type, "ID:", id, "Message:", messageContent);
-    console.log(messageContent)
+    console.log(messageContent);
     // send_message.mutate(
     //   {
     //     type,
@@ -69,60 +72,66 @@ const MessageInput = () => {
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
   return (
-    <div className={styles.messageInputContainer}>
-      <div className={styles.input_field}>
-        <div className={styles.upper_row_icons}>
-          {renderIcons(
-            upperIcons,
-            [3, 6],
-            styles.upper_icons,
-            styles.upper_icon_style
-          )}
-        </div>
-        <textarea
-          name="messageBox"
-          ref={textareaRef}
-          className={styles.textarea}
-          placeholder="write your message ..."
-          value={message}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onInput={handlInputHeight}
-        />
+    <>
+      <div className={styles.messageInputContainer}>
+        <div className={styles.input_field}>
+          <div className={styles.upper_row_icons}>
+            {renderIcons(
+              upperIcons,
+              [3, 6],
+              styles.upper_icons,
+              styles.upper_icon_style
+            )}
+          </div>
+          <textarea
+            name="messageBox"
+            ref={textareaRef}
+            className={styles.textarea}
+            placeholder="write your message ..."
+            value={message}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onInput={handlInputHeight}
+          />
+          <MediaContainer />
 
-        <div className={styles.lower_row_icons}>
-          <LowerToolbar/>
-          <div
-            className={`${styles.right_icons} ${
-              message.trim() && styles.activeSend
-            }`}
-          >
+          <div className={styles.lower_row_icons}>
+            <LowerToolbar />
             <div
-              className={`${styles.sendBtns} ${styles.sendBtns_send}`}
-              onClick={handleSend}
+              className={`${styles.right_icons} ${
+                message.trim() && styles.activeSend
+              }`}
             >
-              <IoSend />
-            </div>
-            <div className={styles.box11}></div>
+              <div
+                className={`${styles.sendBtns} ${styles.sendBtns_send}`}
+                onClick={handleSend}
+              >
+                <IoSend />
+              </div>
+              <div className={styles.box11}></div>
 
-            <div className={`${styles.sendBtns} ${styles.sendBtns_dropdown}`}>
-              <IoIosArrowDown />
+              <div className={`${styles.sendBtns} ${styles.sendBtns_dropdown}`}>
+                <IoIosArrowDown />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        className={`${styles.newLineHint} ${!message.trim() && styles.hidden}`}
-      >
-        <span
-          className={`${styles.hintText} ${
-            message.trim() ? styles.showHint : styles.hideHint
+        <div
+          className={`${styles.newLineHint} ${
+            !message.trim() && styles.hidden
           }`}
         >
-          Shift + Enter for new line
-        </span>
+          <span
+            className={`${styles.hintText} ${
+              message.trim() ? styles.showHint : styles.hideHint
+            }`}
+          >
+            Shift + Enter for new line
+          </span>
+        </div>
       </div>
-    </div>
+      <UploadMenu />
+    </>
   );
 };
 

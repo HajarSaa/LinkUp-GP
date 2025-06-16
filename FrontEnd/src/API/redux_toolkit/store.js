@@ -37,6 +37,7 @@ import userDetailsReducer from "./modals/convers/userDetailsModal";
 //======
 // ==============================(Messages)
 import messageMenuReducer from "./modals/chat/messageMenu";
+import inputMenuReducer from "./modals/chat/inputMenu";
 import threadsReducer from './api_data/messages/threadsSlice';
 import editMessageReducer from './api_data/messages/editMessageSlice';
 //======
@@ -54,10 +55,10 @@ const store = configureStore({
     channelMenu: channelMenuReducer,
     channelDetailsModal: channelDetailsModalReducer,
     createChannelModal: createChannelModalReducer,
-    channelMedia:channelMediaReducer,
+    channelMedia: channelMediaReducer,
     // ==============================(workspace)
     // ====
-    createWorkspace:createWorkspaceReducer,
+    createWorkspace: createWorkspaceReducer,
     // ==============================(conversation)
     // ====
     convers: conversReducer,
@@ -76,6 +77,7 @@ const store = configureStore({
     // ==============================(Messages)
     // ====
     messageMenu: messageMenuReducer,
+    inputMenu: inputMenuReducer,
     threads: threadsReducer,
     editMessage: editMessageReducer,
     // ==============================(Global)
