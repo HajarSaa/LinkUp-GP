@@ -15,9 +15,8 @@ export default function connectionHandler(socket, io) {
       if (
         !mongoose.Types.ObjectId.isValid(userId) ||
         !mongoose.Types.ObjectId.isValid(workspaceId)
-      ) {
+      )
         throw new AppError("Invalid ID format", 400);
-      }
 
       if (!userConnections.has(userId)) {
         userConnections.set(userId, new Set());
@@ -41,17 +40,30 @@ export default function connectionHandler(socket, io) {
         `socket:${socket.id}`,
       ]);
 
-      if (!socket.recovered) {
-        await setUserStatus(userId, workspaceId, "online");
-      }
-
       const userProfile = await UserProfile.findOne({
         user: userId,
         workspace: workspaceId,
       }).lean();
 
-      //Adding userProfileId to socket for later use in other handlers
-      socket.userProfileId = userProfile?._id;
+      if (!userProfile) {
+        throw new AppError("UserProfile not found", 404);
+      }
+
+      socket.userProfileId = userProfile._id;
+
+      if (!socket.recovered && connectionSet.size === 1) {
+        await setUserStatus(userId, workspaceId, "online");
+
+        io.to(`workspace:${workspaceId}`).emit("workspaceMemberJoined", {
+          userId,
+          profile: {
+            _id: userProfile._id,
+            name: userProfile.userName,
+            avatar: userProfile.photo,
+          },
+          joinedAt: new Date(),
+        });
+      }
 
       io.to(`workspace:${workspaceId}`).emit("presenceUpdate", {
         userIds: Array.from(presenceSet),
@@ -71,9 +83,7 @@ export default function connectionHandler(socket, io) {
     "disconnect",
     socketAsync(async (reason) => {
       console.log(`🔌 Disconnected: ${socket.id} (${reason})`);
-      const userId = socket.userId;
-      const workspaceId = socket.workspaceId;
-
+      const { userId, workspaceId } = socket;
       if (!userId || !workspaceId) return;
 
       const userConnSet = userConnections.get(userId);
