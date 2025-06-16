@@ -47,6 +47,7 @@ const fileUploadSlice = createSlice({
     },
     clearFiles(state) {
       state.files = [];
+      state.responseData = [];
     },
     removeFile(state, action) {
       const previewURL = action.payload;

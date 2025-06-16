@@ -16,13 +16,15 @@ import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 import MediaContainer from "./MediaContainer/MediaContainer";
 import UploadMenu from "./UploadMenu/UploadMenu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearFiles } from "../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
 
 const MessageInput = () => {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
   const location = useLocation();
   const { id } = useParams();
+  const dispatch = useDispatch();
   const isChannel = location.pathname.includes("/channels");
   const send_message = useSendMessage();
   // files logic
@@ -60,6 +62,7 @@ const MessageInput = () => {
           setMessage("");
           const textarea = textareaRef.current;
           textarea.style.height = "40px";
+          dispatch(clearFiles());
         },
       }
     );
