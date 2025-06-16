@@ -21,7 +21,7 @@ import userProfileSlice from "./api_data/userProfileSlice";
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
 //======
 // ==============================(Worskpace)
-import createWorkspaceReducer from './ui/creationsStep';
+import createWorkspaceReducer from "./ui/creationsStep";
 //======
 // ==============================(User Profile)
 import editUserProfileReducer from "./modals/userProfile/editUserProfie";
@@ -35,10 +35,15 @@ import userMenuReducer from "./modals/userProfile/userMenuSlice";
 import userDetailsReducer from "./modals/convers/userDetailsModal";
 //======
 //======
+// ==============================(<Media>)
+import fileUploadReducer from "./api_data/media/fileUploadSlice";
+//======
 // ==============================(Messages)
 import messageMenuReducer from "./modals/chat/messageMenu";
-import threadsReducer from './api_data/messages/threadsSlice';
-import editMessageReducer from './api_data/messages/editMessageSlice';
+import inputMenuReducer from "./modals/chat/inputMenu";
+import threadsReducer from "./api_data/messages/threadsSlice";
+import editMessageReducer from "./api_data/messages/editMessageSlice";
+import messageDraftReducer from "./api_data/messages/messageDraftSlice";
 //======
 
 const store = configureStore({
@@ -54,10 +59,10 @@ const store = configureStore({
     channelMenu: channelMenuReducer,
     channelDetailsModal: channelDetailsModalReducer,
     createChannelModal: createChannelModalReducer,
-    channelMedia:channelMediaReducer,
+    channelMedia: channelMediaReducer,
     // ==============================(workspace)
     // ====
-    createWorkspace:createWorkspaceReducer,
+    createWorkspace: createWorkspaceReducer,
     // ==============================(conversation)
     // ====
     convers: conversReducer,
@@ -73,11 +78,16 @@ const store = configureStore({
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
+    // ==============================(Media)
+    // ====
+    fileUpload: fileUploadReducer,
     // ==============================(Messages)
     // ====
     messageMenu: messageMenuReducer,
+    inputMenu: inputMenuReducer,
     threads: threadsReducer,
     editMessage: editMessageReducer,
+    messageDraft : messageDraftReducer,
     // ==============================(Global)
     // ====
     notificationsModal: notificationsModalReducer,

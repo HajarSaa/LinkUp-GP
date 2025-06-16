@@ -105,7 +105,6 @@ const MessageMenu = () => {
   if (!isOpen || !position) return null;
 
   return (
-    <>
       <div className={styles.overlay} onClick={handleClose}>
         <div
           className={styles.modal}
@@ -152,7 +151,6 @@ const MessageMenu = () => {
           </ul>
         </div>
       </div>
-    </>
   );
 };
 MessageMenu.propTypes = {

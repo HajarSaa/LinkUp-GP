@@ -1,0 +1,76 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--bg-white);
+  padding: 10px 0;
+  border-radius: 8px;
+  color: var(--text-color-black);
+  border: 1px solid #ddd;
+  box-shadow: 0px 0px 1px #ddd;
+  overflow: hidden;
+  width: 240px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.item {
+  padding: 5px 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  transition: background 0.2s;
+  width: 100%;
+  color: #111;
+  height: 30px;
+}
+
+.item>span:last-child {
+  color: #666;
+}
+
+.item:hover {
+  background-color: var(--link-color);
+  color: #fff;
+
+  span {
+    color: #fff;
+  }
+}
+
+.item_icon {
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete_loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  font-size: 16px;
+  color: var(--active-color);
+}
+
+.hr {
+  margin: 10px 0;
+}

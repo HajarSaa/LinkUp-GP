@@ -12,11 +12,11 @@ import useJoinWorkspace from "../../../API/hooks/workspace/useJoinWorkspace";
 import { updateCreationDataField } from "../../../utils/workspaceUtils";
 
 const avatarImages = [
-  "/assets/avatars/image-1.jpeg",
-  "/assets/avatars/image-2.jpeg",
-  "/assets/avatars/image-3.jpeg",
-  "/assets/avatars/image-4.jpeg",
-  "/assets/avatars/image-5.jpeg",
+  "/assets/avatars/image-1.svg",
+  "/assets/avatars/image-2.svg",
+  "/assets/avatars/image-3.svg",
+  "/assets/avatars/image-4.svg",
+  "/assets/avatars/image-5.svg",
 ];
 
 function Step2() {
@@ -176,7 +176,10 @@ function Step2() {
             <div className={styles.profilePhotoPlaceholder}>
               <UserImage src={preview} alt="preview" />
             </div>
+          </div>
 
+          {error && <p className={styles.error}>{error}</p>}
+          <div className={styles.btns_group}>
             <label className={styles.uploadButton}>
               Upload Photo
               <input
@@ -186,19 +189,16 @@ function Step2() {
                 onChange={handleImageChange}
               />
             </label>
+            <button
+              onClick={handleNextClick}
+              disabled={isButtonDisabled}
+              className={`${styles.button} ${
+                isButtonDisabled ? styles.disabled : ""
+              }`}
+            >
+              {isPending ? "Joining..." : "Next"}
+            </button>
           </div>
-
-          {error && <p className={styles.error}>{error}</p>}
-
-          <button
-            onClick={handleNextClick}
-            disabled={isButtonDisabled}
-            className={`${styles.button} ${
-              isButtonDisabled ? styles.disabled : ""
-            }`}
-          >
-            {isPending ? "Joining..." : "Next"}
-          </button>
         </div>
       </div>
     </PageContent>
