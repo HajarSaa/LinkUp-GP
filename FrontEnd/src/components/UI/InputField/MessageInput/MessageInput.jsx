@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MessageInput.module.css";
 import { HiMiniBold } from "react-icons/hi2";
@@ -46,25 +45,24 @@ const MessageInput = () => {
     if (!canSend) return;
     const messageContent = {
       content: message,
+      attachmentIds :responseData|| [],
     };
     const type = isChannel ? "channel" : "conversation";
-    console.log("Type:", type, "ID:", id, "Message:", messageContent);
-    console.log(messageContent);
-    console.log(responseData);
-    // send_message.mutate(
-    //   {
-    //     type,
-    //     id,
-    //     messageContent,
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       setMessage("");
-    //       const textarea = textareaRef.current;
-    //       textarea.style.height = "40px";
-    //     },
-    //   }
-    // );
+    // console.log("Type:", type, "ID:", id, "Message:", messageContent);
+    send_message.mutate(
+      {
+        type,
+        id,
+        messageContent,
+      },
+      {
+        onSuccess: () => {
+          setMessage("");
+          const textarea = textareaRef.current;
+          textarea.style.height = "40px";
+        },
+      }
+    );
   };
 
   const handleKeyDown = (e) => {

@@ -13,7 +13,7 @@ function MediaContainer() {
       <div key={idx} className={styles.media_item}>
         <div className={styles.media_icon}>
           {file.status !== "done" ? (
-            <Spinner width={15} height={15} />
+            <Spinner width={12} height={12} color="#000"/>
           ) : (
             <FaTimes
               className={styles.close_icon}

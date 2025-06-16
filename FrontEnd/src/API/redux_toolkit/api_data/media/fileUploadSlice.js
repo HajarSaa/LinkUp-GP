@@ -29,14 +29,42 @@ const fileUploadSlice = createSlice({
     },
 
     addResponse: (state, action) => {
-      console.log(action.payload)
-      state.responseData.push(...action.payload.map((file) => file._id));
+      const responseFiles = action.payload;
+
+      responseFiles.forEach((file) => {
+        // دور على الملف اللي ليه نفس الاسم أو أي مفتاح ربط
+        const matchedFile = state.files.find((f) =>
+          file.fileUrl.includes(f.name)
+        );
+
+        if (matchedFile) {
+          matchedFile._id = file._id; // اربط الـ id بالميديا
+        }
+
+        // ضيف الـ id في الresponseData
+        state.responseData.push(file._id);
+      });
     },
     clearFiles(state) {
       state.files = [];
     },
     removeFile(state, action) {
       const previewURL = action.payload;
+
+      // الخطوة 1: لاقي الملف
+      const fileToRemove = state.files.find(
+        (file) => file.previewURL === previewURL
+      );
+
+      // الخطوة 2: احفظ الـ id مؤقتًا قبل أي تعديل
+      const fileId = fileToRemove?._id;
+
+      // الخطوة 3: عدّل الـ responseData بناءً على الـ id المحفوظ
+      if (fileId) {
+        state.responseData = state.responseData.filter((id) => id !== fileId);
+      }
+
+      // الخطوة 4: احذف الملف من الستيت
       state.files = state.files.filter(
         (file) => file.previewURL !== previewURL
       );
