@@ -41,6 +41,12 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
   req.body.user = req.user.id;
   req.body.email = req.user.email;
   req.body.workspace = req.params.id;
+
+  // handle avatar if uploaded
+  if (req.file && req.file.path) {
+    req.body.photo = req.file.path;
+  }
+
   userProfile = await UserProfile.create(req.body);
   const userProfileId = userProfile.id;
 
