@@ -30,6 +30,7 @@ const userProfileSchema = new mongoose.Schema({
   },
   about: {
     type: String,
+    default: "",
   },
   status: {
     type: String,
@@ -62,6 +63,7 @@ const userProfileSchema = new mongoose.Schema({
       },
       message: (props) => `${props.value} is not a valid Egyptian phone number`,
     },
+    default: "",
   },
 });
 

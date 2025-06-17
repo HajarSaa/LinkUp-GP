@@ -87,6 +87,14 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
 export const getWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
 
+  let workspace = await Workspace.findById(workspaceId);
+  // check if the workspace exists
+  if (!workspace) {
+    return next(
+      new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
+    );
+  }
+
   // First find the user's profile in this workspace
   const userProfile = await UserProfile.findOne({
     user: req.user.id,
@@ -98,7 +106,7 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   }
 
   // Get the workspace with populated data
-  const workspace = await Workspace.findById(workspaceId)
+  workspace = await Workspace.findById(workspaceId)
     .populate({
       path: "members",
     })
