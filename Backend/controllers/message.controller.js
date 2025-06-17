@@ -50,15 +50,12 @@ export const getChannelMedia = catchAsync(async (req, res, next) => {
     channelId,
     attachedToMessage: { $ne: null },
   });
-  if (media.length === 0) {
-    return next(new AppError("No media found for this channel", 404));
-  }
 
   // send response
   res.status(200).json({
     status: "success",
     data: {
-      media,
+      media: media || [],
     },
   });
 });
@@ -105,15 +102,12 @@ export const getConversationMedia = catchAsync(async (req, res, next) => {
     conversationId,
     attachedToMessage: { $ne: null },
   });
-  if (media.length === 0) {
-    return next(new AppError("No media found for this conversation", 404));
-  }
 
   // send response
   res.status(200).json({
     status: "success",
     data: {
-      media,
+      media: media || [],
     },
   });
 });
@@ -138,14 +132,11 @@ export const getThread = catchAsync(async (req, res, next) => {
     .limit(limit)
     .sort({ createdAt: 1 });
 
-  if (replies.length === 0)
-    return next(new AppError("No thread found for this message", 404));
-
   // Send response
   res.status(200).json({
     status: "success",
     data: {
-      messages: replies,
+      messages: replies || [],
     },
   });
 });
