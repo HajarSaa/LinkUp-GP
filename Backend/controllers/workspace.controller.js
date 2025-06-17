@@ -23,6 +23,7 @@ export const createWorkspace = catchAsync(async (req, res, next) => {
 });
 
 export const joinWorkspace = catchAsync(async (req, res, next) => {
+  const io = req.app.get("io");
   // find the workspace
   const workspace = await Workspace.findById(req.params.id);
   // check if the workspace exists
@@ -75,6 +76,17 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
 
   // create conversations between all the members of the workspace and the new member
   workspace.createMemberConversations();
+
+  // emit socket event to other members in workspace
+  io.to(`workspace:${workspace._id}`).emit("workspaceMemberJoined", {
+    userId: req.user.id,
+    profile: {
+      _id: userProfile._id,
+      name: userProfile.userName,
+      avatar: userProfile.photo,
+    },
+    joinedAt: new Date(),
+  });
 
   res.status(200).json({
     status: "success",
@@ -183,6 +195,12 @@ export const deleteWorkspace = catchAsync(async (req, res, next) => {
 
   // Delete the workspace
   await Workspace.findByIdAndDelete(workspaceId);
+  // emit socket event to notify all members that workspace is deleted
+  const io = req.app.get("io");
+  io.to(`workspace:${workspaceId}`).emit("workspace:deleted", {
+    workspaceId,
+    deletedAt: new Date(),
+  });
 
   res.status(204).json({
     status: "success",
