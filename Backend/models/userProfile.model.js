@@ -52,6 +52,17 @@ const userProfileSchema = new mongoose.Schema({
     enum: ["stable", "unstable"],
     default: "stable",
   },
+
+  phoneNumber: {
+    type: String,
+    validate: {
+      validator: function (val) {
+        if (!val) return true;
+        return /^\+20\d{10}$/.test(val); // Egyptian format
+      },
+      message: (props) => `${props.value} is not a valid Egyptian phone number`,
+    },
+  },
 });
 
 // Indexes

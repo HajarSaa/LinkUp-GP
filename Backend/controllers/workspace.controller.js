@@ -4,6 +4,7 @@ import UserProfile from "../models/userProfile.model.js";
 import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 export const getAllWorkspaces = getAll(Workspace);
 
@@ -35,6 +36,11 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
   });
   if (userProfile) {
     return next(new AppError("User already in workspace", 400));
+  }
+
+  // phone number validation
+  if (req.body.phoneNumber && !isValidPhoneNumber(req.body.phoneNumber)) {
+    return next(new AppError("Invalid phone number", 400));
   }
 
   // Create the userProfile
