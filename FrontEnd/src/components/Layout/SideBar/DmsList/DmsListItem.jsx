@@ -3,6 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../../../UI/User/UserImage";
+import UserStatusDot from "../../../UI/User/UserStatusDot";
 
 const DmsListItem = ({ dmData, isActive }) => {
   const navigate = useNavigate();
@@ -22,7 +23,10 @@ const DmsListItem = ({ dmData, isActive }) => {
       onClick={handleClick}
     >
       <div className={styles.left_side}>
-        <UserImage src={dmData.member.photo} alt={'conv member'}/>
+        <div className={styles.photo_wrapper}>
+          <UserImage src={dmData.member.photo} alt={"conv member"} />
+        </div>
+        <UserStatusDot status={dmData.member.status} />
       </div>
       <div className={styles.user_name}>
         <span>{dmData.member.userName}</span>

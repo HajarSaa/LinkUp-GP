@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 function UserStatus({ status }) {
   // status can be 'Online', 'Offline', 'Away'
-  
   return (
     // <span
     //   className={` ${styles.user_status} ${
@@ -35,28 +34,3 @@ export default UserStatus;
 UserStatus.propTypes = {
   status: PropTypes.string.isRequired,
 };
-
-
-// import { useSelector } from "react-redux";
-// import PropTypes from "prop-types";
-// import styles from "./User.module.css";
-
-// function UserStatus({ userId }) {
-//   const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
-
-//   const status = onlineUsers.includes(userId) ? "online" : "offline";
-
-//   return (
-//     <span
-//       className={` ${styles.user_status} ${
-//         status === "online" ? styles.online : styles.offline
-//       }`}
-//     ></span>
-//   );
-// }
-
-// UserStatus.propTypes = {
-//   userId: PropTypes.string.isRequired,
-// };
-
-// export default UserStatus;

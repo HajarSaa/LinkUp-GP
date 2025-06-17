@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🧪 Workspace Testing</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2rem;
+      }
+      .btn {
+        padding: 0.6rem 1rem;
+        margin: 0.5rem;
+        cursor: pointer;
+      }
+      input {
+        margin: 0.3rem;
+        padding: 0.4rem;
+        width: 300px;
+      }
+      pre {
+        background: #f5f5f5;
+        padding: 1rem;
+        border-radius: 6px;
+        max-height: 300px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>⚙️ Workspace Socket Testing</h2>
+
+    <label>
+      User ID:
+      <input type="text" id="userId" placeholder="Paste valid User ID" />
+    </label>
+    <br />
+    <label>
+      Workspace ID:
+      <input
+        type="text"
+        id="workspaceId"
+        placeholder="Paste valid Workspace ID"
+      />
+    </label>
+    <br />
+
+    <button class="btn" onclick="connectUser()">
+      🔌 Connect (Join Workspace)
+    </button>
+    <button class="btn" onclick="leaveWorkspace()">🚪 Leave Workspace</button>
+
+    <h3>📋 Output:</h3>
+    <pre id="log"></pre>
+
+    <script>
+      const log = (msg) => {
+        const out = document.getElementById("log");
+        out.textContent += `[${new Date().toLocaleTimeString()}] ${msg}\n`;
+      };
+
+      const socket = io("http://localhost:5000", {
+        withCredentials: true,
+      });
+
+      socket.on("connect", () => {
+        log("✅ Socket connected: " + socket.id);
+      });
+
+      socket.on("disconnect", () => {
+        log("❌ Socket disconnected");
+      });
+
+      socket.on("workspaceMemberJoined", (data) => {
+        log("🟢 Member joined workspace: " + JSON.stringify(data));
+      });
+
+      socket.on("workspaceMemberLeft", (data) => {
+        log("🔴 Member left workspace: " + JSON.stringify(data));
+      });
+
+      socket.on("presenceUpdate", (data) => {
+        log("👤 Presence update: " + JSON.stringify(data));
+      });
+
+      function connectUser() {
+        const userId = document.getElementById("userId").value.trim();
+        const workspaceId = document.getElementById("workspaceId").value.trim();
+
+        if (!userId || !workspaceId) {
+          return log("❗️ Both userId and workspaceId are required");
+        }
+
+        socket.emit("userConnected", userId, workspaceId, (res) => {
+          if (res.success) {
+            log("✅ userConnected: " + JSON.stringify(res.profile));
+          } else {
+            log("❌ userConnected failed");
+          }
+        });
+      }
+
+      function leaveWorkspace() {
+        const workspaceId = document.getElementById("workspaceId").value.trim();
+
+        socket.emit("leaveWorkspace", { workspaceId }, (res) => {
+          if (res.success) {
+            log("🚪 Left workspace successfully");
+          } else {
+            log("❌ Failed to leave workspace: " + JSON.stringify(res));
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

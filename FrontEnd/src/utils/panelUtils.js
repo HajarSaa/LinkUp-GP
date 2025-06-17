@@ -67,3 +67,9 @@ export const getParentMessageByPageId = (page_id) => {
   const stored = JSON.parse(localStorage.getItem(thread_panel)) || {};
   return stored[page_id]?.parnetMessage || null;
 };
+// =======================================
+// for sign out
+export const removeAllPanels = () => {
+  localStorage.removeItem(user_panel)
+  localStorage.removeItem(thread_panel)
+};

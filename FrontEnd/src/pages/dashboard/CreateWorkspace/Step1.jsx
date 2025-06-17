@@ -1,31 +1,49 @@
-/* eslint-disable react/prop-types */
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
-import { useState } from "react";
-import { createWorkspaceService } from "../../../API/services/workspaceService";
+import { useState,} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import useCreateWorkspace from "../../../API/hooks/workspace/useCreateWorkspace";
+import {
+  setStepIndex,
+  setWorkspace,
+} from "../../../API/redux_toolkit/ui/creationsStep";
+import { updateCreationDataField } from "../../../utils/workspaceUtils";
+import { useNavigate } from "react-router-dom";
 
-function Step1({ onNext }) {
-  const [teamName, setTeamName] = useState("");
-  const [loading, setLoading] = useState(false);
+function Step1() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const savedWorkspace = useSelector(
+    (state) => state.createWorkspace.workspace
+  );
+  const [teamName, setTeamName] = useState(savedWorkspace?.work_name || "");
+
   const [error, setError] = useState(null);
 
-  const isButtonDisabled = teamName.trim() === "" || loading;
+  const { mutateAsync: createWorkspace, isPending } = useCreateWorkspace();
+
+
+  const isButtonDisabled = teamName.trim() === "" || isPending;
 
   const handleNextClick = async () => {
     if (isButtonDisabled) return;
 
-    try {
-      setLoading(true);
-      const res = await createWorkspaceService(teamName);
-      const workspace = res?.data?.workspace;
-      onNext(workspace);
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    createWorkspace(teamName, {
+      onSuccess: (workspace) => {
+        dispatch(setWorkspace(workspace));
+        dispatch(setStepIndex(1));
+        navigate("/create-workspace/step-2");
+      },
+      onError: (error) => {
+        setError(error.response?.data?.message);
+      },
+    });
   };
+  function handleInputChange(e) {
+    const value = e.target.value;
+    setTeamName(value);
+    updateCreationDataField("workspace", { work_name: value });
+  }
 
   return (
     <PageContent>
@@ -43,7 +61,7 @@ function Step1({ onNext }) {
           <input
             type="text"
             value={teamName}
-            onChange={(e) => setTeamName(e.target.value)}
+            onChange={handleInputChange}
             placeholder="Ex: Acme Marketing or Acme Co"
             className={styles.input}
             maxLength={50}
@@ -58,7 +76,7 @@ function Step1({ onNext }) {
               isButtonDisabled ? styles.disabled : ""
             }`}
           >
-            {loading ? "Creating..." : "Next"}
+            {isPending ? "Creating..." : "Next"}
           </button>
         </div>
       </div>

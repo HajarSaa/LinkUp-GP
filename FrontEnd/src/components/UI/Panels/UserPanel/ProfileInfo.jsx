@@ -8,6 +8,10 @@ const ProfileInfo = () => {
   const userProfile = useSelector((state) => state.userProfile.data);
   // const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
   // const userStatus = onlineUsers.includes(userProfile?.user) ? "online" : "offline";
+  const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
+  const userStatus = onlineUsers.includes(userProfile?.user)
+    ? "online"
+    : "offline";
   const dispatch = useDispatch();
 
   function handleOpenEditUserProfile(focusField = "fullName") {

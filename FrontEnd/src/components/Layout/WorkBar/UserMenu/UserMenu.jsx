@@ -9,6 +9,7 @@ import UserStatus from "../../../UI/User/UserStatus";
 import { openSetStatusModal } from "../../../../API/redux_toolkit/modals/userProfile/setStatusSlice";
 import { closeUserMenuModal } from "../../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 import { openUserPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
+import { removeAllPanels } from "../../../../utils/panelUtils";
 
 function UserMenu() {
   const { isOpen } = useSelector((state) => state.userMenu);
@@ -19,7 +20,9 @@ function UserMenu() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
-  const userStatus = onlineUsers.includes(loggin_user?.user) ? "online" : "offline";
+  const userStatus = onlineUsers.includes(loggin_user?.user)
+    ? "online"
+    : "offline";
   const show_profile = () => {
     dispatch(openUserPanel({ panel_id: loggin_user._id, page_id: page_id }));
     dispatch(closeUserMenuModal());
@@ -30,6 +33,7 @@ function UserMenu() {
   };
 
   const handleSignOut = () => {
+    removeAllPanels();
     navigate("/login");
     dispatch(closeUserMenuModal());
   };

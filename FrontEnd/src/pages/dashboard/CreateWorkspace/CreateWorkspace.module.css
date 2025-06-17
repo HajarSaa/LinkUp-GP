@@ -20,7 +20,7 @@
 }
 
 .heading {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 700;
   margin-bottom: 20px;
   color: #1d1c1d;
@@ -67,6 +67,7 @@
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+  /* border: 1px solid currentColor; */
 }
 
 .button:hover:enabled {
@@ -81,7 +82,7 @@
 
 /**********************************Step2****************************************/
 .profilePhotoSection {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   /* width: 25%; */
   height: 100%;
   display: flex;
@@ -104,24 +105,17 @@
   }
 
   .profilePhotoPlaceholder {
-    width: 25%;
-    height: 100%;
-    background: var(--secondary-color);
+    width: 150px;
+    height: 150px;
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .photo {
-      color: var(--active-color);
-      font-size: 150px;
-      padding: 10px 0;
-    }
+    overflow: hidden;
   }
 }
 
 .uploadButton {
-  margin-top: 10px;
   width: 25%;
   padding: 10px;
   font-size: 15px;
@@ -225,3 +219,15 @@
 }
 
 /*************************************************************************/
+
+.btns_group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: fit-content;
+}
+
+.btns_group>* {
+  width: 150px;
+  height: 40px;
+}

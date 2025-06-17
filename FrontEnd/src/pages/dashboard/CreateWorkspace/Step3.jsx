@@ -1,20 +1,55 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
-import { IoIosLink } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
 import SkipConfirmationModal from "../../../components/UI/Modal/SkipConfirmationModal/SkipConfirmationModal";
+import {
+  setEmails,
+  clearCreationSteps,
+} from "../../../API/redux_toolkit/ui/creationsStep";
+import { updateCreationDataField } from "../../../utils/workspaceUtils";
+import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
+import CreationInvite from "../../../components/UI/CreationWork/CreationInvite";
 
-function Step3({ onNext, workspace }) {
-  const [email, setEmail] = useState("");
+function Step3() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const workspace = useSelector((state) => {
+    const w = state.createWorkspace.workspace;
+    return w?.workspace ?? w ?? null;
+  });
+  const savedEmails = useSelector((state) => state.createWorkspace.emails);
+  const [emailText, setEmailText] = useState(
+    Array.isArray(savedEmails) ? savedEmails.join(", ") : ""
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const isButtonDisabled = email.trim() === "";
+  const isButtonDisabled = emailText.trim() === "";
+
+  //   تحويل النص إلى array وحفظه
+  // const handleInputChange = (e) => {
+  //   const value = e.target.value;
+  //   setEmailText(value);
+
+  //   const emailArray = value
+  //     .split(",")
+  //     .map((email) => email.trim())
+  //     .filter((email) => email.length > 0);
+
+  //   dispatch(setEmails(emailArray));
+  //   updateCreationDataField("emails", emailArray);
+  // };
 
   const handleNextClick = () => {
-    if (!isButtonDisabled && onNext) {
-      onNext(email);
-    }
+    if (localStorage.getItem("selectedWorkspaceId"))
+      localStorage.removeItem("selectedWorkspaceId");
+    dispatch(clearWorkspace());
+    localStorage.setItem("selectedWorkspaceId", workspace.id);
+    dispatch(clearCreationSteps());
+    navigate("/"); //   إنهاء وإنقال
   };
 
   const handleSkipClick = () => {
@@ -27,7 +62,9 @@ function Step3({ onNext, workspace }) {
 
   const handleModalConfirm = () => {
     setIsModalOpen(false);
-    onNext([]);
+    dispatch(setEmails([]));
+    updateCreationDataField("emails", []);
+    handleNextClick();
   };
 
   if (!workspace) {
@@ -47,47 +84,13 @@ function Step3({ onNext, workspace }) {
             team?
           </h1>
 
-          <label className={styles.label}>Add coworker by email</label>
-
-          <textarea
-            className={styles.textarea}
-            placeholder="Ex. User1@gmail.com, User2@gmail.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+          <CreationInvite
+            handleSkipClick={handleSkipClick}
+            handleNextClick={handleNextClick}
+            isButtonDisabled={isButtonDisabled}
           />
-
-          <p className={styles.subheading}>
-            Keep in mind that invitations expire in 30 days. You can always
-            extend that deadline.
-          </p>
-
-          <div className={styles.actions}>
-            <button
-              onClick={handleNextClick}
-              disabled={isButtonDisabled}
-              className={`${styles.button} ${
-                isButtonDisabled ? styles.disabled : ""
-              }`}
-            >
-              Next
-            </button>
-
-            <button className={styles.copyButton}>
-              <IoIosLink />
-              Copy Invite Link
-            </button>
-
-            <button
-              type="skipButton"
-              onClick={handleSkipClick}
-              className={styles.skipButton}
-            >
-              Skip this step
-            </button>
-          </div>
         </div>
       </div>
-
       <SkipConfirmationModal
         isOpen={isModalOpen}
         onCancel={handleModalCancel}

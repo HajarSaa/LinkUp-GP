@@ -8,7 +8,7 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "../dashboard.module.css";
 import Panel from "../../../components/Layout/Panel/Panel";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getParentMessageByPageId,
   getThreadPanelIdByPageId,
@@ -22,16 +22,18 @@ import {
   openUserPanel,
 } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
+import FilesContainer from "../../../components/UI/FilesContainer/FilesContainer";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
   const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
+  const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
 
+  // handle opened panel
   useEffect(() => {
-
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
     const isThreadPanel = isIdInOpenedThreadPanelItems(convers_id);
     if (isUserPanel) {
@@ -54,6 +56,8 @@ function DmPage() {
     } else {
       dispatch(closeChatPanel());
     }
+    // reset active tab
+    setActiveTab("messages");
   }, [convers_id, dispatch]);
 
   if (convers_query.isLoading)
@@ -79,9 +83,15 @@ function DmPage() {
   return (
     <PageContent>
       <div className={styles.page_content}>
-        <UserNavbar />
-        <UserCard />
-        {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
+        <UserNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
+        {activeTab === "messages" ? (
+          <>
+            <UserCard />
+            {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
+          </>
+        ) : (
+          <FilesContainer files={[]} type="conversation" />
+        )}
       </div>
       <Panel />
     </PageContent>

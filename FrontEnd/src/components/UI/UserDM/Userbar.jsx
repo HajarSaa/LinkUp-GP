@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import styles from "./UserDM.module.css";
 import { TbMessageCircleFilled } from "react-icons/tb";
@@ -20,8 +21,9 @@ import UserImage from "../User/UserImage";
 import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { useParams } from "react-router-dom";
-const Navbar = () => {
-  const [activeTab, setActiveTab] = useState("messages");
+import PropTypes from "prop-types";
+
+const Navbar = ({ activeTab, setActiveTab }) => {
   const receiver = useSelector((state) => state.convers.chatMate);
   const dispath = useDispatch();
   const { id } = useParams();
@@ -33,12 +35,12 @@ const Navbar = () => {
       icon: <LuMessageCircle />,
       activeIcon: <TbMessageCircleFilled />,
     },
-    {
-      id: "weekly",
-      label: "Weekly Sync",
-      icon: <FaRegFileAlt />,
-      activeIcon: <FaRegFileAlt />,
-    },
+    // {
+    //   id: "weekly",
+    //   label: "Weekly Sync",
+    //   icon: <FaRegFileAlt />,
+    //   activeIcon: <FaRegFileAlt />,
+    // },
     {
       id: "files",
       label: "Files",
@@ -116,9 +118,8 @@ const Navbar = () => {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`${styles.tabButton} ${
-                activeTab === item.id ? styles.active : ""
-              }`}
+              className={`${styles.tabButton} ${activeTab === item.id ? styles.active : ""
+                }`}
               onClick={() => setActiveTab(item.id)}
             >
               {activeTab === item.id ? item.activeIcon : item.icon}
@@ -133,6 +134,11 @@ const Navbar = () => {
       <UserModal />
     </>
   );
+}
+Navbar.propTypes = {
+  activeTab: PropTypes.string.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
 };
+
 
 export default Navbar;

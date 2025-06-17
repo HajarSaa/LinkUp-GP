@@ -17,7 +17,6 @@ function MessageThreads({ threadData, parentMessage }) {
   });
 
   function openThreads() {
-    console.log(threadData);
     dispatch(
       openThreadPanel({
         threadID: threadData.id,
