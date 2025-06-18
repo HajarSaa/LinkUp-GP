@@ -42,7 +42,7 @@ app.use("/api/v1/workspaces", workspaceRouter);
 app.use("/api/v1/channels", channelRouter);
 app.use("/api/v1/conversations", conversationRouter);
 app.use("/api/v1/messages", messageRouter);
-app.use("/api/v1/files", uploadRouter);
+app.use("/api/v1/uploads", uploadRouter);
 app.use("/api/v1/files", fileRouter);
 app.use("/api/v1/search", searchRoutes);
 

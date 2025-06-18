@@ -63,7 +63,7 @@ export default function workspaceHandler(socket, io) {
       }
 
       await socket.leave(`workspace:${workspaceId}`);
-
+      console.log("📡 Emitting workspaceMemberLeft to workspace:", workspaceId);
       io.to(`workspace:${workspaceId}`).emit("workspaceMemberLeft", {
         userId: socket.userId,
         leftAt: new Date(),

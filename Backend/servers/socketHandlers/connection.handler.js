@@ -53,7 +53,7 @@ export default function connectionHandler(socket, io) {
 
       if (!socket.recovered && connectionSet.size === 1) {
         await setUserStatus(userId, workspaceId, "online");
-
+        console.log("📡 Emitting workspaceMemberJoined to workspace:", workspaceId);
         io.to(`workspace:${workspaceId}`).emit("workspaceMemberJoined", {
           userId,
           profile: {
@@ -99,6 +99,11 @@ export default function connectionHandler(socket, io) {
 
       if (workspaceUserSet) {
         workspaceUserSet.delete(userId);
+        // 👇 زودي الجزء ده هنا
+        io.to(`workspace:${workspaceId}`).emit("workspaceMemberLeft", {
+          userId,
+          leftAt: new Date(),
+        });
         if (workspaceUserSet.size === 0) {
           workspacePresence.delete(workspaceId);
         }

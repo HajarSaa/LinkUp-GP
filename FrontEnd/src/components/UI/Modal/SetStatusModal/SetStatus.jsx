@@ -42,10 +42,11 @@ const SetStatusModal = () => {
                 value={selectedStatus}
                 className={styles.status_input}
                 onChange={(e) => setSelectedStatus(e.target.value)}
+                readOnly
               />
 
               <label>Remove status after</label>
-              <input type="text" className={styles.status_valid} value={'Today'} />
+              <input type="text" className={styles.status_valid} defaultValue={'Today'} />
             </div>
           ) : (
             <>
