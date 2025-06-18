@@ -5,6 +5,7 @@ import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 import { isValidPhoneNumber } from "libphonenumber-js";
+import Channel from "../models/channel.model.js";
 
 export const getAllWorkspaces = getAll(Workspace);
 
@@ -13,6 +14,18 @@ export const createWorkspace = catchAsync(async (req, res, next) => {
   req.body.createdBy = req.user.id;
 
   const workspace = await Workspace.create(req.body);
+
+  // Create a general channel for all members to be in
+  const defaultChannel = {
+    name: "General",
+    type: "public",
+    description: "General channel for all members",
+    createdBy: req.user.id,
+    workspaceId: workspace.id,
+    required: true,
+  };
+
+  await Channel.create(defaultChannel);
 
   res.status(201).json({
     status: "success",
@@ -24,6 +37,7 @@ export const createWorkspace = catchAsync(async (req, res, next) => {
 
 export const joinWorkspace = catchAsync(async (req, res, next) => {
   const io = req.app.get("io");
+
   // find the workspace
   const workspace = await Workspace.findById(req.params.id);
   // check if the workspace exists
@@ -88,6 +102,24 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
     joinedAt: new Date(),
   });
 
+  // general channel
+  const channel = await Channel.findOne({
+    workspaceId: workspace.id,
+    required: true,
+  });
+
+  // edit the default channel createdBy to be the userProfile id
+  const generalChannelCreater = await UserProfile.findById(channel.createdBy);
+  if (!generalChannelCreater) {
+    channel.createdBy = userProfileId;
+  }
+  // add the userProfile to the general channel
+  channel.members.push(userProfileId);
+
+  // save the channel
+  await channel.save();
+
+  // Send the response
   res.status(200).json({
     status: "success",
     data: {
