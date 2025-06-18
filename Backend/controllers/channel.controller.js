@@ -90,6 +90,35 @@ export const createChannel = catchAsync(async (req, res, next) => {
   });
 });
 
+export const updateChannel = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+
+  const { name, type, topic, description } = req.body;
+
+  // Find the channel
+  const channel = await Channel.findById(channelId);
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Validate the { name, type, topic, description }
+
+  // Update the channel
+  if (name) channel.name = name;
+  if (type) channel.type = type;
+  if (topic) channel.topic = topic;
+  if (description) channel.description = description;
+
+  // Save the updates
+  await channel.save();
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    data: { channel },
+  });
+});
+
 export const joinChannel = catchAsync(async (req, res, next) => {
   // Attach data into request body
   req.body.userId = req.userProfile.id;

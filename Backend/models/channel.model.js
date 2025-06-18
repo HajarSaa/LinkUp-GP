@@ -22,6 +22,14 @@ const channelSchema = new mongoose.Schema(
       ref: "Workspace",
       required: true,
     },
+    topic: {
+      type: String,
+      default: "",
+    },
+    description: {
+      type: String,
+      default: "",
+    },
     members: [
       {
         type: mongoose.Schema.ObjectId,
