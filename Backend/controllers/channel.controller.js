@@ -33,18 +33,19 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
   // Check if the channel is the dafault channel
-  let channel = await Channel.findById(channelId);
-  if (channel.required) {
-    return next(new AppError("Cannot delete the required channel", 400));
-  }
-
-  // Delete the channel
-  channel = await Channel.findByIdAndDelete(channelId);
+  const channel = await Channel.findById(channelId);
 
   // Check if the channel exists
   if (!channel) {
     return next(new AppError("No channel found with that ID", 404));
   }
+
+  if (channel.required) {
+    return next(new AppError("Cannot delete the required channel", 400));
+  }
+
+  // Delete the channel
+  await Channel.findByIdAndDelete(channelId);
 
   res.status(204).json({
     status: "success",
