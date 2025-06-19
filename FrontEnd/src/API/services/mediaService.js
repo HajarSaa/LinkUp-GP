@@ -19,7 +19,7 @@ export const getConversationMedia = async (conversation_id) => {
 };
 // ====================(Upload Media)
 export const uploadMedia = async ({ formData, onUploadProgress }) => {
-  const { data } = await axiosInstance.post("/files/upload", formData, {
+  const { data } = await axiosInstance.post("/uploads/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
