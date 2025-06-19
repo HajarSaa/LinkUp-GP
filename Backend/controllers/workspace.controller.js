@@ -209,8 +209,6 @@ export const leaveWorkspace = catchAsync(async (req, res, next) => {
     return next(new AppError("No workspace found with that ID", 404));
   }
 
-  console.log(req.userProfile.id);
-
   // Find the user's profile in this workspace
   const userProfile = await UserProfile.findById(req.userProfile.id);
 
