@@ -32,7 +32,6 @@ export const getAllChannels = catchAsync(async (req, res, next) => {
 export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
-  // Check if the channel is the dafault channel
   const channel = await Channel.findById(channelId);
 
   // Check if the channel exists
@@ -40,14 +39,14 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
     return next(new AppError("No channel found with that ID", 404));
   }
 
-<<<<<<< Updated upstream
+  // Check if the channel is the dafault channel
   if (channel.required) {
     return next(new AppError("Cannot delete the required channel", 400));
   }
 
   // Delete the channel
   await Channel.findByIdAndDelete(channelId);
-=======
+
   // emit channelDeleted event to the workspace room
   const io = req.app.get("io");
   io.to(`workspace:${channel.workspaceId}`).emit("channel:updated", {
@@ -61,8 +60,8 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
     },
     timestamp: new Date(),
   });
->>>>>>> Stashed changes
 
+  // Send response
   res.status(204).json({
     status: "success",
     data: null,
