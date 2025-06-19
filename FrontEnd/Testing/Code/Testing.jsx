@@ -3,8 +3,6 @@
 // import AudioRecord from "./AudioRecord/AudioRecord"
 
 
-
-
 function Testing() {
   return (
     <>
@@ -12,7 +10,7 @@ function Testing() {
       {/* <Later/> */}
       {/* <AudioRecord /> */}
     </>
-  )
+  );
 }
 
-export default Testing
+export default Testing;
