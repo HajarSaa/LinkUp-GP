@@ -32,8 +32,14 @@ export const getAllChannels = catchAsync(async (req, res, next) => {
 export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
+  // Check if the channel is the dafault channel
+  let channel = await Channel.findById(channelId);
+  if (channel.required) {
+    return next(new AppError("Cannot delete the required channel", 400));
+  }
+
   // Delete the channel
-  const channel = await Channel.findByIdAndDelete(channelId);
+  channel = await Channel.findByIdAndDelete(channelId);
 
   // Check if the channel exists
   if (!channel) {
@@ -159,6 +165,11 @@ export const leaveChannel = catchAsync(async (req, res, next) => {
 
   if (!channel) {
     return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Check if the channel is the default channel
+  if (channel.required) {
+    return next(new AppError("Cannot leave the required channel", 400));
   }
 
   // Check if the user is a member of the channel

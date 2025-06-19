@@ -30,6 +30,10 @@ const channelSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
     members: [
       {
         type: mongoose.Schema.ObjectId,

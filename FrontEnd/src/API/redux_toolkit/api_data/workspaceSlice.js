@@ -19,9 +19,22 @@ const workspaceSlice = createSlice({
     setOnlineUsers: (state, action) => {
       state.onlineUsers = action.payload;
     },
+    updateWorkspaceName: (state, action) => {
+      if (state.workspace) {
+        state.workspace.name = action.payload;
+      }
+    },
+    removeWorkspaceMember: (state, action) => {
+      if (state.workspace?.members) {
+        state.workspace.members = state.workspace.members.filter(
+          (member) => member._id !== action.payload
+        );
+      }
+    },
   },
 });
 
-export const { setWorkspace, clearWorkspace, setOnlineUsers } = workspaceSlice.actions;
+
+export const { setWorkspace, clearWorkspace, setOnlineUsers, updateWorkspaceName, removeWorkspaceMember, } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

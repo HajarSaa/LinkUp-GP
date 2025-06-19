@@ -59,12 +59,17 @@ const useSocketConnection = () => {
       if (response?.success) {
         dispatch(setUserProfile(response.profile));
 
-        // 2. Set active workspace
+        // 1.1 Join the workspace room
+        socket.emit("joinWorkspaceRoom", workspace._id, (res) => {
+          console.log("🏠 Joined workspace room:", res);
+        });
+
+        // 1.2 Set active workspace
         setActiveWorkspace(workspace._id, (res) => {
           console.log("📌 Active workspace set:", res);
         });
 
-        // 3. Fetch workspace members (اختياري)
+        // 1.3 Fetch workspace members
         fetchWorkspaceMembers(workspace._id, (res) => {
           if (res.success) {
             console.log("📋 Members list:", res.members);
@@ -73,7 +78,7 @@ const useSocketConnection = () => {
       }
     });
 
-    // 4. Register socket event handlers
+    // 2. Register socket event handlers
     const cleanupWorkspace = registerWorkspaceHandlers(socket, dispatch);
     const cleanupPresence = registerPresenceHandlers(socket, dispatch);
 

@@ -47,7 +47,7 @@ conversationSchema.pre("findOneAndDelete", async function (next) {
   const filter = this.getFilter();
 
   if (filter._id) {
-    // Delete all messages associated with the channel
+    // Delete all messages associated with the conversation
     await Message.deleteMany({ conversationId: filter._id });
   }
 
