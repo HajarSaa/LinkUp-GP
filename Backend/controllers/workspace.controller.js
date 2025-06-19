@@ -237,13 +237,13 @@ export const leaveWorkspace = catchAsync(async (req, res, next) => {
   // Delete the userProfile
   await UserProfile.findByIdAndDelete(userProfile._id);
 
-  // // emit socket event to notify all members that a member left
-  // const io = req.app.get("io");
-  // io.to(`workspace:${workspaceId}`).emit("workspaceMemberLeft", {
-  //   userId: req.user.id,
-  //   profileId: userProfile._id,
-  //   leftAt: new Date(),
-  // });
+  // emit socket event to notify all members that a member left
+  const io = req.app.get("io");
+  io.to(`workspace:${workspaceId}`).emit("workspaceMemberLeft", {
+    userId: req.user.id,
+    profileId: userProfile._id,
+    leftAt: new Date(),
+  });
 
   // Send the response
   res.status(200).json({
@@ -257,6 +257,7 @@ export const leaveWorkspace = catchAsync(async (req, res, next) => {
 });
 
 export const updateWorkspace = catchAsync(async (req, res, next) => {
+  const io = req.app.get("io");
   const workspaceId = req.params.id;
 
   const { name } = req.body;
@@ -272,6 +273,13 @@ export const updateWorkspace = catchAsync(async (req, res, next) => {
 
   // Save the updates
   await workspace.save();
+
+  // Broadcast update to all workspace members
+  io.to(`workspace:${workspaceId}`).emit("workspace:updated", {
+    workspaceId,
+    updatedFields: { name },
+    updatedAt: new Date(),
+  });
 
   // Send the response
   res.status(200).json({
