@@ -6,14 +6,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons/faPenToSquare";
 import PropTypes from "prop-types";
 import SidebarLists from "./SidebarLists";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useResize from "../../../API/hooks/workspace/useResize";
+import { openWorkspaceMenu } from "../../../API/redux_toolkit/modals/workspace/workspaceMenu";
+import WorkspaceMenu from "../../UI/Modal/WorkspaceMenu/WorkspaceMenu";
+import RenameWorkModal from "../../UI/Modal/RenameWorkModal/RenameWorkModal";
 
 function SideBar() {
   const { workspace } = useSelector((state) => state.workspace);
-  const initialWidth = parseInt(localStorage.getItem("sidebarWidth")) || 250;
   const sidebarRef = useRef(null);
+  const dispatch = useDispatch();
+  // Custom hook for resizing the sidebar
+  // It returns the current width and a function to start resizing
+  const initialWidth = parseInt(localStorage.getItem("sidebarWidth")) || 250;
   const { width, startResizing } = useResize(sidebarRef, initialWidth);
+
+  function openWorkMenu(e) {
+    e.stopPropagation();
+
+    dispatch(
+      openWorkspaceMenu({
+        workspaceId: workspace.id,
+        workspaceName: workspace.name,
+      })
+    );
+  }
 
   if (!workspace)
     return (
@@ -25,27 +42,35 @@ function SideBar() {
     );
 
   return (
-    <div
-      ref={sidebarRef}
-      className={`${styles.side_bar} ${width ? styles.resizing : ""}`}
-      style={{ width: `${width}px` }}
-    >
-      <div className={styles.side_bar_content}>
-        <div className={styles.side_bar_header}>
-          <div className={styles.side_bar_header_leftSide}>
-            <span className={styles.work_name}>{workspace.name}</span>
-            <span className={styles.side_bar_header_leftSide_icon}>
-              <IoIosArrowDown />
-            </span>
+    <>
+      <div
+        ref={sidebarRef}
+        className={`${styles.side_bar} ${width ? styles.resizing : ""}`}
+        style={{ width: `${width}px` }}
+      >
+        <div className={styles.side_bar_content}>
+          <div className={styles.side_bar_header}>
+            <div
+              className={styles.side_bar_header_leftSide}
+              onClick={openWorkMenu}
+            >
+              <span className={styles.work_name}>{workspace.name}</span>
+              <span className={styles.side_bar_header_leftSide_icon}>
+                <IoIosArrowDown />
+              </span>
+            </div>
+            <Icon className={styles.side_bar_header_icon}>
+              <FontAwesomeIcon icon={faPenToSquare} />
+            </Icon>
           </div>
-          <Icon className={styles.side_bar_header_icon}>
-            <FontAwesomeIcon icon={faPenToSquare} />
-          </Icon>
+          <SidebarLists />
         </div>
-        <SidebarLists />
+        <span className={styles.resizer} onMouseDown={startResizing} />
       </div>
-      <span className={styles.resizer} onMouseDown={startResizing} />
-    </div>
+      <WorkspaceMenu />
+      {/* sub modal */}
+      <RenameWorkModal />
+    </>
   );
 }
 

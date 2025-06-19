@@ -22,6 +22,7 @@ import channelMediaReducer from "./api_data/media/channelMediaSlice";
 //======
 // ==============================(Worskpace)
 import createWorkspaceReducer from "./ui/creationsStep";
+import workspaceMenuReducer from "./modals/workspace/workspaceMenu";
 //======
 // ==============================(User Profile)
 import editUserProfileReducer from "./modals/userProfile/editUserProfie";
@@ -63,6 +64,7 @@ const store = configureStore({
     // ==============================(workspace)
     // ====
     createWorkspace: createWorkspaceReducer,
+    workspaceMenu: workspaceMenuReducer,
     // ==============================(conversation)
     // ====
     convers: conversReducer,
