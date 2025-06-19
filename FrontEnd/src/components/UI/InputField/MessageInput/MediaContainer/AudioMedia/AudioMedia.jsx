@@ -21,12 +21,19 @@ const AudioMedia = ({ audioUrl }) => {
       setCurrentTime(audio.currentTime);
     };
 
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+    };
+
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
 
     return () => {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
     };
   }, []);
 
@@ -60,19 +67,32 @@ const AudioMedia = ({ audioUrl }) => {
   return (
     <div className={styles.wrapper}>
       <button className={styles.playButton} onClick={togglePlay}>
-        <span className={styles.icon}>{isPlaying ? <HiPause size={18} /> : <HiPlay size={18} />}</span>
+        <span className={styles.icon}>
+          {isPlaying ? <HiPause size={18} /> : <HiPlay size={18} />}
+        </span>
       </button>
 
-      <input
-        type="range"
-        min="0"
-        max={duration}
-        step="1"
-        value={currentTime}
-        onChange={handleSeek}
-        className={styles.progressBar}
-        style={{ "--progress": `${(currentTime / duration) * 100 || 0}%` }}
-      />
+      <div className={styles.progressWrapper}>
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          step="0.01"
+          value={currentTime}
+          onChange={handleSeek}
+          className={styles.progressBar}
+          style={{
+            "--progress": `${(currentTime / (duration || 1)) * 100}%`,
+          }}
+        />
+        <span
+          className={styles.customThumb}
+          style={{
+            left: `${(currentTime / (duration || 1)) * 100}%`,
+            "--audio-thumb-color": isPlaying ? "#0074cc" : "#999",
+          }}
+        />
+      </div>
 
       <span className={styles.time}>{formatTime(currentTime)}</span>
 
