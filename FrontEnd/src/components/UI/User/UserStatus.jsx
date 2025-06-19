@@ -1,51 +1,8 @@
-// // import styles from "./User.module.css";
-// // import PropTypes from "prop-types";
-
-// // function UserStatus({ status }) {
-// //   // status can be 'Online', 'Offline', 'Away'
-// //   return (
-// //     // <span
-// //     //   className={` ${styles.user_status} ${
-// //     //     status === "online"
-// //     //       ? styles.online
-// //     //       : status === "away"
-// //     //       ? styles.away
-// //     //       : status === "busy"
-// //     //       ? styles.busy
-// //     //       : styles.offline
-// //     //   }`}
-// //     // ></span>
-
-// //         <span
-// //       className={` ${styles.user_status} ${
-// //         status === "online"
-// //           ? styles.online
-// //           : status === "away"
-// //           ? styles.away
-// //           : status === "busy"
-// //           ? styles.busy
-// //           : styles.offline
-// //       }`}
-// //     ></span>
-// //   );
-// // }
-
-// // export default UserStatus;
-// // UserStatus.propTypes = {
-// //   status: PropTypes.string.isRequired,
-// // };
-
-// import { useSelector } from "react-redux";
 // import styles from "./User.module.css";
 // import PropTypes from "prop-types";
 
-// function UserStatus({ userId }) {
-//   const userStatuses = useSelector((state) => state.workspace.userStatuses);
-//   const userData = userStatuses[userId];
-
-//   const status = userData?.status || "offline";
-//   const customStatus = userData?.customStatus;
-
+// function UserStatus({ status }) {
+//   // status can be 'Online', 'Offline', 'Away'
 //   return (
 //     <span
 //       className={` ${styles.user_status} ${
@@ -57,63 +14,68 @@
 //           ? styles.busy
 //           : styles.offline
 //       }`}
-//       title={
-//         customStatus?.text
-//           ? `${status} - ${customStatus.emoji || ""} ${customStatus.text}`
-//           : status
-//       }
 //     ></span>
 //   );
 // }
 
+// export default UserStatus;
 // UserStatus.propTypes = {
-//   userId: PropTypes.string.isRequired,
+//   status: PropTypes.string.isRequired,
 // };
 
-// export default UserStatus;
+// import styles from "./User.module.css";
+// import PropTypes from "prop-types";
+// function UserStatus({ status, customStatus }) {
+//   const finalStatus = status === "offline" ? "offline" : status;
+
+//   return (
+//     <div className={styles.statusWrapper}>
+//       <span
+//         className={`${styles.user_status} ${
+//           finalStatus === "online"
+//             ? styles.online
+//             : finalStatus === "away"
+//             ? styles.away
+//             : finalStatus === "busy"
+//             ? styles.busy
+//             : styles.offline
+//         }`}
+//       />
+//       {customStatus?.emoji && customStatus?.text && (
+//         <span className={styles.customStatusText}>
+//           {customStatus.emoji} {customStatus.text}
+//         </span>
+//       )}
+//     </div>
+//   );
+// }
+// UserStatus.propTypes = {
+//   status: PropTypes.string.isRequired,
+//   customStatus: PropTypes.object,
+// };
 
 
 import { useSelector } from "react-redux";
-import styles from "./User.module.css";
 import PropTypes from "prop-types";
+import styles from "./User.module.css";
 
-function UserStatus({ userId, status: propStatus, customStatus: propCustomStatus }) {
-  // ✅ استخدم useSelector بشكل ثابت
-  const userStatuses = useSelector((state) => state.workspace.userStatuses);
+function UserStatus({ userId }) {
+  const onlineUsers = useSelector((state) => state.workspace.onlineUsers);
 
-  let status = propStatus || "offline";
-  let customStatus = propCustomStatus;
-
-  // ✅ بعدين نفلتر أو نعدّل على حسب userId
-  if (userId && userStatuses?.[userId]) {
-    status = userStatuses[userId].status || "offline";
-    customStatus = userStatuses[userId].customStatus;
-  }
+  // تحديد الحالة بناءً على وجود userId في onlineUsers
+  const status = onlineUsers.includes(userId) ? "online" : "offline";
 
   return (
     <span
-      className={`${styles.user_status} ${
-        status === "online"
-          ? styles.online
-          : status === "away"
-          ? styles.away
-          : status === "busy"
-          ? styles.busy
-          : styles.offline
+      className={` ${styles.user_status} ${
+        status === "online" ? styles.online : styles.offline
       }`}
-      title={
-        customStatus?.text
-          ? `${status} - ${customStatus.emoji || ""} ${customStatus.text}`
-          : status
-      }
     ></span>
   );
 }
 
 UserStatus.propTypes = {
-  userId: PropTypes.string,
-  status: PropTypes.string,
-  customStatus: PropTypes.object,
+  userId: PropTypes.string.isRequired,
 };
 
 export default UserStatus;

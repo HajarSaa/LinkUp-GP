@@ -4,6 +4,7 @@ import UserProfile from "../models/userProfile.model.js";
 import User from "../models/user.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 export const getAllWorkspaces = getAll(Workspace);
 
@@ -22,6 +23,7 @@ export const createWorkspace = catchAsync(async (req, res, next) => {
 });
 
 export const joinWorkspace = catchAsync(async (req, res, next) => {
+  const io = req.app.get("io");
   // find the workspace
   const workspace = await Workspace.findById(req.params.id);
   // check if the workspace exists
@@ -35,6 +37,11 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
   });
   if (userProfile) {
     return next(new AppError("User already in workspace", 400));
+  }
+
+  // phone number validation
+  if (req.body.phoneNumber && !isValidPhoneNumber(req.body.phoneNumber)) {
+    return next(new AppError("Invalid phone number", 400));
   }
 
   // Create the userProfile
@@ -70,6 +77,17 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
   // create conversations between all the members of the workspace and the new member
   workspace.createMemberConversations();
 
+  // emit socket event to other members in workspace
+  io.to(`workspace:${workspace._id}`).emit("workspaceMemberJoined", {
+    userId: req.user.id,
+    profile: {
+      _id: userProfile._id,
+      name: userProfile.userName,
+      avatar: userProfile.photo,
+    },
+    joinedAt: new Date(),
+  });
+
   res.status(200).json({
     status: "success",
     data: {
@@ -80,6 +98,14 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
 
 export const getWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
+
+  let workspace = await Workspace.findById(workspaceId);
+  // check if the workspace exists
+  if (!workspace) {
+    return next(
+      new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
+    );
+  }
 
   // First find the user's profile in this workspace
   const userProfile = await UserProfile.findOne({
@@ -92,7 +118,7 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   }
 
   // Get the workspace with populated data
-  const workspace = await Workspace.findById(workspaceId)
+  workspace = await Workspace.findById(workspaceId)
     .populate({
       path: "members",
     })
@@ -169,6 +195,12 @@ export const deleteWorkspace = catchAsync(async (req, res, next) => {
 
   // Delete the workspace
   await Workspace.findByIdAndDelete(workspaceId);
+  // emit socket event to notify all members that workspace is deleted
+  const io = req.app.get("io");
+  io.to(`workspace:${workspaceId}`).emit("workspace:deleted", {
+    workspaceId,
+    deletedAt: new Date(),
+  });
 
   res.status(204).json({
     status: "success",

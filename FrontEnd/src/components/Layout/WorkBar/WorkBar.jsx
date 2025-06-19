@@ -25,6 +25,7 @@ import {
   openUserMenuModal,
 } from "../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 import UserStatusDot from "../../UI/User/UserStatusDot";
+// import UserStatus from "../../UI/User/UserStatus";
 
 function WorkBar() {
   const menuRef = useRef(null);
@@ -118,7 +119,8 @@ function WorkBar() {
           >
             <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
           </div>
-          <UserStatusDot status={loggin_user?.status}/>
+          <UserStatusDot userId={loggin_user?.user}/>
+          {/* <UserStatus userId={loggin_user?.user}/> */}
           <UserMenu />
         </div>
       </div>

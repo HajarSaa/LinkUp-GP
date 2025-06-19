@@ -78,7 +78,7 @@ export default function connectionHandler(socket, io) {
       });
     })
   );
-  
+
   socket.on(
     "disconnect",
     socketAsync(async (reason) => {
@@ -116,7 +116,7 @@ export default function connectionHandler(socket, io) {
       //     timestamp: new Date(),
       //   });
       // }
-      
+
       // Reload problem solution: make user emit on presenceUpdate rather than onlineUsers to get the correct use connection without reload page :)
       if (workspacePresence.has(workspaceId)) {
         io.to(`workspace:${workspaceId}`).emit("presenceUpdate", {
@@ -125,7 +125,6 @@ export default function connectionHandler(socket, io) {
           timestamp: new Date(),
         });
       }
-
     })
   );
 }

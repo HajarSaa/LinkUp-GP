@@ -4,7 +4,30 @@ import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
 
-export const getAllChannels = getAll(Channel);
+export const getAllChannels = catchAsync(async (req, res, next) => {
+  const workspaceId = req.workspace.id;
+  const userId = req.userProfile.id;
+
+  // Get all public channels
+  const publicChannels = await Channel.find({ workspaceId, type: "public" });
+  // Get private channels where the user is a member
+  const privateChannels = await Channel.find({
+    type: "private",
+    members: userId,
+  });
+
+  // Combine and remove duplicates if necessary
+  const allChannels = [...publicChannels, ...privateChannels];
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    results: allChannels.length,
+    data: {
+      channels: allChannels,
+    },
+  });
+});
 
 export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
@@ -62,6 +85,35 @@ export const createChannel = catchAsync(async (req, res, next) => {
 
   // Send response
   res.status(201).json({
+    status: "success",
+    data: { channel },
+  });
+});
+
+export const updateChannel = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+
+  const { name, type, topic, description } = req.body;
+
+  // Find the channel
+  const channel = await Channel.findById(channelId);
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Validate the { name, type, topic, description }
+
+  // Update the channel
+  if (name) channel.name = name;
+  if (type) channel.type = type;
+  if (topic) channel.topic = topic;
+  if (description) channel.description = description;
+
+  // Save the updates
+  await channel.save();
+
+  // Send the response
+  res.status(200).json({
     status: "success",
     data: { channel },
   });

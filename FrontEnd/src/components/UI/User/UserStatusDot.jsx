@@ -2,15 +2,15 @@ import styles from './User.module.css'
 import UserStatus from './UserStatus';
 import PropTypes from 'prop-types';
 
-function UserStatusDot({ status }) {
+function UserStatusDot({ userId }) {
   return (
     <span className={styles.statusDot}>
-      <UserStatus status={status} />
+      <UserStatus userId={userId} />
     </span>
   );
 }
 UserStatusDot.propTypes = {
-  status: PropTypes.any.isRequired,
+  userId: PropTypes.any.isRequired,
 };
 
 export default UserStatusDot
