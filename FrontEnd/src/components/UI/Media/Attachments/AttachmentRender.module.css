@@ -1,0 +1,43 @@
+/* ================================================================= */
+
+.attachments {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  /* عشان ينزل رو جديد لو مفيش مساحة */
+  gap: 8px;
+}
+
+.attachmentItem {
+  width: 300px;
+  /* كل عنصر عرضه ثابت */
+  max-width: 100%;
+}
+
+.imageAttachment {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.audioAttachment,
+.videoAttachment {
+  width: 100%;
+}
+
+.audioAttachment {
+  width: 300px;
+  height: 40px;
+  display: block;
+  margin-top: 10px;
+}
+
+.fileLink {
+  color: var(--primary-color);
+  text-decoration: underline;
+  display: inline-block;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}

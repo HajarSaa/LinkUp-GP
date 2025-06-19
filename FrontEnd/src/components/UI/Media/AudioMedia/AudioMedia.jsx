@@ -3,12 +3,14 @@ import { HiPlay, HiPause } from "react-icons/hi2";
 
 import PropTypes from "prop-types";
 import styles from "./AudioMedia.module.css";
+import { formatFileSize } from "../../../../utils/filesUtils";
 
-const AudioMedia = ({ audioUrl }) => {
+const AudioMedia = ({ file }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const fileSize = formatFileSize(file.fileSize);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -66,43 +68,50 @@ const AudioMedia = ({ audioUrl }) => {
 
   return (
     <div className={styles.wrapper}>
-      <button className={styles.playButton} onClick={togglePlay}>
-        <span className={styles.icon}>
-          {isPlaying ? <HiPause size={18} /> : <HiPlay size={18} />}
-        </span>
-      </button>
-
-      <div className={styles.progressWrapper}>
-        <input
-          type="range"
-          min="0"
-          max={duration}
-          step="0.01"
-          value={currentTime}
-          onChange={handleSeek}
-          className={styles.progressBar}
-          style={{
-            "--progress": `${(currentTime / (duration || 1)) * 100}%`,
-          }}
-        />
-        <span
-          className={styles.customThumb}
-          style={{
-            left: `${(currentTime / (duration || 1)) * 100}%`,
-            "--audio-thumb-color": isPlaying ? "#0074cc" : "#999",
-          }}
-        />
+      <div className={styles.left_side}>
+        <button className={styles.playButton} onClick={togglePlay}>
+          <span className={styles.icon}>
+            {isPlaying ? <HiPause size={18} /> : <HiPlay size={18} />}
+          </span>
+        </button>
       </div>
-
-      <span className={styles.time}>{formatTime(currentTime)}</span>
-
-      <audio ref={audioRef} src={audioUrl} />
+      <div className={styles.right_side}>
+        <div className={styles.top_section_info}>
+          <span>{file.fileName}</span>
+          <span>{fileSize}</span>
+        </div>
+        <div className={styles.bottom_section}>
+          <div className={styles.progressWrapper}>
+            <input
+              type="range"
+              min="0"
+              max={duration}
+              step="0.01"
+              value={currentTime}
+              onChange={handleSeek}
+              className={styles.progressBar}
+              style={{
+                "--progress": `${(currentTime / (duration || 1)) * 100}%`,
+              }}
+            />
+            <span
+              className={styles.customThumb}
+              style={{
+                left: `${(currentTime / (duration || 1)) * 100}%`,
+                "--audio-thumb-color": isPlaying ? "#0074cc" : "#999",
+              }}
+            />
+          </div>
+          <span className={styles.time}>{formatTime(currentTime)}</span>
+        </div>
+      </div>
+      <audio ref={audioRef} src={file.fileUrl} />
     </div>
   );
 };
 
 AudioMedia.propTypes = {
-  audioUrl: PropTypes.string.isRequired,
+  file: PropTypes.any.isRequired,
 };
 
 export default AudioMedia;

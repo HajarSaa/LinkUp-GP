@@ -21,7 +21,9 @@ import MessageMenu from "../MessageMenu/MessageMenu";
 import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/messageMenu";
 import { calculateSafePosition } from "../../../utils/modalsUtils";
 import { getAttachedFiles } from "../../../utils/mediaUtils";
-import AttachmentRenderer from "./AttachmentRender";
+import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
+
+
 
 const MessageItem = ({
   message,
@@ -143,11 +145,11 @@ const MessageItem = ({
               </div>
               {messageFiles.length > 0 && (
                 <div className={styles.attachments}>
-                  {messageFiles.map((file) => (
+                  <AttachmentRenderer files={messageFiles} />
+                  {/* {messageFiles.map((file) => (
                     <div key={file._id} className={styles.attachmentItem}>
-                      <AttachmentRenderer file={file} />
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               )}
             </div>
