@@ -85,6 +85,23 @@ workspaceSchema.methods.createMemberConversations = async function () {
   }
 };
 
+workspaceSchema.methods.deleteMemberConversations = async function (
+  userProfileId
+) {
+  const workspaceId = this._id;
+
+  // Find all conversations where the user is a member
+  const conversations = await Conversation.find({
+    workspaceId,
+    $or: [{ memberOneId: userProfileId }, { memberTwoId: userProfileId }],
+  });
+
+  // Loop over each conversation and delete it individually to trigger pre-hooks
+  for (const conversation of conversations) {
+    await Conversation.findByIdAndDelete(conversation._id); // This will trigger the pre("findOneAndDelete") hook
+  }
+};
+
 workspaceSchema.methods.deleteConversationsAndChannels = async function () {
   const workspaceId = this._id;
 

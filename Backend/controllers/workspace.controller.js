@@ -200,6 +200,90 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
+export const leaveWorkspace = catchAsync(async (req, res, next) => {
+  const workspaceId = req.params.id;
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+  if (!workspace) {
+    return next(new AppError("No workspace found with that ID", 404));
+  }
+
+  console.log(req.userProfile.id);
+
+  // Find the user's profile in this workspace
+  const userProfile = await UserProfile.findById(req.userProfile.id);
+
+  if (!userProfile) {
+    return next(new AppError("You are not a member of this workspace", 403));
+  }
+
+  // Remove the userProfile from the workspace members array
+  workspace.members.pull(userProfile._id);
+  await workspace.save();
+
+  // Remove the userProfile from the user's workspaceProfiles array
+  await User.findByIdAndUpdate(req.user.id, {
+    $pull: { workspaceProfiles: userProfile._id },
+  });
+
+  // Delete all conversations  between all the members of the workspace and the  userProfile
+  await workspace.deleteMemberConversations(userProfile._id);
+
+  // Remove the userProfile from all channels in the workspace
+  await Channel.updateMany(
+    { workspaceId: workspace._id },
+    { $pull: { members: userProfile._id } }
+  );
+
+  // Delete the userProfile
+  await UserProfile.findByIdAndDelete(userProfile._id);
+
+  // // emit socket event to notify all members that a member left
+  // const io = req.app.get("io");
+  // io.to(`workspace:${workspaceId}`).emit("workspaceMemberLeft", {
+  //   userId: req.user.id,
+  //   profileId: userProfile._id,
+  //   leftAt: new Date(),
+  // });
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    message: "Successfully left the workspace",
+    data: {
+      workspaceId: workspace.id,
+      workspaceName: workspace.name,
+    },
+  });
+});
+
+export const updateWorkspace = catchAsync(async (req, res, next) => {
+  const workspaceId = req.params.id;
+
+  const { name } = req.body;
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+  if (!workspace) {
+    return next(new AppError("No workspace found with that ID", 404));
+  }
+
+  // Update the workspace
+  if (name) workspace.name = name;
+
+  // Save the updates
+  await workspace.save();
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    data: {
+      workspace,
+    },
+  });
+});
+
 export const deleteWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
 
