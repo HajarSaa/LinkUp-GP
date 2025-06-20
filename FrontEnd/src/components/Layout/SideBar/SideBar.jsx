@@ -24,12 +24,7 @@ function SideBar() {
   function openWorkMenu(e) {
     e.stopPropagation();
 
-    dispatch(
-      openWorkspaceMenu({
-        workspaceId: workspace.id,
-        workspaceName: workspace.name,
-      })
-    );
+    dispatch(openWorkspaceMenu(workspace));
   }
 
   if (!workspace)

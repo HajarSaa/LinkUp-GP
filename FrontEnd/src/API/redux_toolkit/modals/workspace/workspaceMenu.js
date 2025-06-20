@@ -7,7 +7,7 @@ const workspaceMenuSlice = createSlice({
     data: null,
     renameModal: {
       isOpen: false,
-      workspaceName: "",
+      data: null,
     },
   },
   reducers: {
@@ -19,14 +19,14 @@ const workspaceMenuSlice = createSlice({
     openRenameWorkModal: (state, action) => {
       state.isOpen = false;
       state.renameModal.isOpen = true;
-      state.renameModal.workspaceName = action.payload ;
+      state.renameModal.data = action.payload ;
     },
     //
     closeWorkspaceMenu: (state) => {
       state.isOpen = false;
       state.renameModal.isOpen = false;
       state.data = null;
-      state.renameModal.workspaceName = "";
+      state.renameModal.data = null;
     },
   },
 });

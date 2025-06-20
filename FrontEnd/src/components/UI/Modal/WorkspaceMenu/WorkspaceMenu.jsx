@@ -8,7 +8,11 @@ import { getWorkLabel } from "../../../../utils/workspaceUtils";
 
 function WorkspaceMenu() {
   const { isOpen, data } = useSelector((state) => state.workspaceMenu);
-  const work_label = getWorkLabel(data?.workspaceName || "workspace name");
+  const work_label = getWorkLabel(data?.name || "workspace name");
+  const loggin_user_id = localStorage.getItem("currentUser")
+    ? JSON.parse(localStorage.getItem("currentUser"))._id
+    : null;
+  const isWorkOwner = loggin_user_id === data?.createdBy;
 
   const dispatch = useDispatch();
 
@@ -23,8 +27,9 @@ function WorkspaceMenu() {
 
   // open rename modal
   function handleRename() {
+    if (!isWorkOwner) return;
     closeModal();
-    dispatch(openRenameWorkModal(data?.workspaceName || ""));
+    dispatch(openRenameWorkModal(data));
   }
 
   if (!isOpen) return null;
@@ -34,11 +39,11 @@ function WorkspaceMenu() {
         <ul className={styles.list}>
           <li className={styles.item} onClick={handleRename}>
             <span className={styles.work_label}>{work_label}</span>
-            <span className={styles.work_name}>{data?.workspaceName}</span>
+            <span className={styles.work_name}>{data?.name}</span>
           </li>
           <span className={styles.divider} />
           <li className={styles.item}>
-            <span>{`Invite people to ${data?.workspaceName}`}</span>
+            <span>{`Invite people to ${data?.name}`}</span>
           </li>
           <span className={styles.divider} />
           <li className={`${styles.item} ${styles.danger_item}`}>

@@ -3,22 +3,21 @@ import styles from "./RenameWorkModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { closeWorkspaceMenu } from "../../../../API/redux_toolkit/modals/workspace/workspaceMenu";
 import { useState, useEffect } from "react";
-// باقي الأكواد...
+import useUpdateWorkspace from "../../../../API/hooks/userProfile/useUpdateWorkspace";
 
 const RenameWorkModal = () => {
-  const { isOpen, workspaceName } = useSelector(
+  const { isOpen, data } = useSelector(
     (state) => state.workspaceMenu.renameModal
   );
-
   const [teamName, setTeamName] = useState("");
-
+  const rename_workspace = useUpdateWorkspace();
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (isOpen) {
-      setTeamName(workspaceName);
+      setTeamName(data?.name);
     }
-  }, [workspaceName, isOpen]);
+  }, [data, isOpen]);
 
   function handleInputChange(e) {
     setTeamName(e.target.value);
@@ -30,8 +29,21 @@ const RenameWorkModal = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (teamName.trim() === "") {
-      // validation
+    if (teamName.trim() !== "" && data?.name !== teamName) {
+      if (!data?._id) return;
+      rename_workspace.mutate(
+        { work_id: data?._id, data: { name: teamName } },
+        {
+          onSuccess: () => {
+            handleClose();
+          },
+          onError: (error) => {
+            console.error("Error renaming workspace:", error);
+          },
+        }
+      );
+    } else {
+      handleClose();
     }
     // submit logic
   }
@@ -74,7 +86,7 @@ const RenameWorkModal = () => {
             Cancel
           </button>
           <button className={styles.submit_btn} type="submit">
-            Save Changes
+            {rename_workspace.isPending ? "Renaming..." : "Save Changes"}
           </button>
         </div>
       </form>
