@@ -1,6 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
-import { openChannelDetails } from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
+import {
+  openChannelDetails,
+  openEditTopicModal,
+} from "../../../../API/redux_toolkit/modals/channelDetailsSlice";
 import styles from "./Header.module.css";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import ChannelOptionModal from "../../../UI/Modal/ChannelModals/ChannelOptionsModal/ChannelOptionModal";
@@ -21,12 +24,17 @@ import { IoBookmarkOutline, IoLayers } from "react-icons/io5";
 import { useState } from "react";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import PropTypes from "prop-types";
+import { isChannelOwner } from "../../../../utils/channelUtils";
+import TopicModal from "../../Modal/ChannelModals/editModals/TopicModal";
+import RenameChannelModal from "../../Modal/ChannelModals/editModals/RenameChannelModal";
+import DescriptionModal from "../../Modal/ChannelModals/editModals/DescriptionModal";
 
 function Header({ activeTab, setActiveTab }) {
   const dispatch = useDispatch();
   const { workspace } = useSelector((state) => state.workspace);
   const channel = useSelector((state) => state.channel.channel);
   const members = getMembersData(channel, workspace);
+  const isOwner = isChannelOwner(channel, workspace);
   const menuItems = [
     {
       id: "messages",
@@ -53,17 +61,32 @@ function Header({ activeTab, setActiveTab }) {
     { label: "Workflow", icon: <BsLightning /> },
     { label: "Bookmark", icon: <IoBookmarkOutline /> },
   ];
+
+  function editTopic() {
+    if (isOwner) {
+      dispatch(openEditTopicModal());
+    }
+  }
+
   if (!channel) return;
   return (
     <>
       <div className={styles.channelHeader}>
-        <div className="justify-content-between w-100 topPart">
-          <div
-            className={styles.channel_name}
-            onClick={() => dispatch(openChannelDetails({ tab: "about" }))}
-          >
-            <ChannelType type={channel.type} />
-            <span>{channel.name}</span>
+        <div className={styles.header}>
+          <div className={styles.channel_info}>
+            <div
+              className={styles.channel_name}
+              onClick={() => dispatch(openChannelDetails({ tab: "about" }))}
+            >
+              <ChannelType type={channel.type} />
+              <span>{channel.name}</span>
+            </div>
+            {channel.topic && (
+              <div className={styles.channel_topic} onClick={editTopic}>
+                <span>{channel.topic}</span>
+                {isOwner && <span className={styles.infoEdit}>Edit</span>}
+              </div>
+            )}
           </div>
           <div className={styles.rightSide}>
             <div
@@ -128,6 +151,10 @@ function Header({ activeTab, setActiveTab }) {
       </div>
       <NotificationsModal />
       <ChannelDetailsModal />
+      {/* modals */}
+      <TopicModal channelName={channel?.name} defaultTopic={channel?.topic} />
+      <RenameChannelModal channelName={channel?.name} type={channel?.type} />
+      <DescriptionModal defaultDescription={channel?.description} />
     </>
   );
 }
