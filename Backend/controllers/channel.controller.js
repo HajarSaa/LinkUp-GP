@@ -57,6 +57,7 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
       type: channel.type,
       topic: channel.topic || null,
       description: channel.description || null,
+      members: channel.members,
     },
     timestamp: new Date(),
   });

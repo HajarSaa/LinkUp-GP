@@ -12,7 +12,6 @@ export default function registerChannelHandlers(socket, dispatch) {
 
     if (type === "created") {
       channel.id = channel._id;
-      console.log("✅ ADDING channel to list:", channel);
       dispatch(addChannelToList(channel));
     } else if (type === "updated") {
       dispatch(updateChannelInList(channel));
@@ -21,15 +20,35 @@ export default function registerChannelHandlers(socket, dispatch) {
     }
   };
 
-  const handleMemberJoined = ({ channelId, userId, profileId, joinedAt }) => {
-    console.log(`👥 User with ID: ${userId} joined channel ${channelId}: at ${joinedAt}`, profileId);
-    // Optional: dispatch action to update channel members
+  const handleMemberJoined = ({ channelId, userId}) => {
+    const currentUserId = socket.userId;
+    if (userId === currentUserId) {
+      // TODO: Optionally fetch updated channel data here
+      console.log("✅ You joined a new channel:", channelId);
+    }
   };
 
-  const handleMemberLeft = ({ channelId, userId, profileId, leftAt }) => {
-    console.log(`👋 User with ID: ${userId} left channel ${channelId}: at ${leftAt}`, profileId);
-    // Optional: dispatch action to update channel members
-  };
+  // const handleMemberLeft = ({ channelId, userId }) => {
+  //   const currentUserId = socket.userId;
+  //   if (userId === currentUserId) {
+  //     dispatch(removeChannelFromList(channelId));
+  //     console.log("❌ You left the channel:", channelId);
+  //   }
+  // };
+
+  const handleMemberLeft = ({ channelId, userId, profileId }) => {
+  const currentUserId = socket.userId;
+  if (userId === currentUserId) {
+    dispatch(
+      updateChannelInList({
+        _id: channelId,
+        members: `remove:${profileId}`,
+      })
+    );
+    console.log("❌ You left the channel:", channelId);
+  }
+};
+
 
   socket.on("channel:updated", handleChannelUpdated);
   socket.on("channel:memberJoined", handleMemberJoined);

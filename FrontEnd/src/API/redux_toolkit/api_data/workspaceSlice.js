@@ -31,12 +31,33 @@ const workspaceSlice = createSlice({
         );
       }
     },
+    // updateChannelInList: (state, action) => {
+    //   const updated = action.payload;
+    //   state.workspace.channels = state.workspace.channels.map((c) =>
+    //     c._id === updated._id ? updated : c
+    //   );
+    // },
     updateChannelInList: (state, action) => {
       const updated = action.payload;
-      state.workspace.channels = state.workspace.channels.map((c) =>
-        c._id === updated._id ? updated : c
-      );
+
+      state.workspace.channels = state.workspace.channels.map((c) => {
+        if (c._id !== updated._id) return c;
+
+        if (
+          typeof updated.members === "string" &&
+          updated.members.startsWith("remove:")
+        ) {
+          const profileId = updated.members.split(":")[1];
+          return {
+            ...c,
+            members: c.members.filter((id) => id !== profileId),
+          };
+        }
+
+        return { ...c, ...updated };
+      });
     },
+
     addChannelToList: (state, action) => {
       const channel = action.payload;
       channel.id = channel._id;
