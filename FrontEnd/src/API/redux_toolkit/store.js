@@ -19,6 +19,7 @@ import userProfileSlice from "./api_data/userProfileSlice";
 //======
 // ==============================(channels)
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
+import browseChannelsReducer from './api_data/channels/browseChannels'
 //======
 // ==============================(Worskpace)
 import createWorkspaceReducer from "./ui/creationsStep";
@@ -54,7 +55,7 @@ const store = configureStore({
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,
     // ==============================(channel)
-    // ====
+    browseChannels :browseChannelsReducer ,
     channel: channelReducer,
     channel_messages: channel_messages_reducer,
     channelMenu: channelMenuReducer,

@@ -8,6 +8,10 @@ function ChannelsList() {
   const scrollRef = useRef();
   const { workspace } = useSelector((state) => state.workspace);
   const me = findMemberByUserId(workspace);
+
+  const { browseChannels } = useSelector((state) => state.browseChannels);
+  console.log('channels',browseChannels)
+  // delete this 👇
   const channels = workspace.channels.filter((channel) => {
     if (channel.type === "public") return true;
     return channel.members.includes(me._id);

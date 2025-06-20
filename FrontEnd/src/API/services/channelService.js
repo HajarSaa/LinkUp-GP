@@ -23,4 +23,9 @@ export const deleteThisChannel = async (channel_id) => {
   const { data } = await axiosInstance.delete(`/channels/${channel_id}`);
   return data.data;
 };
+// ===============Browse Channels ========================================
+export const browseChannels = async () => {
+  const { data } = await axiosInstance.get(`/channels`);
+  return data.data;
+};
 

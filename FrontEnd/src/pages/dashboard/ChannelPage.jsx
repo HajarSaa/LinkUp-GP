@@ -1,13 +1,13 @@
-import MessageInput from "../../../components/UI/InputField/MessageInput/MessageInput";
-import Header from "../../../components/UI/Channel/Header/Header";
-import ChannelBody from "../../../components/UI/Channel/ChannelBody/ChannelBody";
-import PageContent from "../../../components/Layout/PageContent/PageContnet";
+import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
+import Header from "../../components/UI/Channel/Header/Header";
+import ChannelBody from "../../components/UI/Channel/ChannelBody/ChannelBody";
+import PageContent from "../../components/Layout/PageContent/PageContnet";
 import { useParams } from "react-router-dom";
-import styles from "../dashboard.module.css";
-import Spinner from "../../../components/UI/Spinner/Spinner";
-import Panel from "../../../components/Layout/Panel/Panel";
-import useGetChannel from "../../../API/hooks/channel/useGetChannel";
-import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
+import styles from "./dashboard.module.css";
+import Spinner from "../../components/UI/Spinner/Spinner";
+import Panel from "../../components/Layout/Panel/Panel";
+import useGetChannel from "../../API/hooks/channel/useGetChannel";
+import useGetChannelMessages from "../../API/hooks/messages/useGetChannelMessage";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
@@ -16,18 +16,18 @@ import {
   getUserPanelIdByPageId,
   isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
-} from "../../../utils/panelUtils";
+} from "../../utils/panelUtils";
 import {
   closeChatPanel,
   openThreadPanel,
   openUserPanel,
-} from "../../../API/redux_toolkit/ui/chatPanelSlice";
-import { isAChannelMember } from "../../../utils/channelUtils";
-import ChannelAuth from "../../../components/UI/Channel/ChannelAuth/ChannelAuth";
-import PrivateChAuth from "../../../components/UI/Channel/ChannelAuth/PrivateChAuth";
-import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
-import FilesContainer from "../../../components/UI/FilesContainer/FilesContainer";
-import useGetConversMedia from "../../../API/hooks/conversation/useGetConversMedia";
+} from "../../API/redux_toolkit/ui/chatPanelSlice";
+import { isAChannelMember } from "../../utils/channelUtils";
+import ChannelAuth from "../../components/UI/Channel/ChannelAuth/ChannelAuth";
+import PrivateChAuth from "../../components/UI/Channel/ChannelAuth/PrivateChAuth";
+import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
+import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
+import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
