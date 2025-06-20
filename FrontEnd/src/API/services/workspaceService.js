@@ -32,7 +32,17 @@ export async function joinWorkspace(workspaceId, body) {
 export async function updateWorkspace(workspaceId, body) {
   const { data } = await axiosInstance.patch(
     `/workspaces/${workspaceId}`,
-    body,
+    body
   );
   return data.data;
+}
+// ================= (Leave workspace)
+export async function leaveWorkspace(workspaceId) {
+  const { data } = await axiosInstance.post(`/workspaces/${workspaceId}/leave`);
+  return data.data;
+}
+// ================= (Delete workspace)
+export async function deleteWorkspace(workspaceId) {
+  await axiosInstance.delete(`/workspaces/${workspaceId}`);
+  return { deletedId: workspaceId };
 }

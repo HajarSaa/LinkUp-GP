@@ -5,6 +5,10 @@ import {
   openRenameWorkModal,
 } from "../../../../API/redux_toolkit/modals/workspace/workspaceMenu";
 import { getWorkLabel } from "../../../../utils/workspaceUtils";
+import { openInviteWork } from "../../../../API/redux_toolkit/modals/modalsSlice";
+import useLeaveWorkspace from "../../../../API/hooks/workspace/useLeaveWorkspace";
+import { useNavigate } from "react-router-dom";
+import useDeleteWorkspace from "../../../../API/hooks/workspace/useDeleteWorkspace";
 
 function WorkspaceMenu() {
   const { isOpen, data } = useSelector((state) => state.workspaceMenu);
@@ -13,7 +17,9 @@ function WorkspaceMenu() {
     ? JSON.parse(localStorage.getItem("currentUser"))._id
     : null;
   const isWorkOwner = loggin_user_id === data?.createdBy;
-
+  const leave_work = useLeaveWorkspace();
+  const delete_work = useDeleteWorkspace();
+  const navigateTo = useNavigate();
   const dispatch = useDispatch();
 
   function handleClose(e) {
@@ -31,6 +37,36 @@ function WorkspaceMenu() {
     closeModal();
     dispatch(openRenameWorkModal(data));
   }
+  // handle invitation
+  function handleInvitaion() {
+    closeModal();
+    dispatch(openInviteWork(data));
+  }
+  // handle leaving workspace
+  function handleLeaving() {
+    leave_work.mutate(data?._id, {
+      onSuccess: () => {
+        closeModal();
+        navigateTo("/workspaces-landing");
+      },
+      onError: (error) => {
+        console.error("Error leaving workspace:", error);
+      },
+    });
+  }
+  // handle delete workspace
+  function handleDeleteWorkspace() {
+    if (!isWorkOwner) return;
+    delete_work.mutate(data?._id, {
+      onSuccess: () => {
+        closeModal();
+        navigateTo("/workspaces-landing");
+      },
+      onError: (error) => {
+        console.error("Error deleting workspace:", error);
+      },
+    });
+  }
 
   if (!isOpen) return null;
   return (
@@ -42,26 +78,32 @@ function WorkspaceMenu() {
             <span className={styles.work_name}>{data?.name}</span>
           </li>
           <span className={styles.divider} />
-          <li className={styles.item}>
+          <li className={styles.item} onClick={handleInvitaion}>
             <span>{`Invite people to ${data?.name}`}</span>
           </li>
           <span className={styles.divider} />
-          <li className={`${styles.item} ${styles.danger_item}`}>
-            <span>Leave</span>
-          </li>
-          {/* {isOwner && ( */}
-          <span className={styles.divider} />
-          <li className={styles.item}>
-            <span>Prefernce</span>
-          </li>
           <li
             className={`${styles.item} ${styles.danger_item}`}
-            // onClick={handleDeleteWorkspace}
+            onClick={handleLeaving}
           >
-            {/* {delete_work.isPending ? ( */}
-            <span>Delete Workspace</span>
+            <span>{leave_work.isPending ? "Leaving" : "Leave"}</span>
           </li>
-          {/* )} */}
+          {isWorkOwner && (
+            <>
+              <span className={styles.divider} />
+              <li className={styles.item}>
+                <span>Prefernce</span>
+              </li>
+              <li
+                className={`${styles.item} ${styles.danger_item}`}
+                onClick={handleDeleteWorkspace}
+              >
+                <span>
+                  {delete_work.isPending ? "Deleting ..." : "Delete Workspace"}
+                </span>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </div>

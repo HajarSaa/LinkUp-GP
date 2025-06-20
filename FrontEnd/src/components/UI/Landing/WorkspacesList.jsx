@@ -1,4 +1,4 @@
-import useGetMe from "../../../API/hooks/workspace/useGetMe";
+import useGetMe from "../../../API/hooks/auth/useGetMe";
 import Spinner from "../Spinner/Spinner";
 import { CiFaceFrown } from "react-icons/ci";
 import styles from "./Landing.module.css";
