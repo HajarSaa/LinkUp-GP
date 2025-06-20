@@ -36,7 +36,7 @@ export default function registerWorkspaceHandlers(socket, dispatch) {
   };
 
   const handleWorkspaceUpdated = ({ workspaceId, updatedFields, updatedAt }) => {
-    console.log("🔄 Workspace updated:", updatedFields);
+    console.log(`🔄 Workspace with ID: ${workspaceId} updated at: ${updatedAt}`, updatedFields);
     if (updatedFields.name) {
       dispatch(updateWorkspaceName(updatedFields.name));
       // toast.success("Workspace name updated.");

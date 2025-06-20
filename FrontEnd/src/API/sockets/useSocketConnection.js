@@ -43,7 +43,7 @@ import registerWorkspaceHandlers, {
   setActiveWorkspace,
 } from "../sockets/handlers/workspaceHandler";
 import registerPresenceHandlers from "../sockets/handlers/presenceHandler";
-
+import registerChannelHandlers from "../sockets/handlers/channelHandler";
 const useSocketConnection = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser.currentUser);
@@ -81,10 +81,11 @@ const useSocketConnection = () => {
     // 2. Register socket event handlers
     const cleanupWorkspace = registerWorkspaceHandlers(socket, dispatch);
     const cleanupPresence = registerPresenceHandlers(socket, dispatch);
-
+    const cleanupChannel = registerChannelHandlers(socket, dispatch);
     return () => {
       cleanupWorkspace();
       cleanupPresence();
+      cleanupChannel();
       socket.disconnect();
     };
   }, [currentUser, workspace]);

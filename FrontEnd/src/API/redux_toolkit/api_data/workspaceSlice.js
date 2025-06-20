@@ -31,10 +31,36 @@ const workspaceSlice = createSlice({
         );
       }
     },
+    updateChannelInList: (state, action) => {
+      const updated = action.payload;
+      state.workspace.channels = state.workspace.channels.map((c) =>
+        c._id === updated._id ? updated : c
+      );
+    },
+    addChannelToList: (state, action) => {
+      const channel = action.payload;
+      channel.id = channel._id;
+      state.workspace.channels.push(action.payload);
+    },
+    removeChannelFromList: (state, action) => {
+      state.workspace.channels = state.workspace.channels.filter(
+        (c) => c._id !== action.payload
+      );
+    },
+
   },
 });
 
 
-export const { setWorkspace, clearWorkspace, setOnlineUsers, updateWorkspaceName, removeWorkspaceMember, } = workspaceSlice.actions;
+export const { 
+  setWorkspace, 
+  clearWorkspace, 
+  setOnlineUsers, 
+  updateWorkspaceName, 
+  removeWorkspaceMember, 
+  updateChannelInList, 
+  addChannelToList, 
+  removeChannelFromList 
+} = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

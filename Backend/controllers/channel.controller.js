@@ -32,20 +32,36 @@ export const getAllChannels = catchAsync(async (req, res, next) => {
 export const deleteChannel = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
 
-  // Check if the channel is the dafault channel
-  let channel = await Channel.findById(channelId);
-  if (channel.required) {
-    return next(new AppError("Cannot delete the required channel", 400));
-  }
-
-  // Delete the channel
-  channel = await Channel.findByIdAndDelete(channelId);
+  const channel = await Channel.findById(channelId);
 
   // Check if the channel exists
   if (!channel) {
     return next(new AppError("No channel found with that ID", 404));
   }
 
+  // Check if the channel is the dafault channel
+  if (channel.required) {
+    return next(new AppError("Cannot delete the required channel", 400));
+  }
+
+  // Delete the channel
+  await Channel.findByIdAndDelete(channelId);
+
+  // emit channelDeleted event to the workspace room
+  const io = req.app.get("io");
+  io.to(`workspace:${channel.workspaceId}`).emit("channel:updated", {
+    type: "deleted",
+    channel: {
+      _id: channel._id,
+      name: channel.name,
+      type: channel.type,
+      topic: channel.topic || null,
+      description: channel.description || null,
+    },
+    timestamp: new Date(),
+  });
+
+  // Send response
   res.status(204).json({
     status: "success",
     data: null,
@@ -89,6 +105,22 @@ export const createChannel = catchAsync(async (req, res, next) => {
   // Create the channel
   const channel = await Channel.create(req.body);
 
+  // emit channelCreated event to the workspace room
+  const io = req.app.get("io");
+  io.to(`workspace:${req.workspace.id}`).emit("channel:updated", {
+    type: "created",
+    channel: {
+      _id: channel._id,
+      name: channel.name,
+      type: channel.type,
+      topic: channel.topic || null,
+      description: channel.description || null,
+      members: channel.members,
+    },
+    timestamp: new Date(),
+  });
+
+
   // Send response
   res.status(201).json({
     status: "success",
@@ -117,6 +149,20 @@ export const updateChannel = catchAsync(async (req, res, next) => {
 
   // Save the updates
   await channel.save();
+  // emit channelUpdated event to the workspace room
+  const io = req.app.get("io");
+  io.to(`workspace:${channel.workspaceId}`).emit("channel:updated", {
+    type: "updated",
+    channel: {
+      _id: channel._id,
+      name: channel.name,
+      type: channel.type,
+      topic: channel.topic || null,
+      description: channel.description || null,
+      members: channel.members,
+    },
+    timestamp: new Date(),
+  });
 
   // Send the response
   res.status(200).json({
@@ -146,6 +192,24 @@ export const joinChannel = catchAsync(async (req, res, next) => {
 
   // Await saving the channel
   await channel.save();
+
+  // emit channelMemberJoined event
+  const io = req.app.get("io");
+  const payload = {
+    channelId: channel._id,
+    userId: req.user.id,
+    profileId: req.userProfile.id,
+    joinedAt: new Date(),
+  };
+
+  // Emit to channel room
+  io.to(`channel:${channel._id}`).emit("channel:memberJoined", payload);
+
+  // Emit to the workspace room
+  io.to(`workspace:${channel.workspaceId}`).emit(
+    "channel:memberJoined",
+    payload
+  );
 
   // Send response
   res.status(200).json({
@@ -184,6 +248,22 @@ export const leaveChannel = catchAsync(async (req, res, next) => {
 
   // Await saving the channel
   await channel.save();
+
+  // emit channelMemberLeft event
+  const io = req.app.get("io");
+
+  const payload = {
+    channelId: channel._id,
+    userId: req.user.id,
+    profileId: req.userProfile.id,
+    leftAt: new Date(),
+  };
+
+  // Emit to channel room
+  io.to(`channel:${channel._id}`).emit("channel:memberLeft", payload);
+
+  // Emit to the workspace room
+  io.to(`workspace:${channel.workspaceId}`).emit("channel:memberLeft", payload);
 
   // Send response
   res.status(200).json({
