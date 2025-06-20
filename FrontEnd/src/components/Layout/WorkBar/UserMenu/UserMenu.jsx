@@ -10,8 +10,8 @@ import { openSetStatusModal } from "../../../../API/redux_toolkit/modals/userPro
 import { closeUserMenuModal } from "../../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 import { openUserPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import { removeAllPanels } from "../../../../utils/panelUtils";
+import socket from "../../../../API/sockets/socketService";
 import { clearWorkspace } from "../../../../API/redux_toolkit/api_data/workspaceSlice";
-
 function UserMenu() {
   const { isOpen } = useSelector((state) => state.userMenu);
   const [hoverPause, setHoverPause] = useState(false);
@@ -34,13 +34,24 @@ function UserMenu() {
   };
 
   const handleSignOut = () => {
+  if (workspace?._id) {
+    socket.emit("leaveWorkspace", { workspaceId: workspace._id }, () => {
+      console.log("👋 Left workspace emitted");
+
+      removeAllPanels();
+      dispatch(closeUserMenuModal());
+      dispatch(clearWorkspace());
+      navigate("/login");
+    });
+  } else {
+    console.warn("⚠️ No workspace ID found on sign out");
     removeAllPanels();
-    navigate("/login");
-    if (localStorage.getItem("selectedWorkspaceId"))
-      localStorage.removeItem("selectedWorkspaceId");
-    dispatch(clearWorkspace());
     dispatch(closeUserMenuModal());
-  };
+    dispatch(clearWorkspace());
+    navigate("/login");
+  }
+};
+
 
   if (!isOpen) return null;
   return (
@@ -53,7 +64,9 @@ function UserMenu() {
           <span>{loggin_user?.userName}</span>
           <div className={styles.user_status}>
             <span>{userStatus}</span>
-            <UserStatus status={loggin_user?.status} />
+            <UserStatus userId={loggin_user?.user} />
+            {/* <span>{loggin_user?.status}</span>
+            <UserStatus status={loggin_user?.status} /> */}
           </div>
         </div>
       </div>

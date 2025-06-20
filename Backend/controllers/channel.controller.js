@@ -57,6 +57,7 @@ export const deleteChannel = catchAsync(async (req, res, next) => {
       type: channel.type,
       topic: channel.topic || null,
       description: channel.description || null,
+      members: channel.members,
     },
     timestamp: new Date(),
   });
@@ -115,9 +116,11 @@ export const createChannel = catchAsync(async (req, res, next) => {
       type: channel.type,
       topic: channel.topic || null,
       description: channel.description || null,
+      members: channel.members,
     },
     timestamp: new Date(),
   });
+
 
   // Send response
   res.status(201).json({
@@ -157,6 +160,7 @@ export const updateChannel = catchAsync(async (req, res, next) => {
       type: channel.type,
       topic: channel.topic || null,
       description: channel.description || null,
+      members: channel.members,
     },
     timestamp: new Date(),
   });

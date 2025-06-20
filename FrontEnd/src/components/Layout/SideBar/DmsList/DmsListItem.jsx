@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../../../UI/User/UserImage";
 import UserStatusDot from "../../../UI/User/UserStatusDot";
+// import UserStatus from "../../../UI/User/UserStatus";
 
 const DmsListItem = ({ dmData, isActive }) => {
   const navigate = useNavigate();
@@ -26,7 +27,8 @@ const DmsListItem = ({ dmData, isActive }) => {
         <div className={styles.photo_wrapper}>
           <UserImage src={dmData.member.photo} alt={"conv member"} />
         </div>
-        <UserStatusDot status={dmData.member.status} />
+        <UserStatusDot userId={dmData.member.user} />
+        {/* <UserStatus userId={dmData.member.user} /> */}
       </div>
       <div className={styles.user_name}>
         <span>{dmData.member.userName}</span>

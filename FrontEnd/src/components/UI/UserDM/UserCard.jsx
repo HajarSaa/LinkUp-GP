@@ -41,7 +41,8 @@ const UserCard = () => {
           <div className={styles.info}>
             <div className={styles.user} onClick={handelOpenUserPanel}>
               <span className={styles.name}>{receiver.userName}</span>
-              <UserStatus status={receiver?.status} />
+              <UserStatus userId={receiver?.user} />
+              {/* <UserStatus status={receiver?.status} /> */}
             </div>
             {receiver?.job && (
               <span className={styles.job}>{receiver?.job}</span>

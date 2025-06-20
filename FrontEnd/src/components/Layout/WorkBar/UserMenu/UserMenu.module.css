@@ -107,3 +107,9 @@
   background: #1264a3;
   color: #ffffff;
 }
+
+.customStatus {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+}
