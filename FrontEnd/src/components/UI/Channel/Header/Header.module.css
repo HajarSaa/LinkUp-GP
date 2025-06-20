@@ -27,21 +27,15 @@
     color: var(--text-color-grey);
     cursor: pointer;
     height: 100%;
-    width: 140px;
     padding: 8px;
 }
 
-.channel_topic>span:first-child {
-    width: 90px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
-.channel_topic>span:last-child {
+.channel_topic> .infoEdit {
     display: none;
 }
 
-.channel_topic:hover>span:last-child {
+.channel_topic:hover .infoEdit {
     display: block;
 }
 
