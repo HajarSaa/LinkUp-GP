@@ -7,7 +7,11 @@ export default function roomHandler(socket) {
     "joinRoom",
     socketAsync(async (roomId, callback) => {
       if (!roomId || typeof roomId !== "string") {
-        throw new AppError("Valid room ID required", 400);
+        throw new AppError("Valid room ID is required", 400);
+      }
+
+      if (!socket.userId) {
+        throw new AppError("User is not connected", 401);
       }
 
       if (!socket.rooms.has(roomId)) {
@@ -17,21 +21,30 @@ export default function roomHandler(socket) {
           userRooms.set(socket.userId, new Set());
         }
         userRooms.get(socket.userId).add(roomId);
-
-        console.log(`🚪 ${socket.id} joined room ${roomId}`);
       }
 
       callback?.({ success: true });
     })
   );
 
-  socket.on("leaveRoom", (roomId) => {
-    socket.leave(roomId);
+  socket.on(
+    "leaveRoom",
+    socketAsync(async (roomId, callback) => {
+      if (!roomId || typeof roomId !== "string") {
+        throw new AppError("Valid room ID is required", 400);
+      }
 
-    if (userRooms.has(socket.userId)) {
-      userRooms.get(socket.userId).delete(roomId);
-    }
+      if (!socket.userId) {
+        throw new AppError("User is not connected", 401);
+      }
 
-    console.log(`🚪 ${socket.id} left room ${roomId}`);
-  });
+      socket.leave(roomId);
+
+      if (userRooms.has(socket.userId)) {
+        userRooms.get(socket.userId).delete(roomId);
+      }
+
+      callback?.({ success: true });
+    })
+  );
 }
