@@ -53,7 +53,6 @@ export default function connectionHandler(socket, io) {
 
       if (!socket.recovered && connectionSet.size === 1) {
         await setUserStatus(userId, workspaceId, "online");
-        console.log("📡 Emitting workspaceMemberJoined to workspace:", workspaceId);
         io.to(`workspace:${workspaceId}`).emit("workspaceMemberJoined", {
           userId,
           profile: {
@@ -99,25 +98,11 @@ export default function connectionHandler(socket, io) {
 
       if (workspaceUserSet) {
         workspaceUserSet.delete(userId);
-        // 👇 زودي الجزء ده هنا
-        io.to(`workspace:${workspaceId}`).emit("workspaceMemberLeft", {
-          userId,
-          leftAt: new Date(),
-        });
         if (workspaceUserSet.size === 0) {
           workspacePresence.delete(workspaceId);
         }
       }
 
-      // if (workspacePresence.has(workspaceId)) {
-      //   io.to(`workspace:${workspaceId}`).emit("onlineUsers", {
-      //     userIds: Array.from(workspacePresence.get(workspaceId)),
-      //     workspaceId,
-      //     timestamp: new Date(),
-      //   });
-      // }
-
-      // Reload problem solution: make user emit on presenceUpdate rather than onlineUsers to get the correct use connection without reload page :)
       if (workspacePresence.has(workspaceId)) {
         io.to(`workspace:${workspaceId}`).emit("presenceUpdate", {
           userIds: Array.from(workspacePresence.get(workspaceId)),
