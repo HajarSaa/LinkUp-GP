@@ -33,7 +33,7 @@ function Step2() {
   const { mutate: join_workspace, isPending } = useJoinWorkspace();
   const isButtonDisabled = userName.trim() === "" || isPending;
 
-  // ✅ استرجاع البيانات المحفوظة من localStorage
+
   useEffect(() => {
     const savedName = savedUser?.userName;
     if (savedName) setUserName(savedName);
@@ -110,29 +110,14 @@ function Step2() {
 
     setError("");
 
-    let photoBase64 = "";
+    const formData = new FormData();
+    formData.append("userName", userName.trim());
     if (profilePhoto) {
-      const reader = new FileReader();
-      photoBase64 = await new Promise((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(profilePhoto);
-      });
+      formData.append("photo", profilePhoto);
     }
 
-    updateCreationDataField("user", {
-      userName,
-      preview,
-      photoBase64,
-    });
-
-    const requestBody = {
-      userName: userName.trim(),
-      photo: photoBase64,
-    };
-
     join_workspace(
-      { workspaceId: workspace._id, data: requestBody },
+      { workspaceId: workspace._id, data: formData },
       {
         onSuccess: () => {
           dispatch(setUser({ userName }));
@@ -145,6 +130,7 @@ function Step2() {
       }
     );
   };
+
 
   return (
     <PageContent>

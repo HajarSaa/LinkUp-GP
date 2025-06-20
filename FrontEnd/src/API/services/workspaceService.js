@@ -17,13 +17,7 @@ export const createWorkspaceService = async (work_name) => {
 export async function joinWorkspace(workspaceId, body) {
   const { data } = await axiosInstance.post(
     `/workspaces/${workspaceId}/join`,
-    body,
-    {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
+    body
   );
   return data.data;
 }
