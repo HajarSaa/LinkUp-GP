@@ -51,9 +51,7 @@
   margin-bottom: 5px;
 }
 
-.inputDiv_type{
-  
-}
+/* .inputDiv_type {} */
 
 .inputDiv>span {
   color: var(--text-color-grey);
@@ -126,19 +124,25 @@
 .saveBtn {
   background-color: var(--primary-color);
   color: white;
+  width: 111px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .saveBtn:hover {
   background-color: var(--secondary-color);
 }
 
 /* Topic */
-.topicInput{
+.topicInput {
   height: 150px;
   padding: 10px;
 
 }
 
-.topicInput{
+.topicInput {
   outline: none;
 }

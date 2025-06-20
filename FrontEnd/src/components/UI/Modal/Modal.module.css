@@ -35,8 +35,8 @@
   padding: 10px;
   flex-shrink: 0;
   margin-bottom: 5px;
-  border-bottom: 1px solid var(--border-color) ;
-  box-shadow: var(--shadow);
+  /* border-bottom: 1px solid var(--border-color) ;
+  box-shadow: var(--shadow); */
 }
 
 .title{

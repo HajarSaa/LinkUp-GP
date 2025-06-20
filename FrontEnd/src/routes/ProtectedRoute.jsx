@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
-import useGetMe from "../API/hooks/workspace/useGetMe";
+import useGetMe from "../API/hooks/auth/useGetMe";
 import ProtectedLoading from "../components/UI/ProtectedLoading/ProtectedLoading";
 import { setUser } from "../API/redux_toolkit/api_data/userSlice";
 

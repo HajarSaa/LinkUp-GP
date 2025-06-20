@@ -1,13 +1,19 @@
 .containerWrapper {
   padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow: hidden;
 }
 
 
 .container {
-  margin-top: 20px;
   display: flex;
-  flex-direction: column-reverse;
-  gap: 10px;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .card {

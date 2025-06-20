@@ -19,6 +19,7 @@ import InfoIcon from "../../../../Icons/InforIcon/InfoIcon";
 import useDeleteChannel from "../../../../../../API/hooks/channel/useDeleteChannel";
 import TabItem from "./TabItem";
 import { useNavigate } from "react-router-dom";
+import useUpdateChannel from "../../../../../../API/hooks/channel/useUpdateChannel";
 
 function SettingTab({ channelData }) {
   const dispatch = useDispatch();
@@ -32,6 +33,8 @@ function SettingTab({ channelData }) {
     error: deleting_error,
   } = useDeleteChannel();
   const isOwner = isChannelOwner(channelData, workspace);
+  const { mutate: updateChannelType, isPending: updatingType } =
+    useUpdateChannel();
 
   function rename_channel() {
     if (isOwner) {
@@ -48,6 +51,24 @@ function SettingTab({ channelData }) {
         },
       });
     }
+  }
+
+  function handleSwappeType() {
+    if (!isOwner || updatingType) return;
+
+    const newType = channelData.type === "public" ? "private" : "public";
+
+    updateChannelType(
+      {
+        channelId: channel.id,
+        body: { type: newType },
+      },
+      {
+        onSuccess: () => {
+          dispatch(closeChannelDetails());
+        },
+      }
+    );
   }
 
   if (activeTab !== "settings") return null;
@@ -98,11 +119,18 @@ function SettingTab({ channelData }) {
       <div className={styles.tab_items_container}>
         {/* Transform */}
         <TabItem className={!isOwner && styles.ops_btn}>
-          <div className={styles.tab_item_content}>
+          <div className={styles.tab_item_content} onClick={handleSwappeType}>
             <div className={`${styles.tab_item_content_right_row}`}>
-              <ChannelType
-                type={`${channelData.type === "public" ? "private" : "public"}`}
-              />
+              {updatingType ? (
+                <Spinner width={18} height={18} color="var(--primary-color)" />
+              ) : (
+                <ChannelType
+                  type={`${
+                    channelData.type === "public" ? "private" : "public"
+                  }`}
+                />
+              )}
+
               <div>
                 Change to a{" "}
                 {channelData.type === "public" ? "private" : "public"} channel

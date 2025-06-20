@@ -19,9 +19,11 @@ import userProfileSlice from "./api_data/userProfileSlice";
 //======
 // ==============================(channels)
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
+import browseChannelsReducer from './api_data/channels/browseChannels'
 //======
 // ==============================(Worskpace)
 import createWorkspaceReducer from "./ui/creationsStep";
+import workspaceMenuReducer from "./modals/workspace/workspaceMenu";
 //======
 // ==============================(User Profile)
 import editUserProfileReducer from "./modals/userProfile/editUserProfie";
@@ -53,7 +55,7 @@ const store = configureStore({
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,
     // ==============================(channel)
-    // ====
+    browseChannels :browseChannelsReducer ,
     channel: channelReducer,
     channel_messages: channel_messages_reducer,
     channelMenu: channelMenuReducer,
@@ -63,6 +65,7 @@ const store = configureStore({
     // ==============================(workspace)
     // ====
     createWorkspace: createWorkspaceReducer,
+    workspaceMenu: workspaceMenuReducer,
     // ==============================(conversation)
     // ====
     convers: conversReducer,

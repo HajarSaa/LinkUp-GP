@@ -9,14 +9,13 @@ import {
   setUser,
 } from "../../../API/redux_toolkit/ui/creationsStep";
 import useJoinWorkspace from "../../../API/hooks/workspace/useJoinWorkspace";
-import { updateCreationDataField } from "../../../utils/workspaceUtils";
 
 const avatarImages = [
-  "/assets/avatars/image-1.svg",
-  "/assets/avatars/image-2.svg",
-  "/assets/avatars/image-3.svg",
-  "/assets/avatars/image-4.svg",
-  "/assets/avatars/image-5.svg",
+  "/assets/avatars/image-1.png",
+  "/assets/avatars/image-2.png",
+  "/assets/avatars/image-3.png",
+  "/assets/avatars/image-4.png",
+  "/assets/avatars/image-5.png",
 ];
 
 function Step2() {
@@ -25,81 +24,58 @@ function Step2() {
 
   const { workspace } = useSelector((state) => state.createWorkspace.workspace);
   const savedUser = useSelector((state) => state.createWorkspace.user);
+
   const [userName, setUserName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [preview, setPreview] = useState("");
+  const [randomAvatarBlob, setRandomAvatarBlob] = useState(null);
   const [error, setError] = useState("");
 
   const { mutate: join_workspace, isPending } = useJoinWorkspace();
   const isButtonDisabled = userName.trim() === "" || isPending;
 
-  // ✅ استرجاع البيانات المحفوظة من localStorage
   useEffect(() => {
     const savedName = savedUser?.userName;
     if (savedName) setUserName(savedName);
 
-    const savedPreview = savedUser?.preview;
-    if (savedPreview?.startsWith("data:image")) {
-      setPreview(savedPreview);
+    const randomIndex = Math.floor(Math.random() * avatarImages.length);
+    const randomImagePath = avatarImages[randomIndex];
 
-      fetch(savedPreview)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const file = new File([blob], "user-photo.jpeg", { type: blob.type });
-          setProfilePhoto(file);
+    fetch(randomImagePath)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const extension = blob.type.split("/")[1];
+        const file = new File([blob], `default-avatar.${extension}`, {
+          type: blob.type,
         });
-    } else {
-      // fallback لصورة عشوائية
-      const randomIndex = Math.floor(Math.random() * avatarImages.length);
-      const randomImagePath = avatarImages[randomIndex];
 
-      fetch(randomImagePath)
-        .then((res) => res.blob())
-        .then((blob) => {
-          const file = new File([blob], "default-avatar.jpeg", {
-            type: blob.type,
-          });
+        setRandomAvatarBlob(file);
 
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result;
-            setPreview(base64);
-            setProfilePhoto(file);
-
-            updateCreationDataField("user", {
-              userName: savedName || "",
-              preview: base64,
-              photoBase64: base64,
-            });
-          };
-          reader.readAsDataURL(file);
-        });
-    }
-  }, [savedUser]);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      })
+      .catch((err) => {
+        console.error("Failed to load preview image:", err);
+      });
+  }, [savedUser?.userName]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64 = reader.result;
-        setPreview(base64);
+        setPreview(reader.result);
         setProfilePhoto(file);
-
-        updateCreationDataField("user", {
-          userName,
-          preview: base64,
-          photoBase64: base64,
-        });
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleNameChange = (e) => {
-    const value = e.target.value;
-    setUserName(value);
-    updateCreationDataField("user", { userName: value });
+    setUserName(e.target.value);
   };
 
   const handleNextClick = async () => {
@@ -110,29 +86,17 @@ function Step2() {
 
     setError("");
 
-    let photoBase64 = "";
+    const formData = new FormData();
+    formData.append("userName", userName.trim());
+
     if (profilePhoto) {
-      const reader = new FileReader();
-      photoBase64 = await new Promise((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(profilePhoto);
-      });
+      formData.append("avatar", profilePhoto);
+    } else if (randomAvatarBlob) {
+      formData.append("avatar", randomAvatarBlob);
     }
 
-    updateCreationDataField("user", {
-      userName,
-      preview,
-      photoBase64,
-    });
-
-    const requestBody = {
-      userName: userName.trim(),
-      photo: photoBase64,
-    };
-
     join_workspace(
-      { workspaceId: workspace._id, data: requestBody },
+      { workspaceId: workspace._id, data: formData },
       {
         onSuccess: () => {
           dispatch(setUser({ userName }));
@@ -179,6 +143,7 @@ function Step2() {
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
+
           <div className={styles.btns_group}>
             <label className={styles.uploadButton}>
               Upload Photo

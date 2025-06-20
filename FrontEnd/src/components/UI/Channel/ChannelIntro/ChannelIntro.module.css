@@ -6,20 +6,38 @@
 
 .title {
   font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 10px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 5px;
 }
-
+.title > span {
+  display: flex;
+  align-items: center;
+}
+.title>span:first-child >span{
+  font-size: 20px;
+}
 .description {
   color: #555;
   margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.channel_name {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.channel_name>span {
+  font-weight: bold;
+  line-height: 1.2;
 }
 
 .actions {
   display: flex;
   gap: 12px;
 }
-
 .action_button {
   display: flex;
   align-items: center;

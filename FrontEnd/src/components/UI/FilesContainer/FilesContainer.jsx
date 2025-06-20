@@ -19,12 +19,15 @@ function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
   });
 
   if (isLoading) return <div className={styles.status}>Loading...</div>;
+
   if (isError)
     return (
       <div className={styles.statusError}>
         {error?.message || "Error fetching media."}
       </div>
     );
+
+  const isSearchActive = searchTerm.trim().length > 0;
 
   return (
     <div className={styles.containerWrapper}>
@@ -34,7 +37,9 @@ function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <div className={styles.container}>
-        {filteredFiles.length === 0 ? (
+        {!isSearchActive && channelMedia?.length === 0 ? (
+          <p className={styles.empty}>There is no media here yet.</p>
+        ) : isSearchActive && filteredFiles.length === 0 ? (
           <p className={styles.empty}>No matching files found.</p>
         ) : (
           <>
@@ -52,6 +57,7 @@ function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
     </div>
   );
 }
+
 FilesContainer.propTypes = {
   files: PropTypes.any,
   isLoading: PropTypes.bool,

@@ -4,6 +4,7 @@ import { removeFile } from "../../../../../API/redux_toolkit/api_data/media/file
 import { FaTimes } from "react-icons/fa";
 import Spinner from "../../../Spinner/Spinner";
 import { useParams } from "react-router-dom";
+import AudioMedia from "../../../Media/AudioMedia/AudioMedia";
 
 function MediaContainer() {
   const dispatch = useDispatch();
@@ -47,11 +48,7 @@ function MediaContainer() {
         )}
 
         {file.type.startsWith("audio/") && (
-          <audio
-            src={file.previewURL}
-            controls
-            className={styles.media_audio}
-          />
+          <AudioMedia audioUrl={file.previewURL}/>
         )}
       </div>
     );

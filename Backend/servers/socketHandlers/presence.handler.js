@@ -30,7 +30,7 @@ export default function presenceHandler(socket, io) {
 
       if (status === "offline") {
         await UserProfile.updateOne(
-          { user: socket.userId, workspace: socket.workspaceId },
+          { _id: socket.userProfileId },
           {
             $set: {
               status: "offline",
@@ -64,7 +64,7 @@ export default function presenceHandler(socket, io) {
     "clearCustomStatus",
     socketAsync(async (callback) => {
       await UserProfile.updateOne(
-        { user: socket.userId, workspace: socket.workspaceId },
+        { _id: socket.userProfileId },
         { $set: { customStatus: null } }
       );
 
@@ -117,26 +117,25 @@ export default function presenceHandler(socket, io) {
   }, 60000);
 
   // Batch update lastActive using presenceHeartbeat
-  let heartbeatQueue = [];
-  const processHeartbeats = () => {
-    if (heartbeatQueue.length > 0) {
-      const updates = heartbeatQueue.map((key) => {
-        const [userId, workspaceId] = key.split("-");
-        return UserProfile.updateOne(
-          { user: userId, workspace: workspaceId },
-          { $set: { lastActive: new Date() } }
-        );
-      });
-
-      Promise.all(updates).catch(console.error);
-      heartbeatQueue = [];
-    }
-  };
-  setInterval(processHeartbeats, 10000);
+  let heartbeatQueue = new Set();
 
   socket.on("presenceHeartbeat", () => {
     if (socket.userId && socket.workspaceId) {
-      heartbeatQueue.push(`${socket.userId}-${socket.workspaceId}`);
+      heartbeatQueue.add(`${socket.userId}-${socket.workspaceId}`);
     }
   });
+
+  const processHeartbeats = () => {
+    const updates = Array.from(heartbeatQueue).map((key) => {
+      const [userId, workspaceId] = key.split("-");
+      return UserProfile.updateOne(
+        { user: userId, workspace: workspaceId },
+        { $set: { lastActive: new Date() } }
+      );
+    });
+
+    Promise.all(updates).catch(console.error);
+    heartbeatQueue.clear();
+  };
+  setInterval(processHeartbeats, 10000);
 }
