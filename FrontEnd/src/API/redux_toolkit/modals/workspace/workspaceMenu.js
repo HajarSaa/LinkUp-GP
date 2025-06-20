@@ -9,6 +9,10 @@ const workspaceMenuSlice = createSlice({
       isOpen: false,
       data: null,
     },
+    deleteModal: {
+      isOpen: false,
+      data: null,
+    },
   },
   reducers: {
     openWorkspaceMenu: (state, action) => {
@@ -19,18 +23,29 @@ const workspaceMenuSlice = createSlice({
     openRenameWorkModal: (state, action) => {
       state.isOpen = false;
       state.renameModal.isOpen = true;
-      state.renameModal.data = action.payload ;
+      state.renameModal.data = action.payload;
     },
-    //
+    //open delete modal
+    openDeleteModal: (state, action) => {
+      state.isOpen = false;
+      state.deleteModal.isOpen = true;
+      state.deleteModal.data = action.payload;
+    },
     closeWorkspaceMenu: (state) => {
       state.isOpen = false;
       state.renameModal.isOpen = false;
+      state.deleteModal.isOpen = false;
       state.data = null;
       state.renameModal.data = null;
+      state.deleteModal.data = null;
     },
   },
 });
 
-export const { openWorkspaceMenu,openRenameWorkModal, closeWorkspaceMenu } =
-  workspaceMenuSlice.actions;
+export const {
+  openWorkspaceMenu,
+  openDeleteModal,
+  openRenameWorkModal,
+  closeWorkspaceMenu,
+} = workspaceMenuSlice.actions;
 export default workspaceMenuSlice.reducer;

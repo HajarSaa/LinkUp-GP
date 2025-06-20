@@ -17,7 +17,30 @@
   font-weight: bold;
   margin-bottom: 10px;
   width: fit-content;
+  user-select: none;
 }
+
+.details {
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-around;
+  height: 60px;
+}
+
+.details_item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.details_icon {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+}
+
+
 
 .mailLabel {
   margin-top: 10px;
@@ -66,17 +89,31 @@
   border-radius: var(--border-radius);
   border: none;
   font-size: 15px;
+  width: 75px;
+  height: 40px;
 }
 
+
 .submit_btn {
-  background-color: #007a5a;
+  background-color: var(--error-color);
   color: white;
   margin-right: 20px;
   transition: 0.3s;
 
   &:hover {
-    background-color: #006e50;
+    background-color: #e74c3ced;
   }
+}
+
+.submit_btn>span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error_message {
+  padding: 0 15px;
+  color: var(--error-color);
 }
 
 .cancel_btn {
@@ -122,6 +159,12 @@
 }
 
 .input:focus {
-  border-color: var(--link-color);
-  box-shadow: 0 0 0 3px rgb(183, 208, 227);
+  border-color: var(--error-color);
+}
+
+.divider {
+  display: flex;
+  height: 100%;
+  width: 2px;
+  background-color: var(--border-color);
 }

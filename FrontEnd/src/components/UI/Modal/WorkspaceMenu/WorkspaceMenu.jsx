@@ -2,13 +2,13 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./WorkspaceMenu.module.css";
 import {
   closeWorkspaceMenu,
+  openDeleteModal,
   openRenameWorkModal,
 } from "../../../../API/redux_toolkit/modals/workspace/workspaceMenu";
 import { getWorkLabel } from "../../../../utils/workspaceUtils";
 import { openInviteWork } from "../../../../API/redux_toolkit/modals/modalsSlice";
 import useLeaveWorkspace from "../../../../API/hooks/workspace/useLeaveWorkspace";
 import { useNavigate } from "react-router-dom";
-import useDeleteWorkspace from "../../../../API/hooks/workspace/useDeleteWorkspace";
 
 function WorkspaceMenu() {
   const { isOpen, data } = useSelector((state) => state.workspaceMenu);
@@ -18,7 +18,6 @@ function WorkspaceMenu() {
     : null;
   const isWorkOwner = loggin_user_id === data?.createdBy;
   const leave_work = useLeaveWorkspace();
-  const delete_work = useDeleteWorkspace();
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
 
@@ -57,15 +56,7 @@ function WorkspaceMenu() {
   // handle delete workspace
   function handleDeleteWorkspace() {
     if (!isWorkOwner) return;
-    delete_work.mutate(data?._id, {
-      onSuccess: () => {
-        closeModal();
-        navigateTo("/workspaces-landing");
-      },
-      onError: (error) => {
-        console.error("Error deleting workspace:", error);
-      },
-    });
+    dispatch(openDeleteModal(data));
   }
 
   if (!isOpen) return null;
@@ -98,9 +89,7 @@ function WorkspaceMenu() {
                 className={`${styles.item} ${styles.danger_item}`}
                 onClick={handleDeleteWorkspace}
               >
-                <span>
-                  {delete_work.isPending ? "Deleting ..." : "Delete Workspace"}
-                </span>
+                <span>Delete Workspace</span>
               </li>
             </>
           )}

@@ -11,6 +11,7 @@ import useResize from "../../../API/hooks/workspace/useResize";
 import { openWorkspaceMenu } from "../../../API/redux_toolkit/modals/workspace/workspaceMenu";
 import WorkspaceMenu from "../../UI/Modal/WorkspaceMenu/WorkspaceMenu";
 import RenameWorkModal from "../../UI/Modal/RenameWorkModal/RenameWorkModal";
+import DeleteConfirmModal from "../../UI/Modal/DeleteConfirmModal/DeleteConfirmModal";
 
 function SideBar() {
   const { workspace } = useSelector((state) => state.workspace);
@@ -65,6 +66,7 @@ function SideBar() {
       <WorkspaceMenu />
       {/* sub modal */}
       <RenameWorkModal />
+      <DeleteConfirmModal />
     </>
   );
 }
