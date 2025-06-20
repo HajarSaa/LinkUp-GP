@@ -57,13 +57,21 @@ function Header({ activeTab, setActiveTab }) {
   return (
     <>
       <div className={styles.channelHeader}>
-        <div className="justify-content-between w-100 topPart">
-          <div
-            className={styles.channel_name}
-            onClick={() => dispatch(openChannelDetails({ tab: "about" }))}
-          >
-            <ChannelType type={channel.type} />
-            <span>{channel.name}</span>
+        <div className={styles.header}>
+          <div className={styles.channel_info}>
+            <div
+              className={styles.channel_name}
+              onClick={() => dispatch(openChannelDetails({ tab: "about" }))}
+            >
+              <ChannelType type={channel.type} />
+              <span>{channel.name}</span>
+            </div>
+            {channel.topic && (
+              <div className={styles.channel_topic}>
+                <span>{channel.topic}</span>
+                <span className={styles.infoEdit}>Edit</span>
+              </div>
+            )}
           </div>
           <div className={styles.rightSide}>
             <div
