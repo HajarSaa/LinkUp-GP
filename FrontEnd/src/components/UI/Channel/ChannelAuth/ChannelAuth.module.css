@@ -34,11 +34,14 @@
 
 .btns>button {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 112px;
-  height: 38px;
-  font-weight: normal;
+    justify-content: center;
+    align-items: center;
+    width: 112px;
+    height: 38px;
+    font-weight: normal;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
 }
 
 .details {

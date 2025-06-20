@@ -28,4 +28,8 @@ export const browseChannels = async () => {
   const { data } = await axiosInstance.get(`/channels`);
   return data.data;
 };
-
+// ===============update Channels ========================================
+export const updateChannel = async (channel_id, body) => {
+  const { data } = await axiosInstance.patch(`/channels/${channel_id}`, body);
+  return data.data;
+};
