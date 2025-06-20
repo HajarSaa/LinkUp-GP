@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeWorkspaceMenu } from "../../../../API/redux_toolkit/modals/workspace/workspaceMenu";
 import { useState, useEffect } from "react";
 import useUpdateWorkspace from "../../../../API/hooks/workspace/useUpdateWorkspace";
+import Spinner from "../../Spinner/Spinner";
 
 const RenameWorkModal = () => {
   const { isOpen, data } = useSelector(
@@ -86,7 +87,13 @@ const RenameWorkModal = () => {
             Cancel
           </button>
           <button className={styles.submit_btn} type="submit">
-            {rename_workspace.isPending ? "Renaming..." : "Save Changes"}
+            {rename_workspace.isPending ? (
+              <span>
+                <Spinner color="#007a5a" width={25} height={25} />
+              </span>
+            ) : (
+              "Save Changes"
+            )}
           </button>
         </div>
       </form>

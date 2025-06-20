@@ -66,6 +66,8 @@
   border-radius: var(--border-radius);
   border: none;
   font-size: 15px;
+  width: 125px;
+  height: 40px;
 }
 
 .submit_btn {
@@ -77,6 +79,14 @@
   &:hover {
     background-color: #006e50;
   }
+}
+
+.submit_btn > span{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cancel_btn {

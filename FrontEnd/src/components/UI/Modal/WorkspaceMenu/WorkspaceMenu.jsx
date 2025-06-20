@@ -9,6 +9,7 @@ import { getWorkLabel } from "../../../../utils/workspaceUtils";
 import { openInviteWork } from "../../../../API/redux_toolkit/modals/modalsSlice";
 import useLeaveWorkspace from "../../../../API/hooks/workspace/useLeaveWorkspace";
 import { useNavigate } from "react-router-dom";
+import Spinner from '../../Spinner/Spinner'
 
 function WorkspaceMenu() {
   const { isOpen, data } = useSelector((state) => state.workspaceMenu);
@@ -77,7 +78,15 @@ function WorkspaceMenu() {
             className={`${styles.item} ${styles.danger_item}`}
             onClick={handleLeaving}
           >
-            <span>{leave_work.isPending ? "Leaving" : "Leave"}</span>
+            <span>
+              {leave_work.isPending ? (
+                <span>
+                  <Spinner color="var(--error-color)" width={25} height={25} />
+                </span>
+              ) : (
+                "Leave"
+              )}
+            </span>
           </li>
           {isWorkOwner && (
             <>
