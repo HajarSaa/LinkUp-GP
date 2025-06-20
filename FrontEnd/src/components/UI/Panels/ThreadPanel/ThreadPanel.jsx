@@ -59,24 +59,6 @@ function ThreadPanel() {
           </div>
           <div className={styles.replies}>
             {threads.map((thread) => (
-              // <div key={reply.id} className={styles.reply}>
-              //   <BiSolidUser />
-              //   {console.log(threads)}
-              //   <div className={styles.messageContent}>
-              //     <div className={styles.messageHeader}>
-              //       <p>
-              //         <strong>{reply.sender}</strong>
-              //       </p>
-              //       <p className={styles.timestamp}>
-              //         {new Date(reply.timestamp).toLocaleTimeString([], {
-              //           hour: "2-digit",
-              //           minute: "2-digit",
-              //         })}
-              //       </p>
-              //     </div>
-              //     <p>{reply.text}</p>
-              //   </div>
-              // </div>
               <MessageItem
                 isInThreadPanel={true}
                 key={thread._id}
