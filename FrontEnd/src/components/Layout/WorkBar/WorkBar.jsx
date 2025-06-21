@@ -25,17 +25,40 @@ import {
   openUserMenuModal,
 } from "../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 import UserStatusDot from "../../UI/User/UserStatusDot";
-// import UserStatus from "../../UI/User/UserStatus";
 
 function WorkBar() {
   const menuRef = useRef(null);
   const navigateTo = useNavigate();
   const { workspace } = useSelector((state) => state.workspace);
   const [activeIndex, setActiveIndex] = useState(null);
-  const work_label = getWorkLabel(workspace?.name || "workspace name");
-  const loggin_user = findMemberByUserId(workspace);
-  const main_channel = workspace?.channels[0];
   const dispatch = useDispatch();
+
+  const loggin_user = findMemberByUserId(workspace);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        dispatch(closeUserMenuModal());
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dispatch]);
+
+  function handleClick(index, navigation) {
+    setActiveIndex(index);
+    if (navigation) navigateTo(navigation);
+  }
+
+  if (!workspace || !loggin_user) {
+    return <div className={styles.work_bar}></div>;
+  }
+
+  const work_label = getWorkLabel(workspace?.name || "workspace name");
+  const main_channel = workspace?.channels[0];
 
   const sidebarItems = [
     {
@@ -65,26 +88,6 @@ function WorkBar() {
       iconFill: <IoIosMore />,
     },
   ];
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        dispatch(closeUserMenuModal());
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dispatch]);
-
-  function handleClick(index, navigation) {
-    setActiveIndex(index);
-    if (navigation) navigateTo(navigation);
-  }
-
-  if (!workspace) return <div className={styles.work_bar}></div>;
 
   return (
     <div className={styles.work_bar}>
@@ -117,15 +120,16 @@ function WorkBar() {
             className={styles.profilePhotoPlaceholder}
             onClick={() => dispatch(openUserMenuModal())}
           >
-            <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
+            <UserImage
+              src={loggin_user.photo}
+              alt={loggin_user.userName}
+            />
           </div>
-          <UserStatusDot userId={loggin_user?.user}/>
-          {/* <UserStatus userId={loggin_user?.user}/> */}
+          <UserStatusDot userId={loggin_user?.user} />
           <UserMenu />
         </div>
       </div>
     </div>
   );
 }
-
 export default WorkBar;
