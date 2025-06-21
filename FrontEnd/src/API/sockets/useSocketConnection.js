@@ -53,7 +53,7 @@ const useSocketConnection = () => {
     if (!currentUser || !workspace?._id) return;
 
     socket.connect();
-
+    socket.userId = currentUser._id;
     // 1. Connect user
     socket.emit("userConnected", currentUser._id, workspace._id, (response) => {
       if (response?.success) {
