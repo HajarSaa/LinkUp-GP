@@ -46,10 +46,22 @@ const getPreview = () => {
       </a>
     </div>
   );
-};
+  };
+
+
+  function decodeBrokenFilename(name) {
+    try {
+      return decodeURIComponent(escape(name));
+    } catch {
+      return name;
+    }
+  }
+
   function handleCloseModal(e) {
     if (e.target === e.currentTarget) handleClose();
   }
+
+
   if (!isOpen || !file) return null;
 
   return (
@@ -60,7 +72,10 @@ const getPreview = () => {
     >
       <div className={`${styles.modal}`}>
         <div className={styles.modal_header}>
-          <h2 className={styles.title}>{file?.fileName || "File Preview"}</h2>
+          {/* <h2 className={styles.title}>{file?.fileName || "File Preview"}</h2> */}
+          <h2 className={styles.title}>
+            {decodeBrokenFilename(file?.fileName)}
+          </h2>
           <CloseIcon closeEvent={handleClose} />
         </div>
         <div className={styles.modal_body}>
