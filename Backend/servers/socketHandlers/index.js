@@ -7,7 +7,7 @@ import readReceiptHandler from "./readReceipt.handler.js";
 import pinningHandler from "./pinning.handler.js";
 import laterItemHandler from "./later.handler.js";
 import workspaceHandler from "./workspace.handler.js";
-import historyHandler from "./history.handler.js";
+import reactionHandler from "./reaction.handler.js";
 
 export const initializeSocketHandlers = (socket, io) => {
   connectionHandler(socket, io);
@@ -19,5 +19,5 @@ export const initializeSocketHandlers = (socket, io) => {
   pinningHandler(socket, io);
   laterItemHandler(socket, io);
   workspaceHandler(socket, io);
-  historyHandler(socket, io);
+  reactionHandler(socket, io);
 };

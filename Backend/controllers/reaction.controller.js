@@ -60,7 +60,7 @@ export const getReactions = catchAsync(async (req, res, next) => {
     return next(new AppError("No message found with that ID", 404));
   }
 
-  // Get grouped reactions for the meesage
+  // Get grouped reactions for the message
   const reactions = await Reaction.find({ messageId }).sort({ createdAt: 1 });
 
   // Group reactions by emoji
