@@ -9,25 +9,39 @@ import useCurrentWorkspace from "../../API/hooks/workspace/useCurrentWorkspace";
 import { useSelector } from "react-redux";
 import InviteChannelModal from "../../components/UI/Modal/ChannelModals/InviteChannelModal/InviteChannelModal";
 import SetStatusModal from "../../components/UI/Modal/SetStatusModal/SetStatus";
-import useSocketConnection from "../../API/sockets/useSocketConnection"
+import useSocketConnection from "../../API/sockets/useSocketConnection";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 // import {fetchWorkspaceMembers, fetchOnlineUsers } from "../../API/sockets/handlers/workspaceHandler";
 function MainLayout() {
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
-
-  useCurrentWorkspace();
   const { workspace } = useSelector((state) => state.workspace);
+  const channels = workspace?.channels;
   const navigate = useNavigate();
+  // custom hoccks
+  useCurrentWorkspace();
+  useSocketConnection();
+
   useEffect(() => {
     if (
       !localStorage.getItem("selectedWorkspaceId") ||
       !localStorage.getItem("logged_user_data")
     )
       navigate("/login");
-  })
-  useSocketConnection();
+  });
+
+  // navigate to main channel in main page
+  useEffect(() => {
+    const isOnRoot = location.pathname === "/";
+    if (isOnRoot && channels?.length > 0) {
+      const requiredChannel = channels.find((ch) => ch.required === true);
+      if (requiredChannel) {
+        navigate(`/channels/${requiredChannel._id}`, { replace: true });
+      }
+    }
+  }, [location.pathname, channels, navigate]);
+
   return (
     <div className={styles.main_layout}>
       <NavBar />
@@ -53,10 +67,9 @@ function MainLayout() {
         <InviteWorkModal />
         <InviteChannelModal />
         <SetStatusModal />
-
       </div>
       {/* Only for test */}
-        {/* <button onClick={() => {
+      {/* <button onClick={() => {
           fetchWorkspaceMembers(workspace._id, (res) => {
             console.log("📋 Members:", res.members);
           });

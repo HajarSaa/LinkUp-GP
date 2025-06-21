@@ -10,8 +10,6 @@ const AudioMedia = ({ file }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [shouldAutoPlay, setShouldAutoPlay] = useState(false); // ✅ جديد
-
   const fileSize = formatFileSize(file.size || file.fileSize);
 
   useEffect(() => {
@@ -19,20 +17,6 @@ const AudioMedia = ({ file }) => {
 
     const handleLoadedMetadata = () => {
       setDuration(audio.duration);
-
-      // ✅ لو المستخدم حاول يشغل قبل ما التحميل يخلص
-      if (shouldAutoPlay) {
-        audio
-          .play()
-          .then(() => {
-            setIsPlaying(true);
-            setShouldAutoPlay(false);
-          })
-          .catch((err) => {
-            console.warn("Play error after metadata load:", err);
-            setShouldAutoPlay(false);
-          });
-      }
     };
 
     const handleTimeUpdate = () => {
@@ -53,27 +37,18 @@ const AudioMedia = ({ file }) => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", handleEnded);
     };
-  }, [shouldAutoPlay]);
+  }, []);
 
-  const togglePlay = async () => {
+  const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    try {
-      if (audio.paused) {
-        if (isNaN(audio.duration) || audio.readyState < 2) {
-          setShouldAutoPlay(true); // ✅ استنى تحميل metadata
-        } else {
-          await audio.play();
-          setIsPlaying(true);
-        }
-      } else {
-        audio.pause();
-        setIsPlaying(false);
-        setShouldAutoPlay(false); // ✅ لو كان فيه نية للتشغيل، نلغيها
-      }
-    } catch (err) {
-      console.warn("Play error:", err);
+    if (audio.paused) {
+      audio.play();
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setIsPlaying(false);
     }
   };
 
@@ -98,6 +73,7 @@ const AudioMedia = ({ file }) => {
       return name;
     }
   }
+
 
   return (
     <div className={styles.wrapper}>
