@@ -6,6 +6,7 @@ import { useParams, useLocation } from "react-router-dom";
 import {
   addFile,
   addResponse,
+  removeFile,
   setFileStatus,
 } from "../../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
 import useUploadMedia from "../../../../../API/hooks/media/useUploadMedia";
@@ -60,12 +61,12 @@ function UploadMenu() {
             dispatch(addResponse({ pageId, responseFiles: data }));
             dispatch(setFileStatus({ pageId, previewURL, status: "done" }));
           },
-          onError: (err) => {
-            console.error("❌ Upload failed:", err);
-            dispatch(setFileStatus({ pageId, previewURL, status: "done" }));
+          onError: () => {
+            dispatch(removeFile({ pageId, previewURL }));
           },
         }
       );
+
     };
 
     document.body.appendChild(input);

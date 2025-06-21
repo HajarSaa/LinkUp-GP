@@ -18,7 +18,10 @@ import MediaContainer from "./MediaContainer/MediaContainer";
 import UploadMenu from "./UploadMenu/UploadMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { clearFiles } from "../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
-import { clearDraft, saveDraft } from "../../../../API/redux_toolkit/api_data/messages/messageDraftSlice";
+import {
+  clearDraft,
+  saveDraft,
+} from "../../../../API/redux_toolkit/api_data/messages/messageDraftSlice";
 
 const MessageInput = () => {
   const textareaRef = useRef(null);
@@ -55,7 +58,6 @@ const MessageInput = () => {
       }
     }, 0);
   }, [pageId, messageDraft]);
-
 
   const handleChange = (e) => {
     setMessage(e.target.value);
