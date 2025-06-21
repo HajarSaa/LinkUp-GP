@@ -2,18 +2,19 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./DmsList.module.css";
 import DmsListItem from "./DmsListItem";
-import { useNavigate, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import AddButton from "../AddButton/AddButton";
 import { closeAddButtonModal } from "../../../../API/redux_toolkit/modals/addButtonModal";
-import { getMyConversations } from "../../../../utils/workspaceUtils";
+import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
 
 function DmsList() {
   const { workspace } = useSelector((state) => state.workspace);
   const { id } = useParams();
   const dispatch = useDispatch();
-  const conversations = getMyConversations(workspace);
+  const conversations = useGetSidebarConvers(workspace);
 
-  // handle get workspace conversations
+
+
 
   function handleCreateBtn() {
     dispatch(closeAddButtonModal());
