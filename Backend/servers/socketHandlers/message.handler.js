@@ -4,7 +4,7 @@ import File from "../../models/file.model.js";
 import AppError from "../../utils/appError.js";
 import { socketAsync } from "../../utils/socketAsyncWrapper.js";
 import { userConnections } from "./connection.handler.js";
-import cloudinary from "../../utils/cloudinary.js";
+import { cloudinary } from "../../config/cloudinary.js";
 
 const MAX_MESSAGE_LENGTH = 4000;
 const EDIT_WINDOW_MS = 15 * 60 * 1000;
