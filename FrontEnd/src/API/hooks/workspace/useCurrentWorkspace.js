@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getWorkspace } from "../../services/workspaceService";
-import { setWorkspace } from "../../redux_toolkit/api_data/workspaceSlice";
+import { setSelectedWorkspace } from "../../redux_toolkit/api_data/workspaceSlice";
 import {
   disableResizing,
   enableResizing,
@@ -27,7 +27,7 @@ const useCurrentWorkspace = () => {
   // Handle success
   useEffect(() => {
     if (query.data?.workspace) {
-      dispatch(setWorkspace(query.data.workspace));
+      dispatch(setSelectedWorkspace(query.data.workspace ));
     }
   }, [query.data, dispatch]);
 

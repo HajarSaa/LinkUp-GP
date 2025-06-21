@@ -43,10 +43,14 @@ export const getMyConversations = (workspace) => {
     return [];
   }
 
+  // لحد هنا بجيب اليوزر ايدي
+
   const myMember = workspace.members.find((member) => member.user === userId);
   const myMemberId = myMember?._id;
 
   if (!myMemberId) return [];
+
+  // لحد هنا معايا اليوزر ايدي والميمبر ايدي
 
   const conversations = workspace.conversations
     .filter(

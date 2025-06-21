@@ -75,7 +75,7 @@ function UserStatus({ userId }) {
 }
 
 UserStatus.propTypes = {
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.string,
 };
 
 export default UserStatus;

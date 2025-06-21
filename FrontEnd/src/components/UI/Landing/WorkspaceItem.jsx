@@ -7,17 +7,27 @@ import { useDispatch } from "react-redux";
 import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
 import UserImage from '../User/UserImage';
 
-function WorkspaceItem({ workspace }) {
+function WorkspaceItem({ workspace , userData }) {
   const work_title = getWorkLabel(workspace?.name || "workspace name");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const loggedUser = {
+    memberId: workspace.userProfileId,
+    userId: userData._id,
+    emai: userData.email,
+  };
+
 
   const handleClick = (work_id) => {
     if (localStorage.getItem("selectedWorkspaceId"))
       localStorage.removeItem("selectedWorkspaceId");
     dispatch(clearWorkspace());
+
+    if (localStorage.getItem('logged_user_data'))
+      localStorage.removeItem("logged_user_data");
+
     localStorage.setItem("selectedWorkspaceId", work_id);
+    localStorage.setItem("logged_user_data", JSON.stringify(loggedUser));
     navigate(`/`);
   };
 
@@ -70,6 +80,7 @@ function WorkspaceItem({ workspace }) {
 
 WorkspaceItem.propTypes = {
   workspace: PropTypes.object,
+  userData: PropTypes.object,
 };
 
 export default WorkspaceItem;

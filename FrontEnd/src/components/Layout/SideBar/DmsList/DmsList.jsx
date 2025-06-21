@@ -13,6 +13,8 @@ function DmsList() {
   const dispatch = useDispatch();
   const conversations = getMyConversations(workspace);
 
+  // handle get workspace conversations
+
   function handleCreateBtn() {
     dispatch(closeAddButtonModal());
     console.log("put here the creation modal");

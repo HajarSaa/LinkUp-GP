@@ -3,13 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   workspace: null,
   onlineUsers: [],
+  logged_user : {}
 };
 
 const workspaceSlice = createSlice({
   name: "workspace",
   initialState,
   reducers: {
-    setWorkspace: (state, action) => {
+    setSelectedWorkspace: (state, action) => {
       state.workspace = action.payload;
     },
     clearWorkspace: (state) => {
@@ -73,15 +74,15 @@ const workspaceSlice = createSlice({
 });
 
 
-export const { 
-  setWorkspace, 
-  clearWorkspace, 
-  setOnlineUsers, 
-  updateWorkspaceName, 
-  removeWorkspaceMember, 
-  updateChannelInList, 
-  addChannelToList, 
-  removeChannelFromList 
+export const {
+  setSelectedWorkspace,
+  clearWorkspace,
+  setOnlineUsers,
+  updateWorkspaceName,
+  removeWorkspaceMember,
+  updateChannelInList,
+  addChannelToList,
+  removeChannelFromList
 } = workspaceSlice.actions;
 
 export default workspaceSlice.reducer;

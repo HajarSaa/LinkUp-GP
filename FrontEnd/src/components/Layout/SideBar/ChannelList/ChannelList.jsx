@@ -3,12 +3,11 @@ import styles from "./ChannelList.module.css";
 import ChannelListItem from "./ChannelListItem";
 import AddButton from "../AddButton/AddButton.jsx";
 import { useParams } from "react-router-dom";
-import {getMyChannelsOnly} from "../../../../utils/channelUtils.js";
 
 function ChannelList() {
   const { workspace } = useSelector((state) => state.workspace);
   const { id } = useParams();
-  const myChannels = getMyChannelsOnly(workspace);
+  const myChannels = workspace.channels;
 
   return (
     <div>

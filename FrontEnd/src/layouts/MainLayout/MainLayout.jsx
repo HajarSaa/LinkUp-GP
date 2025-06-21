@@ -21,7 +21,10 @@ function MainLayout() {
   const { workspace } = useSelector((state) => state.workspace);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!localStorage.getItem("selectedWorkspaceId"))
+    if (
+      !localStorage.getItem("selectedWorkspaceId") ||
+      !localStorage.getItem("logged_user_data")
+    )
       navigate("/login");
   })
   useSocketConnection();
