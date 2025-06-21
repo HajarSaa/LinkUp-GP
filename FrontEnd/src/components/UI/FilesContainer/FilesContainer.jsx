@@ -5,7 +5,6 @@ import SearchInput from "../InputField/SearchInput/SearchInput";
 import MediaModal from "../Modal/MediaModal/MediaModal";
 import AudioMedia from "../Media/AudioMedia/AudioMedia";
 
-
 function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -60,9 +59,29 @@ function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
           </p>
         ) : (
           <>
+            {audios.length > 0 && (
+              <section>
+                <h3 className={styles.sectionTitle}>
+                  Audios ({audios.length})
+                </h3>
+                <div className={`${styles.mediaGrid} ${styles.audioGrid}`}>
+                  {audios.map((file) => (
+                    <div
+                      key={file._id}
+                      className={`${styles.mediaBox} ${styles.mediaBox_audio}`}
+                    >
+                      <AudioMedia file={file} />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {images.length > 0 && (
               <section>
-                <h3 className={styles.sectionTitle}>Images</h3>
+                <h3 className={styles.sectionTitle}>
+                  Images ({images.length})
+                </h3>
                 <div className={styles.mediaGrid}>
                   {images.map((file) => (
                     <div
@@ -83,7 +102,9 @@ function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
 
             {videos.length > 0 && (
               <section>
-                <h3 className={styles.sectionTitle}>Videos</h3>
+                <h3 className={styles.sectionTitle}>
+                  Videos ({videos.length})
+                </h3>
                 <div className={styles.mediaGrid}>
                   {videos.map((file) => (
                     <div
@@ -97,17 +118,6 @@ function FilesContainer({ files: channelMedia, isLoading, isError, error }) {
                         muted
                       />
                     </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {audios.length > 0 && (
-              <section>
-                <h3 className={styles.sectionTitle}>Audios</h3>
-                <div className={styles.audioList}>
-                  {audios.map((file) => (
-                    <AudioMedia key={file._id} file={file} />
                   ))}
                 </div>
               </section>

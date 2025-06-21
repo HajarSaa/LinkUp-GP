@@ -109,9 +109,14 @@
   height: 160px;
 }
 
+.mediaBox.mediaBox_audio{
+height: fit-content;
+overflow: visible;
+}
+
 .fixedMedia {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -119,4 +124,84 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* ======================= */
+.containerWrapper {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.status,
+.statusError,
+.empty {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+}
+
+.statusError {
+  color: red;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
+
+/* Base Grid for media */
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Override for audios */
+.audioGrid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Box style */
+.mediaBox {
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+}
+
+.mediaBox.mediaBox_audio {
+  height: fit-content;
+  overflow: visible;
+  cursor: default;
+}
+
+/* Zoom cursor */
+.mediaBox img,
+.mediaBox video {
+  cursor: zoom-in;
+}
+
+/* Content inside box */
+.fixedMedia {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
