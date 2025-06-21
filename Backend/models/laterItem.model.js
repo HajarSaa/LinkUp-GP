@@ -6,13 +6,9 @@ const laterItemSchema = new mongoose.Schema({
     ref: "UserProfile",
     required: true,
   },
-  itemType: {
-    type: String,
-    enum: ["Message", "File"],
-    required: true,
-  },
-  itemId: {
+  messageId: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "Message",
     required: true,
   },
   status: {
@@ -20,14 +16,20 @@ const laterItemSchema = new mongoose.Schema({
     enum: ["in-progress", "completed"],
     default: "in-progress",
   },
-  reminderAt: { type: Date, default: null },
-  savedAt: { type: Date, default: Date.now },
-  notified: { type: Boolean, default: false },
+  reminderAt: {
+    type: Date,
+    default: null,
+  },
+  savedAt: {
+    type: Date,
+    default: Date.now,
+  },
+  notified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-laterItemSchema.index(
-  { userProfile: 1, itemId: 1, itemType: 1 },
-  { unique: true }
-);
+laterItemSchema.index({ userProfile: 1, messageId: 1 }, { unique: true });
 
 export default mongoose.model("LaterItem", laterItemSchema);

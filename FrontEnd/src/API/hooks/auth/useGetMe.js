@@ -7,6 +7,7 @@ const useGetMe = () => {
     queryFn: ({ signal }) => getMe(signal),
     staleTime: 0,
     retry: 1,
+    // refetchInterval: 5000,
   });
 };
 

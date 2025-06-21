@@ -95,6 +95,7 @@ function ChannelPage() {
     );
 
   if (!channel) return;
+
   return (
     <PageContent>
       {channel?.type === "private" && !isMember ? (

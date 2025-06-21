@@ -121,7 +121,6 @@ export const createChannel = catchAsync(async (req, res, next) => {
     timestamp: new Date(),
   });
 
-
   // Send response
   res.status(201).json({
     status: "success",
@@ -144,7 +143,19 @@ export const updateChannel = catchAsync(async (req, res, next) => {
 
   // Update the channel
   if (name) channel.name = name;
-  if (type) channel.type = type;
+  if (type) {
+    // Validate the type
+    if (!["public", "private"].includes(type)) {
+      return next(new AppError("Invalid channel type", 400));
+    }
+    // If the channel is the default channel, we cannot change its type
+    if (channel.required && type !== channel.type) {
+      return next(
+        new AppError("Cannot change the type of the required channel", 400)
+      );
+    }
+    channel.type = type;
+  }
   if (topic) channel.topic = topic;
   if (description) channel.description = description;
 

@@ -55,57 +55,18 @@ export const uploadFile = catchAsync(async (req, res, next) => {
         channelId: channelId || null,
         conversationId: conversationId || null,
         parentMessageId: parentMessageId || null,
-        attachedToMessage: parentMessageId || null,
+        attachedToMessage: null,
         pinned: false,
       })
     )
   );
-
-  // prepare Socket.IO data
-  const formattedFiles = files.map((file) => ({
-    _id: file._id,
-    url: file.fileUrl,
-    originalname: file.fileName,
-    mimetype: file.fileType,
-    size: file.fileSize,
-    uploadedBy: userProfile._id,
-  }));
-
-  // handle Socket.IO emission
-  const io = req.app.get("io");
-  const roomId = conversationId || channelId;
-
-  if (io && roomId) {
-    const roomType = conversationId ? "conversation" : "channel";
-    const fullRoomId = `${roomType}:${roomId}`;
-
-    io.to(fullRoomId).emit(
-      "fileShared",
-      {
-        room: fullRoomId,
-        file: formattedFiles[0],
-        files: formattedFiles,
-        senderId: userId,
-        senderProfile: {
-          _id: userProfile._id,
-          name: userProfile.userName,
-          avatar: userProfile.photo,
-        },
-        timestamp: new Date().toISOString(),
-        parentMessageId: parentMessageId || null,
-      },
-      (err) => {
-        if (err) console.error("Socket emission failed:", err);
-      }
-    );
-  }
 
   res.status(200).json({
     status: "success",
     message:
       files.length === 1
         ? "File uploaded successfully!"
-        :` ${files.length} files uploaded successfully!`,
+        : ` ${files.length} files uploaded successfully!`,
     data: files.map(formatFile),
   });
 });
@@ -205,6 +166,5 @@ export const deleteFile = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "File deleted successfully",
-  });
+  });
 });
-

@@ -1,39 +1,3 @@
-// import { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import socket from "./socketService";
-// import { setUserProfile } from "../redux_toolkit/api_data/userProfileSlice";
-// import registerWorkspaceHandlers from "../sockets/handlers/workspaceHandler";
-// import registerPresenceHandlers from "../sockets/handlers/presenceHandler";
-
-// const useSocketConnection = () => {
-//   const dispatch = useDispatch();
-//   const currentUser = useSelector((state) => state.currentUser.currentUser);
-//   const workspace = useSelector((state) => state.workspace.workspace);
-
-//   useEffect(() => {
-//     if (!currentUser || !workspace?._id) return;
-
-//     socket.connect();
-
-//     socket.emit("userConnected", currentUser._id, workspace._id, (response) => {
-//       if (response?.success) {
-//         dispatch(setUserProfile(response.profile));
-//       }
-//     });
-
-//     const cleanupWorkspace = registerWorkspaceHandlers(socket, dispatch);
-//     const cleanupPresence = registerPresenceHandlers(socket, dispatch);
-//     return () => {
-//       cleanupWorkspace();
-//       cleanupPresence();
-//       socket.disconnect();
-//     };
-//   }, [currentUser, workspace]);
-// };
-
-// export default useSocketConnection;
-
-
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import socket from "./socketService";
@@ -53,7 +17,7 @@ const useSocketConnection = () => {
     if (!currentUser || !workspace?._id) return;
 
     socket.connect();
-
+    socket.userId = currentUser._id;
     // 1. Connect user
     socket.emit("userConnected", currentUser._id, workspace._id, (response) => {
       if (response?.success) {

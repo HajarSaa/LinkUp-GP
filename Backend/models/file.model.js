@@ -50,10 +50,6 @@ const fileSchema = new mongoose.Schema(
       ref: "Message",
       default: null,
     },
-    pinned: {
-      type: Boolean,
-      default: false,
-    },
   },
   { timestamps: true }
 );

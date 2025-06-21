@@ -23,5 +23,4 @@ const useGetChannel = (channel_id) => {
 
   return query;
 };
-
 export default useGetChannel;
