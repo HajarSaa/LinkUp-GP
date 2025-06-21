@@ -95,6 +95,43 @@ function ChannelPage() {
     );
 
   if (!channel) return;
+
+  // if (channel_query.isLoading || message_query.isLoading) {
+  //   return (
+  //     <div className={styles.status}>
+  //       <Spinner width={70} height={70} border={3} color="var(--primary-color)" />
+  //     </div>
+  //   );
+  // }
+
+  // if (channel_query.isError) {
+  //   return (
+  //     <div className={`${styles.status} ${styles.error}`}>
+  //       {channel_query.error?.response?.data?.message ||
+  //         channel_query.error?.message ||
+  //         "Failed to load channel"}
+  //     </div>
+  //   );
+  // }
+
+  // if (message_query.isError) {
+  //   return (
+  //     <div className={`${styles.status} ${styles.error}`}>
+  //       {message_query.error?.response?.data?.message ||
+  //         message_query.error?.message ||
+  //         "Failed to load messages"}
+  //     </div>
+  //   );
+  // }
+
+  // if (!channel) {
+  //   return (
+  //     <div className={`${styles.status} ${styles.error}`}>
+  //       Channel not found or unauthorized.
+  //     </div>
+  //   );
+  // }
+
   return (
     <PageContent>
       {channel?.type === "private" && !isMember ? (
