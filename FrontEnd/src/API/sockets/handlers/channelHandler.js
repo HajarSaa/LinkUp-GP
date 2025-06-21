@@ -69,9 +69,52 @@ import {
 } from "../../redux_toolkit/api_data/workspaceSlice";
 
 export default function registerChannelHandlers(socket, dispatch) {
-  const handleChannelUpdated = ({ type, channel }) => {
-    console.log(`📢 Channel ${type}:`, channel);
+  // const handleChannelUpdated = ({ type, channel }) => {
+  //   console.log(`📢 Channel ${type}:`, channel);
 
+  //   if (type === "created") {
+  //     channel.id = channel._id;
+  //     dispatch(addChannelToList(channel));
+  //   } else if (type === "updated") {
+  //     dispatch(updateChannelInList(channel));
+  //   } else if (type === "deleted") {
+  //     dispatch(removeChannelFromList(channel._id));
+  //   }
+  // };
+
+  // const handleMemberJoined = ({ channelId, userId, profileId }) => {
+  //   const currentUserId = socket.userId;
+  //   if (userId === currentUserId) {
+  //     console.log("✅ You joined a new channel:", channelId);
+  //     dispatch(
+  //       updateChannelInList({
+  //         _id: channelId,
+  //         members: `add:${profileId}`,
+  //       })
+  //     );
+  //   }
+  // };
+
+  // const handleMemberLeft = ({ channelId, userId, profileId }) => {
+  //   const currentUserId = socket.userId;
+  //   if (userId === currentUserId) {
+  //     console.log("❌ You left the channel:", channelId);
+  //     dispatch(
+  //       updateChannelInList({
+  //         _id: channelId,
+  //         members: `remove:${profileId}`,
+  //       })
+  //     );
+  //   }
+  // };
+
+  const handleChannelUpdated = ({ type, channel }) => {
+    const msg = {
+      created: `🆕 Channel created: ${channel.name}`,
+      updated: `✏️ Channel updated: ${channel.name}`,
+      deleted: `🗑️ Channel deleted: ${channel.name}`,
+    };
+    console.log(msg[type]);
     if (type === "created") {
       channel.id = channel._id;
       dispatch(addChannelToList(channel));
@@ -85,28 +128,23 @@ export default function registerChannelHandlers(socket, dispatch) {
   const handleMemberJoined = ({ channelId, userId, profileId }) => {
     const currentUserId = socket.userId;
     if (userId === currentUserId) {
-      console.log("✅ You joined a new channel:", channelId);
-      dispatch(
-        updateChannelInList({
-          _id: channelId,
-          members: `add:${profileId}`,
-        })
-      );
+      console.log(`✅ You joined channel ${channelId}`);
+      dispatch(updateChannelInList({ _id: channelId, members: `add:${profileId}` }));
+    } else {
+      console.log(`👥 Member joined channel ${channelId}: ${profileId}`);
     }
   };
 
-  const handleMemberLeft = ({ channelId, userId, profileId }) => {
-    const currentUserId = socket.userId;
-    if (userId === currentUserId) {
-      console.log("❌ You left the channel:", channelId);
-      dispatch(
-        updateChannelInList({
-          _id: channelId,
-          members: `remove:${profileId}`,
-        })
-      );
-    }
-  };
+const handleMemberLeft = ({ channelId, userId, profileId }) => {
+  const currentUserId = socket.userId;
+  if (userId === currentUserId) {
+    console.log(`❌ You left channel ${channelId}`);
+    dispatch(updateChannelInList({ _id: channelId, members: `remove:${profileId}` }));
+  } else {
+    console.log(`🚪 Member left channel ${channelId}: ${profileId}`);
+  }
+};
+
 
   socket.on("channel:updated", handleChannelUpdated);
   socket.on("channel:memberJoined", handleMemberJoined);
