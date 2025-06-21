@@ -53,11 +53,9 @@ const AttachmentRenderer = ({ files = [] }) => {
 
       {audios.map((file) => (
         <div key={file.fileUrl} className={styles.attachmentItem}>
-          {/* {console.log(file)} */}
+
           <AudioMedia
             file={file}
-            // fileName={file.fileName}
-            // fileSizeMB={file.fileSize}
           />
         </div>
       ))}

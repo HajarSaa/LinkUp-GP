@@ -13,6 +13,8 @@ export default function registerWorkspaceHandlers(socket, dispatch) {
     dispatch(setOnlineUsers(userIds));
   };
 
+
+
   const handleMemberJoined = ({ userId, profile, joinedAt }) => {
     console.log(
       `🟢 [workspaceMemberJoined] User '${profile?.name}' (${userId}) joined at ${new Date(joinedAt).toLocaleTimeString()}`
@@ -24,6 +26,7 @@ export default function registerWorkspaceHandlers(socket, dispatch) {
     console.log(
       `🔴 [workspaceMemberLeft] User ${userId} left at ${new Date(leftAt).toLocaleTimeString()}`
     );
+
     dispatch(removeWorkspaceMember(profileId));
 
     const currentUserId = socket.userId;
@@ -35,14 +38,17 @@ export default function registerWorkspaceHandlers(socket, dispatch) {
   };
 
   const handleWorkspaceDeleted = ({ workspaceId, deletedAt }) => {
+
     console.warn(
       `🗑️ [workspace:deleted] Workspace '${workspaceId}' deleted at ${new Date(deletedAt).toLocaleTimeString()}`
     );
+
     dispatch(clearWorkspace());
     window.location.href = "/workspaces-landing";
   };
 
   const handleWorkspaceUpdated = ({ workspaceId, updatedFields, updatedAt }) => {
+
     console.log(
       `🔧 [workspace:updated] Workspace '${workspaceId}' updated at ${new Date(updatedAt).toLocaleTimeString()}`,
       updatedFields

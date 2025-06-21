@@ -15,7 +15,10 @@ import Spinner from "../../../../Spinner/Spinner";
 import { useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { getNearestChannel, isChannelOwner } from "../../../../../../utils/channelUtils";
+import {
+  getNearestChannel,
+  isChannelOwner,
+} from "../../../../../../utils/channelUtils";
 import InfoIcon from "../../../../Icons/InforIcon/InfoIcon";
 import useLeaveChannel from "../../../../../../API/hooks/channel/useLeaveChannel";
 import { useNavigate } from "react-router-dom";
@@ -27,12 +30,13 @@ function AboutTab() {
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   const { workspace } = useSelector((state) => state.workspace);
   const { channel } = useSelector((state) => state.channel);
-  const { mutate: leave_channel , isPending } = useLeaveChannel();
+  const { mutate: leave_channel, isPending } = useLeaveChannel();
   const createdBy = findMemberById(workspace, channel?.createdBy);
   const createdAt = formatDateToLong(channel?.createdAt);
   const isOwner = isChannelOwner(channel, workspace);
 
   function handle_leave(e) {
+    if (channel.required) return;
     e.stopPropagation();
     leave_channel(channel.id, {
       onSuccess: close_leave,
@@ -106,7 +110,7 @@ function AboutTab() {
             )}
           </div>
           <div className={styles.bottom}>
-            <p>Add a topic</p>
+            <p>{channel.topic ? `${channel.topic} ` : "Add topic"}</p>
           </div>
         </div>
         <div className={styles.infoTopic} onClick={edit_dicription}>
@@ -119,7 +123,11 @@ function AboutTab() {
             )}
           </div>
           <div className={styles.bottom}>
-            <p>Add a description</p>
+            <p>
+              {channel.description
+                ? `${channel.description} `
+                : "Add  Discription"}
+            </p>
           </div>
         </div>
         <div className={styles.infoTopic}>
@@ -131,7 +139,7 @@ function AboutTab() {
           </div>
         </div>
         <div
-          className={`${styles.infoTopic} ${styles.leaveItem}`}
+          className={`${styles.infoTopic} ${styles.leaveItem} `}
           onClick={handle_leave}
         >
           <>
@@ -140,7 +148,22 @@ function AboutTab() {
                 <Spinner width={30} height={30} color="var(--error-color)" />
               </div>
             ) : (
-              <span>Leave channel</span>
+              <>
+                <span
+                  className={`${
+                    !channel.required ? styles.active_leave : styles.ops_btn
+                  }`}
+                >
+                  Leave channel
+                </span>
+
+                {channel.required && (
+                  <InfoIcon
+                    id="leave_req"
+                    text="You couldn`t leave this channel"
+                  />
+                )}
+              </>
             )}
           </>
         </div>

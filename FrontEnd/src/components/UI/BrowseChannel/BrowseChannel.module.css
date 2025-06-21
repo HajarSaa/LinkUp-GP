@@ -84,19 +84,42 @@
 .viewChannel {
   color: var(--text-secondary);
   font-size: 0.8rem;
-  display: none;
+  display: flex;
   align-items: center;
+  visibility: hidden;
+}
+.viewChannel.req_ifo > * {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
 }
 
+/* Required Attribute */
+.req_ifo {
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+}
+
+.req_ifo>span {
+  display: flex;
+}
+
+
+.channelItem:hover .viewChannel,
+.channelItem:hover .viewChannel.req_ifo,
+.channelItem:hover .buttonGroups {
+  visibility: visible;
+}
 /* buttonGroup */
 .buttonGroups {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 30px;
-  display: none;
+  display: flex;
   gap: 8px;
   cursor: context-menu;
+  visibility: hidden;
 }
 
 .buttonGroups>.buttonGroups_btn,
@@ -114,16 +137,15 @@
   background-color: var(--bg-white);
   height: 32px;
 }
-
+.toggle_join{
+  width: 70px;
+}
 .buttonGroups>.buttonGroups_btn:hover,
 .createBtn:hover {
   background-color: var(--white-btn-hover-color);
 }
 
-.channelItem:hover .viewChannel,
-.channelItem:hover .buttonGroups {
-  display: flex;
-}
+
 
 .channelInfo {
   color: var(--text-secondary);
@@ -189,3 +211,4 @@
   background-color: var(--white-btn-hover-color);
   box-shadow: var(--shadow);
 }
+

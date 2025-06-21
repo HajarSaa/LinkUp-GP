@@ -105,10 +105,13 @@ function MembersTab() {
       </div>
       {members.map((member, index) => (
         <div
+
           className={styles.membersItem}
           key={index}
           onClick={() => open_user_panel(member.id || member._id)}
+
         >
+          {console.log(member)}
           <div className={styles.memberImg}>
             <UserImage src={member.photo} alt={member.userName} />
           </div>

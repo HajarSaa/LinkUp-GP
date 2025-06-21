@@ -26,7 +26,6 @@ function WorkspacesList() {
 
   const user = data?.user || null;
   const workspaces = data?.workspaces || [];
-
   return (
     <div className={styles.workspaces_list}>
       <div className={styles.workspace_list_header}>
@@ -42,7 +41,7 @@ function WorkspacesList() {
           </div>
         ) : (
           workspaces.map((workspace, index) => (
-            <WorkspaceItem key={index} workspace={workspace} />
+            <WorkspaceItem key={index} workspace={workspace} userData={user} />
           ))
         )}
       </div>

@@ -102,19 +102,23 @@ const ChannelOptionModal = () => {
                 </div>
                 <div className={styles.menuItem}>Search in channel</div>
                 <div className={styles.menuItem}>Open in new window</div>
-                <hr className={styles.divider} />
-                <div
-                    className={`${styles.menuItem} ${styles.danger}`}
-                    onClick={handle_leave}
-                >
-                    {isPending ? (
-                        <span className={styles.spinner_loading}>
-                            <Spinner width={20} height={20} color="var(--error-color)" />
-                        </span>
-                    ) : (
-                        "Leave channel"
-                    )}
-                </div>
+                {!channel?.required && (
+                    <>
+                        <hr className={styles.divider} />
+                        <div
+                            className={`${styles.menuItem} ${styles.danger}`}
+                            onClick={handle_leave}
+                        >
+                            {isPending ? (
+                                <span className={styles.spinner_loading}>
+                                    <Spinner width={20} height={20} color="var(--error-color)" />
+                                </span>
+                            ) : (
+                                "Leave channel"
+                            )}
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );

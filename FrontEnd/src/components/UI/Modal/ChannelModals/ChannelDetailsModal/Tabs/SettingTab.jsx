@@ -42,7 +42,7 @@ function SettingTab({ channelData }) {
     }
   }
   function handle_delete_channel() {
-    if (isOwner && !deleting_pinding) {
+    if (isOwner && !deleting_pinding && !channel.required) {
       delete_channel(channel.id, {
         onSuccess: () => {
           dispatch(closeChannelDetails());
@@ -54,7 +54,7 @@ function SettingTab({ channelData }) {
   }
 
   function handleSwappeType() {
-    if (!isOwner || updatingType) return;
+    if (!isOwner || updatingType || channel.required) return;
 
     const newType = channelData.type === "public" ? "private" : "public";
 
@@ -125,19 +125,23 @@ function SettingTab({ channelData }) {
                 <Spinner width={18} height={18} color="var(--primary-color)" />
               ) : (
                 <ChannelType
+                  className={channel.required ? styles.ops_btn : ""}
                   type={`${
                     channelData.type === "public" ? "private" : "public"
                   }`}
                 />
               )}
 
-              <div>
+              <div className={channel.required ? styles.ops_btn : ''}>
                 Change to a{" "}
                 {channelData.type === "public" ? "private" : "public"} channel
               </div>
             </div>
-            {!isOwner && (
+            {(!isOwner && !channel.required)&& (
               <InfoIcon id="edit_ch_name" text="You don`t have permissions" />
+            )}
+            {channel.required && (
+              <InfoIcon id="switch_req" text="this must be general channel" />
             )}
           </div>
         </TabItem>
@@ -159,9 +163,7 @@ function SettingTab({ channelData }) {
         </TabItem>
         {/* Delete */}
         <TabItem
-          className={`${styles.deleteItem} ${
-            isOwner ? styles.active_delete : styles.ops_btn
-          }`}
+          className={`${styles.deleteItem}`}
           onClick={handle_delete_channel}
         >
           {deleting_pinding ? (
@@ -170,14 +172,26 @@ function SettingTab({ channelData }) {
             <p>{deleting_error?.response?.data?.message}</p>
           ) : (
             <div className={styles.tab_item_content}>
-              <div className={`${styles.tab_item_content_right_row}`}>
+              <div
+                className={`${styles.tab_item_content_right_row} ${
+                  isOwner && !channel.required
+                    ? styles.active_delete
+                    : styles.ops_btn
+                }`}
+              >
                 <span className={styles.tab_item_icon}>
                   <MdDeleteOutline size={20} />
                 </span>
                 <span>Delete this channel</span>
               </div>
-              {!isOwner && (
+              {!isOwner && !channel.required && (
                 <InfoIcon id="edit_ch_name" text="You don`t have permissions" />
+              )}
+              {channel.required && (
+                <InfoIcon
+                  id="delete_req_ch"
+                  text="this is a required channel"
+                />
               )}
             </div>
           )}

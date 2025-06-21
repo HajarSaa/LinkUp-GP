@@ -196,7 +196,9 @@
   color: var(--error-color);
   padding: 15px 10px;
   cursor: pointer;
-  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .chId {
@@ -412,7 +414,7 @@
 
 /*  */
 
-.ops_btn{
+.ops_btn {
   opacity: 0.7;
 }
 
@@ -457,7 +459,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.row_content{
+.row_content {
   display: flex;
   align-items: center;
   gap: 5px;

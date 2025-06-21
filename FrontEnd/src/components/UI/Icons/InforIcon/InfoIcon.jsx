@@ -3,7 +3,7 @@ import { FiHelpCircle } from "react-icons/fi";
 import styles from "./InfoIcon.module.css";
 import { Tooltip } from "react-tooltip";
 
-function InfoIcon({ className, place = "top", text, id }) {
+function InfoIcon({ className = "", place = "top", text, id }) {
   return (
     <>
       <span
@@ -13,14 +13,32 @@ function InfoIcon({ className, place = "top", text, id }) {
       >
         <FiHelpCircle />
       </span>
-      <Tooltip id={id} place={place} className={`custom-tooltip`} />
+      <Tooltip
+        id={id}
+        place={place}
+        positionStrategy="absolute"
+        className="custom-tooltip"
+      />
     </>
   );
 }
 
 InfoIcon.propTypes = {
   className: PropTypes.string,
-  place: PropTypes.oneOf(["top", "right", "bottom", "left"]),
+  place: PropTypes.oneOf([
+    "top",
+    "top-start",
+    "top-end",
+    "right",
+    "right-start",
+    "right-end",
+    "bottom",
+    "bottom-start",
+    "bottom-end",
+    "left",
+    "left-start",
+    "left-end",
+  ]),
   text: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
 };
