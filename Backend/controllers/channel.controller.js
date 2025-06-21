@@ -95,8 +95,9 @@ export const createChannel = catchAsync(async (req, res, next) => {
   // Check if the channel name already exists in the workspace
   const existingChannel = await Channel.findOne({
     name: req.body.name,
-    workspaceId: req.body.workspaceId,
+    workspaceId: req.workspace.id,
   });
+
   if (existingChannel) {
     return next(
       new AppError("There is a channel with the same name. Try to join it", 400)

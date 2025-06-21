@@ -128,6 +128,80 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
+// export const getWorkspace = catchAsync(async (req, res, next) => {
+//   const workspaceId = req.params.id;
+
+//   let workspace = await Workspace.findById(workspaceId);
+//   // check if the workspace exists
+//   if (!workspace) {
+//     return next(
+//       new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
+//     );
+//   }
+
+//   // First find the user's profile in this workspace
+//   const userProfile = await UserProfile.findOne({
+//     user: req.user.id,
+//     workspace: workspaceId,
+//   });
+
+//   if (!userProfile) {
+//     return next(new AppError("You are not a member of this workspace", 403));
+//   }
+
+//   // Get the workspace with populated data
+//   workspace = await Workspace.findById(workspaceId)
+//     .populate({
+//       path: "members",
+//     })
+//     .populate({
+//       path: "channels",
+//       match: { members: userProfile._id }, // Only channels where user is a member
+//     })
+//     .populate("conversations");
+
+//   // check if the workspace exists
+//   if (!workspace) {
+//     return next(
+//       new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
+//     );
+//   }
+
+//   // Filter conversations to only include those where the user is a member
+//   const filteredConversations = workspace.conversations.filter(
+//     (conversation) => {
+//       return (
+//         conversation.memberOneId._id.equals(userProfile._id) ||
+//         conversation.memberTwoId._id.equals(userProfile._id)
+//       );
+//     }
+//   );
+
+//   // Replace the arrays with filtered ones
+//   workspace.conversations = filteredConversations;
+//   // Note: Channels are already filtered by the match condition in populate
+
+//   // Send the workspace id as a cookie
+//   res.cookie("workspace", workspaceId, {
+//     expires: new Date(
+//       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+//     ),
+//     secure: process.env.NODE_ENV === "production",
+//     httpOnly: true,
+//     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+//   });
+
+//   // Send the response
+//   res.status(200).json({
+//     status: "success",
+//     data: {
+//       workspace,
+//       userId: req.user.id,
+//       userProfileId: userProfile.id,
+//     },
+//   });
+// });
+
 export const getWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
 
@@ -156,7 +230,7 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
     })
     .populate({
       path: "channels",
-      match: { members: userProfile._id }, // Only channels where user is a member
+      // Remove the match condition from here
     })
     .populate("conversations");
 
@@ -166,6 +240,17 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
       new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
     );
   }
+
+  // Filter channels manually to ensure accuracy
+  const filteredChannels = workspace.channels.filter((channel) => {
+    // Check if the user's profile ID is in the channel's members array
+    return (
+      channel.members &&
+      channel.members.some(
+        (memberId) => memberId.toString() === userProfile._id.toString()
+      )
+    );
+  });
 
   // Filter conversations to only include those where the user is a member
   const filteredConversations = workspace.conversations.filter(
@@ -178,8 +263,8 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
   );
 
   // Replace the arrays with filtered ones
+  workspace.channels = filteredChannels;
   workspace.conversations = filteredConversations;
-  // Note: Channels are already filtered by the match condition in populate
 
   // Send the workspace id as a cookie
   res.cookie("workspace", workspaceId, {
