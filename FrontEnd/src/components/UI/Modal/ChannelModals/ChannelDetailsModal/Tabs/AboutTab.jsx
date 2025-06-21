@@ -110,7 +110,7 @@ function AboutTab() {
             )}
           </div>
           <div className={styles.bottom}>
-            <p>Add a topic</p>
+            <p>{channel.topic ? `${channel.topic} ` : "Add topic"}</p>
           </div>
         </div>
         <div className={styles.infoTopic} onClick={edit_dicription}>
@@ -123,7 +123,11 @@ function AboutTab() {
             )}
           </div>
           <div className={styles.bottom}>
-            <p>Add a description</p>
+            <p>
+              {channel.description
+                ? `${channel.description} `
+                : "Add  Discription"}
+            </p>
           </div>
         </div>
         <div className={styles.infoTopic}>
@@ -151,7 +155,7 @@ function AboutTab() {
                   }`}
                 >
                   Leave channel
-                  </span>
+                </span>
 
                 {channel.required && (
                   <InfoIcon
