@@ -4,11 +4,17 @@ import {
   removeChannelFromList,
 } from "../../redux_toolkit/api_data/workspaceSlice";
 
-import { 
-  updateChannelMembers, 
-  addChannelToBrowseList, 
-  removeChannelFromBrowseList
-} from "../../redux_toolkit/api_data/channels/browseChannels"; // ✅ NEW
+import {
+  updateChannelMembers,
+} from "../../redux_toolkit/api_data/channelSlice";
+
+import {
+  setBrowseChannels,
+  addChannelToBrowseList,
+  removeChannelFromBrowseList,
+} from "../../redux_toolkit/api_data/channels/browseChannels";
+
+import store from "../../redux_toolkit/store";
 
 export default function registerChannelHandlers(socket, dispatch) {
   const handleChannelUpdated = ({ type, channel }) => {
@@ -23,7 +29,6 @@ export default function registerChannelHandlers(socket, dispatch) {
 
     if (type === "created") {
       dispatch(addChannelToList(channel));
-      // ✅ Add to browse if public
       if (channel.type === "public") {
         dispatch(addChannelToBrowseList(channel));
       }
@@ -37,34 +42,64 @@ export default function registerChannelHandlers(socket, dispatch) {
 
   const handleMemberJoined = ({ channelId, userId, profileId }) => {
     const currentUserId = socket.userId;
-
-    // ✅ Always update browseChannels
-    dispatch(
-      updateChannelMembers({ channelId, profileId, type: "add" })
+    console.log(
+      userId === currentUserId
+        ? `✅ You joined channel ${channelId}`
+        : `👥 Member joined channel ${channelId}: ${profileId}`
     );
 
-    if (userId === currentUserId) {
-      console.log(`✅ You joined channel ${channelId}`);
-      dispatch(updateChannelInList({ _id: channelId, members: `add:${profileId}` }));
-    } else {
-      console.log(`👥 Member joined channel ${channelId}: ${profileId}`);
+    // ✅ Update workspace.channels
+    dispatch(
+      updateChannelInList({ _id: channelId, members: `add:${profileId}` })
+    );
+
+    // ✅ Update current channel if it's open
+    const currentChannel = store.getState().channel.channel;
+    if (currentChannel && currentChannel._id === channelId) {
+      const newMembers = [...new Set([...currentChannel.members, profileId])];
+      dispatch(updateChannelMembers(newMembers));
     }
+
+    // ✅ Update browseChannels
+    const browseList = store.getState().browseChannels.browseChannels || [];
+    const updated = browseList.map((ch) =>
+      ch._id === channelId
+        ? { ...ch, members: [...new Set([...ch.members, profileId])] }
+        : ch
+    );
+    dispatch(setBrowseChannels(updated));
   };
 
   const handleMemberLeft = ({ channelId, userId, profileId }) => {
     const currentUserId = socket.userId;
-
-    // ✅ Always update browseChannels
-    dispatch(
-      updateChannelMembers({ channelId, profileId, type: "remove" })
+    console.log(
+      userId === currentUserId
+        ? `❌ You left channel ${channelId}`
+        : `🚪 Member left channel ${channelId}: ${profileId}`
     );
 
-    if (userId === currentUserId) {
-      console.log(`❌ You left channel ${channelId}`);
-      dispatch(updateChannelInList({ _id: channelId, members: `remove:${profileId}` }));
-    } else {
-      console.log(`🚪 Member left channel ${channelId}: ${profileId}`);
+    // ✅ Update workspace.channels
+    dispatch(
+      updateChannelInList({ _id: channelId, members: `remove:${profileId}` })
+    );
+
+    // ✅ Update current channel if it's open
+    const currentChannel = store.getState().channel.channel;
+    if (currentChannel && currentChannel._id === channelId) {
+      const newMembers = currentChannel.members.filter(
+        (id) => id !== profileId
+      );
+      dispatch(updateChannelMembers(newMembers));
     }
+
+    // ✅ Update browseChannels
+    const browseList = store.getState().browseChannels.browseChannels || [];
+    const updated = browseList.map((ch) =>
+      ch._id === channelId
+        ? { ...ch, members: ch.members.filter((id) => id !== profileId) }
+        : ch
+    );
+    dispatch(setBrowseChannels(updated));
   };
 
   socket.on("channel:updated", handleChannelUpdated);
