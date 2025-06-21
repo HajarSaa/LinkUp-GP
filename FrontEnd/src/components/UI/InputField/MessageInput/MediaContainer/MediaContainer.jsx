@@ -48,7 +48,7 @@ function MediaContainer() {
         )}
 
         {file.type.startsWith("audio/") && (
-          <AudioMedia audioUrl={file.previewURL}/>
+          <AudioMedia file={file}/>
         )}
       </div>
     );

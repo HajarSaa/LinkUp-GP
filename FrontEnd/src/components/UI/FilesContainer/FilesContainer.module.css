@@ -84,3 +84,39 @@
 .statusError {
   color: red;
 }
+/* ==================== */
+.sectionTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mediaBox {
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+}
+
+.fixedMedia {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.audioList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

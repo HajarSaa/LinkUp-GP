@@ -56,8 +56,6 @@ const AttachmentRenderer = ({ files = [] }) => {
           {/* {console.log(file)} */}
           <AudioMedia
             file={file}
-            // fileName={file.fileName}
-            // fileSizeMB={file.fileSize}
           />
         </div>
       ))}

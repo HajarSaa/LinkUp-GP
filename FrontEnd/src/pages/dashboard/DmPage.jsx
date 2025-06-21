@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
-import PageContent from "../../../components/Layout/PageContent/PageContnet";
-import MessageInput from "../../../components/UI/InputField/MessageInput/MessageInput";
-import UserCard from "../../../components/UI/UserDM/UserCard";
-import UserNavbar from "../../../components/UI/UserDM/Userbar";
-import useGetConvers from "../../../API/hooks/conversation/useGetConvers";
-import Spinner from "../../../components/UI/Spinner/Spinner";
-import styles from "../dashboard.module.css";
-import Panel from "../../../components/Layout/Panel/Panel";
+import PageContent from "../../components/Layout/PageContent/PageContnet";
+import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
+import UserCard from "../../components/UI/UserDM/UserCard";
+import UserNavbar from "../../components/UI/UserDM/Userbar";
+import useGetConvers from "../../API/hooks/conversation/useGetConvers";
+import Spinner from "../../components/UI/Spinner/Spinner";
+import styles from "./dashboard.module.css";
+import Panel from "../../components/Layout/Panel/Panel";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
@@ -15,14 +15,14 @@ import {
   getUserPanelIdByPageId,
   isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
-} from "../../../utils/panelUtils";
+} from "../../utils/panelUtils";
 import {
   closeChatPanel,
   openThreadPanel,
   openUserPanel,
-} from "../../../API/redux_toolkit/ui/chatPanelSlice";
-import EditMessageInput from "../../../components/UI/InputField/MessageInput/EditMessageInput";
-import FilesContainer from "../../../components/UI/FilesContainer/FilesContainer";
+} from "../../API/redux_toolkit/ui/chatPanelSlice";
+import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
+import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
