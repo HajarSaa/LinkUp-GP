@@ -196,6 +196,8 @@ export const getWorkspace = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       workspace,
+      userId: req.user.id,
+      userProfileId: userProfile.id,
     },
   });
 });
