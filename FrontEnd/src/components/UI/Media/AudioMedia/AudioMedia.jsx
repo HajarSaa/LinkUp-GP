@@ -10,7 +10,7 @@ const AudioMedia = ({ file }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const fileSize = formatFileSize(file.fileSize);
+  const fileSize = formatFileSize(file.size || file.fileSize);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -77,7 +77,7 @@ const AudioMedia = ({ file }) => {
       </div>
       <div className={styles.right_side}>
         <div className={styles.top_section_info}>
-          <span>{file.fileName}</span>
+          <span>{decodeURIComponent(escape(file.fileName || file.name))}</span>
           <span>{fileSize}</span>
         </div>
         <div className={styles.bottom_section}>
