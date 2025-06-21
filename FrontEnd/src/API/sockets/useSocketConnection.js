@@ -61,18 +61,18 @@ const useSocketConnection = () => {
 
         // 1.1 Join the workspace room
         socket.emit("joinWorkspaceRoom", workspace._id, (res) => {
-          console.log("🏠 Joined workspace room:", res);
+          // console.log("🏠 Joined workspace room:", res);
         });
 
         // 1.2 Set active workspace
         setActiveWorkspace(workspace._id, (res) => {
-          console.log("📌 Active workspace set:", res);
+          // console.log("📌 Active workspace set:", res);
         });
 
         // 1.3 Fetch workspace members
         fetchWorkspaceMembers(workspace._id, (res) => {
           if (res.success) {
-            console.log("📋 Members list:", res.members);
+            // console.log("📋 Members list:", res.members);
           }
         });
       }

@@ -12,12 +12,12 @@ export default function registerWorkspaceHandlers(socket, dispatch) {
   };
 
   const handleMemberJoined = ({ userId, profile }) => {
-    console.log("👥 New member joined:", profile?.name, "ID:", userId);
+    // console.log("👥 New member joined:", profile?.name, "ID:", userId);
     // toast.info(`${profile?.name} has joined the workspace.`);
   };
 
   const handleMemberLeft = ({ userId, profileId, leftAt }) => {
-    console.log("👋 Member left:", userId, "at", leftAt);
+    // console.log("👋 Member left:", userId, "at", leftAt);
     dispatch(removeWorkspaceMember(profileId));
 
     const currentUserId = socket.userId;
@@ -29,14 +29,14 @@ export default function registerWorkspaceHandlers(socket, dispatch) {
   };
 
   const handleWorkspaceDeleted = ({ workspaceId, deletedAt }) => {
-    console.warn(`🚨 Workspace ${workspaceId} deleted at ${deletedAt}`);
+    // console.warn(`🚨 Workspace ${workspaceId} deleted at ${deletedAt}`);
     dispatch(clearWorkspace());
     // toast.error("Workspace has been deleted.");
     // window.location.href = "/workspaces-landing";
   };
 
   const handleWorkspaceUpdated = ({ workspaceId, updatedFields, updatedAt }) => {
-    console.log(`🔄 Workspace with ID: ${workspaceId} updated at: ${updatedAt}`, updatedFields);
+    // console.log(`🔄 Workspace with ID: ${workspaceId} updated at: ${updatedAt}`, updatedFields);
     if (updatedFields.name) {
       dispatch(updateWorkspaceName(updatedFields.name));
       // toast.success("Workspace name updated.");
