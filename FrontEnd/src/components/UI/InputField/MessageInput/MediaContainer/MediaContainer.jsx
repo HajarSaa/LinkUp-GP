@@ -49,7 +49,6 @@ function MediaContainer() {
 
         {file.type.startsWith("audio/") && (
           <>
-          {console.log(file)}
             <AudioMedia file={file} />
             </>
         )}

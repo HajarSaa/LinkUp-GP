@@ -66,6 +66,15 @@ const AudioMedia = ({ file }) => {
     return `${mins}:${secs}`;
   };
 
+  function decodeBrokenFilename(name) {
+    try {
+      return decodeURIComponent(escape(name));
+    } catch {
+      return name;
+    }
+  }
+
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.left_side}>
@@ -77,7 +86,7 @@ const AudioMedia = ({ file }) => {
       </div>
       <div className={styles.right_side}>
         <div className={styles.top_section_info}>
-          <span>{decodeURIComponent(escape(file.fileName || file.name))}</span>
+          <span>{decodeBrokenFilename(file.fileName || file.name)}</span>
           <span>{fileSize}</span>
         </div>
         <div className={styles.bottom_section}>
