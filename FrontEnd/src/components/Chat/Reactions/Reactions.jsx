@@ -27,7 +27,6 @@ function Reactions({ messageId }) {
   }
 
   function removeThisReact(emoji) {
-    console.log(emoji)
     toggleThisReact({
       messageId,
       emoji: emoji,
@@ -46,7 +45,10 @@ function Reactions({ messageId }) {
               className={styles.react}
               onClick={() => removeThisReact(emoji)}
             >
-              <div className={styles.react_emoji}>{emoji}</div>
+              {/* <div className={styles.react_emoji}>{emoji}</div> */}
+              <div className={styles.react_emoji}>
+                <img src={emoji} alt="" />
+              </div>
               <div className={styles.react_count}>{count}</div>
             </div>
           ))}

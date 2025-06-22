@@ -122,10 +122,10 @@ function ChatMessage({ containerRef }) {
       </div>
       <EmojiPicker
         onSelect={(emojiData, messageId) => {
-          console.log(emojiData.imageUrl);
           toggleThisReact({
             messageId,
-            emoji: emojiData.emoji,
+            emoji: emojiData.imageUrl, // this best to show the same shape
+            // emoji: emojiData.emoji, // this best for fast show but not the same shape
           });
         }}
       />

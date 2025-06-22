@@ -17,8 +17,8 @@ const DmsListItem = ({ dmData, isActive }) => {
     navigate(`/conversations/${dmData.conversationId}`);
   };
 
-  // ✅ prevent crash if member is missing
-  if (!dmData.member) return null;
+  // // ✅ prevent crash if member is missing
+  // if (!dmData.member) return null;
 
   return (
     <div

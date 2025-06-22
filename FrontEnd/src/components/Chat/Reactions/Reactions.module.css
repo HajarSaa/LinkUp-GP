@@ -17,17 +17,33 @@
   font-size: 15px;
 }
 
-.react {
-  gap: 4px;
-  background-color: #e4f8ff;
+.react {  background-color: #e4f8ff;
   color: var(--link-color);
   border: 1px solid var(--link-color);
+  width: 55px;
+  height: 27px;
+  overflow: hidden;
 }
 
 .react_emoji,
 .react_count {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.react_emoji {
+  flex: 1;
+}
+.react_emoji > img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.react_count {
+  width: 15px;
+  height: 100%;
+  display: flex;
   align-items: center;
 }
 
