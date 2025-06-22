@@ -10,10 +10,13 @@ const EmojiPicker = ({ onSelect }) => {
   );
   const dispatch = useDispatch();
 
-  function handleCloseModal(e) {
-    if (e.target === e.currentTarget) dispatch(closeEmojiPicker());
-  }
-  const handleEmojiClick = (emojiData, event) => {
+  const handleCloseModal = (e) => {
+    if (e.target === e.currentTarget) {
+      dispatch(closeEmojiPicker());
+    }
+  };
+
+  const handleEmojiClick = (emojiData) => {
     if (onSelect) {
       onSelect(emojiData, messageId);
     }
@@ -32,10 +35,13 @@ const EmojiPicker = ({ onSelect }) => {
           left: position.left,
           zIndex: 9999,
         }}
+        onClick={(e) => e.stopPropagation()}
       >
         <EmojiPickerReact
           onEmojiClick={handleEmojiClick}
           lazyLoadEmojis={true}
+          height={400}
+          width={320}
         />
       </div>
     </div>
