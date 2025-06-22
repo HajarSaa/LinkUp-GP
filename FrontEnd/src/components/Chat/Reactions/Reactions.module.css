@@ -18,17 +18,18 @@
 }
 
 .react {
-  background-color: #e4f8ff;
   color: var(--link-color);
   border: 1px solid var(--link-color);
+  background-color: var(--bg-white-hover);
+  border-color: var(--border-color);
   width: 55px;
   height: 27px;
   overflow: hidden;
 }
 
 .myReact {
-  background-color: var(--bg-white-hover);
-  border-color: var(--border-color);
+  background-color: #e4f8ff;
+  border-color: var(--link-color);
 }
 
 .react_emoji,
