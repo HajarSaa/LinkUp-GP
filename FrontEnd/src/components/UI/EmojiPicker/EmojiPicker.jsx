@@ -42,6 +42,7 @@ const EmojiPicker = ({ onSelect }) => {
           lazyLoadEmojis={true}
           height={400}
           width={320}
+          emojiStyle="google"
         />
       </div>
     </div>
