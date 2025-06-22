@@ -23,6 +23,7 @@ import {
 } from "../../API/redux_toolkit/ui/chatPanelSlice";
 import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
+import useRoomSubscription from "../../API/hooks/useRoomSubscription";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -31,7 +32,8 @@ function DmPage() {
   const convers_query = useGetConvers(convers_id);
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
-
+  const roomId = convers ? `conversation:${convers._id}` : null;
+  useRoomSubscription(roomId);
   // handle opened panel
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);

@@ -8,6 +8,7 @@ import useGetThreads from "../../../../API/hooks/messages/useGetThreads";
 import Spinner from "../../Spinner/Spinner";
 import ThreadMessageInput from "../../InputField/MessageInput/ThreadMessageInput";
 import EditMessageInput from "../../InputField/MessageInput/EditMessageInput";
+import useRoomSubscription from "../../../../API/hooks/useRoomSubscription";
 
 function ThreadPanel() {
   const dispatch = useDispatch();
@@ -19,7 +20,8 @@ function ThreadPanel() {
   const get_thread = useGetThreads(threadID);
   const { threads } = useSelector((state) => state.threads);
   let error_message = null;
-
+  const roomId = threadID ? `thread:${threadID}` : null;
+  useRoomSubscription(roomId);
   if (get_thread.error)
     if (get_thread.error.response.status) error_message = "";
     else error_message = get_thread.error.message;

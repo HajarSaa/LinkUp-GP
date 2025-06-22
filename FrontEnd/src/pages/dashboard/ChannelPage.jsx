@@ -28,9 +28,12 @@ import PrivateChAuth from "../../components/UI/Channel/ChannelAuth/PrivateChAuth
 import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
+import useRoomSubscription from "../../API/hooks/useRoomSubscription";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
+  // const channel = useSelector((state) => state.channel.channel);
+  const roomId = channel ? `channel:${channel._id}` : null;
   const { workspace } = useSelector((state) => state.workspace);
   const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: channel_id } = useParams();
@@ -41,7 +44,8 @@ function ChannelPage() {
     channel && workspace ? isAChannelMember(workspace, channel) : false;
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
-
+  
+  useRoomSubscription(roomId);
   // handle opened Panels
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
@@ -95,6 +99,7 @@ function ChannelPage() {
     );
 
   if (!channel) return;
+  
 
   return (
     <PageContent>
