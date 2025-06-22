@@ -181,7 +181,7 @@ const MessageItem = ({
           <MessageThreads threadData={threadData} parentMessage={message} />
         )}
       </div>
-      <EmojiPicker position={add_position} onSelect={handleEmojiSelect} />
+
       <MessageMenu />
     </>
   );

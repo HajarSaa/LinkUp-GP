@@ -60,12 +60,19 @@ function MessageActions({
       {children && <div className={styles.action_icon}></div>}
       <div
         className={styles.action_icon}
-        onClick={() => {
-          dispatch(openEmojiPicker());
+        onClick={(e) => {
+          const position = calculateSafePosition(e, 340);
+          dispatch(
+            openEmojiPicker({
+              position,
+              messageId: message._id,
+            })
+          );
         }}
       >
         <MdOutlineAddReaction />
       </div>
+
       {!isThread && (
         <div className={styles.action_icon} onClick={openThreads}>
           <BiMessageRoundedDetail />

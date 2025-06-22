@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
 import DateDivider from "../DateDivider/DateDivider";
+import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
+
 
 function ChatMessage({ containerRef }) {
   const { id: channel_id } = useParams();
@@ -89,7 +91,6 @@ function ChatMessage({ containerRef }) {
     isFetchingNextPage,
   ]);
 
-
   // بعد تحميل الرسائل القديمة، نحافظ على مكان المستخدم
   useEffect(() => {
     const container = containerRef?.current;
@@ -101,21 +102,29 @@ function ChatMessage({ containerRef }) {
   }, [messages, isFetchingNextPage, containerRef]);
 
   return (
-    <div className={styles.messages_wrapper}>
-      {isFetchingNextPage && (
-        <div className={styles.loading}>Loading History ...</div>
-      )}
-      {messages
-        ?.slice(0)
-        .reverse()
-        .map((message) => (
-          <React.Fragment key={message._id}>
-            <DateDivider date={message.createdAt} />
-            <MessageItem isInThreadPanel={false} message={message} />
-          </React.Fragment>
-        ))}
-      <div ref={messagesEndRef} />
-    </div>
+    <>
+      <div className={styles.messages_wrapper}>
+        {isFetchingNextPage && (
+          <div className={styles.loading}>Loading History ...</div>
+        )}
+        {messages
+          ?.slice(0)
+          .reverse()
+          .map((message) => (
+            <React.Fragment key={message._id}>
+              <DateDivider date={message.createdAt} />
+              <MessageItem isInThreadPanel={false} message={message} />
+            </React.Fragment>
+          ))}
+        <div ref={messagesEndRef} />
+      </div>
+      <EmojiPicker
+        onSelect={(emojiData, messageId) => {
+          console.log("React with:", emojiData.emoji, "on message:", messageId);
+          // هنا تبعت الريأكشن للباك اند أو تضيفه في الرسالة
+        }}
+      />
+    </>
   );
 }
 

@@ -4,42 +4,6 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import UserImage from "../../../UI/User/UserImage";
 import UserStatusDot from "../../../UI/User/UserStatusDot";
-// import UserStatus from "../../../UI/User/UserStatus";
-
-// const DmsListItem = ({ dmData, isActive }) => {
-//   const navigate = useNavigate();
-
-//   const handleDeletelteItem = (e) => {
-//     e.stopPropagation();
-//     console.log("closed");
-//   };
-
-//   const handleClick = () => {
-//     navigate(`/conversations/${dmData.conversationId}`);
-//   };
-
-//   return (
-//     <div
-//       className={`${styles.dms_item} ${isActive ? styles.active : ""}`}
-//       onClick={handleClick}
-//     >
-//       <div className={styles.left_side}>
-//         <div className={styles.photo_wrapper}>
-//           <UserImage src={dmData.member.photo} alt={"conv member"} />
-//         </div>
-//         <UserStatusDot userId={dmData.member.user} />
-//         {/* <UserStatus userId={dmData.member.user} /> */}
-//       </div>
-//       <div className={styles.user_name}>
-//         <span>{dmData.member.userName}</span>
-//         {dmData.isMe && <span className={styles.user_name_hint}>(you)</span>}
-//       </div>
-//       <div className={styles.right_side} onClick={handleDeletelteItem}>
-//         <IoMdClose />
-//       </div>
-//     </div>
-//   );
-// };
 
 const DmsListItem = ({ dmData, isActive }) => {
   const navigate = useNavigate();
@@ -54,7 +18,7 @@ const DmsListItem = ({ dmData, isActive }) => {
   };
 
   // ✅ prevent crash if member is missing
-  if (!dmData?.member) return null;
+  if (!dmData) return null;
 
   return (
     <div

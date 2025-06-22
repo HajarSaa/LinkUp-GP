@@ -11,8 +11,10 @@
   z-index: 1000;
 }
 
+/* EmojiPicker.module.css */
+
 .emoji_picker {
-  position: absolute;
-  top: 20px;
-  z-index: 2001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  background: white;
 }
