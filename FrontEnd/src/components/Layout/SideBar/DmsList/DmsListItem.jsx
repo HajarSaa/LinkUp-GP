@@ -18,7 +18,7 @@ const DmsListItem = ({ dmData, isActive }) => {
   };
 
   // ✅ prevent crash if member is missing
-  // if (!dmData.member) return null;
+  if (!dmData.member) return null;
 
   return (
     <div

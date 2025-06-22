@@ -9,26 +9,35 @@ import useGetMessageReactions from "../../../API/hooks/reactions/useGetMessageRe
 function Reactions({ messageId }) {
   const dispatch = useDispatch();
   const add_react_ref = useRef(null);
-  const {data,isLoading,isError} = useGetMessageReactions(messageId);
+  const { data, isLoading, isError } = useGetMessageReactions(messageId);
+  const reactionsObj = data?.groupedReactions || {};
 
   function openEmojies() {
     dispatch(openEmojiPicker());
   }
 
+  if (isLoading || isError) return null;
+  const reactions = Object.entries(reactionsObj);
   return (
-    <div className={styles.reactions}>
-      <div className={styles.react}>
-        <div className={styles.react_emoji}>🤔</div>
-        <div className={styles.react_count}>1</div>
-      </div>
-      <div
-        className={styles.add_react}
-        onClick={openEmojies}
-        ref={add_react_ref}
-      >
-        <MdOutlineAddReaction />
-      </div>
-    </div>
+    <>
+      {reactions.length !== 0 && (
+        <div className={styles.reactions}>
+          {reactions.map(([emoji, { count }]) => (
+            <div key={emoji} className={styles.react}>
+              <div className={styles.react_emoji}>{emoji}</div>
+              <div className={styles.react_count}>{count}</div>
+            </div>
+          ))}
+          <div
+            className={styles.add_react}
+            onClick={openEmojies}
+            ref={add_react_ref}
+          >
+            <MdOutlineAddReaction />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 Reactions.propTypes = {
