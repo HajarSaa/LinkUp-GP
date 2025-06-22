@@ -22,6 +22,7 @@ import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/mes
 import { calculateSafePosition } from "../../../utils/modalsUtils";
 import { getAttachedFiles } from "../../../utils/mediaUtils";
 import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
+import useGetMessageReactions from "../../../API/hooks/reactions/useGetMessageReactions";
 
 
 
@@ -45,7 +46,7 @@ const MessageItem = ({
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
   const { channelMedia } = useSelector((state) => state.channelMedia);
   const messageFiles = getAttachedFiles(message, channelMedia);
-
+  const reaction = useGetMessageReactions(message._id);
   const threadData = {
     count: message?.threadCount,
     participants: message?.threadParticipants,
@@ -121,6 +122,7 @@ const MessageItem = ({
         }}
       >
         <div className={styles.message} id={`message-${message._id}`}>
+          {/* Sender Data => name , image */}
           <div className={styles.message_leftSide}>
             <div className={styles.profileWrapper} onClick={openProfile}>
               <UserImage src={sender.photo} alt={sender.userName} />
@@ -134,6 +136,7 @@ const MessageItem = ({
                 </div>
                 <div className={styles.message_time}>{message_time}</div>
               </div>
+              {/* Text content container */}
               <div
                 className={styles.message_text}
                 id={`message-content-${message._id}`}
@@ -143,13 +146,10 @@ const MessageItem = ({
                   <span className={styles.edited_label}>(edited)</span>
                 )}
               </div>
+              {/* Media Container */}
               {messageFiles.length > 0 && (
                 <div className={styles.attachments}>
                   <AttachmentRenderer files={messageFiles} />
-                  {/* {messageFiles.map((file) => (
-                    <div key={file._id} className={styles.attachmentItem}>
-                    </div>
-                  ))} */}
                 </div>
               )}
             </div>
@@ -168,6 +168,7 @@ const MessageItem = ({
             )}
           </div>
         </div>
+        {/* Menu Actions => forward , later , more , .... */}
         <MessageActions
           isThread={isInThreadPanel}
           message={message}
@@ -177,6 +178,7 @@ const MessageItem = ({
           parentMessage={message}
           isSender={isMessageSender}
         />
+        {/* Message Threads */}
         {message?.threadCount !== 0 && !isInThreadPanel && (
           <MessageThreads threadData={threadData} parentMessage={message} />
         )}
