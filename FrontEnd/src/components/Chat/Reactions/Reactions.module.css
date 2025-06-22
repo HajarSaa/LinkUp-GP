@@ -17,7 +17,8 @@
   font-size: 15px;
 }
 
-.react {  background-color: #e4f8ff;
+.react {
+  background-color: #e4f8ff;
   color: var(--link-color);
   border: 1px solid var(--link-color);
   width: 55px;
@@ -35,7 +36,8 @@
 .react_emoji {
   flex: 1;
 }
-.react_emoji > img {
+
+.react_emoji>img {
   max-width: 100%;
   max-height: 100%;
 }
@@ -57,4 +59,26 @@
 .add_react:hover {
   border-color: var(--border-color);
   background-color: #fff;
+}
+
+/* ========================= */
+/* tooltip */
+.toolTip {
+  width: 200px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react_image {
+  width: 65px;
+  height: 65px;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.react_image>img {
+  max-width: 100%;
+  max-height: 100%;
 }

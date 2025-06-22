@@ -1,0 +1,17 @@
+.toolTip {
+  width: 200px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react_image {
+  width: 65px;
+  height: 65px;
+}
+
+.react_image>img {
+  max-width: 100%;
+  max-height: 100%;
+}

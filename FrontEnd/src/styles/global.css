@@ -81,7 +81,7 @@ a {
 /* Start Custom Tooltip */
 .custom-tooltip {
   border-radius: 8px !important;
-  background-color: #111 !important;
+  background-color: #000000 !important;
   color: white !important;
   padding: 8px 12px !important;
   transition: background-color 0.3s ease;
@@ -90,6 +90,10 @@ a {
   white-space: normal;
   word-break: break-word;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000000000;
 }
 
 .custom-tooltip.tooltip-success {
