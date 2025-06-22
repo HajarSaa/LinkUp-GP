@@ -89,48 +89,6 @@
   justify-content: flex-start;
 }
 
-.reactions {
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 8px;
-}
-
-.add_react,
-.react {
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  padding: 2px 8px;
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.react {
-  gap: 4px;
-  background-color: #e4f8ff;
-  color: var(--link-color);
-  border: 1px solid var(--link-color);
-}
-
-.react_emoji,
-.react_count {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.add_react {
-  position: relative;
-  background-color: #ebebeb;
-  font-size: 20px;
-  border: 1px solid transparent;
-}
-
-.add_react:hover {
-  border-color: var(--border-color);
-  background-color: #fff;
-}
 
 .message_rightSide {
   flex: 1;

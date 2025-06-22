@@ -1,10 +1,5 @@
-/* eslint-disable no-unused-vars */
 import styles from "./ChatMessage.module.css";
-import { MdOutlineAddReaction } from "react-icons/md";
-import Reaction from "./Reaction";
-import { useEffect, useRef, useState } from "react";
-import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
-import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSlice";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import MessageActions from "./MessageActions";
@@ -22,8 +17,7 @@ import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/mes
 import { calculateSafePosition } from "../../../utils/modalsUtils";
 import { getAttachedFiles } from "../../../utils/mediaUtils";
 import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
-import useGetMessageReactions from "../../../API/hooks/reactions/useGetMessageReactions";
-
+import Reactions from "../Reactions/Reactions";
 
 
 const MessageItem = ({
@@ -31,9 +25,7 @@ const MessageItem = ({
   isInThreadPanel = false,
   isThreadParent = false,
 }) => {
-  const [emoji, setEmoji] = useState("");
-  const add_react_ref = useRef(null);
-  const [add_position, set_add_Position] = useState(null);
+
   const [messageHover, setMessageHover] = useState(false);
   const dispatch = useDispatch();
   const { id: page_id } = useParams();
@@ -46,7 +38,6 @@ const MessageItem = ({
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
   const { channelMedia } = useSelector((state) => state.channelMedia);
   const messageFiles = getAttachedFiles(message, channelMedia);
-  const reaction = useGetMessageReactions(message._id);
   const threadData = {
     count: message?.threadCount,
     participants: message?.threadParticipants,
@@ -55,13 +46,7 @@ const MessageItem = ({
   };
   const editingMessage = messageId === message._id;
 
-  const handleEmojiSelect = (emoji) => {
-    setEmoji((prev) => prev + emoji.native);
-  };
-  function openEmojies() {
-    dispatch(openEmojiPicker());
-  }
-
+  // Functions
   function openProfile() {
     dispatch(
       openUserPanel({
@@ -71,18 +56,6 @@ const MessageItem = ({
       })
     );
   }
-
-  const updatePosition = () => {
-    if (add_react_ref.current) {
-      const rect = add_react_ref.current.getBoundingClientRect();
-      set_add_Position({
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-      });
-    }
-  };
 
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
@@ -99,15 +72,6 @@ const MessageItem = ({
     );
   };
 
-  useEffect(() => {
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    window.addEventListener("zoom", updatePosition);
-    return () => {
-      window.removeEventListener("resize", updatePosition);
-      window.removeEventListener("zoom", updatePosition);
-    };
-  }, []);
 
   return (
     <>
@@ -154,18 +118,7 @@ const MessageItem = ({
               )}
             </div>
             {/* Reactions */}
-            {message.reactions && (
-              <div className={styles.reactions}>
-                <Reaction reactions={message.reactions} />
-                <div
-                  className={styles.add_react}
-                  onClick={openEmojies}
-                  ref={add_react_ref}
-                >
-                  <MdOutlineAddReaction />
-                </div>
-              </div>
-            )}
+            <Reactions messageId={message._id} />
           </div>
         </div>
         {/* Menu Actions => forward , later , more , .... */}
