@@ -26,6 +26,11 @@
   overflow: hidden;
 }
 
+.myReact {
+  background-color: var(--bg-white-hover);
+  border-color: var(--border-color);
+}
+
 .react_emoji,
 .react_count {
   display: flex;
