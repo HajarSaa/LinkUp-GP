@@ -28,6 +28,7 @@ export default function typingHandler(socket) {
               profileId: socket.userProfileId,
               typingStatus: false,
               timestamp: Date.now(),
+              room,
             });
             userTypingStatus.delete(userRoomKey);
           }, TYPING_INDICATOR_DURATION),
@@ -41,6 +42,7 @@ export default function typingHandler(socket) {
             profileId: socket.userProfileId,
             typingStatus: true,
             timestamp: now,
+            room,
           });
         }
       } else {
@@ -52,6 +54,7 @@ export default function typingHandler(socket) {
           profileId: socket.userProfileId,
           typingStatus: false,
           timestamp: now,
+          room,
         });
       }
 
