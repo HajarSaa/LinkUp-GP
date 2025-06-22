@@ -8,6 +8,8 @@ import registerWorkspaceHandlers, {
 } from "../sockets/handlers/workspaceHandler";
 import registerPresenceHandlers from "../sockets/handlers/presenceHandler";
 import registerChannelHandlers from "../sockets/handlers/channelHandler";
+import registerTypingHandler from "../sockets/handlers/typingHandler";
+
 const useSocketConnection = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser.currentUser);
@@ -25,18 +27,18 @@ const useSocketConnection = () => {
 
         // 1.1 Join the workspace room
         socket.emit("joinWorkspaceRoom", workspace._id, (res) => {
-          // console.log("🏠 Joined workspace room:", res);
+          console.log("🏠 Joined workspace room:", res);
         });
 
         // 1.2 Set active workspace
         setActiveWorkspace(workspace._id, (res) => {
-          // console.log("📌 Active workspace set:", res);
+          console.log("📌 Active workspace set:", res);
         });
 
         // 1.3 Fetch workspace members
         fetchWorkspaceMembers(workspace._id, (res) => {
           if (res.success) {
-            // console.log("📋 Members list:", res.members);
+            console.log("📋 Members list:", res.members);
           }
         });
       }
@@ -46,10 +48,13 @@ const useSocketConnection = () => {
     const cleanupWorkspace = registerWorkspaceHandlers(socket, dispatch);
     const cleanupPresence = registerPresenceHandlers(socket, dispatch);
     const cleanupChannel = registerChannelHandlers(socket, dispatch);
+    const cleanupTyping = registerTypingHandler(socket, dispatch);
+
     return () => {
       cleanupWorkspace();
       cleanupPresence();
       cleanupChannel();
+      cleanupTyping();
       socket.disconnect();
     };
   }, [currentUser, workspace]);

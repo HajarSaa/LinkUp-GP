@@ -38,9 +38,30 @@ const DescriptionModal = ({ defaultDescription = "" }) => {
     setDescription(e.target.value);
   };
 
+  // const handleSave = () => {
+  //   if (description.trim() === defaultDescription.trim()) {
+  //     // ✅ نفس الديسكريبشن، اقفل بس من غير ريكويست
+  //     closeModal();
+  //     return;
+  //   }
+
+  //   updateDescription(
+  //     {
+  //       channelId: channel_id,
+  //       body: { description },
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         closeModal();
+  //       },
+  //     }
+  //   );
+  // };
+
   const handleSave = () => {
-    if (description.trim() === defaultDescription.trim()) {
-      // ✅ نفس الديسكريبشن، اقفل بس من غير ريكويست
+    const sanitizedDefaultDescription = defaultDescription || "";
+
+    if (description.trim() === sanitizedDefaultDescription.trim()) {
       closeModal();
       return;
     }

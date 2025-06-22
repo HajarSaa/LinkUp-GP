@@ -5,6 +5,7 @@ import {
 } from "../../redux_toolkit/api_data/workspaceSlice";
 
 import {
+  // setChannel,
   updateChannelMembers,
 } from "../../redux_toolkit/api_data/channelSlice";
 
@@ -26,15 +27,46 @@ export default function registerChannelHandlers(socket, dispatch) {
     console.log(msg[type]);
 
     channel.id = channel._id; // for consistency
+    const currentUserId = socket.userId;
+    const isMember = channel.members.includes(currentUserId);
 
     if (type === "created") {
       dispatch(addChannelToList(channel));
       if (channel.type === "public") {
         dispatch(addChannelToBrowseList(channel));
       }
-    } else if (type === "updated") {
+    } 
+    else if (type === "updated") {
+    const browseList = store.getState().browseChannels.browseChannels || [];
+    const isInBrowse = browseList.some((ch) => ch._id === channel._id);
+
+    if (channel.type === "public" && !isInBrowse) {
+      dispatch(addChannelToBrowseList(channel));
+    } else if (channel.type === "private" && isInBrowse) {
+      dispatch(removeChannelFromBrowseList(channel._id));
+    } else {
+      const updated = browseList.map((ch) =>
+        ch._id === channel._id ? { ...ch, ...channel } : ch
+      );
+      dispatch(setBrowseChannels(updated));
+    }
+
+    const sidebarList = store.getState().workspace.workspace?.channels || [];
+    const existsInSidebar = sidebarList.some((ch) => ch._id === channel._id);
+
+    if (isMember || existsInSidebar) {
       dispatch(updateChannelInList(channel));
-    } else if (type === "deleted") {
+    } else {
+      dispatch(removeChannelFromList(channel._id));
+    }
+
+    const currentChannel = store.getState().channel.channel;
+    if (currentChannel && currentChannel._id === channel._id) {
+      dispatch({ type: "channel/setChannel", payload: { ...currentChannel, ...channel } });
+    }
+  }
+
+    else if (type === "deleted") {
       dispatch(removeChannelFromList(channel._id));
       dispatch(removeChannelFromBrowseList(channel._id));
     }

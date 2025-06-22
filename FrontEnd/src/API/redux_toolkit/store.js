@@ -16,6 +16,7 @@ import modalsReducer from "./modals/modalsSlice";
 import userReducer from "./api_data/userSlice";
 import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
 import userProfileSlice from "./api_data/userProfileSlice";
+import typingReducer from "./api_data/typingSlice";
 //======
 // ==============================(channels)
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
@@ -91,6 +92,7 @@ const store = configureStore({
     threads: threadsReducer,
     editMessage: editMessageReducer,
     messageDraft : messageDraftReducer,
+    typing: typingReducer,
     // ==============================(Global)
     // ====
     notificationsModal: notificationsModalReducer,
