@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import registerRoomHandler from "../sockets/handlers/roomHandler";
+import registerRoomHandler from "../../sockets/handlers/roomHandler";
 
 const useRoomSubscription = (roomId) => {
   const { joinRoom, leaveRoom } = registerRoomHandler();

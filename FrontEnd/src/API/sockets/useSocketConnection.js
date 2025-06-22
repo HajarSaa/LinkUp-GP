@@ -8,6 +8,8 @@ import registerWorkspaceHandlers, {
 } from "../sockets/handlers/workspaceHandler";
 import registerPresenceHandlers from "../sockets/handlers/presenceHandler";
 import registerChannelHandlers from "../sockets/handlers/channelHandler";
+import registerTypingHandler from "../sockets/handlers/typingHandler";
+
 const useSocketConnection = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser.currentUser);
@@ -46,10 +48,13 @@ const useSocketConnection = () => {
     const cleanupWorkspace = registerWorkspaceHandlers(socket, dispatch);
     const cleanupPresence = registerPresenceHandlers(socket, dispatch);
     const cleanupChannel = registerChannelHandlers(socket, dispatch);
+    const cleanupTyping = registerTypingHandler(socket, dispatch);
+
     return () => {
       cleanupWorkspace();
       cleanupPresence();
       cleanupChannel();
+      cleanupTyping();
       socket.disconnect();
     };
   }, [currentUser, workspace]);

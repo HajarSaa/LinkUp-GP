@@ -28,7 +28,9 @@ import PrivateChAuth from "../../components/UI/Channel/ChannelAuth/PrivateChAuth
 import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
-import useRoomSubscription from "../../API/hooks/useRoomSubscription";
+import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
+import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
+
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
@@ -112,6 +114,7 @@ function ChannelPage() {
             {activeTab === "messages" ? (
               <>
                 <ChannelBody />
+                <TypingIndicator roomId={roomId} />
                 {isMember ? (
                   isEditing && !isInThread ? (
                     <EditMessageInput />

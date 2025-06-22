@@ -1,0 +1,42 @@
+.container {
+  padding: 8px 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.typingItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 20%;
+  -webkit-border-radius: 20%;
+  -moz-border-radius: 20%;
+  -ms-border-radius: 20%;
+  -o-border-radius: 20%;
+}
+
+.text {
+  font-size: 14px;
+  color: var(--text-color-black);
+}
+
+.dots {
+  margin-left: 4px;
+  display: inline-block;
+  animation: blink 1s infinite steps(1);
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

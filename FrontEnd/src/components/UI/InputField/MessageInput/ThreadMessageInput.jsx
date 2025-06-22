@@ -16,6 +16,8 @@ import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
+import useTypingEmitter from "../../../../API/hooks/socket/useTypingEmmiter";
+
 
 const ThreadMessageInput = ({ parentMessageId }) => {
   const [message, setMessage] = useState("");
@@ -28,20 +30,23 @@ const ThreadMessageInput = ({ parentMessageId }) => {
   let send_also_to = null;
   if (isChannel) send_also_to = channel.name;
   const send_message = useSendMessage();
-
+  const room = `thread:${parentMessageId}`;
+  const emitTyping = useTypingEmitter(room);
+  
   const handleToggleCheckbox = () => {
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
   };
-
+  
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();
     }
   }, []);
-
+  
   const handleChange = (e) => {
     setMessage(e.target.value);
+    emitTyping(); // ✅
   };
 
   const handleSend = () => {

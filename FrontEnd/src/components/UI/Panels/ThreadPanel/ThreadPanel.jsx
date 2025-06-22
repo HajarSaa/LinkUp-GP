@@ -8,7 +8,8 @@ import useGetThreads from "../../../../API/hooks/messages/useGetThreads";
 import Spinner from "../../Spinner/Spinner";
 import ThreadMessageInput from "../../InputField/MessageInput/ThreadMessageInput";
 import EditMessageInput from "../../InputField/MessageInput/EditMessageInput";
-import useRoomSubscription from "../../../../API/hooks/useRoomSubscription";
+import useRoomSubscription from "../../../../API/hooks/socket/useRoomSubscription";
+import TypingIndicator from "../../../Chat/TypingIndicator/TypingIndicator";
 
 function ThreadPanel() {
   const dispatch = useDispatch();
@@ -70,6 +71,7 @@ function ThreadPanel() {
           </div>
         </div>
       )}
+      <TypingIndicator roomId={`thread:${threadID}`} />
       {isEditing && isInThread ? (
         <EditMessageInput />
       ) : (

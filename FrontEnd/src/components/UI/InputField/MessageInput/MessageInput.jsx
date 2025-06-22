@@ -22,6 +22,8 @@ import {
   clearDraft,
   saveDraft,
 } from "../../../../API/redux_toolkit/api_data/messages/messageDraftSlice";
+import useTypingEmitter from "../../../../API/hooks/socket/useTypingEmmiter";
+
 
 const MessageInput = () => {
   const textareaRef = useRef(null);
@@ -42,13 +44,16 @@ const MessageInput = () => {
   const hasMedia = files.length > 0;
   const hasPendingMedia = files.some((f) => f.status === "pending");
   const canSend = (message.trim() || hasMedia) && !hasPendingMedia;
-
+  
+  const room = `${isChannel ? "channel" : "conversation"}:${id}`;
+  const emitTyping = useTypingEmitter(room);
+  
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();
     }
   }, []);
-
+  
   useEffect(() => {
     setMessage(messageDraft);
     setTimeout(() => {
@@ -58,10 +63,11 @@ const MessageInput = () => {
       }
     }, 0);
   }, [pageId, messageDraft]);
-
+  
   const handleChange = (e) => {
     setMessage(e.target.value);
     dispatch(saveDraft({ pageId, text: e.target.value }));
+    emitTyping();
   };
 
   const handleSend = () => {

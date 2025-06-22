@@ -23,7 +23,9 @@ import {
 } from "../../API/redux_toolkit/ui/chatPanelSlice";
 import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
-import useRoomSubscription from "../../API/hooks/useRoomSubscription";
+import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
+import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
+
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -89,6 +91,7 @@ function DmPage() {
         {activeTab === "messages" ? (
           <>
             <UserCard />
+            <TypingIndicator roomId={roomId} />
             {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
           </>
         ) : (
