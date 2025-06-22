@@ -8,6 +8,7 @@ import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMess
 import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
 import DateDivider from "../DateDivider/DateDivider";
 import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
+import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
 
 
 function ChatMessage({ containerRef }) {
@@ -15,6 +16,7 @@ function ChatMessage({ containerRef }) {
   const messages = useSelector((state) =>
     selectMessagesByChannel(state, channel_id)
   );
+  const {mutate:toggleThisReact} = useToggleReaction()
 
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
@@ -120,8 +122,11 @@ function ChatMessage({ containerRef }) {
       </div>
       <EmojiPicker
         onSelect={(emojiData, messageId) => {
-          console.log("React with:", emojiData.emoji, "on message:", messageId);
-          // هنا تبعت الريأكشن للباك اند أو تضيفه في الرسالة
+          console.log(emojiData.imageUrl);
+          toggleThisReact({
+            messageId,
+            emoji: emojiData.emoji,
+          });
         }}
       />
     </>
