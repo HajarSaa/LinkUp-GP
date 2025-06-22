@@ -17,6 +17,8 @@ function Reactions({ messageId }) {
   const { data, isLoading, isError } = useGetMessageReactions(messageId);
   const reactionsObj = data?.groupedReactions || {};
   const { workspace } = useSelector((state) => state.workspace);
+  const myId = JSON.parse(localStorage.getItem('currentUser'))._id;
+
 
   function openEmojies() {
     const rect = add_react_ref.current.getBoundingClientRect();
@@ -49,12 +51,15 @@ function Reactions({ messageId }) {
             )
               .filter(Boolean)
               .join(" , ");
-
             return (
               <React.Fragment key={emoji}>
                 <div
                   data-tooltip-id={`reaction-${emoji}`}
-                  className={styles.react}
+                  className={`${styles.react} ${
+                    UserProfiles.some((user) => user.id === myId)
+                      ? styles.myReact
+                      : ""
+                  }`}
                   onClick={() => removeThisReact(emoji)}
                 >
                   <div className={styles.react_emoji}>
