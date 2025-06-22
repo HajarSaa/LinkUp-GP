@@ -1,11 +1,14 @@
 import { useSelector } from "react-redux";
 import styles from "./TypingIndicator.module.css";
 import PropTypes from "prop-types";
+import { selectTypingUsersByRoom } from "../../../API/redux_toolkit/selectore/typingSelectors";
+
 
 const TypingIndicator = ({ roomId }) => {
-  const typingUsers = useSelector(
-    (state) => state.typing.typingUsers[roomId] || []
-  );
+  const typingUsers = useSelector(selectTypingUsersByRoom(roomId));
+  // const typingUsers = useSelector(
+  //   (state) => state.typing.typingUsers[roomId] || []
+  // );
 
   const members = useSelector(
     (state) => state.workspace.workspace?.members || []
