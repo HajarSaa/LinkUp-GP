@@ -7,12 +7,16 @@ import PropTypes from "prop-types";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
 import DateDivider from "../DateDivider/DateDivider";
+import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
+import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
+
 
 function ChatMessage({ containerRef }) {
   const { id: channel_id } = useParams();
   const messages = useSelector((state) =>
     selectMessagesByChannel(state, channel_id)
   );
+  const {mutate:toggleThisReact} = useToggleReaction()
 
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
@@ -89,7 +93,6 @@ function ChatMessage({ containerRef }) {
     isFetchingNextPage,
   ]);
 
-
   // بعد تحميل الرسائل القديمة، نحافظ على مكان المستخدم
   useEffect(() => {
     const container = containerRef?.current;
@@ -101,21 +104,32 @@ function ChatMessage({ containerRef }) {
   }, [messages, isFetchingNextPage, containerRef]);
 
   return (
-    <div className={styles.messages_wrapper}>
-      {isFetchingNextPage && (
-        <div className={styles.loading}>Loading History ...</div>
-      )}
-      {messages
-        ?.slice(0)
-        .reverse()
-        .map((message) => (
-          <React.Fragment key={message._id}>
-            <DateDivider date={message.createdAt} />
-            <MessageItem isInThreadPanel={false} message={message} />
-          </React.Fragment>
-        ))}
-      <div ref={messagesEndRef} />
-    </div>
+    <>
+      <div className={styles.messages_wrapper}>
+        {isFetchingNextPage && (
+          <div className={styles.loading}>Loading History ...</div>
+        )}
+        {messages
+          ?.slice(0)
+          .reverse()
+          .map((message) => (
+            <React.Fragment key={message._id}>
+              <DateDivider date={message.createdAt} />
+              <MessageItem isInThreadPanel={false} message={message} />
+            </React.Fragment>
+          ))}
+        <div ref={messagesEndRef} />
+      </div>
+      <EmojiPicker
+        onSelect={(emojiData, messageId) => {
+          toggleThisReact({
+            messageId,
+            emoji: emojiData.imageUrl, // this best to show the same shape
+            // emoji: emojiData.emoji, // this best for fast show but not the same shape
+          });
+        }}
+      />
+    </>
   );
 }
 

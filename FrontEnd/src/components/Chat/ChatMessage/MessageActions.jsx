@@ -11,6 +11,8 @@ import { openMessageMenuModal } from "../../../API/redux_toolkit/modals/chat/mes
 import { calculateSafePosition } from "../../../utils/modalsUtils";
 import { openThreadPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { useParams } from "react-router-dom";
+import { useRef } from "react";
+import { getEmojiPickerPosition } from "../../../utils/modalsUtils"; // تأكد إنه مستورد
 
 function MessageActions({
   children,
@@ -20,10 +22,11 @@ function MessageActions({
   isThread = false,
   threadData,
   parentMessage,
-  isSender = true
+  isSender = true,
 }) {
   const dispatch = useDispatch();
   const { id: page_id } = useParams();
+  const addReactRef = useRef(null);
 
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
@@ -39,7 +42,8 @@ function MessageActions({
       })
     );
   };
-  function openThreads() {
+
+  const openThreads = () => {
     dispatch(
       openThreadPanel({
         threadID: threadData.id,
@@ -48,46 +52,62 @@ function MessageActions({
         page_id: page_id,
       })
     );
-  }
+  };
+
   const style = { top: 0, right: 0 };
 
   if (!messageHover) return;
+
   return (
     <div
       className={styles.message_actions}
       style={isThreadParent ? style : undefined}
     >
       {children && <div className={styles.action_icon}></div>}
+
       <div
         className={styles.action_icon}
+        ref={addReactRef}
         onClick={() => {
-          dispatch(openEmojiPicker());
+          if (addReactRef.current) {
+            const rect = addReactRef.current.getBoundingClientRect();
+            const position = getEmojiPickerPosition(rect);
+            dispatch(
+              openEmojiPicker({
+                position,
+                messageId: message._id,
+              })
+            );
+          }
         }}
       >
         <MdOutlineAddReaction />
       </div>
+
       {!isThread && (
         <div className={styles.action_icon} onClick={openThreads}>
           <BiMessageRoundedDetail />
         </div>
       )}
+
       <div className={styles.action_icon}>
         <TbArrowForwardUp />
       </div>
+
       <div className={styles.action_icon}>
         <CiBookmark />
       </div>
+
       <div
         className={styles.action_icon}
-        onClick={(e) => {
-          handelOpenMenu(e, message._id);
-        }}
+        onClick={(e) => handelOpenMenu(e, message._id)}
       >
         <FiMoreVertical />
       </div>
     </div>
   );
 }
+
 
 MessageActions.propTypes = {
   children: PropTypes.any,

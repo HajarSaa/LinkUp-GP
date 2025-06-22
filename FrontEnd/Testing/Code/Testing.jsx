@@ -2,6 +2,8 @@
 // import MI from "./MI"
 // import AudioRecord from "./AudioRecord/AudioRecord"
 
+// import Rec from "./Rec";
+
 
 function Testing() {
   return (
@@ -9,6 +11,7 @@ function Testing() {
       {/* <MI/> */}
       {/* <Later/> */}
       {/* <AudioRecord /> */}
+      {/* <Rec /> */}
     </>
   );
 }
