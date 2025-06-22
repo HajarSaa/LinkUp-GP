@@ -5,6 +5,7 @@ import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSl
 import { useDispatch } from "react-redux";
 import { useRef } from "react";
 import useGetMessageReactions from "../../../API/hooks/reactions/useGetMessageReactions";
+import { getEmojiPickerPosition } from "../../../utils/modalsUtils";
 
 function Reactions({ messageId }) {
   const dispatch = useDispatch();
@@ -13,7 +14,14 @@ function Reactions({ messageId }) {
   const reactionsObj = data?.groupedReactions || {};
 
   function openEmojies() {
-    dispatch(openEmojiPicker());
+    const rect = add_react_ref.current.getBoundingClientRect();
+    const position = getEmojiPickerPosition(rect);
+    dispatch(
+      openEmojiPicker({
+        position,
+        messageId: messageId,
+      })
+    );
   }
 
   if (isLoading || isError) return null;
