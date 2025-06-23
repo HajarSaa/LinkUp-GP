@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>🎥 WebRTC Full Call Test</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h2>🎧 WebRTC Huddle Test Client</h2>
+
+    <input id="userId" placeholder="Your User ID" />
+    <input id="userProfileId" placeholder="Your Profile ID" />
+    <input id="workspaceId" placeholder="Workspace ID" />
+    <input id="conversationId" placeholder="Conversation ID" />
+    <br /><br />
+    <button id="connectBtn">Connect</button>
+    <button id="callUserBtn">📞 Call</button>
+    <button id="acceptCallBtn">✅ Accept</button>
+    <button id="rejectCallBtn">❌ Reject</button>
+    <button id="endCallBtn">📴 End Call</button>
+    <br />
+    <button id="toggleMicBtn">🎤 Toggle Mic</button>
+    <button id="toggleVideoBtn">📷 Toggle Video</button>
+    <button id="toggleScreenBtn">🖥️ Toggle Screen Share</button>
+
+    <p>Socket ID: <span id="socketId">--</span></p>
+    <video
+      id="localVideo"
+      autoplay
+      muted
+      playsinline
+      style="width: 300px"
+    ></video>
+    <video id="remoteVideo" autoplay playsinline style="width: 300px"></video>
+
+    <script>
+      const socket = io("http://localhost:5000", {
+        auth: { token: "fake_token" },
+      });
+
+      let localStream, peerConnection;
+      let isMuted = false;
+      let videoEnabled = false;
+      let screenSharing = false;
+      let screenStream;
+      const config = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+
+      const $ = (id) => document.getElementById(id);
+      const localVideo = $("localVideo");
+      const remoteVideo = $("remoteVideo");
+
+      socket.on("connect", () => {
+        $("socketId").textContent = socket.id;
+      });
+
+      $("connectBtn").onclick = () => {
+        const userId = $("userId").value;
+        const userProfileId = $("userProfileId").value;
+        const workspaceId = $("workspaceId").value;
+        socket.userId = userId;
+        socket.userProfileId = userProfileId;
+        socket.workspaceId = workspaceId;
+
+        socket.emit("userConnected", userId, workspaceId, (res) => {
+          console.log("✅ Connected:", res);
+        });
+      };
+
+      $("callUserBtn").onclick = () => {
+        const conversationId = $("conversationId").value;
+        socket.emit(
+          "callUser",
+          { conversationId, callType: "video" },
+          (res) => {
+            console.log("📞 Call result:", res);
+          }
+        );
+      };
+
+      $("acceptCallBtn").onclick = async () => {
+        await startMedia();
+        setupPeer();
+        const conversationId = $("conversationId").value;
+        socket.emit("callAccepted", { conversationId });
+      };
+
+      $("rejectCallBtn").onclick = () => {
+        const conversationId = $("conversationId").value;
+        socket.emit("callRejected", { conversationId });
+      };
+
+      $("endCallBtn").onclick = () => {
+        const conversationId = $("conversationId").value;
+        socket.emit("call:end", { conversationId });
+        cleanup();
+      };
+
+      $("toggleMicBtn").onclick = () => {
+        isMuted = !isMuted;
+        localStream.getAudioTracks()[0].enabled = !isMuted;
+        socket.emit("toggleMute", {
+          conversationId: $("conversationId").value,
+          muted: isMuted,
+        });
+      };
+
+      $("toggleVideoBtn").onclick = () => {
+        videoEnabled = !videoEnabled;
+        localStream.getVideoTracks()[0].enabled = videoEnabled;
+        socket.emit("toggleVideo", {
+          conversationId: $("conversationId").value,
+          videoEnabled,
+        });
+      };
+
+      $("toggleScreenBtn").onclick = async () => {
+        const conversationId = $("conversationId").value;
+        if (!screenSharing) {
+          screenStream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+          });
+          const screenTrack = screenStream.getVideoTracks()[0];
+          const sender = peerConnection
+            .getSenders()
+            .find((s) => s.track.kind === "video");
+          sender.replaceTrack(screenTrack);
+
+          screenTrack.onended = () => {
+            stopScreenSharing();
+          };
+
+          screenSharing = true;
+        } else {
+          stopScreenSharing();
+        }
+
+        socket.emit("toggleScreenShare", {
+          conversationId,
+          screenSharing,
+        });
+      };
+
+      function stopScreenSharing() {
+        const cameraTrack = localStream.getVideoTracks()[0];
+        const sender = peerConnection
+          .getSenders()
+          .find((s) => s.track.kind === "video");
+        sender.replaceTrack(cameraTrack);
+        screenStream.getTracks().forEach((t) => t.stop());
+        screenSharing = false;
+      }
+
+      // ========== Incoming Events ==========
+      socket.on("callIncoming", ({ from, callType, conversationId }) => {
+        $("conversationId").value = conversationId;
+        console.log(`📞 Incoming ${callType} call from ${from}`);
+      });
+
+      socket.on("callAccepted", ({ from }) => {
+        console.log("✅ Call accepted by", from);
+      });
+
+      socket.on("callRejected", ({ from }) => {
+        console.log("❌ Call rejected by", from);
+        cleanup();
+      });
+
+      socket.on("call:incoming", async ({ from, offer, conversationId }) => {
+        $("conversationId").value = conversationId;
+        await startMedia();
+
+        peerConnection = new RTCPeerConnection(config);
+        peerConnection.ontrack = (e) => (remoteVideo.srcObject = e.streams[0]);
+        peerConnection.onicecandidate = (e) => {
+          if (e.candidate) {
+            socket.emit("call:ice-candidate", {
+              conversationId,
+              candidate: e.candidate,
+            });
+          }
+        };
+
+        localStream
+          .getTracks()
+          .forEach((track) => peerConnection.addTrack(track, localStream));
+
+        await peerConnection.setRemoteDescription(
+          new RTCSessionDescription(offer)
+        );
+        const answer = await peerConnection.createAnswer();
+        await peerConnection.setLocalDescription(answer);
+
+        socket.emit("call:answer", { conversationId, answer });
+      });
+
+      socket.on("call:answered", async ({ answer }) => {
+        await peerConnection.setRemoteDescription(
+          new RTCSessionDescription(answer)
+        );
+      });
+
+      socket.on("call:ice-candidate", async ({ candidate }) => {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+      });
+
+      socket.on("call:ended", ({ from }) => {
+        console.log("📴 Call ended by", from);
+        cleanup();
+      });
+
+      socket.on("peerMuteToggled", ({ from, muted }) => {
+        console.log(`🎤 ${from} ${muted ? "muted" : "unmuted"} mic`);
+      });
+
+      socket.on("peerVideoToggled", ({ from, videoEnabled }) => {
+        console.log(
+          `📷 ${from} ${videoEnabled ? "enabled" : "disabled"} video`
+        );
+      });
+
+      socket.on("peerScreenShareToggled", ({ from, screenSharing }) => {
+        console.log(
+          `🖥️ ${from} ${screenSharing ? "started" : "stopped"} screen sharing`
+        );
+      });
+
+      function setupPeer() {
+        const conversationId = $("conversationId").value;
+        peerConnection = new RTCPeerConnection(config);
+
+        peerConnection.ontrack = (e) => (remoteVideo.srcObject = e.streams[0]);
+        peerConnection.onicecandidate = (e) => {
+          if (e.candidate) {
+            socket.emit("call:ice-candidate", {
+              conversationId,
+              candidate: e.candidate,
+            });
+          }
+        };
+
+        localStream
+          .getTracks()
+          .forEach((track) => peerConnection.addTrack(track, localStream));
+
+        peerConnection.createOffer().then((offer) => {
+          peerConnection.setLocalDescription(offer);
+          socket.emit("call:offer", { conversationId, offer });
+        });
+      }
+
+      async function startMedia() {
+        localStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        localVideo.srcObject = localStream;
+
+        // Default: mic on, cam off
+        isMuted = false;
+        videoEnabled = false;
+        localStream.getAudioTracks()[0].enabled = true;
+        localStream.getVideoTracks()[0].enabled = false;
+      }
+
+      function cleanup() {
+        if (peerConnection) {
+          peerConnection.close();
+          peerConnection = null;
+        }
+
+        if (localStream) {
+          localStream.getTracks().forEach((t) => t.stop());
+          localVideo.srcObject = null;
+          localStream = null;
+        }
+
+        remoteVideo.srcObject = null;
+        screenSharing = false;
+      }
+    </script>
+  </body>
+</html>
