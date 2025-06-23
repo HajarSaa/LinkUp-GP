@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./LiveWaveform.module.css";
+import { FaTimes } from "react-icons/fa";
 
-function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
+function LiveWaveform({ isRecording, onCancel }) {
   const canvasRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -12,14 +13,12 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
 
   const [seconds, setSeconds] = useState(0);
   const intervalRef = useRef(null);
-
-  // Array لحفظ الموجات المتحركة
-  const waveformRef = useRef(new Array(40).fill(10));
+  const waveformRef = useRef(new Array(40).fill(10)); // الأعمدة
 
   useEffect(() => {
     if (!isRecording) {
-      setSeconds(0); // Reset timer
-      waveformRef.current = new Array(40).fill(10); // Reset waveform
+      setSeconds(0);
+      waveformRef.current = new Array(40).fill(10);
       return;
     }
 
@@ -49,14 +48,13 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
         analyser.getByteFrequencyData(dataArray);
         const volume =
           dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
-        const normalizedHeight = Math.max(8, Math.min(50, volume / 2));
+        const normalizedHeight = Math.max(6, Math.min(40, volume / 2)); // 🔥 ظبطت الشدة
 
-        // تحديث الموجات
         waveformRef.current.shift();
         waveformRef.current.push(normalizedHeight);
 
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        const barWidth = 4;
+        const barWidth = 3; // ✅ أعمدة أرفع
         const gap = 2;
         let x = 0;
 
@@ -94,7 +92,7 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
   return (
     <div className={styles.wrapper}>
       <button className={styles.cancelBtn} onClick={onCancel}>
-        ✖
+        <FaTimes/>
       </button>
 
       <div className={styles.waveform_container}>
@@ -106,10 +104,6 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
         />
         <span className={styles.timer}>{formatTime(seconds)}</span>
       </div>
-
-      <button className={styles.saveBtn} onClick={() => onSave(audioBlob)}>
-        ✔
-      </button>
     </div>
   );
 }
@@ -118,7 +112,6 @@ LiveWaveform.propTypes = {
   isRecording: PropTypes.bool.isRequired,
   audioBlob: PropTypes.instanceOf(Blob),
   onCancel: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
 };
 
 export default LiveWaveform;

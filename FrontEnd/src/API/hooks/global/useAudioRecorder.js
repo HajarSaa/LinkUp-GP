@@ -32,7 +32,7 @@ function useAudioRecorder() {
       mediaRecorder.onstop = () => {
         const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         setAudioBlob(blob);
-        cleanup();
+        cleanup(); // نوقف الستريم وننضف المراجع
       };
 
       mediaRecorder.start();
@@ -49,6 +49,18 @@ function useAudioRecorder() {
       mediaRecorderRef.current.state !== "inactive"
     ) {
       mediaRecorderRef.current.stop();
+    }
+    setIsRecording(false);
+    setIsPaused(false);
+  };
+
+  const finishRecording = () => {
+    // تستخدمها عند الضغط على ✔️ (يحفظ الصوت ويجهزه)
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
+      mediaRecorderRef.current.stop(); // ستجهز الـ Blob تلقائيًا من onstop
     }
     setIsRecording(false);
     setIsPaused(false);
@@ -77,7 +89,7 @@ function useAudioRecorder() {
       }
     } catch (e) {
       console.warn("Cancel: mediaRecorder already inactive");
-      console.log(e)
+      console.log(e);
     }
     setIsRecording(false);
     setIsPaused(false);
@@ -103,6 +115,7 @@ function useAudioRecorder() {
     pauseRecording,
     resumeRecording,
     cancelRecording,
+    finishRecording,
   };
 }
 

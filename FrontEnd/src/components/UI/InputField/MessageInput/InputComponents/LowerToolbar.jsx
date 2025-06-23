@@ -1,24 +1,31 @@
 import styles from "../MessageInput.module.css";
-import { FaPlus } from "react-icons/fa6";
+import { FaCheck, FaPlus } from "react-icons/fa6";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
 import { BsEmojiSmile } from "react-icons/bs";
 import { GoMention } from "react-icons/go";
 import { AiOutlineAudio } from "react-icons/ai";
+
+
 import { CgShortcut } from "react-icons/cg";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { openInputMenuModal } from "../../../../../API/redux_toolkit/modals/chat/inputMenu";
 import useAudioRecorder from "../../../../../API/hooks/global/useAudioRecorder.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef} from "react";
 import LiveWaveform from "../../../Media/Recording/LiveWaveform.jsx";
 
 function LowerToolbar({ isThread, isEditing }) {
-  const { isRecording, audioBlob, startRecording, cancelRecording } =
-    useAudioRecorder();
+  const {
+    isRecording,
+    audioBlob,
+    startRecording,
+    stopRecording,
+    cancelRecording,
+  } = useAudioRecorder();
 
   const dispatch = useDispatch();
   const audioBtnRef = useRef(null);
-  const [micPosition, setMicPosition] = useState({ top: 0, left: 0 });
+  // const [micPosition, setMicPosition] = useState({ top: 0, left: 0 });
 
   const handleOpenInputMenu = (e) => {
     const menuHeight = 140;
@@ -32,24 +39,25 @@ function LowerToolbar({ isThread, isEditing }) {
   };
 
   const startRecordingWithUI = async () => {
-    if (audioBtnRef.current) {
-      const rect = audioBtnRef.current.getBoundingClientRect();
-      setMicPosition({
-        top: rect.top - 70,
-        left: rect.left,
-      });
-    }
+    // if (audioBtnRef.current) {
+    //   const rect = audioBtnRef.current.getBoundingClientRect();
+    //   setMicPosition({
+    //     top: rect.top - 70,
+    //     left: rect.left,
+    //   });
+    // }
     await startRecording();
   };
 
-  const handleSaveRecording = (blob) => {
-    console.log("✔ Saved audio:", blob);
-    // هنا تعمل dispatch أو تحط الملف في state أو ترفعه
+  const handleSaveRecording = () => {
+    stopRecording();
+    console.log("✔️ Preparing to upload audio...");
+
   };
 
   useEffect(() => {
     if (audioBlob) {
-      console.log("🎙️ Audio Blob:", audioBlob);
+      console.log("🎙️ Final Audio Blob:", audioBlob);
     }
   }, [audioBlob]);
 
@@ -87,24 +95,26 @@ function LowerToolbar({ isThread, isEditing }) {
             </span>
           </div>
 
-          {!isRecording && (
-            <div
-              className={styles.tool_wrapper}
-              onClick={startRecordingWithUI}
-              ref={audioBtnRef}
+          <div
+            className={`${styles.tool_wrapper} ${
+              isRecording ? styles.recording : ""
+            }`}
+            ref={audioBtnRef}
+          >
+            <span
+              className={`${styles.tool_icon}`}
+              onClick={isRecording ? handleSaveRecording : startRecordingWithUI}
             >
-              <span className={styles.tool_icon}>
-                <AiOutlineAudio />
-              </span>
-            </div>
-          )}
+              {/* {isRecording ? <IoMdCheckmark /> : <AiOutlineAudio />} */}
+              {isRecording ? <FaCheck /> : <AiOutlineAudio />}
+            </span>
+          </div>
 
           {isRecording && (
             <LiveWaveform
               isRecording={isRecording}
               audioBlob={audioBlob}
               onCancel={cancelRecording}
-              onSave={handleSaveRecording}
             />
           )}
 
