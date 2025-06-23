@@ -103,7 +103,7 @@ export const protectAttchWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.cookies.workspace;
 
   if (!workspaceId) {
-    return next(new AppError("Workspace id not found", 404));
+    return next(new AppError("Workspace id not found from cookies", 404));
   }
 
   // Find the workspace

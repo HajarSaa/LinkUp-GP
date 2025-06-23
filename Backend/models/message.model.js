@@ -39,9 +39,9 @@ const messageSchema = new mongoose.Schema(
         default: [],
       },
     ],
-    lastRepliedAt:{
-      type:Date,
-      default:null
+    lastRepliedAt: {
+      type: Date,
+      default: null,
     },
     attachments: [
       {
@@ -87,6 +87,9 @@ messageSchema.pre("validate", function (next) {
   next();
 });
 
+// Pre-delete hook to delet all attachments and reactions associated with the message
+
+
 // Indexes
 // All replies to a message && Oldest first (Threads)
 messageSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
@@ -94,6 +97,8 @@ messageSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
 messageSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
 // Newest first (Conversations)
 messageSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
+// Search by content
+messageSchema.index({ content: "text" }); 
 
 const Message = mongoose.model("Message", messageSchema);
 export default Message;

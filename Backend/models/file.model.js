@@ -55,12 +55,12 @@ const fileSchema = new mongoose.Schema(
 );
 
 // Indexes
-// All replies to a message or file (Threads) — Oldest first
-fileSchema.index({ parentMessageId: 1, createdAt: 1 }, { sparse: true });
 // Channel files — Newest first
 fileSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
 // Conversation files — Newest first
 fileSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
+// Search by file name
+fileSchema.index({ fileName: "text" }); // Search by content
 
 const File = mongoose.model("File", fileSchema);
 export default File;

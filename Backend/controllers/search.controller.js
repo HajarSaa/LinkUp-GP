@@ -1,51 +1,155 @@
 import mongoose from "mongoose";
 import Message from "../models/message.model.js";
+import Channel from "../models/channel.model.js";
+import Conversation from "../models/converstion.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 
 export const searchMessages = catchAsync(async (req, res, next) => {
-  const { keyword, user, channel, startDate, endDate } = req.query;
-  const query = {};
+  const { keyword, user, channel, conversation, startDate, endDate } =
+    req.query;
+  const workspaceId = req.workspace.id;
+  const currentUserId = req.userProfile.id;
+
+  const query = {
+    $or: [],
+  };
+
+  // Validate the search query
+  if (!keyword || keyword.trim() === "") {
+    return next(new AppError("Search query cannot be empty", 400));
+  }
 
   // Keyword search
-  if (keyword) {
-    query.content = { $regex: keyword, $options: "i" };
-  }
+  const keywordQuery = { $regex: keyword, $options: "i" };
 
-  // Filter by user (using createdBy field)
-  if (user) {
-    if (!mongoose.Types.ObjectId.isValid(user)) {
-      return next(new AppError("Invalid user ID format", 400));
+  // Get channels the user is a member of
+  const userChannels = await Channel.find({
+    workspaceId,
+    members: currentUserId,
+  }).select("_id");
+
+  // Get conversations the user is part of
+  const userConversations = await Conversation.find({
+    workspaceId,
+    $or: [{ memberOneId: currentUserId }, { memberTwoId: currentUserId }],
+  }).select("_id");
+
+  // Build channel messages query
+  if (userChannels.length > 0) {
+    const channelMessagesQuery = {
+      channelId: { $in: userChannels.map((c) => c._id) },
+      content: keywordQuery,
+    };
+
+    // Apply additional filters if provided
+    if (channel) {
+      if (!mongoose.Types.ObjectId.isValid(channel)) {
+        return next(new AppError("Invalid channel ID format", 400));
+      }
+      // Verify user is a member of this channel
+      const isMember = userChannels.some((c) => c._id.equals(channel));
+      if (!isMember) {
+        return next(new AppError("You don't have access to this channel", 403));
+      }
+      channelMessagesQuery.channelId = new mongoose.Types.ObjectId(channel);
     }
-    query.createdBy = new mongoose.Types.ObjectId(user);
-  }
 
-  // Filter by channel (using channelId field)
-  if (channel) {
-    if (!mongoose.Types.ObjectId.isValid(channel)) {
-      return next(new AppError("Invalid channel ID format", 400));
+    if (user) {
+      if (!mongoose.Types.ObjectId.isValid(user)) {
+        return next(new AppError("Invalid user ID format", 400));
+      }
+      channelMessagesQuery.createdBy = new mongoose.Types.ObjectId(user);
     }
-    query.channelId = new mongoose.Types.ObjectId(channel);
+
+    if (startDate || endDate) {
+      channelMessagesQuery.createdAt = {};
+      if (startDate) channelMessagesQuery.createdAt.$gte = new Date(startDate);
+      if (endDate) channelMessagesQuery.createdAt.$lte = new Date(endDate);
+    }
+
+    query.$or.push(channelMessagesQuery);
   }
 
-  // Date range filter
-  if (startDate || endDate) {
-    query.createdAt = {};
-    if (startDate) query.createdAt.$gte = new Date(startDate);
-    if (endDate) query.createdAt.$lte = new Date(endDate);
+  // Build conversation messages query
+  if (userConversations.length > 0) {
+    const conversationMessagesQuery = {
+      conversationId: { $in: userConversations.map((c) => c._id) },
+      content: keywordQuery,
+    };
+
+    // Apply additional filters if provided
+    if (conversation) {
+      if (!mongoose.Types.ObjectId.isValid(conversation)) {
+        return next(new AppError("Invalid conversation ID format", 400));
+      }
+      // Verify user is part of this conversation
+      const isParticipant = userConversations.some((c) =>
+        c._id.equals(conversation)
+      );
+      if (!isParticipant) {
+        return next(
+          new AppError("You don't have access to this conversation", 403)
+        );
+      }
+      conversationMessagesQuery.conversationId = new mongoose.Types.ObjectId(
+        conversation
+      );
+    }
+
+    if (user) {
+      if (!mongoose.Types.ObjectId.isValid(user)) {
+        return next(new AppError("Invalid user ID format", 400));
+      }
+      conversationMessagesQuery.createdBy = new mongoose.Types.ObjectId(user);
+    }
+
+    if (startDate || endDate) {
+      conversationMessagesQuery.createdAt = {};
+      if (startDate)
+        conversationMessagesQuery.createdAt.$gte = new Date(startDate);
+      if (endDate) conversationMessagesQuery.createdAt.$lte = new Date(endDate);
+    }
+
+    query.$or.push(conversationMessagesQuery);
   }
 
+  // If no channels or conversations found where user is a member
+  if (query.$or.length === 0) {
+    return res.status(200).json({
+      status: "success",
+      results: 0,
+      data: {
+        messages: [],
+      },
+    });
+  }
 
   // Execute the query
   const results = await Message.find(query)
     .sort({ createdAt: -1 })
-    .populate("createdBy", "username email")
-    .populate("channelId", "name");
-
-  // Check if any messages were found
-  if (!results) {
-    return next(new AppError("No messages found matching the criteria.", 404));
-  }
+    .populate("attachments", "_id fileName fileType uploadedBy")
+    .populate("createdBy", "userName")
+    .populate({
+      path: "channelId",
+      select: "name ",
+      match: { _id: { $exists: true } }, // Only populate if channelId exists
+    })
+    .populate({
+      path: "conversationId",
+      select: "memberOneId memberTwoId",
+      match: { _id: { $exists: true } }, // Only populate if conversationId exists
+      populate: [
+        {
+          path: "memberOneId",
+          select: "username ",
+        },
+        {
+          path: "memberTwoId",
+          select: "username ",
+        },
+      ],
+    });
 
   // send response
   res.status(200).json({
