@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./DmsList.module.css";
-import DmsListItem from "./DmsListItem";
+
 import {useParams } from "react-router-dom";
 import AddButton from "../AddButton/AddButton";
 import { closeAddButtonModal } from "../../../../API/redux_toolkit/modals/addButtonModal";
 import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
+import DmsListItem from './DmsListItem'
 
 function DmsList() {
   const { workspace } = useSelector((state) => state.workspace);

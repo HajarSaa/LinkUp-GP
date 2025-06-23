@@ -8,8 +8,14 @@ import { CgShortcut } from "react-icons/cg";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { openInputMenuModal } from "../../../../../API/redux_toolkit/modals/chat/inputMenu";
+import useAudioRecorder from "../../../../../API/hooks/global/useAudioRecorder.js";
+import { useEffect } from "react";
+import { FaStop } from "react-icons/fa";
+
 
 function LowerToolbar({ isThread, isEditing }) {
+  const { isRecording, audioBlob, startRecording, stopRecording } =
+    useAudioRecorder();
   const dispatch = useDispatch();
 
   function handleOpenInputMenu(e) {
@@ -22,6 +28,13 @@ function LowerToolbar({ isThread, isEditing }) {
     };
     dispatch(openInputMenuModal(position));
   }
+
+  useEffect(() => {
+    if (audioBlob) {
+      console.log("🎙️ Audio Blob:", audioBlob);
+    }
+  }, [audioBlob]);
+
 
   return (
     <div
@@ -56,11 +69,18 @@ function LowerToolbar({ isThread, isEditing }) {
               <GoMention />
             </span>
           </div>
-          <div className={styles.tool_wrapper}>
-            <span className={styles.tool_icon}>
-              <AiOutlineAudio />
+          <div
+            className={styles.tool_wrapper}
+            onClick={isRecording ? stopRecording : startRecording}
+          >
+            <span
+              className={styles.tool_icon}
+              style={{ color: isRecording ? "red" : "" }}
+            >
+              {isRecording ? <FaStop /> : <AiOutlineAudio />}
             </span>
           </div>
+
           <div className={styles.tool_wrapper}>
             <span className={styles.tool_icon}>
               <CgShortcut />
