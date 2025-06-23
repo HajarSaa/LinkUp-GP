@@ -1,0 +1,51 @@
+.wrapper {
+  position: absolute;
+  z-index: 2000;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  width: 300px;
+  transform: translateX(-50%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.btn {
+  padding: 2px 8px;
+  font-size: 13px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pause {
+  background: #ffc107;
+}
+
+.resume {
+  background: #28a745;
+}
+
+.cancel {
+  background: #dc3545;
+}
+
+.canvas {
+  border-radius: 4px;
+}
