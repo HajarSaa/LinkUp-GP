@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { HiPlay, HiPause } from "react-icons/hi2";
-
 import PropTypes from "prop-types";
 import styles from "./AudioMedia.module.css";
 import { formatFileSize } from "../../../../utils/filesUtils";
@@ -10,13 +9,25 @@ const AudioMedia = ({ file }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
   const fileSize = formatFileSize(file.size || file.fileSize);
+  const audioSrc = file.fileUrl || file.previewURL; // ✅ دعم الملفات اللي جاية من Blob
 
   useEffect(() => {
     const audio = audioRef.current;
 
     const handleLoadedMetadata = () => {
-      setDuration(audio.duration);
+      if (!isFinite(audio.duration) || audio.duration === Infinity) {
+        // ✅ معالجة مشكلة duration = Infinity
+        audio.currentTime = 1e101;
+        audio.ontimeupdate = () => {
+          audio.ontimeupdate = null;
+          audio.currentTime = 0;
+          setDuration(audio.duration);
+        };
+      } else {
+        setDuration(audio.duration);
+      }
     };
 
     const handleTimeUpdate = () => {
@@ -54,8 +65,9 @@ const AudioMedia = ({ file }) => {
 
   const handleSeek = (e) => {
     const audio = audioRef.current;
-    audio.currentTime = e.target.value;
-    setCurrentTime(e.target.value);
+    const value = parseFloat(e.target.value);
+    audio.currentTime = value;
+    setCurrentTime(value);
   };
 
   const formatTime = (time) => {
@@ -66,14 +78,13 @@ const AudioMedia = ({ file }) => {
     return `${mins}:${secs}`;
   };
 
-  function decodeBrokenFilename(name) {
+  const decodeBrokenFilename = (name) => {
     try {
       return decodeURIComponent(escape(name));
     } catch {
       return name;
     }
-  }
-
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -114,7 +125,7 @@ const AudioMedia = ({ file }) => {
           <span className={styles.time}>{formatTime(currentTime)}</span>
         </div>
       </div>
-      <audio ref={audioRef} src={file.fileUrl} />
+      <audio ref={audioRef} src={audioSrc} />
     </div>
   );
 };

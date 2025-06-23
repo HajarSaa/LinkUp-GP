@@ -10,17 +10,13 @@ const AttachmentRenderer = ({ files = [] }) => {
   });
 
   const videos = files.filter((file) => {
-    const ext = file.fileName?.split(".").pop()?.toLowerCase();
     const type = file.fileType?.toLowerCase() || "";
-    return ["mp4", "webm", "ogg"].includes(ext) || type.startsWith("video/");
+    return type.startsWith("video/");
   });
 
   const audios = files.filter((file) => {
-    const ext = file.fileName?.split(".").pop()?.toLowerCase();
     const type = file.fileType?.toLowerCase() || "";
-    return (
-      ["mp3", "wav", "ogg", "m4a"].includes(ext) || type.startsWith("audio/")
-    );
+    return type.startsWith("audio/");
   });
 
   const others = files.filter(
