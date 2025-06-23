@@ -65,7 +65,10 @@ channelSchema.pre("findOneAndDelete", async function (next) {
 
   if (filter._id) {
     // Delete all messages associated with the channel
-    await Message.deleteMany({ channelId: filter._id });
+    const messages = await Message.find({ channelId: filter._id });
+    for (const message of messages) {
+      await message.deleteOne(); // This will trigger the pre-delete hook in the Message model
+    }
   }
 
   next();

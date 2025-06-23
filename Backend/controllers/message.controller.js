@@ -336,12 +336,6 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
     }
   }
 
-  // Check if the message has any attachments
-  if (message.attachments && message.attachments.length > 0) {
-    // delete the attachments
-    await File.deleteMany({ _id: { $in: message.attachments } });
-  }
-
   // Delete the message
   await message.deleteOne();
 

@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import File from "./file.model.js";
+import Reaction from "./reaction.model.js";
 
 const messageSchema = new mongoose.Schema(
   {
@@ -88,7 +90,42 @@ messageSchema.pre("validate", function (next) {
 });
 
 // Pre-delete hook to delet all attachments and reactions associated with the message
+messageSchema.pre(
+  "deleteOne",
+  { document: false, query: true },
+  async function (next) {
+    const messageId = this.getQuery()._id;
 
+    // Delete all attachments (files) associated with the message
+    await File.deleteMany({
+      _id: { $in: (await this.model.findById(messageId)).attachments },
+    });
+
+    // Delete all reactions associated with the message
+    await Reaction.deleteMany({ messageId });
+
+    next();
+  }
+);
+// Pre-delete hook to delete all attachments and reactions associated with the message (document instance)
+messageSchema.pre(
+  "deleteOne",
+  { document: true, query: false },
+  async function (next) {
+    // "this" refers to the document instance
+    const messageId = this._id;
+
+    // Delete all attachments (files) associated with the message
+    await File.deleteMany({
+      _id: { $in: this.attachments },
+    });
+
+    // Delete all reactions associated with the message
+    await Reaction.deleteMany({ messageId });
+
+    next();
+  }
+);
 
 // Indexes
 // All replies to a message && Oldest first (Threads)
@@ -98,7 +135,7 @@ messageSchema.index({ channelId: 1, createdAt: -1 }, { sparse: true });
 // Newest first (Conversations)
 messageSchema.index({ conversationId: 1, createdAt: -1 }, { sparse: true });
 // Search by content
-messageSchema.index({ content: "text" }); 
+messageSchema.index({ content: "text" });
 
 const Message = mongoose.model("Message", messageSchema);
 export default Message;

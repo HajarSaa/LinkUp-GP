@@ -43,12 +43,14 @@ conversationSchema.index({ workspaceId: 1 });
 
 // pre-hook to delete messages when a conversation is deleted
 conversationSchema.pre("findOneAndDelete", async function (next) {
-  // Access the query filter
   const filter = this.getFilter();
 
   if (filter._id) {
     // Delete all messages associated with the conversation
-    await Message.deleteMany({ conversationId: filter._id });
+    const messages = await Message.find({ conversationId: filter._id });
+    for (const message of messages) {
+      await message.deleteOne(); // This will trigger the pre-delete hook in the Message model
+    }
   }
 
   next();
