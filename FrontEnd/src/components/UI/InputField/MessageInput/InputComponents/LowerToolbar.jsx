@@ -10,19 +10,17 @@ import { useDispatch } from "react-redux";
 import { openInputMenuModal } from "../../../../../API/redux_toolkit/modals/chat/inputMenu";
 import useAudioRecorder from "../../../../../API/hooks/global/useAudioRecorder.js";
 import { useEffect, useRef, useState } from "react";
-import { FaStop } from "react-icons/fa";
-// import WaveformRecorder from "../../../Media/AudioMedia/WaveformRecorder.jsx";
 import LiveWaveform from "../../../Media/Recording/LiveWaveform.jsx";
 
-
 function LowerToolbar({ isThread, isEditing }) {
-  const { isRecording, audioBlob, startRecording, stopRecording } =
+  const { isRecording, audioBlob, startRecording, cancelRecording } =
     useAudioRecorder();
+
   const dispatch = useDispatch();
   const audioBtnRef = useRef(null);
   const [micPosition, setMicPosition] = useState({ top: 0, left: 0 });
 
-  function handleOpenInputMenu(e) {
+  const handleOpenInputMenu = (e) => {
     const menuHeight = 140;
     const padding = 8;
     const buttonRect = e.currentTarget.getBoundingClientRect();
@@ -31,26 +29,29 @@ function LowerToolbar({ isThread, isEditing }) {
       y: buttonRect.top - menuHeight - padding,
     };
     dispatch(openInputMenuModal(position));
-  }
+  };
 
   const startRecordingWithUI = async () => {
     if (audioBtnRef.current) {
       const rect = audioBtnRef.current.getBoundingClientRect();
       setMicPosition({
-        top: rect.top - 70, // يظهر فوق الزر
+        top: rect.top - 70,
         left: rect.left,
       });
     }
     await startRecording();
   };
 
+  const handleSaveRecording = (blob) => {
+    console.log("✔ Saved audio:", blob);
+    // هنا تعمل dispatch أو تحط الملف في state أو ترفعه
+  };
 
   useEffect(() => {
     if (audioBlob) {
       console.log("🎙️ Audio Blob:", audioBlob);
     }
   }, [audioBlob]);
-
 
   return (
     <div
@@ -85,36 +86,27 @@ function LowerToolbar({ isThread, isEditing }) {
               <GoMention />
             </span>
           </div>
-          <div
-            className={styles.tool_wrapper}
-            onClick={isRecording ? stopRecording : startRecordingWithUI}
-            ref={audioBtnRef}
-          >
-            <span
-              className={styles.tool_icon}
-              style={{ color: isRecording ? "red" : "" }}
-            >
-              {isRecording ? <FaStop /> : <AiOutlineAudio />}
-            </span>
-          </div>
 
-          <LiveWaveform
-            isRecording={isRecording}
-            top={micPosition.top}
-            left={micPosition.left}
-            onPauseResume={() => {
-              if (audioBtnRef.current?.state === "recording") {
-                audioBtnRef.current.pause();
-              } else if (audioBtnRef.current?.state === "paused") {
-                audioBtnRef.current.resume();
-              }
-            }}
-            onCancel={() => {
-              if (audioBtnRef.current?.state !== "inactive") {
-                audioBtnRef.current.stop();
-              }
-            }}
-          />
+          {!isRecording && (
+            <div
+              className={styles.tool_wrapper}
+              onClick={startRecordingWithUI}
+              ref={audioBtnRef}
+            >
+              <span className={styles.tool_icon}>
+                <AiOutlineAudio />
+              </span>
+            </div>
+          )}
+
+          {isRecording && (
+            <LiveWaveform
+              isRecording={isRecording}
+              audioBlob={audioBlob}
+              onCancel={cancelRecording}
+              onSave={handleSaveRecording}
+            />
+          )}
 
           <div className={styles.tool_wrapper}>
             <span className={styles.tool_icon}>

@@ -133,6 +133,7 @@
 .left_icons {
   opacity: 0.9;
   transition: 0.3s;
+  position: relative;
 }
 
 .right_icons,

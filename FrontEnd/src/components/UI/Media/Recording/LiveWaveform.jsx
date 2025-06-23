@@ -2,27 +2,23 @@ import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import styles from "./LiveWaveform.module.css";
 
-function LiveWaveform({ isRecording, top, left, onPauseResume, onCancel }) {
+function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
   const canvasRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const dataArrayRef = useRef(null);
   const animationRef = useRef(null);
+  const streamRef = useRef(null);
 
   const [seconds, setSeconds] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [pauseStart, setPauseStart] = useState(null);
-  const [pauseDuration, setPauseDuration] = useState(0);
-  const timerRef = useRef(null);
+  const intervalRef = useRef(null);
+  const offsetRef = useRef(0); // ✅ لحركة الشريط لليمين
 
   useEffect(() => {
-    if (!isRecording) return;
-
-    setSeconds(0);
-    setPaused(false);
-    setPauseDuration(0);
-    setStartTime(Date.now());
+    if (!isRecording) {
+      setSeconds(0); // ✅ reset بعد كل تسجيل
+      return;
+    }
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -30,130 +26,102 @@ function LiveWaveform({ isRecording, top, left, onPauseResume, onCancel }) {
     const HEIGHT = canvas.height;
 
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      const audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
-      audioContextRef.current = audioContext;
+      streamRef.current = stream;
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextRef.current = audioCtx;
 
-      const source = audioContext.createMediaStreamSource(stream);
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 2048;
+      const source = audioCtx.createMediaStreamSource(stream);
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 32; // عدد قليل لأعمدة واضحة
       source.connect(analyser);
       analyserRef.current = analyser;
 
-      const bufferLength = analyser.fftSize;
+      const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
       dataArrayRef.current = dataArray;
 
       const draw = () => {
         animationRef.current = requestAnimationFrame(draw);
-        if (paused) return;
+        analyser.getByteFrequencyData(dataArray);
 
-        analyser.getByteTimeDomainData(dataArray);
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "#06f";
-        ctx.beginPath();
+        const barWidth = 4;
+        const gap = 2;
+        const totalWidth = barWidth + gap;
 
-        let sliceWidth = (WIDTH * 1.0) / bufferLength;
-        let x = 0;
+        let x = offsetRef.current;
 
         for (let i = 0; i < bufferLength; i++) {
-          let v = dataArray[i] / 128.0;
-          let y = (v * HEIGHT) / 2;
+          const barHeight = dataArray[i] * 0.6;
+          const centerY = HEIGHT / 2;
 
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
+          ctx.fillStyle = "#007bff";
+          ctx.fillRect(x, centerY - barHeight / 2, barWidth, barHeight);
 
-          x += sliceWidth;
+          x += totalWidth;
+          if (x > WIDTH) break;
         }
 
-        ctx.lineTo(canvas.width, canvas.height / 2);
-        ctx.stroke();
+        // ✅ نحرك الرسم شويه يمين
+        offsetRef.current += 2;
+        if (offsetRef.current > totalWidth) {
+          offsetRef.current = 0;
+        }
       };
 
       draw();
     });
 
-    timerRef.current = setInterval(() => {
-      if (!paused && startTime) {
-        const now = Date.now();
-        const time = Math.floor((now - startTime - pauseDuration) / 1000);
-        setSeconds(time);
-      }
+    intervalRef.current = setInterval(() => {
+      setSeconds((prev) => prev + 1); // ✅ تايمر حقيقي بيزيد كل ثانية
     }, 1000);
 
     return () => {
       cancelAnimationFrame(animationRef.current);
-      clearInterval(timerRef.current);
+      clearInterval(intervalRef.current);
+      offsetRef.current = 0;
       audioContextRef.current?.close();
+      streamRef.current?.getTracks().forEach((t) => t.stop());
     };
   }, [isRecording]);
 
   const formatTime = (s) =>
-    `${Math.floor(s / 60)
-      .toString()
-      .padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
+    `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(
+      2,
+      "0"
+    )}`;
 
-  const handlePauseResume = () => {
-    setPaused((prev) => !prev);
-
-    if (!paused) {
-      setPauseStart(Date.now());
-    } else {
-      setPauseDuration((prev) => prev + (Date.now() - pauseStart));
-      setPauseStart(null);
-    }
-
-    onPauseResume(); // نداء للوظيفة الخارجية
-  };
+  if (!isRecording) return null;
 
   return (
-    <div
-      className={styles.wrapper}
-      style={{
-        top: `${top}px`,
-        left: `${left}px`,
-      }}
-    >
-      <div className={styles.header}>
-        <span>{formatTime(seconds)}</span>
-        <div className={styles.actions}>
-          <button
-            onClick={handlePauseResume}
-            className={`${styles.btn} ${paused ? styles.resume : styles.pause}`}
-          >
-            {paused ? "Resume" : "Pause"}
-          </button>
-          <button
-            onClick={onCancel}
-            className={`${styles.btn} ${styles.cancel}`}
-          >
-            Cancel
-          </button>
-        </div>
+    <div className={styles.wrapper}>
+      <button className={styles.cancelBtn} onClick={onCancel}>
+        ✖
+      </button>
+
+      <div className={styles.waveform_container}>
+        <canvas
+          className={styles.canvas}
+          ref={canvasRef}
+          width={200}
+          height={60}
+        />
+        <span className={styles.timer}>{formatTime(seconds)}</span>
       </div>
 
-      <canvas
-        ref={canvasRef}
-        width={300}
-        height={70}
-        className={styles.canvas}
-      />
+      <button className={styles.saveBtn} onClick={() => onSave(audioBlob)}>
+        ✔
+      </button>
     </div>
   );
 }
 
 LiveWaveform.propTypes = {
   isRecording: PropTypes.bool.isRequired,
-  top: PropTypes.number.isRequired,
-  left: PropTypes.number.isRequired,
-  onPauseResume: PropTypes.func.isRequired,
+  audioBlob: PropTypes.instanceOf(Blob),
   onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default LiveWaveform;
