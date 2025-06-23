@@ -157,8 +157,12 @@ export const updateChannel = catchAsync(async (req, res, next) => {
     }
     channel.type = type;
   }
-  channel.topic = topic;
-  channel.description = description;
+  if (topic !== undefined) {
+    channel.topic = topic;
+  }
+  if (description !== undefined) {
+    channel.description = description;
+  }
 
   // Save the updates
   await channel.save();
