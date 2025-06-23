@@ -12,11 +12,14 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
 
   const [seconds, setSeconds] = useState(0);
   const intervalRef = useRef(null);
-  const offsetRef = useRef(0); // ✅ لحركة الشريط لليمين
+
+  // Array لحفظ الموجات المتحركة
+  const waveformRef = useRef(new Array(40).fill(10));
 
   useEffect(() => {
     if (!isRecording) {
-      setSeconds(0); // ✅ reset بعد كل تسجيل
+      setSeconds(0); // Reset timer
+      waveformRef.current = new Array(40).fill(10); // Reset waveform
       return;
     }
 
@@ -32,7 +35,7 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
 
       const source = audioCtx.createMediaStreamSource(stream);
       const analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 32; // عدد قليل لأعمدة واضحة
+      analyser.fftSize = 64;
       source.connect(analyser);
       analyserRef.current = analyser;
 
@@ -42,31 +45,26 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
 
       const draw = () => {
         animationRef.current = requestAnimationFrame(draw);
+
         analyser.getByteFrequencyData(dataArray);
+        const volume =
+          dataArray.reduce((acc, val) => acc + val, 0) / dataArray.length;
+        const normalizedHeight = Math.max(8, Math.min(50, volume / 2));
+
+        // تحديث الموجات
+        waveformRef.current.shift();
+        waveformRef.current.push(normalizedHeight);
 
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
-
         const barWidth = 4;
         const gap = 2;
-        const totalWidth = barWidth + gap;
+        let x = 0;
 
-        let x = offsetRef.current;
-
-        for (let i = 0; i < bufferLength; i++) {
-          const barHeight = dataArray[i] * 0.6;
+        for (let h of waveformRef.current) {
           const centerY = HEIGHT / 2;
-
           ctx.fillStyle = "#007bff";
-          ctx.fillRect(x, centerY - barHeight / 2, barWidth, barHeight);
-
-          x += totalWidth;
-          if (x > WIDTH) break;
-        }
-
-        // ✅ نحرك الرسم شويه يمين
-        offsetRef.current += 2;
-        if (offsetRef.current > totalWidth) {
-          offsetRef.current = 0;
+          ctx.fillRect(x, centerY - h / 2, barWidth, h);
+          x += barWidth + gap;
         }
       };
 
@@ -74,13 +72,12 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
     });
 
     intervalRef.current = setInterval(() => {
-      setSeconds((prev) => prev + 1); // ✅ تايمر حقيقي بيزيد كل ثانية
+      setSeconds((prev) => prev + 1);
     }, 1000);
 
     return () => {
       cancelAnimationFrame(animationRef.current);
       clearInterval(intervalRef.current);
-      offsetRef.current = 0;
       audioContextRef.current?.close();
       streamRef.current?.getTracks().forEach((t) => t.stop());
     };
@@ -104,7 +101,7 @@ function LiveWaveform({ isRecording, audioBlob, onCancel, onSave }) {
         <canvas
           className={styles.canvas}
           ref={canvasRef}
-          width={200}
+          width={220}
           height={60}
         />
         <span className={styles.timer}>{formatTime(seconds)}</span>
