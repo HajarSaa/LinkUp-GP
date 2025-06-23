@@ -47,7 +47,8 @@ function MainLayout() {
       <NavBar />
       <div className={styles.workspace_wrapper}>
         <WorkBar />
-        {isBrowseChannels ? (
+        {
+          isBrowseChannels ? (
           <div className={styles.workspace_content_wrapper}>
             <div className={styles.full_content}>{workspace && <Outlet />}</div>
           </div>

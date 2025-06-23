@@ -1,6 +1,6 @@
 .side_bar {
   position: relative;
-  min-width: 180px;
+  min-width: 220px;
   max-width: 300px;
   height: 100%;
   flex-shrink: 0;

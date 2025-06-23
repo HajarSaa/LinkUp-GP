@@ -1,0 +1,13 @@
+.right_icons{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.later_side_bar {
+  position: relative;
+  width: 300px;
+  height: 100%;
+  flex-shrink: 0;
+  background-color: var(--secondary-color);
+}
