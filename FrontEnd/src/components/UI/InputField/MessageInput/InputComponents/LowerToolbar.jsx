@@ -4,15 +4,23 @@ import { RxLetterCaseCapitalize } from "react-icons/rx";
 import { BsEmojiSmile } from "react-icons/bs";
 import { GoMention } from "react-icons/go";
 import { AiOutlineAudio } from "react-icons/ai";
-
-
 import { CgShortcut } from "react-icons/cg";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { openInputMenuModal } from "../../../../../API/redux_toolkit/modals/chat/inputMenu";
-import useAudioRecorder from "../../../../../API/hooks/global/useAudioRecorder.js";
-import { useEffect, useRef} from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+
 import LiveWaveform from "../../../Media/Recording/LiveWaveform.jsx";
+import useAudioRecorder from "../../../../../API/hooks/global/useAudioRecorder.js";
+import useUploadMedia from "../../../../../API/hooks/media/useUploadMedia.js";
+
+import {
+  addFile,
+  addResponse,
+  removeFile,
+  setFileStatus,
+} from "../../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
+import { openInputMenuModal } from "../../../../../API/redux_toolkit/modals/chat/inputMenu";
 
 function LowerToolbar({ isThread, isEditing }) {
   const {
@@ -25,7 +33,13 @@ function LowerToolbar({ isThread, isEditing }) {
 
   const dispatch = useDispatch();
   const audioBtnRef = useRef(null);
-  // const [micPosition, setMicPosition] = useState({ top: 0, left: 0 });
+  const [shouldUpload, setShouldUpload] = useState(false);
+
+  const { id } = useParams();
+  const location = useLocation();
+  const isChannel = location.pathname.includes("/channels");
+  const pageId = `${isChannel ? "channel" : "conversation"}-${id}`;
+  const uploadMutation = useUploadMedia();
 
   const handleOpenInputMenu = (e) => {
     const menuHeight = 140;
@@ -39,27 +53,53 @@ function LowerToolbar({ isThread, isEditing }) {
   };
 
   const startRecordingWithUI = async () => {
-    // if (audioBtnRef.current) {
-    //   const rect = audioBtnRef.current.getBoundingClientRect();
-    //   setMicPosition({
-    //     top: rect.top - 70,
-    //     left: rect.left,
-    //   });
-    // }
     await startRecording();
   };
 
   const handleSaveRecording = () => {
     stopRecording();
-    console.log("✔️ Preparing to upload audio...");
-
+    setShouldUpload(true); // ✅ استعد للرفع لما blob يتكون
   };
 
   useEffect(() => {
-    if (audioBlob) {
-      console.log("🎙️ Final Audio Blob:", audioBlob);
-    }
-  }, [audioBlob]);
+    if (!audioBlob || !shouldUpload) return;
+
+    const fileName = "Record Clip.mp3"; // ✅ اسم ثابت
+    const file = new File([audioBlob], fileName, { type: "audio/mpeg" }); // ✅ النوع صوت فقط
+
+    const previewURL = URL.createObjectURL(file);
+
+    const fileMeta = {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      previewURL,
+      progress: 1,
+      tempId: `${file.name}-${Date.now()}`,
+    };
+
+    dispatch(addFile({ pageId, file: fileMeta }));
+
+    const formData = new FormData();
+    formData.append("files", file);
+    formData.append(isChannel ? "channelId" : "conversationId", id);
+
+    uploadMutation.mutate(
+      { formData },
+      {
+        onSuccess: (data) => {
+          dispatch(addResponse({ pageId, responseFiles: data }));
+          dispatch(setFileStatus({ pageId, previewURL, status: "done" }));
+        },
+        onError: () => {
+          dispatch(removeFile({ pageId, previewURL }));
+        },
+      }
+    );
+
+    setShouldUpload(false); // ✅ عشان ما يكررش الرفع
+  }, [audioBlob, shouldUpload]);
+
 
   return (
     <div
@@ -105,7 +145,6 @@ function LowerToolbar({ isThread, isEditing }) {
               className={`${styles.tool_icon}`}
               onClick={isRecording ? handleSaveRecording : startRecordingWithUI}
             >
-              {/* {isRecording ? <IoMdCheckmark /> : <AiOutlineAudio />} */}
               {isRecording ? <FaCheck /> : <AiOutlineAudio />}
             </span>
           </div>
