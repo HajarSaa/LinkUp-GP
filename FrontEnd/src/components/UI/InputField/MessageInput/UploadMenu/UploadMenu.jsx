@@ -34,7 +34,6 @@ function UploadMenu() {
     input.onchange = (event) => {
       const file = event.target.files[0];
       if (!file) return;
-      console.log(file)
       const previewURL = URL.createObjectURL(file);
 
       const fileMeta = {

@@ -29,6 +29,7 @@ function LowerToolbar({ isThread, isEditing }) {
     startRecording,
     stopRecording,
     cancelRecording,
+    setAudioBlob,
   } = useAudioRecorder();
 
   const dispatch = useDispatch();
@@ -62,11 +63,11 @@ function LowerToolbar({ isThread, isEditing }) {
   };
 
   useEffect(() => {
-    if (!audioBlob || !shouldUpload) return;
 
-    const fileName = "Record Clip.mp3"; // ✅ اسم ثابت
-    const file = new File([audioBlob], fileName, { type: "audio/mpeg" }); // ✅ النوع صوت فقط
+    if (!shouldUpload || !audioBlob) return;
 
+    const fileName = "Record Clip.mp3";
+    const file = new File([audioBlob], fileName, { type: "audio/mpeg" });
     const previewURL = URL.createObjectURL(file);
 
     const fileMeta = {
@@ -90,14 +91,16 @@ function LowerToolbar({ isThread, isEditing }) {
         onSuccess: (data) => {
           dispatch(addResponse({ pageId, responseFiles: data }));
           dispatch(setFileStatus({ pageId, previewURL, status: "done" }));
+          setShouldUpload(false); // ✅ نوقف الرفع
+          setAudioBlob(null); // ✅ نمسح البلووب بعد الرفع
         },
         onError: () => {
           dispatch(removeFile({ pageId, previewURL }));
+          setShouldUpload(false);
+          setAudioBlob(null); // ❗ بردو نمسحه في حالة الخطأ
         },
       }
     );
-
-    setShouldUpload(false); // ✅ عشان ما يكررش الرفع
   }, [audioBlob, shouldUpload]);
 
 

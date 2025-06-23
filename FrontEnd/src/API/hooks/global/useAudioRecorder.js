@@ -116,6 +116,7 @@ function useAudioRecorder() {
     resumeRecording,
     cancelRecording,
     finishRecording,
+    setAudioBlob,
   };
 }
 
