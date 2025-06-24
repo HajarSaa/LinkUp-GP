@@ -64,7 +64,7 @@
 
 .item {
   background-color: var(--secondary-color);
-  padding: 10px 12px;
+  padding: 18px 10px;
   display: flex;
   flex-direction: column;
   color: white;
@@ -118,7 +118,7 @@
 .tags {
   display: flex;
   align-items: center;
-  margin-bottom: 7px;
+  margin-bottom: 10px;
   gap: 5px;
 }
 
