@@ -10,6 +10,8 @@ import {
   getThread,
   getChannelMedia,
   getConversationMedia,
+  getChannelPinnedMessages,
+  getConversationPinnedMessages,
 } from "../controllers/message.controller.js";
 import {
   protect,
@@ -27,6 +29,8 @@ router
   .get("/channelMedia/:id", getChannelMedia)
   .get("/conversationMessages/:id", getConversationMessages)
   .get("/conversationMedia/:id", getConversationMedia)
+  .get("/channelPinnedMessages/:id", getChannelPinnedMessages)
+  .get("/conversationPinnedMessages/:id", getConversationPinnedMessages)
   .get("/thread/:id", getThread)
   .get("/:id", getMessage)
   .post("/", createMessage)

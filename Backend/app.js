@@ -15,6 +15,7 @@ import userProfileRouter from "./routes/userProfile.routes.js";
 import uploadRouter from "./routes/uploadFile.routes.js";
 import fileRouter from "./routes/file.routes.js";
 import reactionRouter from "./routes/reaction.routes.js";
+import laterItemRouter from "./routes/laterItem.routes.js";
 
 // Error handling imports
 import AppError from "./utils/appError.js";
@@ -47,6 +48,7 @@ app.use("/api/v1/uploads", uploadRouter);
 app.use("/api/v1/files", fileRouter);
 app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/reactions", reactionRouter);
+app.use("/api/v1/laterItems", laterItemRouter);
 
 // 404 route handler middleware
 app.all("*", (req, res, next) => {

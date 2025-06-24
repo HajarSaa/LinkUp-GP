@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import PageContent from "../../components/Layout/PageContent/PageContnet";
 import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
-import UserCard from "../../components/UI/UserDM/UserCard";
 import UserNavbar from "../../components/UI/UserDM/Userbar";
 import useGetConvers from "../../API/hooks/conversation/useGetConvers";
 import Spinner from "../../components/UI/Spinner/Spinner";
@@ -25,17 +24,22 @@ import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMe
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
-
+import DmBody from "../../components/UI/UserDM/DmBody";
+import useGetConversMessages from "../../API/hooks/messages/useGetConversMessages";
+import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
   const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
+  const message_query = useGetConversMessages(convers_id);
+  const media_query = useGetConversMedia(convers_id);
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
   const roomId = convers ? `conversation:${convers._id}` : null;
   useRoomSubscription(roomId);
+
   // handle opened panel
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
@@ -64,7 +68,7 @@ function DmPage() {
     setActiveTab("messages");
   }, [convers_id, dispatch]);
 
-  if (convers_query.isLoading)
+  if (convers_query.isLoading || message_query.isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -83,6 +87,13 @@ function DmPage() {
       </div>
     );
 
+  if (message_query.isError)
+    return (
+      <div className={`${styles.status} ${styles.error}`}>
+        {message_query.error}
+      </div>
+    );
+
   if (!convers) return;
   return (
     <PageContent>
@@ -90,12 +101,17 @@ function DmPage() {
         <UserNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
         {activeTab === "messages" ? (
           <>
-            <UserCard />
+            <DmBody />
             <TypingIndicator roomId={roomId} />
             {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
           </>
         ) : (
-          <FilesContainer files={[]} type="conversation" />
+          <FilesContainer
+            files={media_query?.data?.media}
+            isLoading={media_query.isLoading}
+            isError={media_query.isError}
+            error={media_query.error}
+          />
         )}
       </div>
       <Panel />

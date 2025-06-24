@@ -7,6 +7,7 @@ import {
   joinWorkspace,
   updateWorkspace,
   leaveWorkspace,
+  signOutWorkspace,
 } from "../controllers/workspace.controller.js";
 import {
   protect,
@@ -28,6 +29,8 @@ router.use(protectAttchWorkspace);
 router
   .patch("/:id", updateWorkspace)
   .delete("/:id", deleteWorkspace)
-  .post("/:id/leave", leaveWorkspace);
+  .post("/:id/leave", leaveWorkspace)
+  .post("/signout", signOutWorkspace);
 
 export default router;
+  

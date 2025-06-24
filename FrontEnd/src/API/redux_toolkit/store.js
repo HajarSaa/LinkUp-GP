@@ -14,7 +14,6 @@ import conversReducer from "./api_data/conversSlice";
 import resizingReducer from "./ui/resizeSlice";
 import modalsReducer from "./modals/modalsSlice";
 import userReducer from "./api_data/userSlice";
-import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
 import userProfileSlice from "./api_data/userProfileSlice";
 import typingReducer from "./api_data/typingSlice";
 //======
@@ -36,12 +35,15 @@ import userMenuReducer from "./modals/userProfile/userMenuSlice";
 //======
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
+import conversMediaReducer from './api_data/media/conversMediaSlice'
 //======
 //======
 // ==============================(<Media>)
 import fileUploadReducer from "./api_data/media/fileUploadSlice";
 //======
 // ==============================(Messages)
+import channel_messages_reducer from "./api_data/messages/channelMessagesSlice";
+import convers_messages_reducer from "./api_data/messages/conversMessagesSlice";
 import messageMenuReducer from "./modals/chat/messageMenu";
 import inputMenuReducer from "./modals/chat/inputMenu";
 import threadsReducer from "./api_data/messages/threadsSlice";
@@ -56,7 +58,7 @@ const store = configureStore({
     chatPanel: chatPanelReducer,
     workspace: workspaceReducer,
     // ==============================(channel)
-    browseChannels :browseChannelsReducer ,
+    browseChannels: browseChannelsReducer,
     channel: channelReducer,
     channel_messages: channel_messages_reducer,
     channelMenu: channelMenuReducer,
@@ -71,6 +73,8 @@ const store = configureStore({
     // ====
     convers: conversReducer,
     userDetailsModal: userDetailsReducer,
+    convers_messages: convers_messages_reducer,
+    conversMedia: conversMediaReducer,
     // ==============================(User Profile)
     // ====
     editUserProfile: editUserProfileReducer,
@@ -91,7 +95,7 @@ const store = configureStore({
     inputMenu: inputMenuReducer,
     threads: threadsReducer,
     editMessage: editMessageReducer,
-    messageDraft : messageDraftReducer,
+    messageDraft: messageDraftReducer,
     typing: typingReducer,
     // ==============================(Global)
     // ====
