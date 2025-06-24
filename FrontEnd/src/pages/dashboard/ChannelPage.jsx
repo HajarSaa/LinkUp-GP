@@ -27,10 +27,9 @@ import ChannelAuth from "../../components/UI/Channel/ChannelAuth/ChannelAuth";
 import PrivateChAuth from "../../components/UI/Channel/ChannelAuth/PrivateChAuth";
 import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMessageInput";
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
-import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
+import useGetChannelMedia from "../../API/hooks/channel/useGetChannelMedia";
 import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
-
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
@@ -41,12 +40,12 @@ function ChannelPage() {
   const { id: channel_id } = useParams();
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
-  const media_query = useGetConversMedia(channel_id);
+  const media_query = useGetChannelMedia(channel_id);
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
-  
+
   useRoomSubscription(roomId);
   // handle opened Panels
   useEffect(() => {
@@ -101,7 +100,6 @@ function ChannelPage() {
     );
 
   if (!channel) return;
-  
 
   return (
     <PageContent>

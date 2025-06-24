@@ -58,14 +58,16 @@ function WorkBar() {
   }
 
   const work_label = getWorkLabel(workspace?.name || "workspace name");
-  const main_channel = workspace?.channels[0];
+  const main_channel =
+    workspace.channels?.find((channel) => channel.required) ||
+    workspace?.channels[0];
 
   const sidebarItems = [
     {
       label: "Home",
       iconOutline: <AiOutlineHome />,
       iconFill: <AiFillHome />,
-      navigation: main_channel?.id ? `/channels/${main_channel?.id}` : "/",
+      navigation: `/channels/${main_channel?.id}`
     },
     {
       label: "DMs",
@@ -81,6 +83,7 @@ function WorkBar() {
       label: "Later",
       iconOutline: <AiOutlineClockCircle />,
       iconFill: <AiFillClockCircle />,
+      navigation : '/later'
     },
     {
       label: "More",

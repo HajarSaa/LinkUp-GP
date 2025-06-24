@@ -1,29 +1,26 @@
-import { useSelector } from "react-redux";
 import styles from "./ChatMessage.module.css";
-import MessageItem from "./MessageItem";
-import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
-import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
-import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
-import DateDivider from "../DateDivider/DateDivider";
-import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
+import { selectMessagesByConvers } from "../../../API/redux_toolkit/selectore/conversMessagesSelectors";
 import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
+import useGetConversMessages from "../../../API/hooks/messages/useGetConversMessages";
+import React, { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
+import MessageItem from "../ChatMessage/MessageItem";
+import DateDivider from "../DateDivider/DateDivider";
 
-
-function ChatMessage({ containerRef }) {
-  const { id: channel_id } = useParams();
+function DmChatMessage({ containerRef }) {
+  const { id: convers_id } = useParams();
   const messages = useSelector((state) =>
-    selectMessagesByChannel(state, channel_id)
+    selectMessagesByConvers(state, convers_id)
   );
-  const { channelMedia } = useSelector((state) => state.channelMedia);
-  const {mutate:toggleThisReact} = useToggleReaction()
-
+  const { mutate: toggleThisReact } = useToggleReaction();
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
-
+    const { conversMedia } = useSelector((state) => state.conversMedia);
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useGetChannelMessages(channel_id);
+    useGetConversMessages(convers_id);
 
   const messagesEndRef = useRef(null);
   const isInitialLoad = useRef(true);
@@ -119,7 +116,7 @@ function ChatMessage({ containerRef }) {
               <MessageItem
                 isInThreadPanel={false}
                 message={message}
-                media={channelMedia}
+                media={conversMedia}
               />
             </React.Fragment>
           ))}
@@ -138,8 +135,8 @@ function ChatMessage({ containerRef }) {
   );
 }
 
-ChatMessage.propTypes = {
+export default DmChatMessage;
+
+DmChatMessage.propTypes = {
   containerRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
-
-export default ChatMessage;
