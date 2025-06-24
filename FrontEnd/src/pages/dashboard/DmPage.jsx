@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import PageContent from "../../components/Layout/PageContent/PageContnet";
 import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
-import UserCard from "../../components/UI/UserDM/UserCard";
 import UserNavbar from "../../components/UI/UserDM/Userbar";
 import useGetConvers from "../../API/hooks/conversation/useGetConvers";
 import Spinner from "../../components/UI/Spinner/Spinner";
@@ -25,6 +24,7 @@ import EditMessageInput from "../../components/UI/InputField/MessageInput/EditMe
 import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
+import DmBody from "../../components/UI/UserDM/DmBody";
 
 
 function DmPage() {
@@ -90,7 +90,7 @@ function DmPage() {
         <UserNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
         {activeTab === "messages" ? (
           <>
-            <UserCard />
+            <DmBody/>
             <TypingIndicator roomId={roomId} />
             {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
           </>
