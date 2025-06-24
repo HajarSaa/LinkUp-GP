@@ -20,9 +20,11 @@ export default function registerMessageHandler(socket, dispatch) {
     } 
     else if (conversationId) {
       dispatch({
-        type: "conversation/appendMessage",
+        type: "conversMessages/appendMessage",
         payload: { conversation_id: conversationId, message: payload },
       });
+      console.log("📥 dispatching to convers/appendMessage:", conversationId, payload);
+
     }
   };
 
@@ -40,9 +42,10 @@ export default function registerMessageHandler(socket, dispatch) {
     });
 
     dispatch({
-      type: "conversation/updateMessageContent",
+      type: "conversMessages/updateMessageContent",
       payload: { messageId, newContent, edited, editedAt, updatedAt },
     });
+    console.log("🟢 updated convers messageContent via socket");
 
     dispatch({
       type: "threads/updateThreadMessageContent",
