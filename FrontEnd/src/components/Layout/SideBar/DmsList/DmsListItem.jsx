@@ -20,8 +20,7 @@ const DmsListItem = ({ dmData, isActive }) => {
   // ✅ prevent crash if member is missing
   if (!dmData.member) return null;
 
-  return (
-    <>
+  return  <>
       <div
         className={`${styles.dms_item} ${isActive ? styles.active : ""}`}
         onClick={handleClick}
@@ -41,7 +40,7 @@ const DmsListItem = ({ dmData, isActive }) => {
         </div>
       </div>
     </>
-  );
+  ;
 };
 
 DmsListItem.propTypes = {
