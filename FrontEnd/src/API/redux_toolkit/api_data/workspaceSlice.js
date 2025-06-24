@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   workspace: null,
   onlineUsers: [],
-  logged_user : {}
+  logged_user : {},
 };
 
 const workspaceSlice = createSlice({
@@ -94,7 +94,7 @@ export const {
   updateChannelInList,
   addChannelToList,
   removeChannelFromList,
-  setWorkspaceMembers
+  setWorkspaceMembers,
 
 } = workspaceSlice.actions;
 

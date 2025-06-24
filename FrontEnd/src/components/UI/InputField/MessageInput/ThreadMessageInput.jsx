@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 import useTypingEmitter from "../../../../API/hooks/socket/useTypingEmmiter";
-
+import { v4 as uuidv4 } from "uuid";
 
 const ThreadMessageInput = ({ parentMessageId }) => {
   const [message, setMessage] = useState("");
@@ -27,62 +27,61 @@ const ThreadMessageInput = ({ parentMessageId }) => {
   const { id } = useParams();
   const { channel } = useSelector((state) => state.channel);
   const isChannel = location.pathname.includes("/channels");
+
   let send_also_to = null;
   if (isChannel) send_also_to = channel.name;
-  const send_message = useSendMessage();
+
+  const sendMessage = useSendMessage();
   const room = `thread:${parentMessageId}`;
   const emitTyping = useTypingEmitter(room);
-  
+
   const handleToggleCheckbox = () => {
     const newCheckedState = !isChecked;
     setIsChecked(newCheckedState);
   };
-  
+
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();
     }
   }, []);
-  
+
   const handleChange = (e) => {
     setMessage(e.target.value);
-    emitTyping(); // ✅
+    emitTyping();
   };
 
   const handleSend = () => {
     if (!message.trim()) return;
+
     const messageContent = {
       content: message,
       parentMessageId: parentMessageId,
+      tempId: uuidv4(),
     };
+
     const type = isChannel ? "channel" : "conversation";
 
-    send_message.mutate(
-      {
-        type,
-        id,
-        messageContent,
-      },
+    sendMessage.mutate(
+      { type, id, messageContent },
       {
         onSuccess: () => {
-          if (isChecked) {
-            const messageContent = {
-              content: message,
-            };
-
-            send_message.mutate({
-              type,
-              id,
-              messageContent,
-            });
-          }
           setMessage("");
-          setIsChecked(false)
+          setIsChecked(false);
           const textarea = textareaRef.current;
-          textarea.style.height = "40px";
+          if (textarea) textarea.style.height = "40px";
         },
       }
     );
+
+    if (isChecked) {
+      const secondaryContent = {
+        content: message,
+        tempId: uuidv4(),
+      };
+
+      sendMessage.mutate({ type, id, messageContent: secondaryContent });
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -92,10 +91,11 @@ const ThreadMessageInput = ({ parentMessageId }) => {
     }
   };
 
-  const handlInputHeight = () => {
+  const handleInputHeight = () => {
     const textarea = textareaRef.current;
-    textarea.style.height = `${textarea.scrollHeight}px`;
+    if (textarea) textarea.style.height = `${textarea.scrollHeight}px`;
   };
+
   return (
     <div className={styles.messageInputContainer}>
       <div className={styles.input_field}>
@@ -115,7 +115,7 @@ const ThreadMessageInput = ({ parentMessageId }) => {
           value={message}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          onInput={handlInputHeight}
+          onInput={handleInputHeight}
         />
 
         <label htmlFor="checkbox" className={styles.checkBox}>

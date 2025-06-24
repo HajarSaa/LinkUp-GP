@@ -6,19 +6,31 @@ import registerWorkspaceHandlers, {
   fetchWorkspaceMembers,
   setActiveWorkspace,
 } from "../sockets/handlers/workspaceHandler";
-import registerPresenceHandlers from "../sockets/handlers/presenceHandler";
 import registerChannelHandlers from "../sockets/handlers/channelHandler";
 import registerTypingHandler from "../sockets/handlers/typingHandler";
+import registerMessageHandler from "../sockets/handlers/messageHandler";
+
 
 const useSocketConnection = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.currentUser.currentUser);
   const workspace = useSelector((state) => state.workspace.workspace);
 
-  useEffect(() => {
-    if (!currentUser || !workspace?._id) return;
+  // useEffect(() => {
+  //   if (!currentUser || !workspace?._id) return;
 
-    socket.connect();
+  //   socket.connect();
+  useEffect(() => {
+  console.log("🧪 Attempting to connect to socket...");
+
+  if (!currentUser || !workspace?._id) return;
+
+  socket.connect();
+
+  socket.on("connect", () => {
+    console.log("✅ Socket connected with ID:", socket.id);
+  });
+
     socket.userId = currentUser._id;
     // 1. Connect user
     socket.emit("userConnected", currentUser._id, workspace._id, (response) => {
@@ -43,18 +55,18 @@ const useSocketConnection = () => {
         });
       }
     });
-
+    socket.emit("updateStatus", { status: "online" });
     // 2. Register socket event handlers
     const cleanupWorkspace = registerWorkspaceHandlers(socket, dispatch);
-    const cleanupPresence = registerPresenceHandlers(socket, dispatch);
     const cleanupChannel = registerChannelHandlers(socket, dispatch);
     const cleanupTyping = registerTypingHandler(socket, dispatch);
+    const cleanupMessage = registerMessageHandler(socket, dispatch);
 
     return () => {
       cleanupWorkspace();
-      cleanupPresence();
       cleanupChannel();
       cleanupTyping();
+      cleanupMessage();
       socket.disconnect();
     };
   }, [currentUser, workspace]);

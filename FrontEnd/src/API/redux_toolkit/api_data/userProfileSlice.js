@@ -14,15 +14,8 @@ const userProfileSlice = createSlice({
     clearUserProfile: (state) => {
       state.data = null;
     },
-    updateUserStatus: (state, action) => {
-      if (state.data && state.data.user === action.payload.userId) {
-        state.data.status = action.payload.status;
-        state.data.customStatus = action.payload.customStatus;
-        state.data.lastActive = action.payload.lastActive;
-      }
-    },
   },
 });
 
-export const { setUserProfile, clearUserProfile, updateUserStatus } = userProfileSlice.actions;
+export const { setUserProfile, clearUserProfile } = userProfileSlice.actions;
 export default userProfileSlice.reducer;

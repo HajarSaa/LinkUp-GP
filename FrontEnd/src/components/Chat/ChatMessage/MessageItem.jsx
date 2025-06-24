@@ -38,6 +38,11 @@ const MessageItem = ({
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
   const { channelMedia } = useSelector((state) => state.channelMedia);
   const messageFiles = getAttachedFiles(message, channelMedia);
+  // const messageFiles =
+  // message.attachments && message.attachments.length > 0
+  //   ? message.attachments
+  //   : getAttachedFiles(message, channelMedia);
+
   const threadData = {
     count: message?.threadCount,
     participants: message?.threadParticipants,
