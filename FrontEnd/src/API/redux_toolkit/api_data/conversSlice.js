@@ -11,36 +11,16 @@ const conversSlice = createSlice({
     setConvers: (state, action) => {
       state.convers = action.payload;
     },
+    setConversMessages: (state, action) => {
+      const { conversation_id, messages } = action.payload;
+      state.messagesByConversation[conversation_id] = messages;
+    },
     setChatMat: (state, action) => {
       state.chatMate = action.payload;
     },
-    appendMessage: (state, action) => {
-      const { conversation_id, message } = action.payload;
-      if (!state.messagesByConversation[conversation_id]) {
-        state.messagesByConversation[conversation_id] = [];
-      }
-      state.messagesByConversation[conversation_id].unshift(message);
-    },
-    updateMessageContent: (state, action) => {
-      const { messageId, newContent, editedAt, updatedAt } = action.payload;
-
-      Object.values(state.messagesByConversation).forEach((messages) => {
-        const index = messages.findIndex((msg) => msg._id === messageId);
-        if (index !== -1) {
-          messages[index] = {
-            ...messages[index],
-            content: newContent,
-            edited: true,
-            editedAt,
-            updatedAt,
-          };
-        }
-      });
-    },
-
   },
 });
 
-export const { setConvers, setChatMat, appendMessage, updateMessageContent } = conversSlice.actions;
+export const { setConvers, setChatMat, setConversMessages } = conversSlice.actions;
 
 export default conversSlice.reducer;
