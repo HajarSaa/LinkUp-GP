@@ -37,6 +37,56 @@ export const getChannelMessages = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getChannelPinnedMessages = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+
+  // Check if the channel exists
+  const channel = await Channel.findById(channelId);
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Get all pinned messages in channel
+  const messages = await Message.find({
+    channelId,
+    pinned: true,
+  });
+
+  // send the response
+  res.status(200).json({
+    status: "success",
+    data: {
+      messages: messages || [],
+    },
+  });
+});
+
+export const getConversationPinnedMessages = catchAsync(
+  async (req, res, next) => {
+    const conversationId = req.params.id;
+
+    // Check if the conversation exists
+    const conversation = await Conversation.findById(conversationId);
+    if (!conversation) {
+      return next(new AppError("No conversation found with that ID", 404));
+    }
+
+    // Get all pinned messages in conversation
+    const messages = await Message.find({
+      conversationId,
+      pinned: true,
+    });
+
+    // send the response
+    res.status(200).json({
+      status: "success",
+      data: {
+        messages: messages || [],
+      },
+    });
+  }
+);
+
 export const getChannelMedia = catchAsync(async (req, res, next) => {
   const channelId = req.params.id;
   // Check if the channel exists
@@ -288,7 +338,9 @@ export const updateMessage = catchAsync(async (req, res, next) => {
   }
 
   // Update the message content
-  message.content = req.body.content;
+  if (req.body.content !== undefined && req.body.content.trim() !== "")
+    message.content = req.body.content;
+
   await message.save();
 
   res.status(200).json({

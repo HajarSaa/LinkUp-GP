@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const laterItemSchema = new mongoose.Schema({
+  workspaceId: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Workspace",
+    required: true,
+  },
   userProfile: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserProfile",
