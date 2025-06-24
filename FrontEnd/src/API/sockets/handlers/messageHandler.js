@@ -1,37 +1,42 @@
 import { addThreadMessage } from "../../redux_toolkit/api_data/messages/threadsSlice";
-
+import store from "../../redux_toolkit/store";
 export default function registerMessageHandler(socket, dispatch) {
   console.log("📩 Listening to messageEdited on socket.id =", socket.id);
-
   const handleNewMessage = (payload) => {
-    console.log("NEW SOCKET MESSAGE:", payload);
     const { channelId, conversationId, parentMessageId } = payload;
 
-    // If it's a thread reply, don't insert it into the main list
     if (parentMessageId) {
+      const currentThreadID = store.getState().chatPanel.threadPanel.threadID;
+
+      if (parentMessageId !== currentThreadID) {
+        console.log("⛔️ Ignoring thread message not for this tab");
+        return;
+      }
+
+      console.log("✅ Thread message for this tab");
       dispatch({ type: "threads/addThreadMessage", payload });
       return;
     }
+
     if (channelId) {
       dispatch({
         type: "channelMessages/appendMessage",
         payload: { channel_id: channelId, message: payload },
       });
-    } 
-    else if (conversationId) {
+    } else if (conversationId) {
       dispatch({
         type: "conversMessages/appendMessage",
         payload: { conversation_id: conversationId, message: payload },
       });
-      console.log("📥 dispatching to convers/appendMessage:", conversationId, payload);
-
     }
   };
+
 
   // Handle "threadReply" event
   const handleThreadReply = (payload) => {
     dispatch(addThreadMessage(payload));
   };
+
   const handleMessageEdited = (payload) => {
     const { messageId, newContent, edited, editedAt, updatedAt } = payload;
     console.log("🟡 messageEdited received:", payload);
@@ -49,6 +54,11 @@ export default function registerMessageHandler(socket, dispatch) {
 
     dispatch({
       type: "threads/updateThreadMessageContent",
+      payload: { messageId, newContent, edited, editedAt, updatedAt },
+    });
+
+    dispatch({
+      type: "chatPanel/updateThreadParentContent",
       payload: { messageId, newContent, edited, editedAt, updatedAt },
     });
   };
