@@ -31,7 +31,6 @@ const useGetConversMessages = (convers_id) => {
       dispatch(setConversMessages({ convers_id, messages: allMessages }));
     }
   }, [query.data, query.data?.pages, convers_id, dispatch]);
-
   return query;
 };
 

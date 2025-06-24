@@ -37,8 +37,6 @@ const MessageItem = ({
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
-
-
   const messageFiles = getAttachedFiles(message, media);
   const threadData = {
     count: message?.threadCount,
@@ -103,14 +101,18 @@ const MessageItem = ({
                 <div className={styles.message_time}>{message_time}</div>
               </div>
               {/* Text content container */}
-              <div
-                className={styles.message_text}
-                id={`message-content-${message._id}`}
-              >
-                {message.content}
-                {message.edited && (
-                  <span className={styles.edited_label}>(edited)</span>
-                )}
+              <div className={styles.msg_edit}>
+                <div
+                  className={styles.message_text}
+                  id={`message-content-${message._id}`}
+                >
+                  {message.content}
+                </div>
+                <div className={styles.edited}>
+                  {message.edited && (
+                    <span className={styles.edited_label}>(edited)</span>
+                  )}
+                </div>
               </div>
               {/* Media Container */}
               {messageFiles.length > 0 && (

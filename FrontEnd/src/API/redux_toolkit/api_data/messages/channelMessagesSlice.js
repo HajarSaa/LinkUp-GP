@@ -18,12 +18,29 @@ const channelMessagesSlice = createSlice({
         state.messagesByChannel[channel_id] = [];
       }
       state.messagesByChannel[channel_id].unshift(message); // or push()
-    }
+    },
+    updateMessageContent: (state, action) => {
+      const { messageId, newContent, editedAt, updatedAt } = action.payload;
+
+      Object.values(state.messagesByChannel).forEach((messages) => {
+        const index = messages.findIndex((msg) => msg._id === messageId);
+        if (index !== -1) {
+          console.log("✅ Updating message in state:", messageId);
+          messages[index] = {
+            ...messages[index],
+            content: newContent,
+            edited: true,
+            editedAt,
+            updatedAt,
+          };
+        }
+      });
+    },
 
   },
 });
 
-export const { setChannelMessages, appendMessage} =
+export const { setChannelMessages, appendMessage, updateMessageContent} =
   channelMessagesSlice.actions;
 
 export default channelMessagesSlice.reducer;

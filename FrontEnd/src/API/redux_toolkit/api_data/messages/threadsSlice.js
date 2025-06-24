@@ -18,8 +18,25 @@ const threadsSlice = createSlice({
       if (!state.threads) state.threads = [];
       state.threads.push(action.payload);
     },
+    updateThreadMessageContent: (state, action) => {
+      const { messageId, newContent, editedAt, updatedAt } = action.payload;
+
+      if (!state.threads) return;
+
+      const index = state.threads.findIndex((msg) => msg._id === messageId);
+      if (index !== -1) {
+        state.threads[index] = {
+          ...state.threads[index],
+          content: newContent,
+          edited: true,
+          editedAt,
+          updatedAt,
+        };
+      }
+    },
+
   },
 });
 
-export const { setThreads, clearThreads, addThreadMessage } = threadsSlice.actions;
+export const { setThreads, clearThreads, addThreadMessage, updateThreadMessageContent } = threadsSlice.actions;
 export default threadsSlice.reducer;

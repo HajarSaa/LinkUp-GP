@@ -11,20 +11,16 @@ const conversSlice = createSlice({
     setConvers: (state, action) => {
       state.convers = action.payload;
     },
+    setConversMessages: (state, action) => {
+      const { conversation_id, messages } = action.payload;
+      state.messagesByConversation[conversation_id] = messages;
+    },
     setChatMat: (state, action) => {
       state.chatMate = action.payload;
     },
-    appendMessage: (state, action) => {
-      const { conversation_id, message } = action.payload;
-      if (!state.messagesByConversation[conversation_id]) {
-        state.messagesByConversation[conversation_id] = [];
-      }
-      state.messagesByConversation[conversation_id].unshift(message);
-    },
-
   },
 });
 
-export const { setConvers, setChatMat, appendMessage } = conversSlice.actions;
+export const { setConvers, setChatMat, setConversMessages } = conversSlice.actions;
 
 export default conversSlice.reducer;
