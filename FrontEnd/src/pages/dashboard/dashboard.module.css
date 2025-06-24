@@ -25,3 +25,14 @@
   font-weight: bold;
   font-size: 25px;
 }
+
+.later_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.later_page img {
+  width: 300px;
+}

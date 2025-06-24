@@ -17,6 +17,23 @@ export const getChannelMessages = async ({
     hasNextPage: data.data.messages.length === limit,
   };
 };
+// ==============( get Converses messages)===
+export const getConversMessages = async ({
+  convers_id,
+  pageParam = 1,
+  limit,
+}) => {
+  const { data } = await axiosInstance.get(
+    `/messages/conversationMessages/${convers_id}?limit=${limit}&page=${pageParam}`
+  );
+
+  return {
+    data: data.data.messages,
+    currentPage: pageParam,
+    limit,
+    hasNextPage: data.data.messages.length === limit,
+  };
+};
 // ==============( get channel messages)===
 export const getMessageThreads = async ({
   parent_id,
