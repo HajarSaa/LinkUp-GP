@@ -25,17 +25,19 @@ import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
 import DmBody from "../../components/UI/UserDM/DmBody";
-
+import useGetConversMessages from "../../API/hooks/messages/useGetConversMessages";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
   const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
+  const message_query = useGetConversMessages(convers_id);
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
   const roomId = convers ? `conversation:${convers._id}` : null;
   useRoomSubscription(roomId);
+
   // handle opened panel
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(convers_id);
@@ -64,7 +66,7 @@ function DmPage() {
     setActiveTab("messages");
   }, [convers_id, dispatch]);
 
-  if (convers_query.isLoading)
+  if (convers_query.isLoading || message_query.isLoading)
     return (
       <div className={styles.status}>
         <Spinner
@@ -83,6 +85,13 @@ function DmPage() {
       </div>
     );
 
+  if (message_query.isError)
+    return (
+      <div className={`${styles.status} ${styles.error}`}>
+        {message_query.error}
+      </div>
+    );
+
   if (!convers) return;
   return (
     <PageContent>
@@ -90,7 +99,7 @@ function DmPage() {
         <UserNavbar activeTab={activeTab} setActiveTab={setActiveTab} />
         {activeTab === "messages" ? (
           <>
-            <DmBody/>
+            <DmBody />
             <TypingIndicator roomId={roomId} />
             {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
           </>

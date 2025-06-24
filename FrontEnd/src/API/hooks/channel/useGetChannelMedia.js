@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getChannelMedia } from "../../services/mediaService";
-import {useEffect } from "react";
+import { useEffect } from "react";
 import { setChannelMedia } from "../../redux_toolkit/api_data/media/channelMediaSlice";
 import { useDispatch } from "react-redux";
 
-function useGetConversMedia(channel_id) {
+function useGetChannelMedia(channel_id) {
   const dispatch = useDispatch();
 
   const query = useQuery({
@@ -22,4 +22,4 @@ function useGetConversMedia(channel_id) {
   return query;
 }
 
-export default useGetConversMedia;
+export default useGetChannelMedia;
