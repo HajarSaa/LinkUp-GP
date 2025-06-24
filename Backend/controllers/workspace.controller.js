@@ -128,80 +128,6 @@ export const joinWorkspace = catchAsync(async (req, res, next) => {
   });
 });
 
-// export const getWorkspace = catchAsync(async (req, res, next) => {
-//   const workspaceId = req.params.id;
-
-//   let workspace = await Workspace.findById(workspaceId);
-//   // check if the workspace exists
-//   if (!workspace) {
-//     return next(
-//       new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
-//     );
-//   }
-
-//   // First find the user's profile in this workspace
-//   const userProfile = await UserProfile.findOne({
-//     user: req.user.id,
-//     workspace: workspaceId,
-//   });
-
-//   if (!userProfile) {
-//     return next(new AppError("You are not a member of this workspace", 403));
-//   }
-
-//   // Get the workspace with populated data
-//   workspace = await Workspace.findById(workspaceId)
-//     .populate({
-//       path: "members",
-//     })
-//     .populate({
-//       path: "channels",
-//       match: { members: userProfile._id }, // Only channels where user is a member
-//     })
-//     .populate("conversations");
-
-//   // check if the workspace exists
-//   if (!workspace) {
-//     return next(
-//       new AppError(`Cannot find workspace with ID: ${workspaceId}`, 404)
-//     );
-//   }
-
-//   // Filter conversations to only include those where the user is a member
-//   const filteredConversations = workspace.conversations.filter(
-//     (conversation) => {
-//       return (
-//         conversation.memberOneId._id.equals(userProfile._id) ||
-//         conversation.memberTwoId._id.equals(userProfile._id)
-//       );
-//     }
-//   );
-
-//   // Replace the arrays with filtered ones
-//   workspace.conversations = filteredConversations;
-//   // Note: Channels are already filtered by the match condition in populate
-
-//   // Send the workspace id as a cookie
-//   res.cookie("workspace", workspaceId, {
-//     expires: new Date(
-//       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-//     ),
-//     secure: process.env.NODE_ENV === "production",
-//     httpOnly: true,
-//     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-//   });
-
-//   // Send the response
-//   res.status(200).json({
-//     status: "success",
-//     data: {
-//       workspace,
-//       userId: req.user.id,
-//       userProfileId: userProfile.id,
-//     },
-//   });
-// });
-
 export const getWorkspace = catchAsync(async (req, res, next) => {
   const workspaceId = req.params.id;
 
@@ -414,5 +340,22 @@ export const deleteWorkspace = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: "success",
     data: null,
+  });
+});
+
+export const signOutWorkspace = catchAsync(async (req, res, next) => {
+  const workspaceId = req.workspace.id;
+
+  // Remove the workspace cookie
+  res.clearCookie("workspace", {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    message: `Successfully signed out of workspace with ID: ${workspaceId}`,
   });
 });
