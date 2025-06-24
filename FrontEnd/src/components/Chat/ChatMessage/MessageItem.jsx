@@ -38,11 +38,6 @@ const MessageItem = ({
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
   const { channelMedia } = useSelector((state) => state.channelMedia);
   const messageFiles = getAttachedFiles(message, channelMedia);
-  // const messageFiles =
-  // message.attachments && message.attachments.length > 0
-  //   ? message.attachments
-  //   : getAttachedFiles(message, channelMedia);
-
   const threadData = {
     count: message?.threadCount,
     participants: message?.threadParticipants,
@@ -106,14 +101,18 @@ const MessageItem = ({
                 <div className={styles.message_time}>{message_time}</div>
               </div>
               {/* Text content container */}
-              <div
-                className={styles.message_text}
-                id={`message-content-${message._id}`}
-              >
-                {message.content}
-                {message.edited && (
-                  <span className={styles.edited_label}>(edited)</span>
-                )}
+              <div className={styles.msg_edit}>
+                <div
+                  className={styles.message_text}
+                  id={`message-content-${message._id}`}
+                >
+                  {message.content}
+                </div>
+                <div className={styles.edited}>
+                  {message.edited && (
+                    <span className={styles.edited_label}>(edited)</span>
+                  )}
+                </div>
               </div>
               {/* Media Container */}
               {messageFiles.length > 0 && (

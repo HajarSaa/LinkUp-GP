@@ -79,6 +79,7 @@
 .message_text {
   position: relative;
   line-height: 22px;
+  
 }
 
 .message_content {
@@ -260,7 +261,10 @@
   color: var(--text-color-grey);
   font-size: 13px;
 }
-
+.msg_edit{
+  display: flex;
+  flex-direction: row;
+}
 .editingMessage {
   background-color: var(--active-color);
 }
