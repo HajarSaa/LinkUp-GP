@@ -57,9 +57,26 @@ const chatPanel = createSlice({
         RemoveFromOpenedThreadPanelItems(action?.payload?.page_id);
       }
     },
+    
+    updateThreadParentContent: (state, action) => {
+      const { messageId, newContent, editedAt, updatedAt } = action.payload;
+      if (state.threadPanel.parentMessage?._id === messageId) {
+        state.threadPanel.parentMessage = {
+          ...state.threadPanel.parentMessage,
+          content: newContent,
+          edited: true,
+          editedAt,
+          updatedAt,
+        };
+      }
+    },
   },
 });
 
 export default chatPanel.reducer;
-export const { openUserPanel, openThreadPanel, closeChatPanel } =
-  chatPanel.actions;
+export const {
+  openUserPanel,
+  openThreadPanel,
+  closeChatPanel,
+  updateThreadParentContent,
+} = chatPanel.actions;

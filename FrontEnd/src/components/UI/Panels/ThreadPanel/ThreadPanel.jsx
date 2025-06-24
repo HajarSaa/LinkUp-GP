@@ -71,7 +71,7 @@ function ThreadPanel() {
           </div>
         </div>
       )}
-      <TypingIndicator roomId={`thread:${threadID}`} />
+      <TypingIndicator roomId={roomId} />
       {isEditing && isInThread ? (
         <EditMessageInput />
       ) : (
