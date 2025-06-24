@@ -4,6 +4,7 @@ import { addThreadMessage } from "../../redux_toolkit/api_data/messages/threadsS
 
 export default function registerMessageHandler(socket, dispatch) {
   const handleNewMessage = (payload) => {
+  console.log("NEW SOCKET MESSAGE:", payload);
   const { channelId, conversationId, parentMessageId } = payload;
 
   // If it's a thread reply, don't insert it into the main list

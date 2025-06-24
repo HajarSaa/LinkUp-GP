@@ -38,6 +38,7 @@ const MessageItem = ({
   const { activeMessageId } = useSelector((state) => state.messageMenu);
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
 
+
   const messageFiles = getAttachedFiles(message, media);
   const threadData = {
     count: message?.threadCount,

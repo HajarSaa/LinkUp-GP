@@ -24,7 +24,7 @@ const useTypingEmitter = (room) => {
         room,
         typingStatus: false,
       });
-    }, 2000);
+    }, 500);
   };
 
   return emitTyping;
