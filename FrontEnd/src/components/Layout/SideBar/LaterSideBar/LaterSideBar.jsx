@@ -3,9 +3,13 @@ import Icon from "../../../UI/Icons/Icon/Icon";
 import styles from "./../SideBar.module.css";
 import laterStyle from "./LaterSideBar.module.css";
 import { MdAdd, MdOutlineFilterList } from "react-icons/md";
+import { useState } from "react";
+import LaterItem from "./LaterItem";
 
 function LaterSideBar() {
   const { workspace } = useSelector((state) => state.workspace);
+  const [activeTab, setActiveTab] = useState("inProgress");
+
 
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
 
@@ -25,6 +29,62 @@ function LaterSideBar() {
                 <MdAdd />
               </Icon>
             </div>
+          </div>
+          <div className={laterStyle.tabs_container}>
+            <div
+              className={`${laterStyle.tab} ${
+                activeTab === "inProgress" ? laterStyle.active : ""
+              }`}
+              onClick={() => setActiveTab("inProgress")}
+            >
+              In progress <span className={laterStyle.tab_count}>2</span>
+            </div>
+            <div
+              className={`${laterStyle.tab} ${
+                activeTab === "Archived" ? laterStyle.active : ""
+              }`}
+              onClick={() => setActiveTab("Archived")}
+            >
+              Archived
+            </div>
+            <div
+              className={`${laterStyle.tab} ${
+                activeTab === "Completed" ? laterStyle.active : ""
+              }`}
+              onClick={() => setActiveTab("Completed")}
+            >
+              Completed
+            </div>
+          </div>
+          <div className={laterStyle.content}>
+            {activeTab === "inProgress" && (
+              <>
+                <LaterItem
+                username="AYmoon"
+                message="hello"
+                tag="Overdue by 39 minutes"
+                />
+              <LaterItem username="AYmoon" message="aaaassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+                <LaterItem username="AYmoon" message="aaaa" />
+              </>
+            )}
+
+            {activeTab === "Archived" && (
+              <div className={laterStyle.placeholder}>No archived items</div>
+            )}
+
+            {activeTab === "Completed" && (
+              <div className={laterStyle.placeholder}>No completed items</div>
+            )}
           </div>
         </div>
       </div>
