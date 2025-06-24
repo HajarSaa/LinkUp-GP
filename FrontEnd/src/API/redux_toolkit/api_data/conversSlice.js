@@ -21,10 +21,26 @@ const conversSlice = createSlice({
       }
       state.messagesByConversation[conversation_id].unshift(message);
     },
+    updateMessageContent: (state, action) => {
+      const { messageId, newContent, editedAt, updatedAt } = action.payload;
+
+      Object.values(state.messagesByConversation).forEach((messages) => {
+        const index = messages.findIndex((msg) => msg._id === messageId);
+        if (index !== -1) {
+          messages[index] = {
+            ...messages[index],
+            content: newContent,
+            edited: true,
+            editedAt,
+            updatedAt,
+          };
+        }
+      });
+    },
 
   },
 });
 
-export const { setConvers, setChatMat, appendMessage } = conversSlice.actions;
+export const { setConvers, setChatMat, appendMessage, updateMessageContent } = conversSlice.actions;
 
 export default conversSlice.reducer;
