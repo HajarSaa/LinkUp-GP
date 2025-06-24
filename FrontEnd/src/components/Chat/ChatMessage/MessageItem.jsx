@@ -24,6 +24,7 @@ const MessageItem = ({
   message,
   isInThreadPanel = false,
   isThreadParent = false,
+  media
 }) => {
 
   const [messageHover, setMessageHover] = useState(false);
@@ -36,8 +37,8 @@ const MessageItem = ({
   const message_time = formatTimeTo12Hour(message?.createdAt);
   const { activeMessageId } = useSelector((state) => state.messageMenu);
   const { messageId, isEditing } = useSelector((state) => state.editMessage);
-  const { channelMedia } = useSelector((state) => state.channelMedia);
-  const messageFiles = getAttachedFiles(message, channelMedia);
+
+  const messageFiles = getAttachedFiles(message, media);
   const threadData = {
     count: message?.threadCount,
     participants: message?.threadParticipants,
@@ -147,6 +148,7 @@ MessageItem.propTypes = {
   message: PropTypes.object,
   isInThreadPanel: PropTypes.bool,
   isThreadParent: PropTypes.bool,
+  media: PropTypes.any,
 };
 
 export default MessageItem;

@@ -26,6 +26,7 @@ import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
 import DmBody from "../../components/UI/UserDM/DmBody";
 import useGetConversMessages from "../../API/hooks/messages/useGetConversMessages";
+import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -33,6 +34,7 @@ function DmPage() {
   const { id: convers_id } = useParams();
   const convers_query = useGetConvers(convers_id);
   const message_query = useGetConversMessages(convers_id);
+  const media_query = useGetConversMedia(convers_id);
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
   const roomId = convers ? `conversation:${convers._id}` : null;
@@ -104,7 +106,12 @@ function DmPage() {
             {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
           </>
         ) : (
-          <FilesContainer files={[]} type="conversation" />
+          <FilesContainer
+            files={media_query?.data?.media}
+            isLoading={media_query.isLoading}
+            isError={media_query.isError}
+            error={media_query.error}
+          />
         )}
       </div>
       <Panel />

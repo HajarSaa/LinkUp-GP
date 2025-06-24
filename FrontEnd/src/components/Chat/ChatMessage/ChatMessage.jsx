@@ -16,6 +16,7 @@ function ChatMessage({ containerRef }) {
   const messages = useSelector((state) =>
     selectMessagesByChannel(state, channel_id)
   );
+  const { channelMedia } = useSelector((state) => state.channelMedia);
   const {mutate:toggleThisReact} = useToggleReaction()
 
   const { search } = useLocation();
@@ -115,7 +116,11 @@ function ChatMessage({ containerRef }) {
           .map((message) => (
             <React.Fragment key={message._id}>
               <DateDivider date={message.createdAt} />
-              <MessageItem isInThreadPanel={false} message={message} />
+              <MessageItem
+                isInThreadPanel={false}
+                message={message}
+                media={channelMedia}
+              />
             </React.Fragment>
           ))}
         <div ref={messagesEndRef} />

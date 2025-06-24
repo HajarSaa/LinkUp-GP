@@ -35,6 +35,7 @@ import userMenuReducer from "./modals/userProfile/userMenuSlice";
 //======
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
+import conversMediaReducer from './api_data/media/conversMediaSlice'
 //======
 //======
 // ==============================(<Media>)
@@ -73,6 +74,7 @@ const store = configureStore({
     convers: conversReducer,
     userDetailsModal: userDetailsReducer,
     convers_messages: convers_messages_reducer,
+    conversMedia: conversMediaReducer,
     // ==============================(User Profile)
     // ====
     editUserProfile: editUserProfileReducer,

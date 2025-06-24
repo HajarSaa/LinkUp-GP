@@ -18,6 +18,7 @@ function DmChatMessage({ containerRef }) {
   const { mutate: toggleThisReact } = useToggleReaction();
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
+    const { conversMedia } = useSelector((state) => state.conversMedia);
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetConversMessages(convers_id);
 
@@ -112,7 +113,11 @@ function DmChatMessage({ containerRef }) {
           .map((message) => (
             <React.Fragment key={message._id}>
               <DateDivider date={message.createdAt} />
-              <MessageItem isInThreadPanel={false} message={message} />
+              <MessageItem
+                isInThreadPanel={false}
+                message={message}
+                media={conversMedia}
+              />
             </React.Fragment>
           ))}
         <div ref={messagesEndRef} />
