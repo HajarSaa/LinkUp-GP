@@ -14,6 +14,7 @@ import {
   getUserPanelIdByPageId,
   isIdInOpenedThreadPanelItems,
   isIdInOpenedUserPanelItems,
+  RemoveFromOpenedThreadPanelItems,
 } from "../../utils/panelUtils";
 import {
   closeChatPanel,
@@ -52,16 +53,27 @@ function DmPage() {
           page_id: convers_id,
         })
       );
-    } else if (isThreadPanel) {
-      dispatch(
-        openThreadPanel({
-          threadID: getThreadPanelIdByPageId(convers_id),
-          parentMessage: getParentMessageByPageId(convers_id),
-          type: "threadPanel",
-          page_id: convers_id,
-        })
-      );
-    } else {
+    } 
+    else if (isThreadPanel) {
+      const parentMessage = getParentMessageByPageId(convers_id);
+
+      const existing = document.getElementById(`message-${parentMessage?._id}`);
+
+      if (parentMessage && existing) {
+        dispatch(
+          openThreadPanel({
+            threadID: getThreadPanelIdByPageId(convers_id),
+            parentMessage,
+            type: "threadPanel",
+            page_id: convers_id,
+          })
+        );
+      } else {
+        RemoveFromOpenedThreadPanelItems(convers_id);
+        dispatch(closeChatPanel());
+      }
+    }
+    else {
       dispatch(closeChatPanel());
     }
     // reset active tab
