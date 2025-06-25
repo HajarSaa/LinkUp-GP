@@ -53,6 +53,8 @@ import inputMenuReducer from "./modals/chat/inputMenu";
 import threadsReducer from "./api_data/messages/threadsSlice";
 import editMessageReducer from "./api_data/messages/editMessageSlice";
 import messageDraftReducer from "./api_data/messages/messageDraftSlice";
+import messageReactionsReducer from "./api_data/messages/messageReactionsSlice";
+
 //======
 
 const store = configureStore({
@@ -101,6 +103,7 @@ const store = configureStore({
     threads: threadsReducer,
     editMessage: editMessageReducer,
     messageDraft: messageDraftReducer,
+    messageReactions: messageReactionsReducer,
     typing: typingReducer,
     // ==============================(Global)
     // ====
