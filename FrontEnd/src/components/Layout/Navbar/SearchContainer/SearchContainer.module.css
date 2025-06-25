@@ -71,19 +71,29 @@
   border-radius: 20px;
 }
 
+/* Search Items */
+
 .search_items {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  padding: 10px 0;
 }
 
 .search_item {
-  padding: 6px 8px;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+  padding: 8px;
   cursor: pointer;
+  color: #000;
+  display: flex;
+  gap: 3px;
+}
+
+.search_item>span:not(:last-child) {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .search_item:hover {
-  background-color: #efefef;
+  background-color: var(--link-color);
+  color: #fff;
 }

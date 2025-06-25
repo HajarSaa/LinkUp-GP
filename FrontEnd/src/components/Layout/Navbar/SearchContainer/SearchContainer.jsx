@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { useCallback } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CgClose } from "react-icons/cg";
+import SearchItem from "./SearchItem/SearchItem";
 
 function SearchContainer({ workspace, targetRef }) {
   const inputRef = useRef(null);
@@ -91,16 +92,17 @@ function SearchContainer({ workspace, targetRef }) {
             )}
             <span
               className={`${styles.search_icon} ${styles.close_icon}`}
-              onClick={()=>{dispatch(closeSearch())}}
+              onClick={() => {
+                dispatch(closeSearch());
+              }}
             >
               <CgClose />
             </span>
           </div>
         </div>
         <div className={styles.search_items}>
-          <div className={styles.search_item}>Result 1</div>
-          <div className={styles.search_item}>Result 2</div>
-          <div className={styles.search_item}>Result 3</div>
+          <SearchItem channel={true} />
+          <SearchItem member={true} />
         </div>
       </div>
     </>
