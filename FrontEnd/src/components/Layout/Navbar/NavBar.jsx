@@ -6,9 +6,9 @@ import { IoIosSearch } from "react-icons/io";
 import Icon from "../../UI/Icons/Icon/Icon";
 import { useSelector, useDispatch } from "react-redux";
 import { openSearch } from "../../../API/redux_toolkit/ui/searchSlice";
-
 import { useRef } from "react";
 import SearchContainer from "./SearchContainer/SearchContainer";
+// Removed invalid top-level useSelector hook call
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -39,7 +39,9 @@ function NavBar() {
           className={styles.nav_bar_search}
           onClick={() => dispatch(openSearch())}
         >
-          <span className={styles.nav_bar_search_text}>Search</span>
+          <span className={styles.nav_bar_search_text}>
+            Search in {workspace.name}
+          </span>
           <span>
             <IoIosSearch />
           </span>

@@ -1,21 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { closeSearch } from "../../../../API/redux_toolkit/ui/searchSlice";
 import styles from "./SearchContainer.module.css";
 import PropTypes from "prop-types";
 import { useCallback } from "react";
+import { CiSearch } from "react-icons/ci";
+import { CgClose } from "react-icons/cg";
 
 function SearchContainer({ workspace, targetRef }) {
+  const inputRef = useRef(null);
   const dispatch = useDispatch();
   const [position, setPosition] = useState(null);
+  const [showClear, setShowClear] = useState(false);
 
   const updatePosition = useCallback(() => {
     if (targetRef?.current) {
       const rect = targetRef.current.getBoundingClientRect();
       setPosition({
-        top: rect.bottom + window.scrollY,
-        left: rect.left + window.scrollX,
-        width: rect.width,
+        top: rect.top + window.scrollY,
+        left: rect.left + window.scrollX - 10,
+        width: rect.width + 20,
       });
     }
   }, [targetRef]);
@@ -28,6 +32,23 @@ function SearchContainer({ workspace, targetRef }) {
       window.removeEventListener("resize", updatePosition);
     };
   }, [updatePosition]);
+
+  // focus the input filed
+  useEffect(() => {
+    if (position && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [position]);
+
+  function handleChange(e) {
+    if (e.target.value.trim()) setShowClear(true);
+    else setShowClear(false);
+  }
+
+  function handleClear() {
+    inputRef.current.value = "";
+    setShowClear(false);
+  }
 
   const handleClose = (e) => {
     if (e.target === e.currentTarget) dispatch(closeSearch());
@@ -47,11 +68,35 @@ function SearchContainer({ workspace, targetRef }) {
           width: `${position.width}px`,
         }}
       >
-        <input
-          className={styles.search_input}
-          type="text"
-          placeholder={`Find in #${workspace?.slug || "workspace"}`}
-        />
+        <div className={styles.search_box}>
+          <span className={`${styles.search_icon}`}>
+            <CiSearch />
+          </span>
+          <input
+            ref={inputRef}
+            id="work_search"
+            className={styles.search_input}
+            type="text"
+            placeholder={`Find in #${workspace?.slug || "workspace"}`}
+            onInput={handleChange}
+          />
+          <div className={styles.right_icons}>
+            {showClear && (
+              <>
+                <span className={styles.clear_text} onClick={handleClear}>
+                  clear
+                </span>
+                <span className={styles.divider}></span>
+              </>
+            )}
+            <span
+              className={`${styles.search_icon} ${styles.close_icon}`}
+              onClick={()=>{dispatch(closeSearch())}}
+            >
+              <CgClose />
+            </span>
+          </div>
+        </div>
         <div className={styles.search_items}>
           <div className={styles.search_item}>Result 1</div>
           <div className={styles.search_item}>Result 2</div>
