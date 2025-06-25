@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeSearch } from "../../../../API/redux_toolkit/ui/searchSlice";
 import styles from "./SearchContainer.module.css";
 import PropTypes from "prop-types";
@@ -7,12 +7,20 @@ import { useCallback } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CgClose } from "react-icons/cg";
 import SearchItem from "./SearchItem/SearchItem";
+import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
+import { MdManageSearch } from "react-icons/md";
 
 function SearchContainer({ workspace, targetRef }) {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const [position, setPosition] = useState(null);
   const [showClear, setShowClear] = useState(false);
+  // search
+  const [search_result, set_search_result] = useState([]);
+  const { browseChannels } = useSelector((state) => state.browseChannels);
+  const members = workspace.members;
+  const searchData = [...browseChannels, ...members];
+  const conversations = useGetSidebarConvers(workspace);
 
   const updatePosition = useCallback(() => {
     if (targetRef?.current) {
@@ -41,9 +49,38 @@ function SearchContainer({ workspace, targetRef }) {
     }
   }, [position]);
 
+  // search method
   function handleChange(e) {
-    if (e.target.value.trim()) setShowClear(true);
-    else setShowClear(false);
+    const query = e.target.value.trim().toLowerCase();
+    if (query) {
+      setShowClear(true);
+
+      const results = searchData
+        .map((item) => {
+          const name = item.name || item.userName || "";
+          const lowerName = name.toLowerCase();
+
+          // لو الاسم بيبدأ باللي اكتب
+          if (lowerName.startsWith(query)) {
+            if (item.name) {
+              // دا channel
+              return { ...item, isChannel: true };
+            } else {
+              // دا member → دور عليه جوه conversations
+              const conv = conversations.find((c) => c.member._id === item._id);
+              return conv ? conv : null;
+            }
+          }
+
+          return null;
+        })
+        .filter(Boolean); // شيل الـ nulls
+
+      set_search_result(results);
+    } else {
+      setShowClear(false);
+      set_search_result([]);
+    }
   }
 
   function handleClear() {
@@ -85,7 +122,7 @@ function SearchContainer({ workspace, targetRef }) {
             {showClear && (
               <>
                 <span className={styles.clear_text} onClick={handleClear}>
-                  clear
+                  Clear
                 </span>
                 <span className={styles.divider}></span>
               </>
@@ -101,8 +138,15 @@ function SearchContainer({ workspace, targetRef }) {
           </div>
         </div>
         <div className={styles.search_items}>
-          <SearchItem channel={true} />
-          <SearchItem member={true} />
+          {search_result.length !== 0 ? (
+            <>
+              {search_result.map((result, index) => (
+                <SearchItem key={index} search_item={result} />
+              ))}
+            </>
+          ) : (
+            <SearchItem  />
+          )}
         </div>
       </div>
     </>

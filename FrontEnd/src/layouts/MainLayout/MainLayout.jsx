@@ -12,6 +12,7 @@ import SetStatusModal from "../../components/UI/Modal/SetStatusModal/SetStatus";
 import useSocketConnection from "../../API/sockets/useSocketConnection";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import useBrowseChannels from "../../API/hooks/channel/useBrowseChannels";
 // import {fetchWorkspaceMembers, fetchOnlineUsers } from "../../API/sockets/handlers/workspaceHandler";
 function MainLayout() {
   const location = useLocation();
@@ -19,9 +20,10 @@ function MainLayout() {
   const { workspace } = useSelector((state) => state.workspace);
   const channels = workspace?.channels;
   const navigate = useNavigate();
-  // custom hoccks
+  // custom hooks
   useCurrentWorkspace();
   useSocketConnection();
+  useBrowseChannels();
 
   useEffect(() => {
     if (
