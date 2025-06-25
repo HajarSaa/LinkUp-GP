@@ -108,12 +108,14 @@ const MessageItem = ({
                 >
                   {message.content}
                 </div>
-                <div className={styles.edited}>
-                  {message.edited && (
+
+                {message.edited && (
+                  <div className={styles.edited}>
                     <span className={styles.edited_label}>(edited)</span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
+
               {/* Media Container */}
               {messageFiles.length > 0 && (
                 <div className={styles.attachments}>
@@ -140,8 +142,7 @@ const MessageItem = ({
           <MessageThreads threadData={threadData} parentMessage={message} />
         )}
       </div>
-
-      <MessageMenu />
+      <MessageMenu createdAt={message?.createdAt} />
     </>
   );
 };

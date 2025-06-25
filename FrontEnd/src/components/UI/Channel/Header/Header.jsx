@@ -28,13 +28,17 @@ import { isChannelOwner } from "../../../../utils/channelUtils";
 import TopicModal from "../../Modal/ChannelModals/editModals/TopicModal";
 import RenameChannelModal from "../../Modal/ChannelModals/editModals/RenameChannelModal";
 import DescriptionModal from "../../Modal/ChannelModals/editModals/DescriptionModal";
+import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
+import { useNavigate } from "react-router-dom";
 
 function Header({ activeTab, setActiveTab }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { workspace } = useSelector((state) => state.workspace);
   const channel = useSelector((state) => state.channel.channel);
   const members = getMembersData(channel, workspace);
   const isOwner = isChannelOwner(channel, workspace);
+  const isLater = location.pathname.startsWith("/later");
   const menuItems = [
     {
       id: "messages",
@@ -127,6 +131,7 @@ function Header({ activeTab, setActiveTab }) {
               </div>
               <ChannelOptionModal />
             </div>
+            {isLater && <CloseIcon closeEvent={()=>navigate("/later")} />}
           </div>
         </div>
         <div className={`w-100 align-items-center ${styles.bottomPart}`}>

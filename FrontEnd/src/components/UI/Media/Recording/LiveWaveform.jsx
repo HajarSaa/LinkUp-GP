@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./LiveWaveform.module.css";
 import { FaTimes } from "react-icons/fa";
 
-function LiveWaveform({ isRecording, onCancel }) {
+function LiveWaveform({ isRecording, onCancel , overlayClick }) {
   const canvasRef = useRef(null);
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
@@ -90,7 +90,7 @@ function LiveWaveform({ isRecording, onCancel }) {
   if (!isRecording) return null;
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${overlayClick ? styles.shadow : ''}`}>
       <button className={styles.cancelBtn} onClick={onCancel}>
         <FaTimes/>
       </button>
@@ -112,6 +112,7 @@ LiveWaveform.propTypes = {
   isRecording: PropTypes.bool.isRequired,
   audioBlob: PropTypes.instanceOf(Blob),
   onCancel: PropTypes.func.isRequired,
+  overlayClick: PropTypes.bool, 
 };
 
 export default LiveWaveform;

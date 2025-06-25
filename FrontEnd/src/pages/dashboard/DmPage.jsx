@@ -126,6 +126,7 @@ function DmPage() {
           />
         )}
       </div>
+      <div className={styles.record_overlay}></div>
       <Panel />
     </PageContent>
   );

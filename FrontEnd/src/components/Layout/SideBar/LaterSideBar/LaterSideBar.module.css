@@ -6,7 +6,7 @@
 
 .later_side_bar {
   position: relative;
-  width: 335px;
+  width: 350px;
   height: 100%;
   flex-shrink: 0;
   background-color: var(--secondary-color);
@@ -64,16 +64,24 @@
 
 .item {
   background-color: var(--secondary-color);
-  padding: 18px 10px;
+  padding: 15px 10px;
   display: flex;
   flex-direction: column;
   color: white;
   cursor: pointer;
+  position: relative;
 }
 
-.item:not(:last-child) {
-  border-bottom: 1px solid var(--border-color);
+.item:not(:last-child)::after {
+  position: absolute;
+  content: '';
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background-color: #ffffff52;
 }
+
 
 .item:hover {
   background-color: var(--icons-hover)

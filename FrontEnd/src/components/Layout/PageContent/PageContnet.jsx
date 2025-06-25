@@ -1,8 +1,15 @@
 import PropTypes from "prop-types";
 import styles from "./PageContent.module.css";
+import { useSelector } from "react-redux";
 
 function PageContent({ children }) {
-  return <div className={styles.page}>{children}</div>;
+  const {isRecording} = useSelector((state)=>state.recording)
+  return (
+    <div className={styles.page}>
+      {isRecording && <div className={styles.record_overlay}></div>}
+      {children}
+    </div>
+  );
 }
 
 PageContent.propTypes = {

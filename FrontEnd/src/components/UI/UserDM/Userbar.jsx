@@ -20,12 +20,15 @@ import { useDispatch, useSelector } from "react-redux";
 import UserImage from "../User/UserImage";
 import { openUserDetailsModal } from "../../../API/redux_toolkit/modals/convers/userDetailsModal";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
+import CloseIcon from "../Icons/CloseIcon/CloseIcon";
 
 const Navbar = ({ activeTab, setActiveTab }) => {
   const receiver = useSelector((state) => state.convers.chatMate);
+  const isLater = location.pathname.startsWith("/later");
   const dispath = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const menuItems = [
@@ -110,6 +113,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               items={huddleItems}
             />
             <MoreDropdown items={moreMenuItems} />
+            {isLater && <CloseIcon closeEvent={()=>navigate("/later")} />}
           </div>
         </div>
 

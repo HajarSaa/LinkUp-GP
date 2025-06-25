@@ -1,0 +1,42 @@
+.search_item {
+  padding: 8px;
+  cursor: pointer;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+}
+
+.member_icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.search_item:hover {
+  background-color: var(--link-color);
+  color: #fff;
+}
+
+.search_item_left_icon {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.search_item_left_icon_ch {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user_data {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 5px;
+}

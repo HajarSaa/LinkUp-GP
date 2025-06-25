@@ -118,6 +118,7 @@
   background-color: var(--link-color);
   color: #fff;
   border-radius: 5px;
+  z-index: 2000;
 }
 
 .tool_icon {
@@ -270,3 +271,13 @@
 }
 
 /* Media Container */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  z-index: 1000;
+}
