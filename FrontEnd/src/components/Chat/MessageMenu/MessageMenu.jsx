@@ -6,6 +6,10 @@ import Spinner from "../../UI/Spinner/Spinner";
 import useDeleteMessage from "../../../API/hooks/messages/useDeleteMessage";
 import { showEditMessageInput } from "../../../API/redux_toolkit/api_data/messages/editMessageSlice";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
+import { useMemo } from "react";
+import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
+import { selectMessagesByConvers } from "../../../API/redux_toolkit/selectore/conversMessagesSelectors";
 
 const MessageMenu = () => {
   const { isOpen, position, activeMessageId, isSender, isInThread } =
@@ -13,12 +17,43 @@ const MessageMenu = () => {
   const delete_message = useDeleteMessage();
   const dispatch = useDispatch();
 
+  // ... Edit Time Logic
+
+  const location = useLocation();
+  const isChannel = location.pathname.startsWith("/channels/");
+  const id = location.pathname.split("/")[2]; // جِب الـ ID سواء Channel أو Conversation
+
+  const message = useSelector((state) => {
+    if (!id || !activeMessageId) return null;
+    const messages = isChannel
+      ? selectMessagesByChannel(state, id)
+      : selectMessagesByConvers(state, id);
+
+    return messages?.find((msg) => msg._id === activeMessageId);
+  });
+
+  const createdAt = message?.createdAt;
+
+  // ... Edit Time Logic
+
+  const isEditable = useMemo(() => {
+    if (!createdAt) return false;
+
+    const messageTime = new Date(createdAt);
+    if (isNaN(messageTime)) return false;
+
+    const now = new Date();
+    const diffInMs = now - messageTime;
+    const diffInMinutes = diffInMs / (1000 * 60);
+    return diffInMinutes <= 15;
+  }, [createdAt]);
 
   function handleClose(e) {
     if (e.target === e.currentTarget) {
       closeModal();
     }
   }
+
 
   // handle closing
   const closeModal = useCallback(() => {
@@ -84,7 +119,7 @@ const MessageMenu = () => {
       if (event.key.toLowerCase() === "c") {
         handleCopy();
       }
-      if (event.key.toLowerCase() === "e") {
+      if (event.key.toLowerCase() === "e" && isSender && isEditable) {
         handleEdit();
       }
       if (event.key === "Delete") {
@@ -100,60 +135,71 @@ const MessageMenu = () => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, closeModal, handleDelete, handleEdit, handleCopy]);
+  }, [
+    isOpen,
+    closeModal,
+    handleDelete,
+    handleEdit,
+    handleCopy,
+    isEditable,
+    isSender,
+  ]);
 
   if (!isOpen || !position) return null;
 
   return (
-      <div className={styles.overlay} onClick={handleClose}>
-        <div
-          className={styles.modal}
-          onClick={(e) => e.stopPropagation()}
-          style={{
-            top: `${position.y}px`,
-            left: `${position.x}px`,
-            position: "absolute",
-            zIndex: 1000,
-          }}
-        >
-          <ul className={styles.list}>
-            <li className={styles.item} onClick={handleCopy}>
-              <span>Copy Message</span>
-              <span>C</span>
-            </li>
-            {isSender && (
-              <>
+    <div className={styles.overlay} onClick={handleClose}>
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          top: `${position.y}px`,
+          left: `${position.x}px`,
+          position: "absolute",
+          zIndex: 1000,
+        }}
+      >
+        <ul className={styles.list}>
+          <li className={styles.item} onClick={handleCopy}>
+            <span>Copy Message</span>
+            <span>C</span>
+          </li>
+          {isSender && (
+            <>
+              {isEditable && (
                 <li className={styles.item} onClick={handleEdit}>
                   <span>Edit Message</span>
                   <span>E</span>
                 </li>
-                <li
-                  className={`${styles.item} ${styles.delete_item}`}
-                  onClick={handleDelete}
-                >
-                  {delete_message.isPending ? (
-                    <span className={styles.delete_loading}>
-                      <Spinner
-                        width={20}
-                        height={20}
-                        color="var(--error-color)"
-                      />
-                    </span>
-                  ) : (
-                    <>
-                      <span>Delete Message</span>
-                      <span>Delete</span>
-                    </>
-                  )}
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
+              )}
+              <li
+                className={`${styles.item} ${styles.delete_item}`}
+                onClick={handleDelete}
+              >
+                {delete_message.isPending ? (
+                  <span className={styles.delete_loading}>
+                    <Spinner
+                      width={20}
+                      height={20}
+                      color="var(--error-color)"
+                    />
+                  </span>
+                ) : (
+                  <>
+                    <span>Delete Message</span>
+                    <span>Delete</span>
+                  </>
+                )}
+              </li>
+            </>
+          )}
+        </ul>
       </div>
+    </div>
   );
 };
 MessageMenu.propTypes = {
+  createdAt: PropTypes.any,
   isInThread: PropTypes.bool,
 };
 

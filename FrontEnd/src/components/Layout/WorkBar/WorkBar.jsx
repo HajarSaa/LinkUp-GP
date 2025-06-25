@@ -6,9 +6,9 @@ import {
   AiFillMessage,
   AiOutlineBell,
   AiFillBell,
-  AiOutlineClockCircle,
-  AiFillClockCircle,
 } from "react-icons/ai";
+import { CiBookmark } from "react-icons/ci";
+import { GoBookmarkFill } from "react-icons/go";
 import { IoIosMore } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import UserMenu from "./UserMenu/UserMenu";
@@ -67,7 +67,7 @@ function WorkBar() {
       label: "Home",
       iconOutline: <AiOutlineHome />,
       iconFill: <AiFillHome />,
-      navigation: `/channels/${main_channel?.id}`
+      navigation: `/channels/${main_channel?.id}`,
     },
     {
       label: "DMs",
@@ -81,9 +81,9 @@ function WorkBar() {
     },
     {
       label: "Later",
-      iconOutline: <AiOutlineClockCircle />,
-      iconFill: <AiFillClockCircle />,
-      navigation : '/later'
+      iconOutline: <CiBookmark />,
+      iconFill: <GoBookmarkFill />,
+      navigation: "/later",
     },
     {
       label: "More",
@@ -95,24 +95,29 @@ function WorkBar() {
   return (
     <div className={styles.work_bar}>
       <div className={styles.work_label}>{work_label}</div>
-      {sidebarItems.map((item, index) => {
-        const isActive = activeIndex === index;
 
-        return (
-          <div
-            key={index}
-            className={`${styles.iconWrapper} ${isActive ? styles.active : ""}`}
-            onClick={() => {
-              handleClick(index, item.navigation);
-            }}
-          >
-            <div className={styles.icon}>
-              {isActive ? item.iconFill : item.iconOutline}
+      <div className={styles.icons}>
+        {sidebarItems.map((item, index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <div
+              key={index}
+              className={`${styles.iconWrapper} ${
+                isActive ? styles.active : ""
+              }`}
+              onClick={() => {
+                handleClick(index, item.navigation);
+              }}
+            >
+              <div className={styles.icon}>
+                {isActive ? item.iconFill : item.iconOutline}
+              </div>
+              <span className={styles.label}>{item.label}</span>
             </div>
-            <span className={styles.label}>{item.label}</span>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
       <div className={styles.bottomSection}>
         <div className={styles.iconButton}>
@@ -123,10 +128,7 @@ function WorkBar() {
             className={styles.profilePhotoPlaceholder}
             onClick={() => dispatch(openUserMenuModal())}
           >
-            <UserImage
-              src={loggin_user.photo}
-              alt={loggin_user.userName}
-            />
+            <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
           </div>
           <UserStatusDot userId={loggin_user?.user} />
           <UserMenu />

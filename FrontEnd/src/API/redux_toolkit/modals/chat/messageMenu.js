@@ -7,6 +7,7 @@ const initialState = {
   activeMessageId: null,
   isSender: false,
   isInThread: false,
+  createdAt: null,
 };
 
 
@@ -21,6 +22,7 @@ const messageMenuSlice = createSlice({
         state.activeMessageId = action.payload.activeMessageId;
         state.isSender = action.payload.isSender;
         state.isInThread = action.payload.isInThread || false;
+        state.createdAt = action.payload.createdAt || null;
       }
     },
 
@@ -30,6 +32,7 @@ const messageMenuSlice = createSlice({
       state.activeMessageId = null;
       state.isSender = false;
       state.isInThread = false;
+      state.createdAt = null;
     },
   },
 });

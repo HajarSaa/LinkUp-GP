@@ -79,7 +79,7 @@
 .message_text {
   position: relative;
   line-height: 22px;
-  
+
 }
 
 .message_content {
@@ -267,4 +267,9 @@
 }
 .editingMessage {
   background-color: var(--active-color);
+}
+
+.edit{
+  display: flex;
+  align-items: center;
 }
