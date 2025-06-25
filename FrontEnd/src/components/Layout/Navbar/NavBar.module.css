@@ -16,6 +16,10 @@
   flex-basis: 70%;
 }
 
+.search_container {
+  background-color: #fff;
+}
+
 
 .nav_bar_left_empty {
   flex-basis: 40px;
