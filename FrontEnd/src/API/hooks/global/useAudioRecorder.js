@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { enableRecoding, setNotRecording } from "../../redux_toolkit/ui/recording";
 
 function useAudioRecorder() {
   const mediaRecorderRef = useRef(null);
@@ -8,6 +10,7 @@ function useAudioRecorder() {
   const [isPaused, setIsPaused] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const audioChunksRef = useRef([]);
+  const dispatch = useDispatch();
 
   const startRecording = async () => {
     try {
@@ -37,6 +40,7 @@ function useAudioRecorder() {
 
       mediaRecorder.start();
       setIsRecording(true);
+      dispatch(enableRecoding());
       setIsPaused(false);
     } catch (err) {
       console.error("Error starting recording:", err);
@@ -51,6 +55,7 @@ function useAudioRecorder() {
       mediaRecorderRef.current.stop();
     }
     setIsRecording(false);
+    dispatch(setNotRecording());
     setIsPaused(false);
   };
 
@@ -63,6 +68,7 @@ function useAudioRecorder() {
       mediaRecorderRef.current.stop(); // ستجهز الـ Blob تلقائيًا من onstop
     }
     setIsRecording(false);
+    dispatch(setNotRecording());
     setIsPaused(false);
   };
 
@@ -92,6 +98,7 @@ function useAudioRecorder() {
       console.log(e);
     }
     setIsRecording(false);
+    dispatch(setNotRecording());
     setIsPaused(false);
     setAudioBlob(null);
     cleanup();

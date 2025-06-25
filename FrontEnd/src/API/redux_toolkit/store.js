@@ -17,6 +17,9 @@ import userReducer from "./api_data/userSlice";
 import userProfileSlice from "./api_data/userProfileSlice";
 import typingReducer from "./api_data/typingSlice";
 //======
+// ==============================(Global)
+import recordingReducer from './ui/recording'
+//======
 // ==============================(channels)
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
 import browseChannelsReducer from './api_data/channels/browseChannels'
@@ -70,7 +73,7 @@ const store = configureStore({
     // ====
     createWorkspace: createWorkspaceReducer,
     workspaceMenu: workspaceMenuReducer,
-    search:searchReducer,
+    search: searchReducer,
     // ==============================(conversation)
     // ====
     convers: conversReducer,
@@ -104,6 +107,7 @@ const store = configureStore({
     notificationsModal: notificationsModalReducer,
     emojiPicker: emojiPickerReducer,
     userProfile: userProfileSlice,
+    recording: recordingReducer,
   },
 });
 

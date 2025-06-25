@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styles from "../MessageInput.module.css";
 import { FaCheck, FaPlus } from "react-icons/fa6";
 import { RxLetterCaseCapitalize } from "react-icons/rx";
@@ -35,12 +36,20 @@ function LowerToolbar({ isThread, isEditing }) {
   const dispatch = useDispatch();
   const audioBtnRef = useRef(null);
   const [shouldUpload, setShouldUpload] = useState(false);
+  const [overlayClick, setOverlayClick] = useState(false);
 
   const { id } = useParams();
   const location = useLocation();
   const isChannel = location.pathname.includes("/channels");
   const pageId = `${isChannel ? "channel" : "conversation"}-${id}`;
   const uploadMutation = useUploadMedia();
+
+  function handleOverlayClick() {
+    setOverlayClick(true);
+    setTimeout(() => {
+      setOverlayClick(false);
+    }, 1000);
+  }
 
   const handleOpenInputMenu = (e) => {
     const menuHeight = 140;
@@ -63,7 +72,6 @@ function LowerToolbar({ isThread, isEditing }) {
   };
 
   useEffect(() => {
-
     if (!shouldUpload || !audioBlob) return;
 
     const fileName = "Record Clip.mp3";
@@ -102,7 +110,6 @@ function LowerToolbar({ isThread, isEditing }) {
       }
     );
   }, [audioBlob, shouldUpload]);
-
 
   return (
     <div
@@ -151,9 +158,12 @@ function LowerToolbar({ isThread, isEditing }) {
               {isRecording ? <FaCheck /> : <AiOutlineAudio />}
             </span>
           </div>
-
+          {isRecording && (
+            <div className={styles.overlay} onClick={handleOverlayClick}></div>
+          )}
           {isRecording && (
             <LiveWaveform
+              overlayClick={overlayClick}
               isRecording={isRecording}
               audioBlob={audioBlob}
               onCancel={cancelRecording}
