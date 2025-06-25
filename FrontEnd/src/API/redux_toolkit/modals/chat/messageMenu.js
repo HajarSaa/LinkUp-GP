@@ -34,9 +34,14 @@ const messageMenuSlice = createSlice({
       state.isInThread = false;
       state.createdAt = null;
     },
+    clearMessageMenu: (state) => {
+      state.activeMessageId = null;
+      state.isSender = false;
+    }
+
   },
 });
 
-export const { openMessageMenuModal, closeMessageMenuModal } =
+export const { openMessageMenuModal, closeMessageMenuModal, clearMessageMenu } =
   messageMenuSlice.actions;
 export default messageMenuSlice.reducer;

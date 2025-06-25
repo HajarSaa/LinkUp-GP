@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import validator from "validator";
-import catchAsync from "../utils/catchAsync.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -27,17 +26,18 @@ const userSchema = new mongoose.Schema(
         message: "Passwords do not match",
       },
     },
-    passwordChangedAt: Date,
     workspaceProfiles: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "UserProfile",
       },
     ],
+    passwordChangedAt: Date,
+    passwordResetCode: String,
+    passwordResetExpires: Date,
   },
   { timestamps: true }
 );
-
 
 // Document Middlewares
 // Hash the password before saving it to the database
@@ -71,6 +71,15 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     return JWTTimestamp < changedTimestamp;
   }
   return false;
+};
+
+// Create a password reset token
+userSchema.methods.createPaswordResetToken = function () {
+  // Generate a 6-digit random code
+  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+  this.passwordResetCode = resetCode;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+  return resetCode;
 };
 
 const User = mongoose.model("User", userSchema);

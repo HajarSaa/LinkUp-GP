@@ -36,11 +36,18 @@ const channelMessagesSlice = createSlice({
         }
       });
     },
-
+    removeMessageById: (state, action) => {
+      const { messageId } = action.payload;
+      Object.keys(state.messagesByChannel).forEach((channelId) => {
+        state.messagesByChannel[channelId] = state.messagesByChannel[channelId].filter(
+          (msg) => msg._id !== messageId
+        );
+      });
+    },
   },
 });
 
-export const { setChannelMessages, appendMessage, updateMessageContent} =
+export const { setChannelMessages, appendMessage, updateMessageContent, removeMessageById} =
   channelMessagesSlice.actions;
 
 export default channelMessagesSlice.reducer;

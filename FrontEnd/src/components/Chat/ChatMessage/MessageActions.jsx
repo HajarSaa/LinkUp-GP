@@ -30,6 +30,10 @@ function MessageActions({
 
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
+
+    const messageElement = document.getElementById(`message-${message_id}`);
+    if (!messageElement) return;
+
     const menuWidth = 240;
     const padding = 0;
     const position = calculateSafePosition(e, menuWidth, null, padding);

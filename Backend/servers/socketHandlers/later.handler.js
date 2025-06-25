@@ -66,6 +66,7 @@ export default function laterHandler(socket, io) {
       const updated = await LaterItem.findOneAndUpdate(
         {
           userProfile: socket.userProfileId,
+          workspace: socket.workspaceId,
           messageId,
         },
         { $set: { status } },
@@ -99,6 +100,7 @@ export default function laterHandler(socket, io) {
         {
           messageId,
           userProfile: socket.userProfileId,
+          workspace: socket.workspaceId,
         },
         { $set: { reminderAt: new Date(reminderAt) } },
         { new: true }
@@ -115,7 +117,6 @@ export default function laterHandler(socket, io) {
     })
   );
   // Remove reminder
-  // Remove reminder time
   socket.on(
     "removeLaterReminder",
     socketAsync(async ({ messageId }, callback) => {
@@ -127,6 +128,7 @@ export default function laterHandler(socket, io) {
         {
           messageId,
           userProfile: socket.userProfileId,
+          workspace: socket.workspaceId,
         },
         { $set: { reminderAt: null } },
         { new: true }
@@ -148,6 +150,7 @@ export default function laterHandler(socket, io) {
     socketAsync(async ({ status }, callback) => {
       const query = {
         userProfile: socket.userProfileId,
+        workspace: socket.workspaceId,
         ...(status && VALID_STATUSES.includes(status) && { status }),
       };
 

@@ -13,9 +13,11 @@ import { selectMessagesByConvers } from "../../../API/redux_toolkit/selectore/co
 
 const MessageMenu = () => {
   const { isOpen, position, activeMessageId, isSender, isInThread } =
-    useSelector((state) => state.messageMenu);
+  useSelector((state) => state.messageMenu);
+  
   const delete_message = useDeleteMessage();
   const dispatch = useDispatch();
+
 
   // ... Edit Time Logic
 
@@ -54,68 +56,68 @@ const MessageMenu = () => {
     }
   }
 
-
-  // handle closing
   const closeModal = useCallback(() => {
     dispatch(closeMessageMenuModal());
   }, [dispatch]);
 
-  // handle copying
   const handleCopy = useCallback(() => {
-    const messageElement = document.getElementById(
-      `message-${activeMessageId}`
+    if (!activeMessageId) return;
+
+    const messageElement = document.getElementById(`message-${activeMessageId}`);
+    if (!messageElement) {
+      closeModal();
+      return;
+    }
+
+    const messageTextEl = messageElement.querySelector(
+      `#message-content-${activeMessageId}`
     );
-    if (messageElement) {
-      const messageTextEl = messageElement.querySelector(
-        `#message-content-${activeMessageId}`
-      );
-      const text = messageTextEl?.innerText || "";
-      if (text) {
-        navigator.clipboard.writeText(text);
-      }
+    const text = messageTextEl?.innerText || "";
+    if (text) {
+      navigator.clipboard.writeText(text);
     }
     closeModal();
   }, [activeMessageId, closeModal]);
 
-  // handle deleting
+  
   const handleDelete = useCallback(() => {
-    if (isSender) {
-      delete_message.mutate(activeMessageId, {
-        onSuccess: () => {
-          closeModal();
-        },
-      });
-    }
+    if (!isSender) return;
+
+    delete_message.mutate(activeMessageId, {
+      onSuccess: () => {
+        closeModal();
+      },
+      onError: (err) => {
+        console.error("❌ Delete failed:", err);
+      },
+    });
   }, [delete_message, activeMessageId, isSender, closeModal]);
 
-  // handle cediting
   const handleEdit = useCallback(() => {
     if (isSender) {
       dispatch(closeMessageMenuModal());
-      const messageElement = document.getElementById(
-        `message-${activeMessageId}`
-      );
+      const messageElement = document.getElementById(`message-${activeMessageId}`);
 
       const messageText = messageElement
-        ? messageElement.querySelector(`#message-content-${activeMessageId}`)
-            .textContent
+        ? messageElement.querySelector(`#message-content-${activeMessageId}`)?.textContent
         : "";
 
       dispatch(
         showEditMessageInput({
           messageId: activeMessageId,
-          messageText: messageText,
-          isInThread: isInThread,
+          messageText,
+          isInThread,
         })
       );
       closeModal();
     }
   }, [isSender, activeMessageId, closeModal, dispatch, isInThread]);
-
+  
   useEffect(() => {
     if (!isOpen) return;
-
+    
     const handleKeyDown = (event) => {
+
       if (event.key.toLowerCase() === "c") {
         handleCopy();
       }
@@ -146,6 +148,7 @@ const MessageMenu = () => {
   ]);
 
   if (!isOpen || !position) return null;
+  if (!isOpen || !position || !activeMessageId) return null;
 
   return (
     <div className={styles.overlay} onClick={handleClose}>
@@ -166,12 +169,14 @@ const MessageMenu = () => {
           </li>
           {isSender && (
             <>
+
               {isEditable && (
                 <li className={styles.item} onClick={handleEdit}>
                   <span>Edit Message</span>
                   <span>E</span>
                 </li>
               )}
+
               <li
                 className={`${styles.item} ${styles.delete_item}`}
                 onClick={handleDelete}
@@ -198,6 +203,7 @@ const MessageMenu = () => {
     </div>
   );
 };
+
 MessageMenu.propTypes = {
   createdAt: PropTypes.any,
   isInThread: PropTypes.bool,

@@ -20,9 +20,17 @@ function ThreadPanel() {
   const { isEditing, isInThread } = useSelector((state) => state.editMessage);
   const get_thread = useGetThreads(threadID);
   const { threads } = useSelector((state) => state.threads);
+
+  const { channelMedia } = useSelector((state) => state.channelMedia);
+  const { conversMedia } = useSelector((state) => state.conversMedia);
+
+  const isChannelThread = !!parentMessage?.channelId;
+  const media = isChannelThread ? channelMedia : conversMedia;
+
   let error_message = null;
   const roomId = threadID ? `thread:${threadID}` : null;
   useRoomSubscription(roomId);
+
   if (get_thread.error)
     if (get_thread.error.response.status) error_message = "";
     else error_message = get_thread.error.message;
@@ -32,6 +40,7 @@ function ThreadPanel() {
   }
 
   if (!isOpen) return null;
+
   return (
     <div className={styles.threadPanel}>
       <div className={styles.header}>
@@ -43,7 +52,9 @@ function ThreadPanel() {
         message={parentMessage}
         isThreadParent={true}
         isInThreadPanel={true}
+        media={media}
       />
+
       {get_thread.isLoading || !threads ? (
         <div className={styles.status}>
           <Spinner />
@@ -66,12 +77,15 @@ function ThreadPanel() {
                 isInThreadPanel={true}
                 key={thread._id}
                 message={thread}
+                media={media}
               />
             ))}
           </div>
         </div>
       )}
-      <TypingIndicator roomId={`thread:${threadID}`} />
+
+      <TypingIndicator roomId={roomId} />
+
       {isEditing && isInThread ? (
         <EditMessageInput />
       ) : (
