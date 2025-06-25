@@ -75,6 +75,11 @@ const messageSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    pinnedBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "UserProfile",
+      default: null,
+    },
   },
   { timestamps: true }
 );

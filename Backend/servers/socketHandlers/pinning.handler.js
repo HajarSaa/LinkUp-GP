@@ -35,6 +35,7 @@ export default function pinningHandler(socket, io) {
       if (!profile) throw new AppError("Unauthorized", 403);
 
       message.pinned = pin;
+      message.pinnedBy = pin ? profile._id : null;
       await message.save();
 
       const room = message.channelId
@@ -45,27 +46,10 @@ export default function pinningHandler(socket, io) {
         messageId: message._id,
         pinned: pin,
         updatedBy: socket.userId,
+        pinnedBy: pin ? profile._id : null,
       });
 
       callback?.({ success: true });
-    })
-  );
-
-  // Get all pinned messages in a room
-  socket.on(
-    "getPinnedMessages",
-    socketAsync(async ({ channelId, conversationId }, callback) => {
-      const query = { pinned: true };
-      if (channelId) query.channelId = channelId;
-      else if (conversationId) query.conversationId = conversationId;
-      else throw new AppError("channelId or conversationId required", 400);
-
-      const messages = await Message.find(query).lean();
-
-      callback?.({
-        success: true,
-        messages,
-      });
     })
   );
 }
