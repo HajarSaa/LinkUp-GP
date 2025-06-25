@@ -34,9 +34,13 @@ const threadsSlice = createSlice({
         };
       }
     },
-
+    removeThreadMessageById: (state, action) => {
+      const { messageId } = action.payload;
+      if (!state.threads) return;
+      state.threads = state.threads.filter((msg) => msg._id !== messageId);
+    },
   },
 });
 
-export const { setThreads, clearThreads, addThreadMessage, updateThreadMessageContent } = threadsSlice.actions;
+export const { setThreads, clearThreads, addThreadMessage, updateThreadMessageContent, removeThreadMessageById } = threadsSlice.actions;
 export default threadsSlice.reducer;

@@ -35,10 +35,17 @@ const conversMessagesSlice = createSlice({
         }
       });
     },
-
+    removeMessageById: (state, action) => {
+      const { messageId } = action.payload;
+      Object.keys(state.messagesByConvers).forEach((conversId) => {
+        state.messagesByConvers[conversId] = state.messagesByConvers[conversId].filter(
+          (msg) => msg._id !== messageId
+        );
+      });
+    },
   },
 });
 
-export const { setConversMessages, appendMessage, updateMessageContent } = conversMessagesSlice.actions;
+export const { setConversMessages, appendMessage, updateMessageContent, removeMessageById } = conversMessagesSlice.actions;
 
 export default conversMessagesSlice.reducer;
