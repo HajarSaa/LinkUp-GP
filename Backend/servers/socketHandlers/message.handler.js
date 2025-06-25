@@ -22,25 +22,18 @@ export default function messageHandler(socket, io) {
         tempId = null,
       } = data;
 
-      // Validate connection
       if (!socket.userId || !socket.userProfileId) {
         throw new AppError("User not connected", 401);
       }
 
-      // Validate destination
       if (!channelId && !conversationId) {
-        throw new AppError(
-          "Message must belong to a channel or conversation",
-          400
-        );
+        throw new AppError("Message must belong to a channel or conversation", 400);
       }
 
-      // Validate message existence
       if (!content && attachmentIds.length === 0) {
         throw new AppError("Message must have content or attachments", 400);
       }
 
-      // Determine messageType
       let messageType = "text";
       if (attachmentIds.length > 0 && content) {
         messageType = "mixed";
@@ -48,7 +41,6 @@ export default function messageHandler(socket, io) {
         messageType = "file";
       }
 
-      // Prepare payload
       const messagePayload = {
         content: content?.trim() || "",
         createdBy: socket.userProfileId,
@@ -60,14 +52,10 @@ export default function messageHandler(socket, io) {
         readBy: [socket.userProfileId],
       };
 
-      // Check parentMessage exists if replying
       if (parentMessageId) {
         const parent = await Message.findById(parentMessageId);
-        if (!parent) {
-          throw new AppError("Parent message not found", 404);
-        }
+        if (!parent) throw new AppError("Parent message not found", 404);
 
-        // Increment thread info
         await Message.findByIdAndUpdate(parentMessageId, {
           $inc: { threadCount: 1 },
           $set: { lastRepliedAt: new Date() },
@@ -75,20 +63,20 @@ export default function messageHandler(socket, io) {
         });
       }
 
-      // Create message
       const message = await Message.create(messagePayload);
 
-      // Update attached files
-      if (attachmentIds.length > 0) {
-        await File.updateMany(
-          { _id: { $in: attachmentIds } },
-          { $set: { attachedToMessage: message._id } }
-        );
-      }
+      await File.updateMany(
+        { _id: { $in: attachmentIds } },
+        { $set: { attachedToMessage: message._id } }
+      );
 
-      // Build socket payload
+      // ✅ Populate attachments for real-time payload as plain objects
+      const populatedMessage = await Message.findById(message._id)
+        .populate("attachments")
+        .lean();
+
       const payload = {
-        ...message.toObject(),
+        ...populatedMessage,
         tempId,
       };
 
@@ -98,7 +86,7 @@ export default function messageHandler(socket, io) {
 
       io.to(room).emit("newMessage", payload);
 
-      // Handle thread notification (for replies)
+      // Handle thread participants
       if (parentMessageId) {
         const involvedUserIds = new Set();
 
@@ -113,11 +101,8 @@ export default function messageHandler(socket, io) {
           involvedUserIds.add(parentFile.uploadedBy.toString());
         }
 
-        const replies = await Message.find({ parentMessageId }).select(
-          "createdBy"
-        );
+        const replies = await Message.find({ parentMessageId }).select("createdBy");
         replies.forEach((msg) => involvedUserIds.add(msg.createdBy.toString()));
-
         involvedUserIds.delete(socket.userId.toString());
 
         involvedUserIds.forEach((userId) => {
@@ -144,6 +129,7 @@ export default function messageHandler(socket, io) {
       });
     })
   );
+
   socket.on(
     "deleteMessage",
     socketAsync(async (messageId, callback) => {
@@ -155,20 +141,14 @@ export default function messageHandler(socket, io) {
       if (!message) throw new AppError("Message not found", 404);
 
       if (message.createdBy.toString() !== socket.userProfileId.toString()) {
-        throw new AppError(
-          "You are not authorized to delete this message",
-          403
-        );
+        throw new AppError("You are not authorized to delete this message", 403);
       }
 
-      // Handle thread logic
       if (message.parentMessageId) {
-        // Decrement threadCount
         await Message.findByIdAndUpdate(message.parentMessageId, {
           $inc: { threadCount: -1 },
         });
 
-        // Remove participant if this is their only reply
         const otherReplies = await Message.findOne({
           parentMessageId: message.parentMessageId,
           createdBy: message.createdBy,
@@ -182,11 +162,10 @@ export default function messageHandler(socket, io) {
         }
       }
 
-      // Delete attached files (if any)
-      if (message.attachments && message.attachments.length > 0) {
-        const attachedFiles = await File.find({
-          _id: { $in: message.attachments },
-        });
+      const attachmentIds = message.attachments || [];
+
+      if (attachmentIds.length > 0) {
+        const attachedFiles = await File.find({ _id: { $in: attachmentIds } });
 
         for (const file of attachedFiles) {
           try {
@@ -202,18 +181,18 @@ export default function messageHandler(socket, io) {
         }
       }
 
-      // Delete the message
       await message.deleteOne();
 
-      // Determine room
       const room = message.channelId
         ? `channel:${message.channelId}`
         : `conversation:${message.conversationId}`;
 
-      // Notify others in room
       io.to(room).emit("messageDeleted", {
         messageId: message._id,
         deletedBy: socket.userId,
+        channelId: message.channelId,
+        conversationId: message.conversationId,
+        attachmentIds,
       });
 
       callback?.({ success: true });
@@ -238,7 +217,6 @@ export default function messageHandler(socket, io) {
         );
       }
 
-      // Find message and check permission
       const message = await Message.findById(messageId);
       if (!message) throw new AppError("Message not found", 404);
 
@@ -251,7 +229,6 @@ export default function messageHandler(socket, io) {
         throw new AppError("Editing time window has expired", 400);
       }
 
-      // Update content + flags
       message.content = newContent;
       message.edited = true;
       message.editedAt = new Date();
