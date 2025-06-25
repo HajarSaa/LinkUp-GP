@@ -17,8 +17,7 @@ const sendEmail = async (options) => {
     from: '"LinkUp" <no-reply@LinkUp.com>',
     to: options.email,
     subject: options.subject,
-    // text: options.message,
-    html:options.html
+    text: options.message,
   };
 
   // 3) send the email

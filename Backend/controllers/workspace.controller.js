@@ -6,6 +6,8 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import Channel from "../models/channel.model.js";
+import WorkspaceInvitation from "../models/workspaceInvitation.model.js";
+import sendEmail from "../utils/email.js";
 
 export const getAllWorkspaces = getAll(Workspace);
 
@@ -357,5 +359,122 @@ export const signOutWorkspace = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: `Successfully signed out of workspace with ID: ${workspaceId}`,
+  });
+});
+
+export const inviteToWorkspace = catchAsync(async (req, res, next) => {
+  const email = req.body.email;
+  const workspaceId = req.params.id;
+
+  // Validate email format
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return next(new AppError("Invalid email format", 400));
+  }
+
+  // Find the workspace
+  const workspace = await Workspace.findById(workspaceId);
+  if (!workspace) {
+    return next(new AppError("No workspace found with that ID", 404));
+  }
+
+  // Check if user already exists in workspace
+  const existingUserProfile = await UserProfile.findOne({
+    email,
+    workspace: workspaceId,
+  });
+  if (existingUserProfile) {
+    return next(new AppError("User already exists in this workspace", 400));
+  }
+
+  // Check if the user is already invited
+  const existingInvitation = await WorkspaceInvitation.findOne({
+    email,
+    workspace: workspaceId,
+    status: "pending",
+  });
+  if (existingInvitation) {
+    return next(
+      new AppError("User already already invited to this workspace", 400)
+    );
+  }
+
+  // Create a unique token for the invitation
+  const token = Math.random().toString(36).substring(2, 15);
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days expiration
+
+  const invitation = await WorkspaceInvitation.create({
+    email,
+    workspace: workspaceId,
+    invitedBy: req.userProfile.id,
+    token,
+    expiresAt,
+  });
+
+  // Send the invitation email
+  const invitationLink = `linkup/workspace/invite/${invitation.token}`;
+  const message = `
+Hello,
+
+You have been invited to join the workspace "${workspace.name}".
+
+click the link below to accept the invitation:
+${invitationLink}
+
+This invitation will expire in 7 days.
+If you have any questions, feel free to contact the workspace owner.
+
+Best regards,
+${workspace.name} workspace team
+`;
+  try {
+    await sendEmail({
+      email,
+      subject: `Invitation to join workspace "${workspace.name}"`,
+      message,
+    });
+  } catch (error) {
+    return next(new AppError("Failed to send invitation email", 500));
+  }
+
+  // Send the response
+  res.status(201).json({
+    status: "success",
+    message: "Invitation sent successfully",
+  });
+});
+
+export const acceptInvite = catchAsync(async (req, res, next) => {
+  const { token } = req.body;
+
+  // Validate token
+  if (!token) {
+    return next(new AppError("Token is required", 400));
+  }
+
+  // Find the invitation
+  const invitation = await WorkspaceInvitation.findOne({
+    token,
+    status: "pending",
+  }).populate("workspace");
+  if (!invitation) {
+    return next(new AppError("Invalid or expired invitation token", 400));
+  }
+
+  // Check if the invitation has expired
+  if (new Date() > invitation.expiresAt) {
+    return next(new AppError("Invitation has expired", 400));
+  }
+
+  // Mark the invitation as accepted
+  invitation.status = "accepted";
+  await invitation.save();
+
+  // Send the response
+  res.status(200).json({
+    status: "success",
+    message: "Successfully accepted the invitation",
+    data: {
+      workspaceId: invitation.workspace.id,
+    },
   });
 });

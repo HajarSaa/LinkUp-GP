@@ -78,28 +78,21 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
   await sendEmail({
     email: user.email,
     subject: "Your password reset code",
-    html: `
-      <div style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;color:#333">
-        <div style="background:#8E7C5F;padding:30px;text-align:center;color:white">
-          <h1 style="margin:0;font-size:24px">🔗 LinkUp</h1>
-        </div>
-        <div style="padding:30px;background:white">
-          <p style="font-size:16px;margin-bottom:20px"><strong>Hello,</strong></p>
-          <p style="margin-bottom:20px">We received a request to reset your password for your <strong>LinkUp</strong> account.</p>
-          <p style="margin-bottom:10px">Your password reset code is:</p>
-          <div style="background:#f5f5f5;padding:20px;text-align:center;margin:20px 0;border-radius:8px;border:2px solid #ddd">
-            <span style="font-size:32px;font-weight:bold;color:#333;letter-spacing:3px;font-family:monospace">🔒 ${passwordResetCode}</span>
-          </div>
-          <div style="background:#f8f8f8;padding:15px;margin:20px 0;border-radius:5px;border:1px solid #ddd">
-            <span style="color:#666">⏰ This code is valid for the next <strong>10 minutes</strong>.</span>
-          </div>
-          <div style="background:#f8f9fa;padding:15px;margin:20px 0;border-left:4px solid #888;border-radius:0 5px 5px 0">
-            <p style="margin:0;font-size:14px;color:#555">🛡️ If you did not request this, please ignore this email. Your account will remain secure.</p>
-          </div>
-          <p style="margin-top:30px">Thanks,<br><strong style="color:#4a4a4a">The LinkUp Team</strong></p>
-        </div>
-      </div>
-    `,
+    message: `
+Hello,
+
+We received a request to reset your password for your LinkUp account.
+
+Your password reset code is:
+
+🔒 ${passwordResetCode}
+
+This code is valid for the next 10 minutes.
+
+If you did not request this, please ignore this email. Your account will remain secure.
+
+Thanks,  
+The LinkUp Team`,
   });
 
   // Send the response

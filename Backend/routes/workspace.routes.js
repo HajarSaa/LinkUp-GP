@@ -8,6 +8,8 @@ import {
   updateWorkspace,
   leaveWorkspace,
   signOutWorkspace,
+  inviteToWorkspace,
+  acceptInvite,
 } from "../controllers/workspace.controller.js";
 import {
   protect,
@@ -30,7 +32,8 @@ router
   .patch("/:id", updateWorkspace)
   .delete("/:id", deleteWorkspace)
   .post("/:id/leave", leaveWorkspace)
-  .post("/signout", signOutWorkspace);
+  .post("/signout", signOutWorkspace)
+  .post("/:id/invite", inviteToWorkspace)
+  .post("/acceptInvite", acceptInvite);
 
 export default router;
-  
