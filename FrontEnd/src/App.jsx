@@ -8,7 +8,7 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import EmptyLayout from "./layouts/MainLayout/EmptyLayout";
 import BrowseChannels from "./pages/dashboard/BrowseChannels";
 import DmPage from "./pages/dashboard/DmPage";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ChannelPage from "./pages/dashboard/ChannelPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -22,7 +22,6 @@ import Testing from "../Testing/Code/Testing";
 import LaterPage from "./pages/dashboard/LaterPage";
 
 function App() {
-
   return (
     <div className="app__body">
       <Routes>
@@ -37,7 +36,12 @@ function App() {
             <Route path="conversations/:id" element={<DmPage />} />
             <Route path="channels/:id" element={<ChannelPage />} />
             <Route path="browse-channels" element={<BrowseChannels />} />
-            <Route path="later" element={<LaterPage />} />
+            {/* التفرعات الخاصة بـ later */}
+            <Route path="later" element={<LaterPage />}>
+              <Route path="conversations/:id" element={<DmPage />} />
+              <Route path="channels/:id" element={<ChannelPage />} />
+            </Route>
+            
             <Route path="testing" element={<Testing />} />
           </Route>
 

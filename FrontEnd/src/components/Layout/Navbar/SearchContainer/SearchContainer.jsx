@@ -8,7 +8,7 @@ import { CiSearch } from "react-icons/ci";
 import { CgClose } from "react-icons/cg";
 import SearchItem from "./SearchItem/SearchItem";
 import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
-import { MdManageSearch } from "react-icons/md";
+
 
 function SearchContainer({ workspace, targetRef }) {
   const inputRef = useRef(null);

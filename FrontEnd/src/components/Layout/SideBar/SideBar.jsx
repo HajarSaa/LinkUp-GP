@@ -17,7 +17,7 @@ import LaterSideBar from "./LaterSideBar/LaterSideBar";
 function SideBar() {
   const { workspace } = useSelector((state) => state.workspace);
   const dispatch = useDispatch();
-  const isLater = location.pathname === "/later";
+  const isLater = location.pathname.startsWith("/later");
   // Custom hook for resizing the sidebar
   // It returns the current width and a function to start resizing
   const sidebarRef = useRef(null);
