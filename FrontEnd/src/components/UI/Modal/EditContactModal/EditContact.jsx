@@ -102,7 +102,8 @@ const EditContactModal = () => {
     phone: data?.phone || "",
   });
 
-  const phoneRef = useRef();
+  // const phoneRef = useRef();
+  const mailRef = useRef();
 
   useEffect(() => {
     if (isOpen && data) {
@@ -132,7 +133,6 @@ const EditContactModal = () => {
     updateProfile.mutate(
       {
         email: form.email.trim(),
-        // phone: form.phone, // إذا هتضيفي phone في الـ backend
       },
       {
         onSuccess: () => {
@@ -143,7 +143,8 @@ const EditContactModal = () => {
   };
 
   useEffect(() => {
-    if (isOpen && phoneRef.current) phoneRef.current.focus();
+    // if (isOpen && phoneRef.current) phoneRef.current.focus();
+    if (isOpen && mailRef.current) mailRef.current.focus();
   }, [isOpen]);
 
   if (!isOpen || !data) return null;
@@ -156,23 +157,24 @@ const EditContactModal = () => {
       title="Edit Contact information"
     >
       <form onSubmit={handleSubmit} className={styles.form}>
-        {/* <label className={styles.mailLabel}> */}
+        <label className={styles.mailLabel}>
           {/* <span className={styles.icon}>
             <FaLock />
             </span>
             <span>Email Address</span> */}
-            <label>
+            {/* <label> */}
           Email Address
         </label>
         <input
+          ref={mailRef}
           type="email"
           name="email"
           value={form.email}
           onChange={handleChange}
-          className={styles.phoneInput}
+          className={styles.input}
         />
 
-        <label>Phone</label>
+        {/* <label>Phone</label>
         <input
           ref={phoneRef}
           type="text"
@@ -180,7 +182,7 @@ const EditContactModal = () => {
           value={form.phone}
           onChange={handleChange}
           className={styles.phoneInput}
-        />
+        /> */}
 
         <div className={styles.buttons}>
           <button

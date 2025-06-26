@@ -59,53 +59,7 @@ export const updateMyProfile = catchAsync(async (req, res, next) => {
 });
 
 // Update user profile image (can be in updateMyProfile  after implementation )
-// export const updateUserImage = catchAsync(async (req, res, next) => {
-//   const workspaceId = req.cookies.workspace;
-//   if (!workspaceId) {
-//     return next(new AppError("Workspace ID not found ", 404));
-//   }
-
-//   if (!req.file) {
-//     return next(new AppError("Please upload your image", 400));
-//   }
-
-//   // Set photo path
-//   const photoPath = req.file.path;
-
-//   // Check if the user has a profile in this workspace
-//   const userProfile = await UserProfile.findOne({
-//     user: req.user._id,
-//     workspace: workspaceId,
-//   });
-
-//   if (!userProfile) {
-//     return next(
-//       new AppError(
-//         `No user profile found for user ${req.user._id} in workspace ${workspaceId}`,
-//         404
-//       )
-//     );
-//   }
-
-//   // Update the photo in the user's profile
-//   userProfile.photo = photoPath;
-//   await userProfile.save();
-
-//   res.status(200).json({
-//     status: "Success",
-//     data: {
-//       userProfile,
-//     },
-//   });
-// });
-
-
 export const updateUserImage = catchAsync(async (req, res, next) => {
-  console.log("🧪 updateUserImage called");
-  console.log("📦 req.file:", req.file);
-  console.log("👤 req.user:", req.user);
-  console.log("🍪 req.cookies.workspace:", req.cookies.workspace);
-
   const workspaceId = req.cookies.workspace;
   if (!workspaceId) {
     return next(new AppError("Workspace ID not found ", 404));
@@ -115,8 +69,10 @@ export const updateUserImage = catchAsync(async (req, res, next) => {
     return next(new AppError("Please upload your image", 400));
   }
 
+  // Set photo path
   const photoPath = req.file.path;
 
+  // Check if the user has a profile in this workspace
   const userProfile = await UserProfile.findOne({
     user: req.user._id,
     workspace: workspaceId,
@@ -131,8 +87,8 @@ export const updateUserImage = catchAsync(async (req, res, next) => {
     );
   }
 
+  // Update the photo in the user's profile
   userProfile.photo = photoPath;
-  // userProfile.photo = String(photoPath);
   await userProfile.save();
 
   res.status(200).json({
