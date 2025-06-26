@@ -391,13 +391,30 @@ const ProfileEditModal = () => {
     fileInputRef.current?.click();
   };
 
+  // const handleFileChange = (event) => {
+  //   const image = event.target.files[0];
+  //   if (!image) return;
+  //   const formData = new FormData();
+  //   formData.append("photo", image);
+  //   update_image.mutate(formData);
+  // };
   const handleFileChange = (event) => {
     const image = event.target.files[0];
     if (!image) return;
+
     const formData = new FormData();
     formData.append("photo", image);
+
+    // Optimistically show new image
+    const tempURL = URL.createObjectURL(image);
+    setProfileData((prev) => ({
+      ...prev,
+      photo: tempURL,
+    }));
+
     update_image.mutate(formData);
   };
+
 
   const handleClose = function () {
     dispatch(closeEditUserProfile());
@@ -542,7 +559,8 @@ const ProfileEditModal = () => {
                     <Spinner />
                   </div>
                 )}
-                <UserImage src={myData?.photo} alt={myData?.userName} />
+                {/* <UserImage src={myData?.photo} alt={myData?.userName} /> */}
+                <UserImage src={profileData?.photo || myData?.photo} alt={myData?.userName} />
               </div>
               <Button
                 type="button"

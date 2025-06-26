@@ -92,6 +92,17 @@ const workspaceSlice = createSlice({
         };
       }
     },
+    updateMemberPhoto: (state, action) => {
+  const { userId, photo } = action.payload;
+  const memberIndex = state.workspace?.members?.findIndex(
+    (m) => m.user === userId || m._id === userId
+  );
+
+  if (memberIndex !== -1) {
+    state.workspace.members[memberIndex].photo = photo;
+  }
+},
+
 
   },
 });
@@ -109,6 +120,7 @@ export const {
   removeChannelFromList,
   setWorkspaceMembers,
   updateMemberProfile,
+  updateMemberPhoto,
 
 } = workspaceSlice.actions;
 
