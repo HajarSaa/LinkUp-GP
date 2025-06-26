@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import Channel from "../models/channel.model.js";
 import Conversation from "../models/converstion.model.js";
 import Message from "../models/message.model.js";
 import File from "../models/file.model.js";
+import UserProfile from "../models/userProfile.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
@@ -394,5 +396,52 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: "success",
     data: null,
+  });
+});
+
+export const togglePinMessage = catchAsync(async (req, res, next) => {
+  const messageId = req.params.id;
+  const userId = req.user._id;
+  const pinValue = req.query.pin ?? req.body.pin;
+
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+    return next(new AppError("Invalid message ID", 400));
+  }
+
+  if (typeof pinValue === "undefined") {
+    return next(new AppError("Pin value is required", 400));
+  }
+
+  const pin = pinValue === true || pinValue === "true";
+
+  const message = await Message.findById(messageId);
+  if (!message) {
+    return next(new AppError("No message found with this ID", 404));
+  }
+
+  const workspaceId = message.channelId
+    ? (await Channel.findById(message.channelId)).workspaceId
+    : (await Conversation.findById(message.conversationId)).workspaceId;
+
+  const userProfile = await UserProfile.findOne({
+    user: userId,
+    workspace: workspaceId,
+  });
+
+  if (!userProfile) {
+    return next(new AppError("You are not member in this workspace", 403));
+  }
+
+  message.pinned = pin;
+  message.pinnedBy = pin ? userProfile._id : null;
+  await message.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      messageId: message._id,
+      pinned: message.pinned,
+      pinnedBy: message.pinnedBy,
+    },
   });
 });

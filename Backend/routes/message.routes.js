@@ -12,6 +12,7 @@ import {
   getConversationMedia,
   getChannelPinnedMessages,
   getConversationPinnedMessages,
+  togglePinMessage,
 } from "../controllers/message.controller.js";
 import {
   protect,
@@ -35,6 +36,7 @@ router
   .get("/:id", getMessage)
   .post("/", createMessage)
   .patch("/:id", updateMessage)
+  .patch("/:id/pin", togglePinMessage)
   .delete("/:id", deleteMessage);
 
 export default router;
