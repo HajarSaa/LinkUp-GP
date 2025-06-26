@@ -11,54 +11,81 @@ import UserImage from "../../../../UI/User/UserImage";
 import { MdManageSearch } from "react-icons/md";
 import { closeSearch } from "../../../../../API/redux_toolkit/ui/searchSlice";
 
-function SearchItem({ search_item }) {
+function SearchItem({
+  search_item,
+  isActive = false,
+  isViewProfile = false,
+  noResultText,
+}) {
   const { workspace } = useSelector((state) => state.workspace);
   const navigateTo = useNavigate();
   const dispatch = useDispatch();
 
-  const isChannel = search_item?.isChannel;
-  const isMember = search_item?.conversationId;
+  const itemClass = `${styles.search_item} ${styles.contact_item} ${
+    isActive ? styles.active : ""
+  }`;
 
-  function handleChannelNavigate() {
-    dispatch(closeSearch());
-    navigateTo(`/channels/${search_item?.id}`);
-  }
-  function handleConversNavigate() {
-    dispatch(closeSearch());
-    navigateTo(`/conversations/${search_item?.conversationId}`);
-  }
-  function handleUserProfileNavigate() {
-    dispatch(closeSearch());
-    navigateTo(`/conversations/${search_item?.conversationId}`);
-    dispatch(
-      dispatch(
-        openUserPanel({
-          type: "userPanel",
-          panel_id: search_item?.member._id,
-          page_id: search_item?.conversationId,
-        })
-      )
-    );
-  }
-
-  if (!search_item)
+  if (noResultText) {
     return (
-      <div className={`${styles.search_item} ${styles.contact_item}`}>
+      <div className={itemClass}>
         <div className={styles.search_item_left_icon_ch}>
           <span className={styles.member_icon}>
             <MdManageSearch />
           </span>
         </div>
-        <span>Find in {workspace.name} Workspace</span>
+        <span>
+          No results for &quot;<strong>{noResultText}</strong>&quot;
+        </span>
+      </div>
+    );
+  }
+
+  if (!search_item)
+    return (
+      <div className={styles.search_item}>
+        <div className={styles.search_item_left_icon_ch}>
+          <span className={styles.member_icon}>
+            <MdManageSearch />
+          </span>
+        </div>
+        <span>Search in {workspace.name} Workspace</span>
       </div>
     );
 
-  if (isMember)
-    return (
-      <>
+  if (search_item.conversationId) {
+    if (isViewProfile) {
+      return (
         <div
-          className={`${styles.search_item} ${styles.contact_item}`}
-          onClick={handleConversNavigate}
+          className={itemClass}
+          onClick={() => {
+            dispatch(closeSearch());
+            navigateTo(`/conversations/${search_item.conversationId}`);
+            dispatch(
+              openUserPanel({
+                type: "userPanel",
+                panel_id: search_item.member._id,
+                page_id: search_item.conversationId,
+              })
+            );
+          }}
+        >
+          <span className={styles.member_icon}>
+            <PiArrowBendDownRight />
+          </span>
+          <span className={styles.member_icon}>
+            <FcContacts />
+          </span>
+          <span>View profile</span>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className={itemClass}
+          onClick={() => {
+            dispatch(closeSearch());
+            navigateTo(`/conversations/${search_item.conversationId}`);
+          }}
         >
           <div className={styles.search_item_left_icon}>
             <UserImage
@@ -77,36 +104,33 @@ function SearchItem({ search_item }) {
             )}
           </div>
         </div>
-        <div
-          className={`${styles.search_item} ${styles.contact_item}`}
-          onClick={handleUserProfileNavigate}
-        >
-          <span className={styles.member_icon}>
-            <PiArrowBendDownRight />
-          </span>
-          <span className={styles.member_icon}>
-            <FcContacts />
-          </span>
-          <span>View profile</span>
-        </div>
-      </>
-    );
-  if (isChannel)
+      );
+    }
+  }
+
+  if (search_item.isChannel) {
     return (
       <div
-        className={`${styles.search_item} ${styles.contact_item}`}
-        onClick={handleChannelNavigate}
+        className={itemClass}
+        onClick={() => {
+          dispatch(closeSearch());
+          navigateTo(`/channels/${search_item.id}`);
+        }}
       >
         <div className={styles.search_item_left_icon_ch}>
-          {" "}
           <ChannelType type={search_item.type} />
         </div>
         <span>{search_item.name}</span>
       </div>
     );
+  }
 }
+
 SearchItem.propTypes = {
   search_item: PropTypes.any,
+  isActive: PropTypes.bool,
+  isViewProfile: PropTypes.bool,
+  noResultText: PropTypes.string,
 };
 
 export default SearchItem;
