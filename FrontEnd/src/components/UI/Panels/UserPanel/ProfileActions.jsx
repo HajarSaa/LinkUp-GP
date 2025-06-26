@@ -1,7 +1,7 @@
 import styles from "./UserPanel.module.css";
 import { LuMessageCircle } from "react-icons/lu";
 import IconDropdown from "../../Dropdown/IconDropdown";
-import MoreDropdown from "../../Dropdown/MoreDropdown";
+// import MoreDropdown from "../../Dropdown/MoreDropdown";
 import { FiHeadphones } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import Button from "../../Buttons/Button/Button";
@@ -15,14 +15,14 @@ const ProfileActions = () => {
   function handleOpen() {
     dispatch(openSetStatusModal(userProfile));
   }
-  const moreMenuItems = [
-    { label: "Copy display name: @user" },
-    { label: "Share contact" },
-    { label: "View files" },
-    { label: "Copy member ID" },
-    { label: "Copy link to profile" },
-    { label: "Hide user", isDanger: true },
-  ];
+  // const moreMenuItems = [
+  //   { label: "Copy display name: @user" },
+  //   { label: "Share contact" },
+  //   { label: "View files" },
+  //   { label: "Copy member ID" },
+  //   { label: "Copy link to profile" },
+  //   { label: "Hide user", isDanger: true },
+  // ];
   const items = [
     { label: "Start Huddle", icon: <FiHeadphones /> },
     { label: "Join Huddle", icon: <IoIosLink /> },
@@ -30,9 +30,9 @@ const ProfileActions = () => {
   return (
     <div className={styles.profileActions}>
       {userProfile?.isMe ? (
-        <button className={styles.button} onClick={handleOpen}>
+        <Button className={styles.button} onClick={handleOpen}>
           Set Status
-        </button>
+        </Button>
       ) : (
         <>
           <Button className={styles.button} icon={<LuMessageCircle />}>
@@ -42,7 +42,7 @@ const ProfileActions = () => {
           <IconDropdown icon={<FiHeadphones />} label="Huddle" items={items} />
         </>
       )}
-      <MoreDropdown items={moreMenuItems} />
+      {/* <MoreDropdown items={moreMenuItems} /> */}
     </div>
   );
 };

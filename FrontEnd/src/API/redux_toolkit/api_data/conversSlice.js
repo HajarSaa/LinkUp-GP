@@ -18,9 +18,18 @@ const conversSlice = createSlice({
     setChatMat: (state, action) => {
       state.chatMate = action.payload;
     },
+    updateChatMate: (state, action) => {
+      if (!state.chatMate) return;
+      Object.assign(state.chatMate, action.payload);
+    },
+    updateChatMatePhoto: (state, action) => {
+      if (state.chatMate) {
+        state.chatMate.photo = action.payload;
+      }
+    },
   },
 });
 
-export const { setConvers, setChatMat, setConversMessages } = conversSlice.actions;
+export const { setConvers, setChatMat, setConversMessages, updateChatMate, updateChatMatePhoto } = conversSlice.actions;
 
 export default conversSlice.reducer;

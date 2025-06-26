@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeChatPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import useGetUserProfile from "../../../../API/hooks/userProfile/useGetUserProfile";
-import { useParams } from "react-router-dom";
 import ProfileEditModal from "../../Modal/EditProfileModal/EditProfile";
 import EditContact from "../../Modal/EditContactModal/EditContact";
 import EditStartDate from "../../Modal/EditStartDateModal/EditStartDate";
@@ -16,18 +15,24 @@ import UploadProfilePhotoModal from "../../Modal/UploadProfilePhotoModal/UploadP
 
 const UserPanel = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const userProfile = useSelector((state) => state.userProfile.data);
 
+  // Get ID of the user whose panel is open
   const { isOpen, userData: user_id } = useSelector(
     (state) => state.chatPanel.userPanel
   );
+
+  // Get profile data from Redux
+  const userProfile = useSelector((state) => state.userProfile.data);
+
+  // Fetch user profile into Redux
   useGetUserProfile(user_id);
 
   const handleClose = () => {
-    dispatch(closeChatPanel({ type: "userPanel", page_id: id }));
+    dispatch(closeChatPanel({ type: "userPanel", page_id: user_id }));
   };
+
   if (!isOpen) return null;
+
   return (
     <>
       <div className={styles.profileCard}>
@@ -36,7 +41,9 @@ const UserPanel = () => {
           <CloseIcon closeEvent={handleClose} />
         </div>
 
-        {userProfile && (
+        {!userProfile ? (
+          <div className={styles.panel_body}>User not found</div>
+        ) : (
           <div className={styles.panel_body}>
             <ProfileImage />
             <ProfileInfo />
@@ -46,7 +53,8 @@ const UserPanel = () => {
           </div>
         )}
       </div>
-      {/* User panel Modals */}
+
+      {/* Modals */}
       <ProfileEditModal />
       <EditContact />
       <EditStartDate />

@@ -1,5 +1,5 @@
 .profileModal {
-  width: 600px;
+  width: 700px;
   max-width: 100%;
   min-width: 550px;
   height: 90%;
@@ -134,8 +134,8 @@
 
   .profilePhotoPlaceholder {
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 230px;
+    height: 230px;
     margin-top: -10px;
     background: #000;
     border-radius: 10px;
@@ -231,4 +231,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: 1px 16px;
+  border-radius: 8px;
+  border: 2px solid var(--divider-color);
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 17px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: var(--bg-white);
+  color: #1d1c1d;
+}
+
+.input::placeholder {
+  color: var(--text-color-muted);
+}
+
+.input:focus {
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgb(183, 208, 227);
 }

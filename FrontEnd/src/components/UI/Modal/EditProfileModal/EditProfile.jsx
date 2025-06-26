@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
 import Button from "../../Buttons/Button/Button";
-import { AiOutlineAudio } from "react-icons/ai";
 import UserImage from "../../User/UserImage";
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
@@ -12,6 +11,7 @@ import { closeEditUserProfile } from "../../../../API/redux_toolkit/modals/userP
 import useUpdateUserImage from "../../../../API/hooks/userProfile/useUpdateUserImage";
 import Spinner from "../../Spinner/Spinner";
 import useUpdateUserProfile from "../../../../API/hooks/userProfile/useUpdateUserProfile";
+
 const ProfileEditModal = () => {
   const dispatch = useDispatch();
   const { isOpen, myData, focusField } = useSelector(
@@ -19,9 +19,11 @@ const ProfileEditModal = () => {
   );
   const update_image = useUpdateUserImage();
   const update_profile = useUpdateUserProfile();
+
   const [profileData, setProfileData] = useState({
     userName: "",
   });
+
   const [inputsData, setInputsData] = useState({
     displayName: "",
     title: "",
@@ -37,7 +39,7 @@ const ProfileEditModal = () => {
       }));
     }
   }, [myData]);
-  // =====================(Handle Inputs Focuses)
+
   const fullNameRef = useRef(null);
   const displayNameRef = useRef(null);
   const titleRef = useRef(null);
@@ -59,7 +61,6 @@ const ProfileEditModal = () => {
     }
   }, [isOpen, focusField]);
 
-  // =====================(Handle Image Uploading)
   const fileInputRef = useRef(null);
 
   const handleUploadImage = () => {
@@ -68,19 +69,23 @@ const ProfileEditModal = () => {
   const handleFileChange = (event) => {
     const image = event.target.files[0];
     if (!image) return;
+
     const formData = new FormData();
     formData.append("photo", image);
+
+    // Optimistically show new image
+    const tempURL = URL.createObjectURL(image);
+    setProfileData((prev) => ({
+      ...prev,
+      photo: tempURL,
+    }));
+
     update_image.mutate(formData);
   };
-  // ==================================================
+
 
   const handleClose = function () {
     dispatch(closeEditUserProfile());
-  };
-
-  const handleRecording = function (e) {
-    e.stopPropagation();
-    console.log("Recooording");
   };
 
   const userNameChange = (e) => {
@@ -89,20 +94,26 @@ const ProfileEditModal = () => {
       userName: e.target.value,
     }));
   };
+
   const displayNameChange = (e) => {
     setInputsData((prev) => ({
       ...prev,
       displayName: e.target.value,
     }));
   };
+
   const titleChange = (e) => {
     setInputsData((prev) => ({
       ...prev,
       title: e.target.value,
     }));
   };
+
+  const namePronunciationChange = (e) => {
+    setInputsData({ ...inputsData, namePronunciation: e.target.value });
+  };
+
   const handleSelect = (zone) => {
-    console.log(zone);
     setInputsData((prev) => ({
       ...prev,
       timeZone: zone,
@@ -110,22 +121,28 @@ const ProfileEditModal = () => {
     setIsDropdownOpen(false);
   };
 
-  const namePronunciationChange = (e) => {
-    setInputsData({ ...inputsData, namePronunciation: e.target.value });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isDifferent = profileData?.userName !== myData?.userName;
-    if (isDifferent)
-      update_profile.mutate(profileData, {
-        onSuccess: () => {
-          handleClose();
-        },
-      });
-    else {
-      handleClose();
+    const updates = {};
+
+    if (profileData?.userName && profileData.userName !== myData?.userName) {
+      updates.userName = profileData.userName;
     }
+
+    if (inputsData?.title && inputsData.title !== myData?.about) {
+      updates.about = inputsData.title; 
+    }
+
+    if (Object.keys(updates).length === 0) {
+      handleClose();
+      return;
+    }
+
+    update_profile.mutate(updates, {
+      onSuccess: () => {
+        handleClose();
+      },
+    });
   };
 
   const dropdownRef = useRef(null);
@@ -175,6 +192,7 @@ const ProfileEditModal = () => {
                 value={profileData?.userName}
                 onChange={userNameChange}
                 placeholder="Full name"
+                className={styles.input}
               />
 
               <label>Display name</label>
@@ -185,6 +203,7 @@ const ProfileEditModal = () => {
                 value={inputsData?.displayName || inputsData?.userName}
                 onChange={displayNameChange}
                 placeholder="Display name"
+                className={styles.input}
               />
               <p className={styles.description}>
                 This could be your first name, or a nickname – however you would
@@ -199,6 +218,7 @@ const ProfileEditModal = () => {
                 value={inputsData?.title}
                 onChange={titleChange}
                 placeholder="Title"
+                className={styles.input}
               />
             </div>
             <div className={styles.profilePhotoSection}>
@@ -209,7 +229,8 @@ const ProfileEditModal = () => {
                     <Spinner />
                   </div>
                 )}
-                <UserImage src={myData?.photo} alt={myData?.userName} />
+                {/* <UserImage src={myData?.photo} alt={myData?.userName} /> */}
+                <UserImage src={profileData?.photo || myData?.photo} alt={myData?.userName} />
               </div>
               <Button
                 type="button"
@@ -227,18 +248,6 @@ const ProfileEditModal = () => {
               />
             </div>
           </div>
-          <p className={styles.description}>Let people know what you do at :</p>
-
-          <label>Name recording</label>
-          <Button
-            type="button"
-            className={styles.recordButton}
-            onClick={handleRecording}
-          >
-            <AiOutlineAudio />
-            Record Audio Clip
-          </Button>
-
           <label>Name pronunciation</label>
           <input
             ref={pronunciationRef}
@@ -249,6 +258,7 @@ const ProfileEditModal = () => {
             placeholder={
               inputsData?.namePronunciation || `Zoe (pronounce 'zo-ee')`
             }
+            className={styles.input}
           />
 
           <label>Time zone</label>

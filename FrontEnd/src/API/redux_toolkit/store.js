@@ -58,6 +58,7 @@ import messageReactionsReducer from "./api_data/messages/messageReactionsSlice";
 //======
 
 const store = configureStore({
+  
   reducer: {
     currentUser: userReducer,
     resizing: resizingReducer,

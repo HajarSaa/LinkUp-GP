@@ -33,6 +33,12 @@ const ProfileInfo = () => {
               </span>
             )}
           </div>
+          {userProfile?.about && (
+            <span className={styles.jobTitle}>{userProfile?.about}</span>
+          )}
+          {/* {userProfile?.gender && (
+            <span className={styles.gender}>{userProfile?.gender}</span>
+          )} */}
           {userProfile?.isMe && (
             <div
               className={styles.user_pronounc}
@@ -43,12 +49,6 @@ const ProfileInfo = () => {
               <span>+</span>
               <span>Add name pronunciation</span>
             </div>
-          )}
-          {userProfile?.about && (
-            <span className={styles.jobTitle}>{userProfile?.about}</span>
-          )}
-          {userProfile?.gender && (
-            <span className={styles.gender}>{userProfile?.gender}</span>
           )}
         </div>
         <p className={styles.status}>
