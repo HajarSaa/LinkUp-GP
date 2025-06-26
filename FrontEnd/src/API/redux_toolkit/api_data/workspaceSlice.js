@@ -47,13 +47,6 @@ const workspaceSlice = createSlice({
         state.workspace.members = action.payload;
       }
     },
-    // updateChannelInList: (state, action) => {
-    //   const updated = action.payload;
-    //   state.workspace.channels = state.workspace.channels.map((c) =>
-    //     c._id === updated._id ? updated : c
-    //   );
-    // },
-
     updateChannelInList: (state, action) => {
       const { _id, members } = action.payload;
       const channel = state.workspace.channels.find((c) => c._id === _id);

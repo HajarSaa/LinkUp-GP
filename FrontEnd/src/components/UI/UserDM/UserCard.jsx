@@ -39,11 +39,6 @@ const UserCard = () => {
             <UserImage src={receiver?.photo} alt={receiver?.userName} />
           </div>
           <div className={styles.info}>
-            {/* <div className={styles.user} onClick={handelOpenUserPanel}>
-              <span className={styles.name}>{receiver.userName}</span>
-              <UserStatus userId={receiver?.user} /> */}
-              {/* <UserStatus status={receiver?.status} /> */}
-            {/* </div> */}
             <div className={styles.user} onClick={handelOpenUserPanel}>
               <span className={styles.name}>{receiver.userName}</span>
               <UserStatus userId={receiver?.user} />

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
 import Button from "../../Buttons/Button/Button";
-// import { AiOutlineAudio } from "react-icons/ai";
 import UserImage from "../../User/UserImage";
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
@@ -88,11 +87,6 @@ const ProfileEditModal = () => {
   const handleClose = function () {
     dispatch(closeEditUserProfile());
   };
-
-  // const handleRecording = function (e) {
-  //   e.stopPropagation();
-  //   console.log("Recooording");
-  // };
 
   const userNameChange = (e) => {
     setProfileData((prev) => ({
@@ -254,18 +248,6 @@ const ProfileEditModal = () => {
               />
             </div>
           </div>
-          {/* <p className={styles.description}>Let people know what you do at :</p>
-
-          <label>Name recording</label>
-          <Button
-            type="button"
-            className={styles.recordButton}
-            onClick={handleRecording}
-          >
-            <AiOutlineAudio />
-            Record Audio Clip
-          </Button> */}
-
           <label>Name pronunciation</label>
           <input
             ref={pronunciationRef}

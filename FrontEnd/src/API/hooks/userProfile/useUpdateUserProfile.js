@@ -5,14 +5,12 @@ import socket from "../../sockets/socketService";
 function useUpdateUserProfile() {
   return useMutation({mutationFn: (user_data) => updateUserProfile(user_data),
 onSuccess: (_, variables) => {
-  // if (!variables?.userName) return;
   if (!variables?.userName && !variables?.email && !variables?.about) return;
 
 
   socket.emit(
     "userProfile:updateInfo",
     { 
-      // updates: { userName: variables.userName }
       updates: variables
     },
     (res) => {
