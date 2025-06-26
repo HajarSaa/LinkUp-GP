@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Modal from "../Modal";
 import styles from "./EditProfile.module.css";
 import Button from "../../Buttons/Button/Button";
-import { AiOutlineAudio } from "react-icons/ai";
+// import { AiOutlineAudio } from "react-icons/ai";
 import UserImage from "../../User/UserImage";
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
@@ -89,10 +89,10 @@ const ProfileEditModal = () => {
     dispatch(closeEditUserProfile());
   };
 
-  const handleRecording = function (e) {
-    e.stopPropagation();
-    console.log("Recooording");
-  };
+  // const handleRecording = function (e) {
+  //   e.stopPropagation();
+  //   console.log("Recooording");
+  // };
 
   const userNameChange = (e) => {
     setProfileData((prev) => ({
@@ -133,6 +133,10 @@ const ProfileEditModal = () => {
 
     if (profileData?.userName && profileData.userName !== myData?.userName) {
       updates.userName = profileData.userName;
+    }
+
+    if (inputsData?.title && inputsData.title !== myData?.about) {
+      updates.about = inputsData.title; 
     }
 
     if (Object.keys(updates).length === 0) {
@@ -194,6 +198,7 @@ const ProfileEditModal = () => {
                 value={profileData?.userName}
                 onChange={userNameChange}
                 placeholder="Full name"
+                className={styles.input}
               />
 
               <label>Display name</label>
@@ -204,6 +209,7 @@ const ProfileEditModal = () => {
                 value={inputsData?.displayName || inputsData?.userName}
                 onChange={displayNameChange}
                 placeholder="Display name"
+                className={styles.input}
               />
               <p className={styles.description}>
                 This could be your first name, or a nickname – however you would
@@ -218,6 +224,7 @@ const ProfileEditModal = () => {
                 value={inputsData?.title}
                 onChange={titleChange}
                 placeholder="Title"
+                className={styles.input}
               />
             </div>
             <div className={styles.profilePhotoSection}>
@@ -247,7 +254,7 @@ const ProfileEditModal = () => {
               />
             </div>
           </div>
-          <p className={styles.description}>Let people know what you do at :</p>
+          {/* <p className={styles.description}>Let people know what you do at :</p>
 
           <label>Name recording</label>
           <Button
@@ -257,7 +264,7 @@ const ProfileEditModal = () => {
           >
             <AiOutlineAudio />
             Record Audio Clip
-          </Button>
+          </Button> */}
 
           <label>Name pronunciation</label>
           <input
@@ -269,6 +276,7 @@ const ProfileEditModal = () => {
             placeholder={
               inputsData?.namePronunciation || `Zoe (pronounce 'zo-ee')`
             }
+            className={styles.input}
           />
 
           <label>Time zone</label>

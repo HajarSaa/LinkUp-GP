@@ -211,3 +211,10 @@
   flex-direction: column;
   overflow-y: auto;
 }
+
+.aboutText {
+  font-size: 15px;
+  color: #1d1c1d;
+  /* margin-top: 2px; */
+  font-weight: 400;
+}
