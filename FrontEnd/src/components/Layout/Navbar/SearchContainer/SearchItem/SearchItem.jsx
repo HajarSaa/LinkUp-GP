@@ -10,12 +10,13 @@ import UserStatus from "../../../../UI/User/UserStatus";
 import UserImage from "../../../../UI/User/UserImage";
 import { MdManageSearch } from "react-icons/md";
 import { closeSearch } from "../../../../../API/redux_toolkit/ui/searchSlice";
+import { CiSearch } from "react-icons/ci";
 
 function SearchItem({
   search_item,
   isActive = false,
   isViewProfile = false,
-  noResultText,
+  noResultText = "",
 }) {
   const { workspace } = useSelector((state) => state.workspace);
   const navigateTo = useNavigate();
@@ -25,22 +26,33 @@ function SearchItem({
     isActive ? styles.active : ""
   }`;
 
-  if (noResultText) {
+  if (!search_item && noResultText) {
+    const itemClass = `${styles.search_item} ${styles.contact_item} ${
+      isActive ? styles.active : ""
+    }`;
     return (
-      <div className={itemClass}>
+      <div
+        className={itemClass}
+        onClick={() => {
+          dispatch(closeSearch());
+          navigateTo(`/search/${encodeURIComponent(noResultText)}`);
+          // ممكن تضيف هنا أكشن زي: createChannel(noResultText) لو حبيت
+        }}
+      >
         <div className={styles.search_item_left_icon_ch}>
           <span className={styles.member_icon}>
-            <MdManageSearch />
+            <CiSearch />
           </span>
         </div>
         <span>
-          No results for &quot;<strong>{noResultText}</strong>&quot;
+          <strong>{noResultText}</strong>
         </span>
       </div>
     );
   }
 
-  if (!search_item)
+
+  if (!search_item) {
     return (
       <div className={styles.search_item}>
         <div className={styles.search_item_left_icon_ch}>
@@ -51,72 +63,67 @@ function SearchItem({
         <span>Search in {workspace.name} Workspace</span>
       </div>
     );
-
-  if (search_item.conversationId) {
-    if (isViewProfile) {
-      return (
-        <div
-          className={itemClass}
-          onClick={() => {
-            dispatch(closeSearch());
-            navigateTo(`/conversations/${search_item.conversationId}`);
-            dispatch(
-              openUserPanel({
-                type: "userPanel",
-                panel_id: search_item.member._id,
-                page_id: search_item.conversationId,
-              })
-            );
-          }}
-        >
-          <span className={styles.member_icon}>
-            <PiArrowBendDownRight />
-          </span>
-          <span className={styles.member_icon}>
-            <FcContacts />
-          </span>
-          <span>View profile</span>
-        </div>
-      );
-    } else {
-      return (
-        <div
-          className={itemClass}
-          onClick={() => {
-            dispatch(closeSearch());
-            navigateTo(`/conversations/${search_item.conversationId}`);
-          }}
-        >
-          <div className={styles.search_item_left_icon}>
-            <UserImage
-              src={search_item.member.photo}
-              alt={search_item.member.userName}
-            />
-          </div>
-          <div className={styles.user_data}>
-            <span>
-              {search_item.member.userName}
-              {search_item.isMe && " ( You )"}
-            </span>
-            <UserStatus userId={search_item.member._id} />
-            {search_item.member.about && (
-              <span>{search_item.member.about}</span>
-            )}
-          </div>
-        </div>
-      );
-    }
   }
 
-  if (search_item.isChannel) {
+  const isChannel = search_item?.isChannel;
+  const isMember = search_item?.conversationId;
+
+  const handleChannelNavigate = () => {
+    dispatch(closeSearch());
+    navigateTo(`/channels/${search_item?.id}`);
+  };
+
+  const handleConversNavigate = () => {
+    dispatch(closeSearch());
+    navigateTo(`/conversations/${search_item?.conversationId}`);
+  };
+
+  const handleUserProfileNavigate = () => {
+    dispatch(closeSearch());
+    navigateTo(`/conversations/${search_item?.conversationId}`);
+    dispatch(
+      openUserPanel({
+        type: "userPanel",
+        panel_id: search_item?.member._id,
+        page_id: search_item?.conversationId,
+      })
+    );
+  };
+
+  if (isMember) {
+    return isViewProfile ? (
+      <div className={itemClass} onClick={handleUserProfileNavigate}>
+        <span className={styles.member_icon}>
+          <PiArrowBendDownRight />
+        </span>
+        <span className={styles.member_icon}>
+          <FcContacts />
+        </span>
+        <span>View profile</span>
+      </div>
+    ) : (
+      <div className={itemClass} onClick={handleConversNavigate}>
+        <div className={styles.search_item_left_icon}>
+          <UserImage
+            src={search_item.member.photo}
+            alt={search_item.member.userName}
+          />
+        </div>
+        <div className={styles.user_data}>
+          <span>
+            {search_item.member.userName}
+            {search_item.isMe && " ( You )"}
+          </span>
+          <UserStatus userId={search_item.member._id} />
+          {search_item.member.about && <span>{search_item.member.about}</span>}
+        </div>
+      </div>
+    );
+  }
+
+  if (isChannel) {
     return (
-      <div
-        className={itemClass}
-        onClick={() => {
-          dispatch(closeSearch());
-          navigateTo(`/channels/${search_item.id}`);
-        }}
-      >
+      <div className={itemClass} onClick={handleChannelNavigate}>
         <div className={styles.search_item_left_icon_ch}>
           <ChannelType type={search_item.type} />
         </div>
@@ -124,6 +131,8 @@ function SearchItem({
       </div>
     );
   }
+
+  return null;
 }
 
 SearchItem.propTypes = {

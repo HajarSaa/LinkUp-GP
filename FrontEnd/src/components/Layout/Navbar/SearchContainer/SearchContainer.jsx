@@ -10,7 +10,6 @@ import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSideb
 import { useNavigate } from "react-router-dom";
 import { openUserPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
 
-
 function SearchContainer({ workspace, targetRef }) {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
@@ -95,20 +94,18 @@ function SearchContainer({ workspace, targetRef }) {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (!expandedItems.length) return;
+      if (e.key === "Enter") {
+        e.preventDefault();
 
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setActiveIndex((prev) => (prev + 1) % expandedItems.length);
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex((prev) =>
-          prev === 0 ? expandedItems.length - 1 : prev - 1
-        );
-      } else if (e.key === "Enter") {
-        e.preventDefault();
+        // حالة: لا يوجد نتائج، ولكن في query
+        if (!expandedItems.length && query) {
+          dispatch(closeSearch());
+          navigateTo(`/search/${encodeURIComponent(query)}`);
+          return;
+        }
+
         const item = expandedItems[activeIndex];
-        const isViewProfile = item.conversationId && activeIndex % 2 === 1;
+        const isViewProfile = item?.conversationId && activeIndex % 2 === 1;
 
         if (item?.isChannel) {
           dispatch(closeSearch());
@@ -127,11 +124,25 @@ function SearchContainer({ workspace, targetRef }) {
           }
         }
       }
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (!expandedItems.length) return;
+        setActiveIndex((prev) => (prev + 1) % expandedItems.length);
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!expandedItems.length) return;
+        setActiveIndex((prev) =>
+          prev === 0 ? expandedItems.length - 1 : prev - 1
+        );
+      }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [expandedItems, activeIndex, dispatch, navigateTo]);
+  }, [expandedItems, activeIndex, dispatch, navigateTo, query]);
 
   if (!position) return null;
 
@@ -203,7 +214,11 @@ function SearchContainer({ workspace, targetRef }) {
               );
             })
           ) : query ? (
-            <SearchItem noResultText={query} />
+            <SearchItem
+              search_item={undefined}
+              noResultText={query}
+              isActive={true}
+            />
           ) : (
             <SearchItem />
           )}
