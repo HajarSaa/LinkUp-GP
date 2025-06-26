@@ -13,6 +13,7 @@ import {
   getChannelPinnedMessages,
   getConversationPinnedMessages,
   togglePinMessage,
+  forwardMessage,
 } from "../controllers/message.controller.js";
 import {
   protect,
@@ -35,6 +36,7 @@ router
   .get("/thread/:id", getThread)
   .get("/:id", getMessage)
   .post("/", createMessage)
+  .post("/forward", forwardMessage)
   .patch("/:id", updateMessage)
   .patch("/:id/pin", togglePinMessage)
   .delete("/:id", deleteMessage);

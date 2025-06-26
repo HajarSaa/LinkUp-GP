@@ -80,6 +80,10 @@ const messageSchema = new mongoose.Schema(
       ref: "UserProfile",
       default: null,
     },
+    forwarded: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

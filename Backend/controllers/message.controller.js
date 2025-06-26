@@ -445,3 +445,78 @@ export const togglePinMessage = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const forwardMessage = catchAsync(async (req, res, next) => {
+  const { originalMessageId, targets } = req.body;
+
+  if (!originalMessageId || !Array.isArray(targets) || targets.length === 0) {
+    return next(new AppError("Missing original MessageId or targets", 400));
+  }
+
+  const originalMessage = await Message.findById(originalMessageId).lean();
+  if (!originalMessage) {
+    return next(new AppError("Original message not found", 404));
+  }
+
+  const forwardedMessages = [];
+  for (const target of targets) {
+    const { type, id } = target;
+
+    if (type === "conversation") {
+      const conversation = await Conversation.findById(id);
+      if (!conversation) {
+        return next(new AppError(`Conversation not found: ${id}`, 404));
+      }
+
+      const userProfileId = req.userProfile.id;
+      if (
+        userProfileId !== conversation.memberOneId.toString() &&
+        userProfileId !== conversation.memberTwoId.toString()
+      ) {
+        return next(
+          new AppError("You are not a member of this conversation", 403)
+        );
+      }
+
+      const forwarded = await Message.create({
+        content: originalMessage.content,
+        attachments: originalMessage.attachments || [],
+        createdBy: userProfileId,
+        messageType: originalMessage.messageType,
+        forwarded: true,
+        conversationId: id,
+      });
+
+      forwardedMessages.push(forwarded);
+    }
+
+    if (type === "channel") {
+      const channel = await Channel.findById(id);
+      if (!channel) {
+        return next(new AppError(`Channel not found: ${id}`, 404));
+      }
+
+      if (!channel.members.includes(req.userProfile.id)) {
+        return next(new AppError("You are not a member of this channel", 403));
+      }
+
+      const forwarded = await Message.create({
+        content: originalMessage.content,
+        attachments: originalMessage.attachments || [],
+        createdBy: req.userProfile.id,
+        messageType: originalMessage.messageType,
+        forwarded: true,
+        channelId: id,
+      });
+
+      forwardedMessages.push(forwarded);
+    }
+  }
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      forwardedMessages,
+    },
+  });
+});
