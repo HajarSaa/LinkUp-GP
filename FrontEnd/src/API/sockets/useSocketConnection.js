@@ -10,6 +10,7 @@ import registerChannelHandlers from "../sockets/handlers/channelHandler";
 import registerTypingHandler from "../sockets/handlers/typingHandler";
 import registerMessageHandler from "../sockets/handlers/messageHandler";
 import registerReactionHandler from "../sockets/handlers/reactionHandler";
+import registerUserProfileHandlers from "../sockets/handlers/userProfileHandler";
 
 const useSocketConnection = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const useSocketConnection = () => {
           const cleanupTyping = registerTypingHandler(socket, dispatch);
           const cleanupMessage = registerMessageHandler(socket, dispatch);
           const cleanupReaction = registerReactionHandler(socket, dispatch);
-
+          const cleanupUserProfile = registerUserProfileHandlers(socket, dispatch);
 
           cleanupFunctions = [
             cleanupWorkspace,
@@ -60,6 +61,7 @@ const useSocketConnection = () => {
             cleanupTyping,
             cleanupMessage,
             cleanupReaction,
+            cleanupUserProfile,
           ];
         }
       });

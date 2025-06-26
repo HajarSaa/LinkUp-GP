@@ -80,6 +80,19 @@ const workspaceSlice = createSlice({
         (c) => c._id !== action.payload
       );
     },
+    updateMemberProfile: (state, action) => {
+      const updated = action.payload;
+      const memberIndex = state.workspace.members.findIndex(
+        (m) => m._id === updated._id
+      );
+      if (memberIndex !== -1) {
+        state.workspace.members[memberIndex] = {
+          ...state.workspace.members[memberIndex],
+          ...updated,
+        };
+      }
+    },
+
   },
 });
 
@@ -95,6 +108,7 @@ export const {
   addChannelToList,
   removeChannelFromList,
   setWorkspaceMembers,
+  updateMemberProfile,
 
 } = workspaceSlice.actions;
 

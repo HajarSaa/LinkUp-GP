@@ -9,6 +9,7 @@ import laterItemHandler from "./later.handler.js";
 import workspaceHandler from "./workspace.handler.js";
 import reactionHandler from "./reaction.handler.js";
 import callHandler from "./call.handler.js";
+import userProfileHandler from "./userProfile.handler.js";
 export const initializeSocketHandlers = (socket, io) => {
   connectionHandler(socket, io);
   presenceHandler(socket, io);
@@ -21,4 +22,5 @@ export const initializeSocketHandlers = (socket, io) => {
   workspaceHandler(socket, io);
   reactionHandler(socket, io);
   callHandler(socket, io);
+  userProfileHandler(socket, io);
 };
