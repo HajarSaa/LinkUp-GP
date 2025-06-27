@@ -67,14 +67,30 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
             <div className={styles.overlay} onClick={() => setIsOpen(false)} />
             <div className={styles.dropdown}>
               {isDate ? (
-                <StaticDatePicker
-                  value={value}
-                  onChange={handleDateChange}
-                  minDate={minDate}
-                  displayStaticWrapperAs="desktop"
-                  disablePast={false}
-                  slotProps={{ actionBar: { actions: [] } }}
-                />
+                <>
+                  <StaticDatePicker
+                    value={value}
+                    onChange={handleDateChange}
+                    minDate={minDate}
+                    displayStaticWrapperAs="desktop"
+                    disablePast={false}
+                    slotProps={{ actionBar: { actions: [] } }}
+                  />
+
+                  <div className={styles.dateActions}>
+                    <button
+                      onClick={() => {
+                        setStartDate(null);
+                        setEndDate(null);
+                        setLocalValue("");
+                        if (onSelect) onSelect("");
+                        setIsOpen(false);
+                      }}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </>
               ) : (
                 (options || []).map((option, idx) => (
                   <div

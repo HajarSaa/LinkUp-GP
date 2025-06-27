@@ -104,7 +104,7 @@
 
 .dateActions {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   padding: 8px;
   border-top: 1px solid var(--border-color);
 }
@@ -121,7 +121,7 @@
 }
 
 .dateActions button:hover {
-  background-color: var(--primary-color-dark);
+  background-color: var(--secondary-color);
 }
 
 .subFilterMenu {
@@ -146,6 +146,15 @@
 
 .selectedFilter {
   background-color: var(--link-color);
-  color: #fff;
+
   border-color: var(--link-color);
+}
+
+.selectedFilter>.filter_item {
+  color: #fff;
+}
+
+
+.dropdown .MuiTypography-root {
+  color: #000 !important;
 }
