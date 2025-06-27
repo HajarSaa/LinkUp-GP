@@ -2,6 +2,7 @@
 import styles from "./SearchFilter.module.css";
 import FilterItem from "./FilterItem";
 import { useEffect, useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 
 // خريطة الأسماء لـ IDs
 const channelMap = {
@@ -29,6 +30,9 @@ function SearchFilter({ onFiltersChange }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [forceReset, setForceReset] = useState(false); // ⬅️ فلاغ جديد
+
+  const { workspace } = useSelector((state) => state.workspace);
+  const channels = workspace?.channels;
 
   const channelsList = useMemo(() => ["#general", "#dev", "#design"], []);
   const conversList = useMemo(() => ["Alaa", "Ahmed", "Youssef"], []);
