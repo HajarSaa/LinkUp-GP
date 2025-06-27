@@ -1,53 +1,48 @@
-// src/sockets/handlers/reactionHandler.js
-
-import {
-  addReactionSocket as addChannelReaction,
-  removeReactionSocket as removeChannelReaction,
-  setMessageReactionsFromSocket as setChannelMessageReactions,
-} from "../../redux_toolkit/api_data/messages/channelMessagesSlice";
-
-import {
-  addReactionSocket as addThreadReaction,
-  removeReactionSocket as removeThreadReaction,
-  setMessageReactionsFromSocket as setThreadMessageReactions,
-} from "../../redux_toolkit/api_data/messages/threadsSlice";
-
-import {
-  addReactionSocket as addConversReaction,
-  removeReactionSocket as removeConversReaction,
-  setMessageReactionsFromSocket as setConversMessageReactions,
-} from "../../redux_toolkit/api_data/messages/conversMessagesSlice";
-
-// import socket from "../socketService";
+import { setMessageReactions } from "../../redux_toolkit/api_data/messages/messageReactionsSlice";
 
 export default function registerReactionHandler(socket, dispatch) {
-  const handleReactionUpdated = (data) => {
-    const { messageId, emoji, userId, action } = data;
+  function onReactionUpdated({ messageId, emoji, userId, action }) {
+  const myId = JSON.parse(localStorage.getItem("currentUser"))._id;
 
-    if (action === "added") {
-      dispatch(addChannelReaction({ messageId, emoji, userId }));
-      dispatch(addThreadReaction({ messageId, emoji, userId }));
-      dispatch(addConversReaction({ messageId, emoji, userId }));
-    } else if (action === "removed") {
-      dispatch(removeChannelReaction({ messageId, emoji, userId }));
-      dispatch(removeThreadReaction({ messageId, emoji, userId }));
-      dispatch(removeConversReaction({ messageId, emoji, userId }));
-    }
-  };
+  console.log("👤 My ID:", myId);
+  console.log("📩 Incoming reactionUpdated:", {
+    messageId,
+    emoji,
+    userId,
+    action,
+  });
 
-  const handleSetReactions = (data) => {
-    const { messageId, groupedReactions } = data;
+  const isMyReaction = myId === userId;
+  console.log("🧠 Is it my reaction?", isMyReaction);
 
-    dispatch(setChannelMessageReactions({ messageId, groupedReactions }));
-    dispatch(setThreadMessageReactions({ messageId, groupedReactions }));
-    dispatch(setConversMessageReactions({ messageId, groupedReactions }));
-  };
+  if (!messageId || !emoji || !userId || !action) return;
 
-  socket.on("reactionUpdated", handleReactionUpdated);
-  socket.on("messageReactionsFetched", handleSetReactions);
+  dispatch({
+    type: "messageReactions/updateFromSocket",
+    payload: { messageId, emoji, userId, action },
+  });
+}
+
+
+  function onGetMessageReactionsResult({ messageId, groupedReactions }) {
+    console.log("📥 [getMessageReactionsResult] Received:", {
+    messageId,
+    groupedReactions,
+  });
+
+    if (!messageId || !groupedReactions) return;
+
+    dispatch(setMessageReactions({ messageId, groupedReactions }));
+  }
+
+  socket.on("reactionUpdated", onReactionUpdated);
+  socket.on("getMessageReactionsResult", onGetMessageReactionsResult);
+
+  console.log("🧲 reactionHandler registered");
 
   return () => {
-    socket.off("reactionUpdated", handleReactionUpdated);
-    socket.off("messageReactionsFetched", handleSetReactions);
+    socket.off("reactionUpdated", onReactionUpdated);
+    socket.off("getMessageReactionsResult", onGetMessageReactionsResult);
+    console.log("❌ reactionHandler unregistered");
   };
 }

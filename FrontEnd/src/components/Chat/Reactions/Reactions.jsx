@@ -9,7 +9,6 @@ import { getEmojiPickerPosition } from "../../../utils/modalsUtils";
 import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
 import { Tooltip } from "react-tooltip";
 
-
 function Reactions({ messageId }) {
   const dispatch = useDispatch();
   const add_react_ref = useRef(null);
@@ -17,53 +16,56 @@ function Reactions({ messageId }) {
   const { data, isLoading, isError } = useGetMessageReactions(messageId);
   const reactionsObj = data?.groupedReactions || {};
   const { workspace } = useSelector((state) => state.workspace);
-  const myId = JSON.parse(localStorage.getItem('currentUser'))._id;
-
-
+  const currentProfile = useSelector((state) => state.userProfile.data);
+  const myProfileId = currentProfile._id;
+  console.log("✔✔✔✔",myProfileId);
   function openEmojies() {
     const rect = add_react_ref.current.getBoundingClientRect();
     const position = getEmojiPickerPosition(rect);
-    dispatch(
-      openEmojiPicker({
-        position,
-        messageId: messageId,
-      })
-    );
+    dispatch(openEmojiPicker({ position, messageId }));
   }
 
-  function removeThisReact(emoji) {
-    toggleThisReact({
-      messageId,
-      emoji: emoji,
-    });
+  function toggleReaction(emoji) {
+    toggleThisReact({ messageId, emoji });
   }
 
   if (isLoading || isError) return null;
-  const reactions = Object.entries(reactionsObj);
+
+  const reactions = Object.entries(reactionsObj).filter(
+    ([, value]) => value?.count > 0 && value?.userIds?.length > 0
+  );
+
   return (
     <>
-      {reactions.length !== 0 && (
+      {reactions.length > 0 && (
         <div className={styles.reactions}>
-          {reactions.map(([emoji, { count, UserProfiles }]) => {
-            const memberNames = UserProfiles.map(
-              ({ id }) =>
-                workspace.members.find((member) => member.user === id)?.userName
-            )
+          {reactions.map(([emoji, { count, userIds }]) => {
+            const isMyReact = userIds.includes(myProfileId);
+            console.log("✅ My ID:", myProfileId);
+            console.log("📦 userIds:", userIds);
+            console.log("🔍 isMyReact:", isMyReact);
+
+            const memberNames = (userIds || [])
+              .map((profileId) => {
+                const member = workspace.members.find(
+                  (m) => m._id === profileId
+                );
+                return member?.userName;
+              })
               .filter(Boolean)
               .join(" , ");
+              console.log("🧪 isMyReact:", isMyReact);
+
             return (
               <React.Fragment key={emoji}>
                 <div
                   data-tooltip-id={`reaction-${emoji}`}
-                  className={`${styles.react} ${
-                    UserProfiles.some((user) => user.id === myId)
-                      ? styles.myReact
-                      : ""
-                  }`}
-                  onClick={() => removeThisReact(emoji)}
+                  style={isMyReact ? { backgroundColor: 'red' } : {}}
+                  className={`${styles.react} ${isMyReact ? styles.myReact : ""}`}
+                  onClick={() => toggleReaction(emoji)}
                 >
                   <div className={styles.react_emoji}>
-                    <img src={emoji} alt="" />
+                    <img src={emoji} alt="emoji" />
                   </div>
                   <div className={styles.react_count}>{count}</div>
                 </div>
@@ -75,7 +77,7 @@ function Reactions({ messageId }) {
                   content={
                     <div className={styles.toolTip}>
                       <div className={styles.react_image}>
-                        <img src={emoji} alt=" " />
+                        <img src={emoji} alt="emoji" />
                       </div>
                       <div className={styles.names}>
                         {memberNames || "No one yet"}
@@ -99,9 +101,9 @@ function Reactions({ messageId }) {
     </>
   );
 }
+
 Reactions.propTypes = {
   messageId: PropTypes.any.isRequired,
-  reactions: PropTypes.any,
 };
 
 export default Reactions;
