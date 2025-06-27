@@ -25,6 +25,7 @@ const MessageItem = ({
   isThreadParent = false,
   media,
   isSearchResult = false,
+  from = '',
 }) => {
   const [messageHover, setMessageHover] = useState(false);
   const dispatch = useDispatch();
@@ -105,6 +106,9 @@ const MessageItem = ({
                   {sender.userName}
                 </div>
                 <div className={styles.message_time}>{message_time}</div>
+                {isSearchResult && from && (
+                  <div className={styles.message_time}>in {from}</div>
+                )}
               </div>
               {/* Text content container */}
               <div className={styles.msg_edit}>
@@ -162,6 +166,7 @@ MessageItem.propTypes = {
   isThreadParent: PropTypes.bool,
   media: PropTypes.any,
   isSearchResult: PropTypes.bool,
+  from: PropTypes.string,
 };
 
 export default MessageItem;

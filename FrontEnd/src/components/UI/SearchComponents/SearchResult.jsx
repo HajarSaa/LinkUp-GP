@@ -5,12 +5,15 @@ import PropTypes from "prop-types";
 import MessageItem from "../../Chat/ChatMessage/MessageItem";
 import Spinner from "../Spinner/Spinner";
 import { useNavigate } from "react-router-dom";
+import { findMemberById } from "../../../utils/workspaceUtils";
 
 function SearchResult({ isLoading, query }) {
   const scrollRef = useRef();
   const navigate = useNavigate();
   const { messages } = useSelector((state) => state.searchData);
-  console.log(useSelector((state) => state.searchData));
+  const logged_user_data = JSON.parse(localStorage.getItem("logged_user_data"));
+  const myMemberId = logged_user_data.memberId;
+  const {workspace} = useSelector((state)=>state.workspace)
 
   const handleNavigateToMessage = (message) => {
     const { _id: messageId, channelId, conversationId } = message;
@@ -66,11 +69,24 @@ function SearchResult({ isLoading, query }) {
                   handleNavigateToMessage(message);
                 }}
               >
-                {console.log(message)}
                 <MessageItem
                   message={message}
                   isSearchResult={true}
                   media={message?.attachments}
+                  from={
+                    message.channelId
+                      ? message.channelId.name
+                      : (() => {
+                          const oneId =
+                            message.conversationId?.memberOneId?._id;
+                          const twoId =
+                            message.conversationId?.memberTwoId?._id;
+                          const otherMemberId =
+                            oneId === myMemberId ? twoId : oneId;
+                          return findMemberById(workspace, otherMemberId)
+                            ?.userName;
+                        })()
+                  }
                 />
               </div>
             ))
