@@ -5,6 +5,7 @@ import File from "../models/file.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
+import { MetadataService } from "../utils/metadataService.js";
 
 export const getAllMessages = getAll(Message);
 
@@ -301,6 +302,15 @@ export const createMessage = catchAsync(async (req, res, next) => {
       lastRepliedAt: new Date(),
     });
   }
+
+  // Step 1: Extract URLs
+  const urls = MetadataService.extractLinks(content);
+
+  // Step 2: Fetch metadata (no caching)
+  const linkMetadata = await Promise.all(
+    urls.map((url) => MetadataService.fetchMetadata(url))
+  );
+  req.body.metadata = { links: linkMetadata };
   const message = await Message.create(req.body);
 
   // Update attached files
@@ -351,6 +361,7 @@ export const updateMessage = catchAsync(async (req, res, next) => {
   });
 });
 
+//
 export const deleteMessage = catchAsync(async (req, res, next) => {
   const message = await Message.findById(req.params.id);
 

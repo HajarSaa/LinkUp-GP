@@ -80,6 +80,9 @@ const messageSchema = new mongoose.Schema(
       ref: "UserProfile",
       default: null,
     },
+    metadata: {
+      links: [{}],
+    },
   },
   { timestamps: true }
 );
