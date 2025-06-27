@@ -86,4 +86,37 @@ export default function userProfileHandler(socket, io) {
       return callback?.({ success: true });
     })
   );
+
+  // get user profile by ID
+  socket.on(
+    "userProfile:get",
+    socketAsync(async ({ profileId }, callback) => {
+      if (!profileId) {
+        throw new AppError("profileId is required", 400);
+      }
+
+      const userProfile = await UserProfile.findById(profileId).lean();
+
+      if (!userProfile) {
+        throw new AppError(
+          `Cannot find userProfile with ID: ${profileId}`,
+          404
+        );
+      }
+
+      callback?.({
+        success: true,
+        profile: {
+          _id: userProfile._id,
+          userName: userProfile.userName,
+          email: userProfile.email,
+          about: userProfile.about,
+          photo: userProfile.photo,
+          status: userProfile.status,
+          customStatus: userProfile.customStatus,
+          lastActive: userProfile.lastActive,
+        },
+      });
+    })
+  );
 }
