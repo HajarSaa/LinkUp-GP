@@ -16,13 +16,31 @@ function SearchPage() {
 
 
 
-  const searchParams = useMemo(
-    () => ({
+  const searchParams = useMemo(() => {
+    const { channel, conversation, ...restFilters } = searchFilters;
+
+    if (channel) {
+      return {
+        keyword: decodedKeyword,
+        channel,
+        ...restFilters, // أي فلتر تاني زي user أو date
+      };
+    }
+
+    if (conversation) {
+      return {
+        keyword: decodedKeyword,
+        conversation,
+        ...restFilters,
+      };
+    }
+
+    return {
       keyword: decodedKeyword,
-      ...searchFilters,
-    }),
-    [decodedKeyword, searchFilters]
-  );
+      ...restFilters,
+    };
+  }, [decodedKeyword, searchFilters]);
+
   console.log(searchParams);
 
   const search_request = useSearchMessages(searchParams);
