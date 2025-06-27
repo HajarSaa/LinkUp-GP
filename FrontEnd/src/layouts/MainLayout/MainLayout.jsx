@@ -17,6 +17,7 @@ import useBrowseChannels from "../../API/hooks/channel/useBrowseChannels";
 function MainLayout() {
   const location = useLocation();
   const isBrowseChannels = location.pathname === "/browse-channels";
+  const isSearchPage = location.pathname === "/search";
   const { workspace } = useSelector((state) => state.workspace);
   const channels = workspace?.channels;
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ function MainLayout() {
       <div className={styles.workspace_wrapper}>
         <WorkBar />
         {
-          isBrowseChannels ? (
+          (isBrowseChannels|| isSearchPage) ? (
           <div className={styles.workspace_content_wrapper}>
             <div className={styles.full_content}>{workspace && <Outlet />}</div>
           </div>

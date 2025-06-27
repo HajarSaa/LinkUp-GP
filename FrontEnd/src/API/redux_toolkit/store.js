@@ -17,17 +17,20 @@ import userReducer from "./api_data/userSlice";
 import userProfileSlice from "./api_data/userProfileSlice";
 import typingReducer from "./api_data/typingSlice";
 //======
+// ==============================(Search)
+import searchDataReducer from "./api_data/search/searchSlice";
+//======
 // ==============================(Global)
-import recordingReducer from './ui/recording'
+import recordingReducer from "./ui/recording";
 //======
 // ==============================(channels)
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
-import browseChannelsReducer from './api_data/channels/browseChannels'
+import browseChannelsReducer from "./api_data/channels/browseChannels";
 //======
 // ==============================(Worskpace)
 import createWorkspaceReducer from "./ui/creationsStep";
 import workspaceMenuReducer from "./modals/workspace/workspaceMenu";
-import searchReducer from './ui/searchSlice';
+import searchReducer from "./ui/searchSlice";
 //======
 // ==============================(User Profile)
 import editUserProfileReducer from "./modals/userProfile/editUserProfie";
@@ -39,7 +42,7 @@ import userMenuReducer from "./modals/userProfile/userMenuSlice";
 //======
 // ==============================(Conversation)
 import userDetailsReducer from "./modals/convers/userDetailsModal";
-import conversMediaReducer from './api_data/media/conversMediaSlice'
+import conversMediaReducer from "./api_data/media/conversMediaSlice";
 //======
 //======
 // ==============================(<Media>)
@@ -106,6 +109,9 @@ const store = configureStore({
     messageDraft: messageDraftReducer,
     messageReactions: messageReactionsReducer,
     typing: typingReducer,
+    // ==============================(Search)
+    // ====
+    searchData: searchDataReducer,
     // ==============================(Global)
     // ====
     notificationsModal: notificationsModalReducer,
