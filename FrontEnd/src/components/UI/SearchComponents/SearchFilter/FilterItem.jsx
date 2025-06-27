@@ -44,7 +44,7 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
     }
 
     setLocalValue(formatted);
-    if (onSelect) onSelect(formatted); // ⬅️ مهم
+    if (onSelect) onSelect(formatted);
     setIsOpen(false);
   };
 

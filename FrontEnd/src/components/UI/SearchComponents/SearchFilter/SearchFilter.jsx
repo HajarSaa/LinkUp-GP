@@ -103,7 +103,7 @@ function SearchFilter() {
         selectedValue={allType}
         onSelect={(val) => {
           if (val === allType && val === "All") {
-            setForceReset(true); // ✅ Trigger Reset
+            setForceReset(true);
           }
           setAllType(val);
         }}
