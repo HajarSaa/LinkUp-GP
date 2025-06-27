@@ -35,7 +35,7 @@ function SearchItem({
         className={itemClass}
         onClick={() => {
           dispatch(closeSearch());
-          navigateTo(`/search/${encodeURIComponent(noResultText)}`);
+          navigateTo(`/search`);
           // ممكن تضيف هنا أكشن زي: createChannel(noResultText) لو حبيت
         }}
       >

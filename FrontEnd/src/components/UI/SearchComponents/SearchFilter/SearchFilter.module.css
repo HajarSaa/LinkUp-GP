@@ -1,0 +1,122 @@
+/* Srearch Filter */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 30px 0 15px 0;
+}
+
+.filterIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.filter_item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+}
+
+
+
+.search_logo {
+  display: flex;
+  align-items: center;
+  width: 20px;
+}
+
+.search_logo>img {
+  width: 100%;
+}
+
+/* Filter Menu */
+
+.filterWrapper {
+  background: var(--bg-white);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border: 1px solid var(--border-color);
+  position: relative;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.filterWrapper:hover {
+  background-color: var(--white-btn-hover-color);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  z-index: 99;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.dropdownItem {
+  padding: 8px 12px;
+  cursor: pointer;
+  min-width: 250px;
+  width: 100%;
+  font-weight: normal;
+}
+
+.dropdownItem:hover {
+  background-color: var(--link-color);
+  color: #fff;
+}
+
+/* Date Picker */
+.dateInput {
+  background-color: var(--bg-white);
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  width: 160px;
+}
+.datePicker {
+  padding: 0 10px;
+  font-size: 0.85rem;
+}
+
+.dateActions {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-top: 1px solid var(--border-color);
+}
+
+.dateActions button {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+  padding: 5px 15px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dateActions button:hover {
+  background-color: var(--primary-color-dark);
+}

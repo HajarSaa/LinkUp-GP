@@ -100,7 +100,7 @@ function SearchContainer({ workspace, targetRef }) {
         // حالة: لا يوجد نتائج، ولكن في query
         if (!expandedItems.length && query) {
           dispatch(closeSearch());
-          navigateTo(`/search/${encodeURIComponent(query)}`);
+          navigateTo(`/search`);
           return;
         }
 
