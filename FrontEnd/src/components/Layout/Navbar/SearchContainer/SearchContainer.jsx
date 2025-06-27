@@ -9,7 +9,6 @@ import SearchItem from "./SearchItem/SearchItem";
 import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
 import { useNavigate } from "react-router-dom";
 import { openUserPanel } from "../../../../API/redux_toolkit/ui/chatPanelSlice";
-import useSearchMessages from "../../../../API/hooks/search/useSearchMessages";
 
 function SearchContainer({ workspace, targetRef }) {
   const inputRef = useRef(null);
@@ -20,8 +19,7 @@ function SearchContainer({ workspace, targetRef }) {
   const [search_result, set_search_result] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
-  // search request
-  const search_request = useSearchMessages({ keyword: query });
+
 
 
   const { browseChannels } = useSelector((state) => state.browseChannels);
@@ -104,7 +102,7 @@ function SearchContainer({ workspace, targetRef }) {
         e.preventDefault();
 
         // حالة: لا يوجد نتائج، ولكن في query
-        if (!expandedItems.length && query && search_request.data?.length) {
+        if (!expandedItems.length && query ) {
           dispatch(closeSearch());
           navigateTo(`/search?${query}`);
           return;
@@ -149,7 +147,7 @@ function SearchContainer({ workspace, targetRef }) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [expandedItems, activeIndex, dispatch, navigateTo, query, search_request.data?.length]);
+  }, [expandedItems, activeIndex, dispatch, navigateTo, query]);
 
   if (!position) return null;
 

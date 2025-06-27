@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import styles from "./SearchFilter.module.css";
 import FilterItem from "./FilterItem";
 import { useEffect, useState, useMemo } from "react";
@@ -20,7 +21,7 @@ const userMap = {
   Alaa: "68594a066a8f7e74bf320e75",
 };
 
-function SearchFilter() {
+function SearchFilter({ onFiltersChange }) {
   const [allType, setAllType] = useState("All");
   const [selectedChannel, setSelectedChannel] = useState("");
   const [selectedConvers, setSelectedConvers] = useState("");
@@ -82,11 +83,9 @@ function SearchFilter() {
     if (endDate) {
       queryParams.endDate = endDate;
     }
-
-    const searchParams = new URLSearchParams(queryParams).toString();
-    const fullURL = `http://localhost:3000/search?${searchParams}`;
-
-    console.log("🌐 Full URL:", fullURL);
+console.log(queryParams);
+    // const searchParams = new URLSearchParams(queryParams).toString();
+    onFiltersChange(queryParams);
   }, [
     allType,
     selectedChannel,
@@ -94,6 +93,7 @@ function SearchFilter() {
     selectedFrom,
     startDate,
     endDate,
+    onFiltersChange,
   ]);
 
   return (
