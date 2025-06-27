@@ -32,9 +32,14 @@ function SearchResult() {
   return (
     <div className={styles.browse_channel_list} ref={scrollRef}>
       <div className={styles.channel_list_container}>
-        {console.log(messages)}
         {messages.map((message, index) => (
-          <MessageItem key={index} message={message} />
+          <div key={index} className={styles.search_message}>
+            <MessageItem
+              message={message}
+              isSearchResult={true}
+              media={message?.attachments}
+            />
+          </div>
         ))}
       </div>
     </div>

@@ -19,22 +19,24 @@ import { getAttachedFiles } from "../../../utils/mediaUtils";
 import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
 import Reactions from "../Reactions/Reactions";
 
-
 const MessageItem = ({
   message,
   isInThreadPanel = false,
   isThreadParent = false,
-  media
+  media,
+  isSearchResult = false,
 }) => {
-
   const [messageHover, setMessageHover] = useState(false);
   const dispatch = useDispatch();
   const { id: page_id } = useParams();
   const { workspace } = useSelector((state) => state.workspace);
   const sender = findMemberById(
     workspace,
-    message?.createdBy || message?.createdBy._id
+    typeof message.createdBy === "object"
+      ? message.createdBy._id
+      : message.createdBy
   );
+
   const loggin_user = findMemberByUserId(workspace);
   const isMessageSender = sender._id === loggin_user._id;
   const message_time = formatTimeTo12Hour(message?.createdAt);
@@ -51,6 +53,7 @@ const MessageItem = ({
 
   // Functions
   function openProfile() {
+    if (isSearchResult) return;
     dispatch(
       openUserPanel({
         type: "userPanel",
@@ -61,6 +64,7 @@ const MessageItem = ({
   }
 
   const handelOpenMenu = (e, message_id) => {
+    if (isSearchResult) return;
     e.preventDefault();
     const menuWidth = 240;
     const padding = 0;
@@ -74,7 +78,6 @@ const MessageItem = ({
       })
     );
   };
-
 
   return (
     <>
@@ -131,15 +134,17 @@ const MessageItem = ({
           </div>
         </div>
         {/* Menu Actions => forward , later , more , .... */}
-        <MessageActions
-          isThread={isInThreadPanel}
-          message={message}
-          messageHover={messageHover}
-          isThreadParent={isThreadParent}
-          threadData={threadData}
-          parentMessage={message}
-          isSender={isMessageSender}
-        />
+        {!isSearchResult && (
+          <MessageActions
+            isThread={isInThreadPanel}
+            message={message}
+            messageHover={messageHover}
+            isThreadParent={isThreadParent}
+            threadData={threadData}
+            parentMessage={message}
+            isSender={isMessageSender}
+          />
+        )}
         {/* Message Threads */}
         {message?.threadCount !== 0 && !isInThreadPanel && (
           <MessageThreads threadData={threadData} parentMessage={message} />
@@ -156,6 +161,7 @@ MessageItem.propTypes = {
   isInThreadPanel: PropTypes.bool,
   isThreadParent: PropTypes.bool,
   media: PropTypes.any,
+  isSearchResult: PropTypes.bool,
 };
 
 export default MessageItem;

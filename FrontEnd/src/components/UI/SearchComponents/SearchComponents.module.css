@@ -33,10 +33,10 @@
 
 .channel_list_container {
   width: 90%;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   background-color: var(--bg-white);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .browseHeader {
@@ -186,3 +186,8 @@
   font-size: 11px;
 }
 
+.search_message {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}

@@ -149,7 +149,7 @@ function SearchContainer({ workspace, targetRef }) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [expandedItems, activeIndex, dispatch, navigateTo, query]);
+  }, [expandedItems, activeIndex, dispatch, navigateTo, query, search_request.data?.length]);
 
   if (!position) return null;
 
