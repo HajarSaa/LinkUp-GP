@@ -27,11 +27,13 @@ function SearchFilter() {
   const [selectedFrom, setSelectedFrom] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [forceReset, setForceReset] = useState(false); // ⬅️ فلاغ جديد
 
   const channelsList = useMemo(() => ["#general", "#dev", "#design"], []);
   const conversList = useMemo(() => ["Alaa", "Ahmed", "Youssef"], []);
   const fromList = useMemo(() => ["From", "Ahmed", "Alaa"], []);
 
+  // لما النوع يتغير (All / Channels / Conversations)
   useEffect(() => {
     if (allType === "Channels") {
       setSelectedChannel(channelsList[0]);
@@ -45,6 +47,19 @@ function SearchFilter() {
     }
   }, [allType, channelsList, conversList]);
 
+  // Reset إجباري لما forceReset يتغير
+  useEffect(() => {
+    if (forceReset) {
+      setSelectedChannel("");
+      setSelectedConvers("");
+      setSelectedFrom("");
+      setStartDate("");
+      setEndDate("");
+      setForceReset(false); // نرجعه False تاني
+    }
+  }, [forceReset]);
+
+  // تكوين رابط الكويري
   useEffect(() => {
     const queryParams = {};
 
@@ -68,7 +83,10 @@ function SearchFilter() {
       queryParams.endDate = endDate;
     }
 
-    console.log("📦 Query Params to send:", queryParams);
+    const searchParams = new URLSearchParams(queryParams).toString();
+    const fullURL = `http://localhost:3000/search?${searchParams}`;
+
+    console.log("🌐 Full URL:", fullURL);
   }, [
     allType,
     selectedChannel,
@@ -83,7 +101,12 @@ function SearchFilter() {
       <FilterItem
         text="All"
         selectedValue={allType}
-        onSelect={setAllType}
+        onSelect={(val) => {
+          if (val === allType && val === "All") {
+            setForceReset(true); // ✅ Trigger Reset
+          }
+          setAllType(val);
+        }}
         options={["All", "Channels", "Conversations"]}
       />
 
