@@ -11,15 +11,17 @@ function useGetUserProfile(profile_id) {
   const { workspace } = useSelector((state) => state.workspace);
 
   useEffect(() => {
-    if (profile_id && workspace) {
-      const userData = findMemberById(workspace, profile_id);
-      const me = findMemberByUserId(workspace);
-      if (userData._id === me._id)
-        dispatch(setUserProfile({ ...userData, isMe: true }));
-      else dispatch(setUserProfile({ ...userData, isMe: false }));
-    }
-  }, [workspace, profile_id, dispatch]);
+    if (!profile_id || !workspace) return;
 
+    const userData = findMemberById(workspace, profile_id);
+    const me = findMemberByUserId(workspace);
+
+    if (!userData || !me) return;
+
+    const isMe = userData._id === me._id;
+
+    dispatch(setUserProfile({ ...userData, isMe }));
+  }, [workspace, profile_id, dispatch]);
 }
 
 export default useGetUserProfile;

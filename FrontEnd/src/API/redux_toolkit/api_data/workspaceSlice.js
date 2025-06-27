@@ -47,13 +47,6 @@ const workspaceSlice = createSlice({
         state.workspace.members = action.payload;
       }
     },
-    // updateChannelInList: (state, action) => {
-    //   const updated = action.payload;
-    //   state.workspace.channels = state.workspace.channels.map((c) =>
-    //     c._id === updated._id ? updated : c
-    //   );
-    // },
-
     updateChannelInList: (state, action) => {
       const { _id, members } = action.payload;
       const channel = state.workspace.channels.find((c) => c._id === _id);
@@ -80,6 +73,30 @@ const workspaceSlice = createSlice({
         (c) => c._id !== action.payload
       );
     },
+    updateMemberProfile: (state, action) => {
+      const updated = action.payload;
+      const memberIndex = state.workspace.members.findIndex(
+        (m) => m._id === updated._id
+      );
+      if (memberIndex !== -1) {
+        state.workspace.members[memberIndex] = {
+          ...state.workspace.members[memberIndex],
+          ...updated,
+        };
+      }
+    },
+    updateMemberPhoto: (state, action) => {
+  const { userId, photo } = action.payload;
+  const memberIndex = state.workspace?.members?.findIndex(
+    (m) => m.user === userId || m._id === userId
+  );
+
+  if (memberIndex !== -1) {
+    state.workspace.members[memberIndex].photo = photo;
+  }
+},
+
+
   },
 });
 
@@ -95,6 +112,8 @@ export const {
   addChannelToList,
   removeChannelFromList,
   setWorkspaceMembers,
+  updateMemberProfile,
+  updateMemberPhoto,
 
 } = workspaceSlice.actions;
 

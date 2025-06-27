@@ -83,6 +83,10 @@ const messageSchema = new mongoose.Schema(
     metadata: {
       links: [{}],
     },
+    forwarded: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

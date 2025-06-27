@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import Channel from "../models/channel.model.js";
 import Conversation from "../models/converstion.model.js";
 import Message from "../models/message.model.js";
 import File from "../models/file.model.js";
+import UserProfile from "../models/userProfile.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
@@ -405,5 +407,127 @@ export const deleteMessage = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: "success",
     data: null,
+  });
+});
+
+export const togglePinMessage = catchAsync(async (req, res, next) => {
+  const messageId = req.params.id;
+  const userId = req.user._id;
+  const pinValue = req.query.pin ?? req.body.pin;
+
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+    return next(new AppError("Invalid message ID", 400));
+  }
+
+  if (typeof pinValue === "undefined") {
+    return next(new AppError("Pin value is required", 400));
+  }
+
+  const pin = pinValue === true || pinValue === "true";
+
+  const message = await Message.findById(messageId);
+  if (!message) {
+    return next(new AppError("No message found with this ID", 404));
+  }
+
+  const workspaceId = message.channelId
+    ? (await Channel.findById(message.channelId)).workspaceId
+    : (await Conversation.findById(message.conversationId)).workspaceId;
+
+  const userProfile = await UserProfile.findOne({
+    user: userId,
+    workspace: workspaceId,
+  });
+
+  if (!userProfile) {
+    return next(new AppError("You are not member in this workspace", 403));
+  }
+
+  message.pinned = pin;
+  message.pinnedBy = pin ? userProfile._id : null;
+  await message.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      messageId: message._id,
+      pinned: message.pinned,
+      pinnedBy: message.pinnedBy,
+    },
+  });
+});
+
+export const forwardMessage = catchAsync(async (req, res, next) => {
+  const { originalMessageId, targets } = req.body;
+
+  if (!originalMessageId || !Array.isArray(targets) || targets.length === 0) {
+    return next(new AppError("Missing original MessageId or targets", 400));
+  }
+
+  const originalMessage = await Message.findById(originalMessageId).lean();
+  if (!originalMessage) {
+    return next(new AppError("Original message not found", 404));
+  }
+
+  const forwardedMessages = [];
+  for (const target of targets) {
+    const { type, id } = target;
+
+    if (type === "conversation") {
+      const conversation = await Conversation.findById(id);
+      if (!conversation) {
+        return next(new AppError(`Conversation not found: ${id}`, 404));
+      }
+
+      const userProfileId = req.userProfile.id;
+      if (
+        userProfileId !== conversation.memberOneId.toString() &&
+        userProfileId !== conversation.memberTwoId.toString()
+      ) {
+        return next(
+          new AppError("You are not a member of this conversation", 403)
+        );
+      }
+
+      const forwarded = await Message.create({
+        content: originalMessage.content,
+        attachments: originalMessage.attachments || [],
+        createdBy: userProfileId,
+        messageType: originalMessage.messageType,
+        forwarded: true,
+        conversationId: id,
+      });
+
+      forwardedMessages.push(forwarded);
+    }
+
+    if (type === "channel") {
+      const channel = await Channel.findById(id);
+      if (!channel) {
+        return next(new AppError(`Channel not found: ${id}`, 404));
+      }
+
+      if (!channel.members.includes(req.userProfile.id)) {
+        return next(new AppError("You are not a member of this channel", 403));
+      }
+
+      const forwarded = await Message.create({
+        content: originalMessage.content,
+        attachments: originalMessage.attachments || [],
+        createdBy: req.userProfile.id,
+        messageType: originalMessage.messageType,
+        forwarded: true,
+        channelId: id,
+      });
+
+      forwardedMessages.push(forwarded);
+    }
+  }
+
+  res.status(201).json({
+    status: "success",
+    data: {
+      forwardedMessages,
+    },
   });
 });

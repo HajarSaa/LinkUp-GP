@@ -12,8 +12,11 @@ export const updateUserImage = async (formData) => {
     }
   );
 
-  return data.data;
+  // ✅ Return only the photo URL string
+  return data.data.userProfile.photo;
 };
+
+
 // ====================(Update User Profile)
 export const updateUserProfile = async (user_data) => {
   const { data } = await axiosInstance.patch(

@@ -18,6 +18,8 @@ function ChatMessage({ containerRef }) {
   );
   const { channelMedia } = useSelector((state) => state.channelMedia);
   const {mutate:toggleThisReact} = useToggleReaction()
+  // const toggleThisReact = useToggleReaction();
+
 
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
@@ -29,14 +31,12 @@ function ChatMessage({ containerRef }) {
   const isInitialLoad = useRef(true);
   const prevScrollHeightRef = useRef(0);
 
-  // Infinite scroll لما نقرّب من أول رسالة
   useEffect(() => {
     const container = containerRef?.current;
     if (!container) return;
 
     const handleScroll = () => {
       if (container.scrollTop < 150 && hasNextPage && !isFetchingNextPage) {
-        // نحفظ السكول هايت قبل الفتش علشان نرجع مكاننا بعد التحميل
         prevScrollHeightRef.current = container.scrollHeight;
         fetchNextPage();
       }
@@ -46,7 +46,6 @@ function ChatMessage({ containerRef }) {
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, containerRef]);
 
-  // اول مره هفتح الصفحه يوقفني عند اخر رسالة
   useEffect(() => {
     if (messages?.length && isInitialLoad.current && !targetMessageId) {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -54,7 +53,6 @@ function ChatMessage({ containerRef }) {
     }
   }, [messages, targetMessageId]);
 
-  // روح لل later message
   useEffect(() => {
     if (!targetMessageId || !messages?.length) return;
 
@@ -67,10 +65,8 @@ function ChatMessage({ containerRef }) {
         if (element) {
           element.scrollIntoView({ behavior: "smooth", block: "center" });
 
-          // ✨ أضف الكلاس
           element.classList.add(styles.highlight);
 
-          // ⏱️ شيل الكلاس بعد 2 ثانية
           setTimeout(() => {
             element.classList.remove(styles.highlight);
           }, 2000);
@@ -94,7 +90,6 @@ function ChatMessage({ containerRef }) {
     isFetchingNextPage,
   ]);
 
-  // بعد تحميل الرسائل القديمة، نحافظ على مكان المستخدم
   useEffect(() => {
     const container = containerRef?.current;
     if (!container || isInitialLoad.current || isFetchingNextPage) return;

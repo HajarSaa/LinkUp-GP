@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>🧑‍💼 UserProfile Socket Test</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  </head>
+  <body>
+    <h2>🧪 UserProfile Handler Test</h2>
+
+    <label>Your User ID:</label>
+    <input id="userId" placeholder="User ID" />
+    <br />
+    <label>Your Workspace ID:</label>
+    <input id="workspaceId" placeholder="Workspace ID" />
+    <br />
+    <label>Your Profile ID:</label>
+    <input id="profileId" placeholder="UserProfile ID" />
+    <br /><br />
+
+    <button id="connectBtn">🔌 Connect</button>
+    <hr />
+
+    <h3>Update Info</h3>
+    <input id="userName" placeholder="New UserName" />
+    <input id="email" placeholder="New Email" />
+    <input id="about" placeholder="About" />
+    <button id="updateInfoBtn">Update Info</button>
+
+    <h3>Update Photo</h3>
+    <input id="photoUrl" placeholder="New Photo URL" />
+    <button id="updatePhotoBtn">Update Photo</button>
+
+    <pre id="output" style="background: #eee; padding: 10px"></pre>
+
+    <script>
+      const socket = io("http://localhost:5000", {
+        auth: { token: "fake_token" },
+      });
+
+      const userIdInput = document.getElementById("userId");
+      const workspaceIdInput = document.getElementById("workspaceId");
+      const profileIdInput = document.getElementById("profileId");
+
+      const output = document.getElementById("output");
+
+      document.getElementById("connectBtn").onclick = () => {
+        const userId = userIdInput.value.trim();
+        const workspaceId = workspaceIdInput.value.trim();
+        const profileId = profileIdInput.value.trim();
+
+        if (!userId || !workspaceId || !profileId) {
+          alert("Please fill all IDs first.");
+          return;
+        }
+
+        // Inject manually into socket for testing
+        socket.userId = userId;
+        socket.workspaceId = workspaceId;
+        socket.userProfileId = profileId;
+
+        output.textContent = `🔌 Connected manually with:
+userId: ${userId}
+workspaceId: ${workspaceId}
+profileId: ${profileId}`;
+      };
+
+      // 🔁 Update Info
+      document.getElementById("updateInfoBtn").onclick = () => {
+        const updates = {
+          userName: document.getElementById("userName").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          about: document.getElementById("about").value.trim(),
+        };
+
+        socket.emit("userProfile:updateInfo", { updates }, (res) => {
+          output.textContent =
+            "🔁 Update Info Response:\n" + JSON.stringify(res, null, 2);
+        });
+      };
+
+      // 🖼️ Update Photo
+      document.getElementById("updatePhotoBtn").onclick = () => {
+        const photoUrl = document.getElementById("photoUrl").value.trim();
+
+        socket.emit("userProfile:updatePhoto", { photoUrl }, (res) => {
+          output.textContent =
+            "🖼️ Update Photo Response:\n" + JSON.stringify(res, null, 2);
+        });
+      };
+
+      // Receive broadcast updates
+      socket.on("userProfile:updated", (data) => {
+        console.log("📢 userProfile:updated", data);
+      });
+
+      socket.on("userProfile:photoUpdated", (data) => {
+        console.log("📸 userProfile:photoUpdated", data);
+      });
+    </script>
+  </body>
+</html>
