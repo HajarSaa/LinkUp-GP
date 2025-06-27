@@ -4,11 +4,25 @@ import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import MessageItem from "../../Chat/ChatMessage/MessageItem";
 import Spinner from "../Spinner/Spinner";
+import { useNavigate } from "react-router-dom";
 
 function SearchResult({ isLoading, query }) {
   const scrollRef = useRef();
+  const navigate = useNavigate();
   const { messages } = useSelector((state) => state.searchData);
   console.log(useSelector((state) => state.searchData));
+
+  const handleNavigateToMessage = (message) => {
+    const { _id: messageId, channelId, conversationId } = message;
+
+    if (channelId) {
+      navigate(`/channels/${channelId._id}?searched_message=${messageId}`);
+    } else if (conversationId) {
+      navigate(
+        `/conversations/${conversationId._id}?searched_message=${messageId}`
+      );
+    }
+  };
 
   // handle scrolling border
   useEffect(() => {
@@ -45,7 +59,14 @@ function SearchResult({ isLoading, query }) {
         <div className={styles.search_list_container}>
           {messages.length !== 0 ? (
             messages.map((message, index) => (
-              <div key={index} className={styles.search_message}>
+              <div
+                key={index}
+                className={styles.search_message}
+                onClick={() => {
+                  handleNavigateToMessage(message);
+                }}
+              >
+                {console.log(message)}
                 <MessageItem
                   message={message}
                   isSearchResult={true}
@@ -54,7 +75,9 @@ function SearchResult({ isLoading, query }) {
               </div>
             ))
           ) : (
-            <div className={styles.not_found}>{`"${query}" not found in any message`}</div>
+            <div
+              className={styles.not_found}
+            >{`"${query}" not found in any message`}</div>
           )}
         </div>
       )}
