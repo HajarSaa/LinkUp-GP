@@ -3,24 +3,7 @@ import styles from "./SearchFilter.module.css";
 import FilterItem from "./FilterItem";
 import { useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
-
-// خريطة الأسماء لـ IDs
-const channelMap = {
-  "#general": "68594bb06a8f7e74bf320f2f",
-  "#dev": "68594bb06a8f7e74bf320f30",
-  "#design": "68594bb06a8f7e74bf320f31",
-};
-
-const conversMap = {
-  Alaa: "6856979dcb47ffae89eecc8d",
-  Ahmed: "6856979dcb47ffae89eecc8e",
-  Youssef: "6856979dcb47ffae89eecc8f",
-};
-
-const userMap = {
-  Ahmed: "68594a066a8f7e74bf320e74",
-  Alaa: "68594a066a8f7e74bf320e75",
-};
+import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
 
 function SearchFilter({ onFiltersChange }) {
   const [allType, setAllType] = useState("All");
@@ -29,30 +12,82 @@ function SearchFilter({ onFiltersChange }) {
   const [selectedFrom, setSelectedFrom] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [forceReset, setForceReset] = useState(false); // ⬅️ فلاغ جديد
+  const [forceReset, setForceReset] = useState(false);
 
   const { workspace } = useSelector((state) => state.workspace);
   const channels = workspace?.channels;
+  const conversations = useGetSidebarConvers(workspace);
 
-  const channelsList = useMemo(() => ["#general", "#dev", "#design"], []);
-  const conversList = useMemo(() => ["Alaa", "Ahmed", "Youssef"], []);
+  // --- Channels ---
+  const channelsList = useMemo(() => {
+    if (!channels) return [];
+    return channels.map((channel) => ({
+      label: `#${channel.name} (${channel.type})`,
+      value: `#${channel.name}`,
+      id: channel._id,
+    }));
+  }, [channels]);
+
+  const channelMap = useMemo(() => {
+    if (!channels) return {};
+    return channels.reduce((acc, channel) => {
+      acc[`#${channel.name}`] = channel._id;
+      return acc;
+    }, {});
+  }, [channels]);
+
+  const channelNames = useMemo(
+    () => channelsList.map((c) => c.value),
+    [channelsList]
+  );
+
+  // --- Conversations ---
+  const conversList = useMemo(() => {
+    if (!conversations) return [];
+    return conversations.map((conv) => ({
+      label: conv.member.userName,
+      value: conv.member.userName,
+      image: conv.member.photo,
+      id: conv.conversationId,
+    }));
+  }, [conversations]);
+
+  const conversMap = useMemo(() => {
+    if (!conversations) return {};
+    return conversations.reduce((acc, conv) => {
+      acc[conv.member.userName] = conv.conversationId;
+      return acc;
+    }, {});
+  }, [conversations]);
+
+  const conversNames = useMemo(
+    () => conversList.map((c) => c.value),
+    [conversList]
+  );
+
+  // --- From Users ---
   const fromList = useMemo(() => ["From", "Ahmed", "Alaa"], []);
+  const userMap = useMemo(
+    () => ({
+      Ahmed: "68594a066a8f7e74bf320e74",
+      Alaa: "68594a066a8f7e74bf320e75",
+    }),
+    []
+  );
 
-  // لما النوع يتغير (All / Channels / Conversations)
+  // --- Clear selections on type change ---
   useEffect(() => {
     if (allType === "Channels") {
-      setSelectedChannel(channelsList[0]);
       setSelectedConvers("");
     } else if (allType === "Conversations") {
-      setSelectedConvers(conversList[0]);
       setSelectedChannel("");
     } else {
       setSelectedChannel("");
       setSelectedConvers("");
     }
-  }, [allType, channelsList, conversList]);
+  }, [allType]);
 
-  // Reset إجباري لما forceReset يتغير
+  // --- Force Reset ---
   useEffect(() => {
     if (forceReset) {
       setSelectedChannel("");
@@ -60,11 +95,11 @@ function SearchFilter({ onFiltersChange }) {
       setSelectedFrom("");
       setStartDate("");
       setEndDate("");
-      setForceReset(false); // نرجعه False تاني
+      setForceReset(false);
     }
   }, [forceReset]);
 
-  // تكوين رابط الكويري
+  // --- Filters Output ---
   useEffect(() => {
     const queryParams = {};
 
@@ -87,8 +122,7 @@ function SearchFilter({ onFiltersChange }) {
     if (endDate) {
       queryParams.endDate = endDate;
     }
-console.log(queryParams);
-    // const searchParams = new URLSearchParams(queryParams).toString();
+
     onFiltersChange(queryParams);
   }, [
     allType,
@@ -114,21 +148,42 @@ console.log(queryParams);
         options={["All", "Channels", "Conversations"]}
       />
 
-      {allType === "Channels" && selectedChannel && (
+      {allType === "Channels" && (
         <FilterItem
           text="Channel"
           selectedValue={selectedChannel}
           onSelect={setSelectedChannel}
-          options={channelsList}
+          options={channelNames}
         />
       )}
 
-      {allType === "Conversations" && selectedConvers && (
+      {allType === "Conversations" && (
         <FilterItem
           text="Conversation"
           selectedValue={selectedConvers}
           onSelect={setSelectedConvers}
-          options={conversList}
+          options={conversNames}
+          renderOption={(name) => {
+            const person = conversList.find((c) => c.value === name);
+            if (!person) return <span>{name}</span>;
+            return (
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <img
+                  src={person.image}
+                  alt={name}
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+                <span>{name}</span>
+              </div>
+            );
+          }}
         />
       )}
 

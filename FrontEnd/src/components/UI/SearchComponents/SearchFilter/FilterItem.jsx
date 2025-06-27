@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import styles from "./SearchFilter.module.css";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
@@ -7,26 +7,18 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
 
-function FilterItem({ text, options, selectedValue, onSelect }) {
+function FilterItem({ text, options, selectedValue, onSelect, renderOption }) {
   const isStart = text === "Start Date";
   const isEnd = text === "End Date";
   const isDate = isStart || isEnd;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [localValue, setLocalValue] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
-  useEffect(() => {
-    if (selectedValue !== undefined) {
-      setLocalValue(selectedValue);
-    }
-  }, [selectedValue]);
 
   const handleSelectOption = (option) => {
     const isReset = option === text;
     const newValue = isReset ? "" : option;
-    setLocalValue(newValue);
     if (onSelect) onSelect(newValue);
     setIsOpen(false);
   };
@@ -43,15 +35,14 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
       setEndDate(date);
     }
 
-    setLocalValue(formatted);
     if (onSelect) onSelect(formatted);
     setIsOpen(false);
   };
 
   const minDate = isEnd && startDate ? startDate : undefined;
   const value = isStart ? startDate : endDate;
-  const displayText = localValue || text;
-  const isSelected = localValue && localValue !== text;
+  const displayText = selectedValue || text;
+  const isSelected = selectedValue && selectedValue !== text;
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -61,7 +52,11 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
         }`}
       >
         <div className={styles.filter_item} onClick={() => setIsOpen(!isOpen)}>
-          <span>{displayText}</span>
+          {renderOption && selectedValue ? (
+            renderOption(selectedValue)
+          ) : (
+            <span>{displayText}</span>
+          )}
           <span className={styles.filterIcon}>
             <FaChevronDown />
           </span>
@@ -81,14 +76,12 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
                     disablePast={false}
                     slotProps={{ actionBar: { actions: [] } }}
                   />
-
                   <div className={styles.dateActions}>
                     <button
                       onClick={() => {
                         setStartDate(null);
                         setEndDate(null);
-                        setLocalValue("");
-                        if (onSelect) onSelect(""); // ⬅️ مهم برضو
+                        if (onSelect) onSelect("");
                         setIsOpen(false);
                       }}
                     >
@@ -103,7 +96,7 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
                     className={styles.dropdownItem}
                     onClick={() => handleSelectOption(option)}
                   >
-                    {option}
+                    {renderOption ? renderOption(option) : option}
                   </div>
                 ))
               )}
@@ -120,6 +113,7 @@ FilterItem.propTypes = {
   options: PropTypes.array,
   selectedValue: PropTypes.string,
   onSelect: PropTypes.func,
+  renderOption: PropTypes.func,
 };
 
 export default FilterItem;
