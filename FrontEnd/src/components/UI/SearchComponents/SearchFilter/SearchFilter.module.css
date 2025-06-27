@@ -48,7 +48,8 @@
   white-space: nowrap;
   max-width: 100%;
 }
-.filterWrapper:hover {
+
+.filterWrapper:not(.selectedFilter):hover {
   background-color: var(--white-btn-hover-color);
 }
 
@@ -80,6 +81,7 @@
   min-width: 250px;
   width: 100%;
   font-weight: normal;
+  color: #000;
 }
 
 .dropdownItem:hover {
@@ -94,6 +96,7 @@
   border-radius: var(--border-radius);
   width: 160px;
 }
+
 .datePicker {
   padding: 0 10px;
   font-size: 0.85rem;
@@ -119,4 +122,30 @@
 
 .dateActions button:hover {
   background-color: var(--primary-color-dark);
+}
+
+.subFilterMenu {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.subItem {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subItem:hover {
+  background-color: var(--white-btn-hover-color);
+}
+
+.selectedFilter {
+  background-color: var(--link-color);
+  color: #fff;
+  border-color: var(--link-color);
 }
