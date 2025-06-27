@@ -1,0 +1,36 @@
+[
+  {
+    "_id": "685e580bf11abf63c1f64786",
+    "content": "fff",
+    "createdBy": {
+        "_id": "6856e672ac9f4cc5651eddf0",
+        "userName": "AhMed AYman"
+    },
+    "channelId": null,
+    "conversationId": {
+        "_id": "6856e672ac9f4cc5651eddf8",
+        "memberOneId": {
+            "_id": "6856e672ac9f4cc5651eddf0"
+        },
+        "memberTwoId": {
+            "_id": "6856e672ac9f4cc5651eddf0"
+        },
+        "id": "6856e672ac9f4cc5651eddf8"
+    },
+    "parentMessageId": null,
+    "threadCount": 0,
+    "threadParticipants": [],
+    "lastRepliedAt": null,
+    "attachments": [],
+    "messageType": "text",
+    "readBy": [
+        "6856e672ac9f4cc5651eddf0"
+    ],
+    "edited": false,
+    "pinned": false,
+    "pinnedBy": null,
+    "createdAt": "2025-06-27T08:36:27.795Z",
+    "updatedAt": "2025-06-27T08:36:27.795Z",
+    "__v": 0
+}
+]

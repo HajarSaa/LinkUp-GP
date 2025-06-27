@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import styles from "./SearchComponents.module.css";
-import ChannelItem from "./ChannelItem";
 import { useEffect, useRef } from "react";
+import MessageItem from "../../Chat/ChatMessage/MessageItem";
 
-function ChannelsList() {
+function SearchResult() {
   const scrollRef = useRef();
-  const { SearchComponentss } = useSelector((state) => state.SearchComponentss);
-
+  const { messages } = useSelector((state) => state.searchData);
+  console.log(useSelector((state) => state.searchData));
 
   // handle scrolling border
   useEffect(() => {
@@ -28,17 +28,17 @@ function ChannelsList() {
     };
   }, []);
 
-
-  if (SearchComponentss.length === 0) return null
-    return (
-      <div className={styles.browse_channel_list} ref={scrollRef}>
-        <div className={styles.channel_list_container}>
-          {SearchComponentss.map((channel) => (
-            <ChannelItem key={channel.id} channel={channel} />
-          ))}
-        </div>
+  if (messages.length === 0) return null;
+  return (
+    <div className={styles.browse_channel_list} ref={scrollRef}>
+      <div className={styles.channel_list_container}>
+        {console.log(messages)}
+        {messages.map((message, index) => (
+          <MessageItem key={index} message={message} />
+        ))}
       </div>
-    );
+    </div>
+  );
 }
 
-export default ChannelsList;
+export default SearchResult;

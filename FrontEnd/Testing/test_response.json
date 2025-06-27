@@ -1,26 +1,23 @@
 [
   {
+    "_id": "685c5ba43a21cca749ff3754",
+    "content": "Ahmed Ayman makhlouf",
+    "createdBy": "6856e672ac9f4cc5651eddf0",
+    "channelId": null,
     "conversationId": "6856e672ac9f4cc5651eddf8",
-    "member": {
-      "customStatus": {
-        "dontClear": false
-      },
-      "_id": "6856e672ac9f4cc5651eddf0",
-      "user": "682e59d20695df4545391ebd",
-      "workspace": "6856e64dac9f4cc5651edde2",
-      "role": "owner",
-      "userName": "AhMed AYman",
-      "email": "ahmad.ayman62003@gmail.com",
-      "about": "",
-      "status": "online",
-      "photo": "https://res.cloudinary.com/dzlvica4e/image/upload/v1750525554/avatars/yek6hajwjourkhpdvsz8.jpg",
-      "connectionQuality": "stable",
-      "phoneNumber": "",
-      "__v": 0,
-      "lastActive": "2025-06-25T10:35:21.554Z"
-    },
-    "isMe": true,
-    "lastUpdated": "2025-06-21T17:05:54.997Z",
-    "isSelfChat": true
+    "parentMessageId": null,
+    "threadCount": 0,
+    "threadParticipants": [],
+    "lastRepliedAt": null,
+    "attachments": [],
+    "messageType": "text",
+    "readBy": ["6856e672ac9f4cc5651eddf0"],
+    "edited": true,
+    "pinned": false,
+    "pinnedBy": null,
+    "createdAt": "2025-06-25T20:27:16.412Z",
+    "updatedAt": "2025-06-25T20:34:39.568Z",
+    "__v": 0,
+    "editedAt": "2025-06-25T20:34:39.567Z"
   }
 ]
