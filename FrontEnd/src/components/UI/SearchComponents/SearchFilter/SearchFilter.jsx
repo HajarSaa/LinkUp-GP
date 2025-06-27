@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import styles from "./SearchFilter.module.css";
 import FilterItem from "./FilterItem";
@@ -17,12 +18,13 @@ function SearchFilter({ onFiltersChange }) {
   const { workspace } = useSelector((state) => state.workspace);
   const channels = workspace?.channels;
   const conversations = useGetSidebarConvers(workspace);
+  const members = workspace.members;
 
   // --- Channels ---
   const channelsList = useMemo(() => {
     if (!channels) return [];
     return channels.map((channel) => ({
-      label: `#${channel.name} (${channel.type})`,
+      label: `in #${channel.name} (${channel.type})`,
       value: `#${channel.name}`,
       id: channel._id,
     }));
@@ -45,7 +47,7 @@ function SearchFilter({ onFiltersChange }) {
   const conversList = useMemo(() => {
     if (!conversations) return [];
     return conversations.map((conv) => ({
-      label: conv.member.userName,
+      label: `in ${conv.member.userName}`,
       value: conv.member.userName,
       image: conv.member.photo,
       id: conv.conversationId,
@@ -66,14 +68,18 @@ function SearchFilter({ onFiltersChange }) {
   );
 
   // --- From Users ---
-  const fromList = useMemo(() => ["From", "Ahmed", "Alaa"], []);
-  const userMap = useMemo(
-    () => ({
-      Ahmed: "68594a066a8f7e74bf320e74",
-      Alaa: "68594a066a8f7e74bf320e75",
-    }),
-    []
-  );
+  const fromList = useMemo(() => {
+    if (!members) return ["From"];
+    return ["From", ...members.map((m) => m.userName)];
+  }, [members]);
+
+  const userMap = useMemo(() => {
+    if (!members) return {};
+    return members.reduce((acc, member) => {
+      acc[member.userName] = member._id;
+      return acc;
+    }, {});
+  }, [members]);
 
   // --- Clear selections on type change ---
   useEffect(() => {
@@ -165,7 +171,7 @@ function SearchFilter({ onFiltersChange }) {
           options={conversNames}
           renderOption={(name) => {
             const person = conversList.find((c) => c.value === name);
-            if (!person) return <span>{name}</span>;
+            if (!person) return <span>in {name}</span>;
             return (
               <div
                 style={{ display: "flex", alignItems: "center", gap: "8px" }}
@@ -180,7 +186,7 @@ function SearchFilter({ onFiltersChange }) {
                     objectFit: "cover",
                   }}
                 />
-                <span>{name}</span>
+                <span>{person.label}</span>
               </div>
             );
           }}

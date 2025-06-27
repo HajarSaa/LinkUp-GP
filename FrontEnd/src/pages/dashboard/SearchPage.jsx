@@ -25,13 +25,16 @@ function SearchPage() {
   );
   console.log(searchParams);
 
-  useSearchMessages(searchParams);
+  const search_request = useSearchMessages(searchParams);
 
   return (
     <FullPageContent>
       <div className={styles.browse_page_content}>
         <SearchHeader onFiltersChange={setSearchFilters} />
-        <SearchResult />
+        <SearchResult
+          isLoading={search_request.isLoading}
+          query={decodedKeyword}
+        />
       </div>
     </FullPageContent>
   );
