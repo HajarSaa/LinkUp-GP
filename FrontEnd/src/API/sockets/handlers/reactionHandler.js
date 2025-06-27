@@ -1,23 +1,28 @@
-
-// src/sockets/handlers/reactionHandler.js
 import { setMessageReactions } from "../../redux_toolkit/api_data/messages/messageReactionsSlice";
 
 export default function registerReactionHandler(socket, dispatch) {
   function onReactionUpdated({ messageId, emoji, userId, action }) {
-    console.log("\uD83D\uDCE5 [reactionUpdated] Received:", {
-      messageId,
-      emoji,
-      userId,
-      action,
-    });
+  const myId = JSON.parse(localStorage.getItem("currentUser"))._id;
 
-    if (!messageId || !emoji || !userId || !action) return;
+  console.log("👤 My ID:", myId);
+  console.log("📩 Incoming reactionUpdated:", {
+    messageId,
+    emoji,
+    userId,
+    action,
+  });
 
-    dispatch({
-      type: "messageReactions/updateFromSocket",
-      payload: { messageId, emoji, userId, action },
-    });
-  }
+  const isMyReaction = myId === userId;
+  console.log("🧠 Is it my reaction?", isMyReaction);
+
+  if (!messageId || !emoji || !userId || !action) return;
+
+  dispatch({
+    type: "messageReactions/updateFromSocket",
+    payload: { messageId, emoji, userId, action },
+  });
+}
+
 
   function onGetMessageReactionsResult({ messageId, groupedReactions }) {
     console.log("📥 [getMessageReactionsResult] Received:", {

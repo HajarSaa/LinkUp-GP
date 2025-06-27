@@ -53,7 +53,8 @@ export default function reactionHandler(socket, io) {
       io.to(room).emit("reactionUpdated", {
         messageId,
         emoji,
-        userId: socket.userId,
+        // userId: socket.userId,
+        userId: socket.userProfileId,
         action, // "added" or "removed"
       });
 

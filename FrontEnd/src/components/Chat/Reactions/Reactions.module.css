@@ -28,8 +28,8 @@
 }
 
 .myReact {
-  background-color: #e4f8ff;
-  border-color: var(--link-color);
+  background-color: #e4f8ff !important;
+  border-color: var(--link-color) !important;
 }
 
 .react_emoji,
