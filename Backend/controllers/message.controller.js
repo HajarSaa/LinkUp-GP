@@ -7,7 +7,7 @@ import UserProfile from "../models/userProfile.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
-import { MetadataService } from "../utils/metadataService.js";
+import { MetadataService } from "../utils/MetadataService.js";
 
 export const getAllMessages = getAll(Message);
 
