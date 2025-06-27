@@ -5,7 +5,7 @@ import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 function FilterItem({ text, options, selectedValue, onSelect }) {
   const isStart = text === "Start Date";
@@ -33,13 +33,18 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
 
   const handleDateChange = (date) => {
     const formatted = date.format("YYYY-MM-DD");
+
     if (isStart) {
       setStartDate(date);
-      if (endDate && dayjs(endDate).isBefore(date)) setEndDate(null);
+      if (endDate && dayjs(endDate).isBefore(date)) {
+        setEndDate(null);
+      }
     } else {
       setEndDate(date);
     }
+
     setLocalValue(formatted);
+    if (onSelect) onSelect(formatted); // ⬅️ مهم
     setIsOpen(false);
   };
 
@@ -83,7 +88,7 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
                         setStartDate(null);
                         setEndDate(null);
                         setLocalValue("");
-                        if (onSelect) onSelect("");
+                        if (onSelect) onSelect(""); // ⬅️ مهم برضو
                         setIsOpen(false);
                       }}
                     >
@@ -110,10 +115,8 @@ function FilterItem({ text, options, selectedValue, onSelect }) {
   );
 }
 
-
 FilterItem.propTypes = {
   text: PropTypes.string.isRequired,
-  setAllType: PropTypes.func,
   options: PropTypes.array,
   selectedValue: PropTypes.string,
   onSelect: PropTypes.func,
