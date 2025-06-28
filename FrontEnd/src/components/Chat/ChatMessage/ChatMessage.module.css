@@ -273,3 +273,15 @@
   display: flex;
   align-items: center;
 }
+
+
+.pureLink {
+  color: #1d9bf0;
+  text-decoration: underline;
+  word-break: break-word;
+}
+
+.pureLink:hover {
+  color: #0d8ae0;
+  text-decoration: none;
+}

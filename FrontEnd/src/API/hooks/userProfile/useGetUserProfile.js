@@ -25,3 +25,30 @@ function useGetUserProfile(profile_id) {
 }
 
 export default useGetUserProfile;
+
+
+// import { useEffect } from "react";
+// import { setUserProfile } from "../../redux_toolkit/api_data/userProfileSlice";
+// import { useDispatch, useSelector } from "react-redux";
+// import socket from "../../sockets/socketService";
+
+// function useGetUserProfile(profile_id) {
+//   const dispatch = useDispatch();
+//   const { workspace } = useSelector((state) => state.workspace);
+
+//   useEffect(() => {
+//     if (!profile_id || !socket.connected) return;
+
+//     socket.emit("userProfile:get", { profileId: profile_id }, (response) => {
+//       if (!response?.success || !response.profile) return;
+
+//       const currentProfile = response.profile;
+//       const me = workspace?.members?.find((m) => m.user === socket.userId);
+//       const isMe = me?._id === profile_id;
+
+//       dispatch(setUserProfile({ ...currentProfile, isMe }));
+//     });
+//   }, [workspace, profile_id, dispatch]);
+// }
+
+// export default useGetUserProfile;
