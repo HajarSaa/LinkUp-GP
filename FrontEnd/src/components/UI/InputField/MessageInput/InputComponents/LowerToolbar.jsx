@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import styles from "../MessageInput.module.css";
 import { FaCheck, FaPlus } from "react-icons/fa6";
@@ -125,11 +126,11 @@ function LowerToolbar({ isThread, isEditing }) {
         </div>
       )}
 
-      <div className={styles.tool_wrapper}>
+      {/* <div className={styles.tool_wrapper}>
         <span className={styles.tool_icon}>
           <RxLetterCaseCapitalize />
         </span>
-      </div>
+      </div> */}
 
       <div className={styles.tool_wrapper}>
         <span className={styles.tool_icon}>
@@ -170,11 +171,11 @@ function LowerToolbar({ isThread, isEditing }) {
             />
           )}
 
-          <div className={styles.tool_wrapper}>
+          {/* <div className={styles.tool_wrapper}>
             <span className={styles.tool_icon}>
               <CgShortcut />
             </span>
-          </div>
+          </div> */}
         </>
       )}
     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MessageInput.module.css";
 import { HiMiniBold } from "react-icons/hi2";
@@ -75,14 +76,14 @@ const EditMessageInput = () => {
   return (
     <div className={styles.messageInputContainer}>
       <div className={styles.input_field}>
-        <div className={styles.upper_row_icons}>
+        {/* <div className={styles.upper_row_icons}>
           {renderIcons(
             upperIcons,
             [3, 6],
             styles.upper_icons,
             styles.upper_icon_style
           )}
-        </div>
+        </div> */}
         <textarea
           name="messageBox"
           ref={textareaRef}
@@ -137,23 +138,23 @@ const EditMessageInput = () => {
 
 export default EditMessageInput;
 
-const upperIcons = [
-  { icon: HiMiniBold },
-  { icon: FiItalic },
-  { icon: AiOutlineStrikethrough },
-  { icon: PiLinkBold },
-  { icon: MdOutlineFormatListNumbered },
-  { icon: MdOutlineFormatListBulleted },
-  { icon: RiQuoteText },
-  { icon: IoCodeSlash },
-  { icon: PiCodeBlockBold },
-];
+// const upperIcons = [
+//   { icon: HiMiniBold },
+//   { icon: FiItalic },
+//   { icon: AiOutlineStrikethrough },
+//   { icon: PiLinkBold },
+//   { icon: MdOutlineFormatListNumbered },
+//   { icon: MdOutlineFormatListBulleted },
+//   { icon: RiQuoteText },
+//   { icon: IoCodeSlash },
+//   { icon: PiCodeBlockBold },
+// ];
 
-const renderIcons = (icons, positions, iconClass, customClass) => {
-  return icons.map(({ icon: IconComponent }, index) => (
-    <React.Fragment key={index}>
-      <IconComponent className={`${iconClass} ${customClass}`} />
-      {positions.includes(index + 1) && <div className={styles.box11}></div>}
-    </React.Fragment>
-  ));
-};
+// const renderIcons = (icons, positions, iconClass, customClass) => {
+//   return icons.map(({ icon: IconComponent }, index) => (
+//     <React.Fragment key={index}>
+//       <IconComponent className={`${iconClass} ${customClass}`} />
+//       {positions.includes(index + 1) && <div className={styles.box11}></div>}
+//     </React.Fragment>
+//   ));
+// };

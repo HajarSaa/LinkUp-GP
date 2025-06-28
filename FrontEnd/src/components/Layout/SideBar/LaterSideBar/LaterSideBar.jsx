@@ -11,7 +11,7 @@ import Spinner from "../../../UI/Spinner/Spinner";
 function LaterSideBar() {
   const { workspace } = useSelector((state) => state.workspace);
   const [activeTab, setActiveTab] = useState("inProgress");
-  const { data: later_items, isLoading, isError } = useGetLaterItems();
+  const { data: later_items, isLoading, isError, error } = useGetLaterItems();
 
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
 
@@ -61,7 +61,11 @@ function LaterSideBar() {
           <div className={laterStyle.content}>
             {activeTab === "inProgress" && (
               <>
-                {isLoading ? (
+                {!isError ? (
+                  <div className={laterStyle.placeholder}>
+                    <p className={laterStyle.error_message}>{error}</p>
+                  </div>
+                ) : isLoading ? (
                   <div className={laterStyle.placeholder}>
                     <Spinner
                       width={60}
