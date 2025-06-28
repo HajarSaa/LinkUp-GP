@@ -38,7 +38,7 @@
 }
 
 .message_container:not(.pinned_message):hover,
-.active {
+.active:not(.pinned_message) {
   background-color: #f8f8f8;
 }
 
