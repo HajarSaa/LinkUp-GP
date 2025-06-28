@@ -18,7 +18,7 @@ function Reactions({ messageId }) {
   const { workspace } = useSelector((state) => state.workspace);
   const currentProfile = useSelector((state) => state.userProfile.data);
   const myProfileId = currentProfile._id;
-  console.log("✔✔✔✔",myProfileId);
+  // console.log("✔✔✔✔",myProfileId);
   function openEmojies() {
     const rect = add_react_ref.current.getBoundingClientRect();
     const position = getEmojiPickerPosition(rect);
@@ -41,9 +41,9 @@ function Reactions({ messageId }) {
         <div className={styles.reactions}>
           {reactions.map(([emoji, { count, userIds }]) => {
             const isMyReact = userIds.includes(myProfileId);
-            console.log("✅ My ID:", myProfileId);
-            console.log("📦 userIds:", userIds);
-            console.log("🔍 isMyReact:", isMyReact);
+            // console.log("✅ My ID:", myProfileId);
+            // console.log("📦 userIds:", userIds);
+            // console.log("🔍 isMyReact:", isMyReact);
 
             const memberNames = (userIds || [])
               .map((profileId) => {
@@ -54,14 +54,14 @@ function Reactions({ messageId }) {
               })
               .filter(Boolean)
               .join(" , ");
-              console.log("🧪 isMyReact:", isMyReact);
+              // console.log("🧪 isMyReact:", isMyReact);
 
             return (
               <React.Fragment key={emoji}>
                 <div
                   data-tooltip-id={`reaction-${emoji}`}
-                  style={isMyReact ? { backgroundColor: 'red' } : {}}
                   className={`${styles.react} ${isMyReact ? styles.myReact : ""}`}
+                  // className={`${styles.react} ${isMyReact ? "" : styles.myReact}`}
                   onClick={() => toggleReaction(emoji)}
                 >
                   <div className={styles.react_emoji}>

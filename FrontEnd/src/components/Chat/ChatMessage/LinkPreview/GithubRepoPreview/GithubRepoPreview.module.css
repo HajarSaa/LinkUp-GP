@@ -1,0 +1,107 @@
+.previewWrapper {
+  position: relative;
+  width: fit-content;
+  margin-top: 10px;
+}
+
+.outsideDismiss {
+  position: absolute;
+  top: 4px;
+  left: -28px;
+  background: transparent;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  padding: 3px;
+  z-index: 5;
+  visibility: hidden;
+}
+
+.previewWrapper:hover .outsideDismiss {
+  visibility: visible;
+}
+
+.previewCard {
+  padding: 12px 0 0 12px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  border-left: 5px solid #dddddd;
+}
+.repoContent {
+  background-color: #fff;
+  padding: 12px 16px;
+  width: 375px;
+  height: 150px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dddddd;
+  border-radius: var(--border-radius);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+.repoHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.avatar {
+  width: 75px;
+  height: 75px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.repoPath {
+  color: #1d1c1d;
+  font-size: 22px;
+}
+
+.repoPath strong {
+  font-weight: 600;
+  color: #1d1c1d;
+}
+
+.owner {
+  color: #4a4a4a;
+}
+
+.description {
+  margin-top: 4px;
+  margin-bottom: 8px;
+  color: #4a4a4a;
+  font-size: 13px;
+  line-height: 1.4;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.repoStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #616061;
+  font-size: 12px;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: -60px;
+}
+
+a {
+  text-decoration: none;
+  color: #1264a3;
+}
+
+a:hover {
+  text-decoration: underline;
+}
