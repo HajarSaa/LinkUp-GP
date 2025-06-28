@@ -16,7 +16,28 @@
   color: #1d1c1d;
 }
 
-.message_container:hover,
+.pinned_tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pinned_icon {
+  color: #e9912c;
+  display: flex;
+  font-size: 15px;
+}
+
+.pinned_text {
+  font-size: 14px;
+  color: #666;
+}
+
+.pinned_message {
+  background-color: #fff9ed;
+}
+
+.message_container:not(.pinned_message):hover,
 .active {
   background-color: #f8f8f8;
 }
@@ -27,8 +48,9 @@
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  background-color: var(--secondary-color);
+  /* background-color: var(--secondary-color); */
   border-radius: var(--border-radius);
+  display: flex;
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
@@ -261,15 +283,17 @@
   color: var(--text-color-grey);
   font-size: 13px;
 }
-.msg_edit{
+
+.msg_edit {
   display: flex;
   flex-direction: row;
 }
+
 .editingMessage {
   background-color: var(--active-color);
 }
 
-.edit{
+.edit {
   display: flex;
   align-items: center;
 }
