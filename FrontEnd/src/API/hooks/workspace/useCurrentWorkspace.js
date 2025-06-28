@@ -10,7 +10,7 @@ import {
   enableResizing,
 } from "../../redux_toolkit/ui/resizeSlice";
 
-const useCurrentWorkspace = () => {
+const useCurrentWorkspace = (enabled = true) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const work_id = localStorage.getItem("selectedWorkspaceId");
@@ -18,7 +18,7 @@ const useCurrentWorkspace = () => {
   const query = useQuery({
     queryKey: ["workspace", work_id],
     queryFn: () => getWorkspace(work_id),
-    enabled: !!work_id,
+    enabled: !!work_id && enabled,
     staleTime: 0,
     retry: 1,
     // refetchInterval: 1000,
@@ -27,7 +27,14 @@ const useCurrentWorkspace = () => {
   // Handle success
   useEffect(() => {
     if (query.data?.workspace) {
-      dispatch(setSelectedWorkspace(query.data.workspace ));
+      const current_user = JSON.parse(localStorage.getItem("currentUser"));
+      const loggedUser = {
+        memberId: query.data.userProfileId,
+        userId: query.data.userId,
+        email: current_user.email,
+      };
+      localStorage.setItem("logged_user_data", JSON.stringify(loggedUser));
+      dispatch(setSelectedWorkspace(query.data.workspace));
     }
   }, [query.data, dispatch]);
 

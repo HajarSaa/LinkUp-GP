@@ -7,15 +7,11 @@ import { useDispatch } from "react-redux";
 import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
 import UserImage from '../User/UserImage';
 
-function WorkspaceItem({ workspace , userData }) {
+function WorkspaceItem({ workspace }) {
   const work_title = getWorkLabel(workspace?.name || "workspace name");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const loggedUser = {
-    memberId: workspace.userProfileId,
-    userId: userData._id,
-    emai: userData.email,
-  };
+
 
 
   const handleClick = (work_id) => {
@@ -27,7 +23,6 @@ function WorkspaceItem({ workspace , userData }) {
       localStorage.removeItem("logged_user_data");
 
     localStorage.setItem("selectedWorkspaceId", work_id);
-    localStorage.setItem("logged_user_data", JSON.stringify(loggedUser));
     navigate(`/`);
   };
 
