@@ -19,7 +19,6 @@
 // import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
 // import Reactions from "../Reactions/Reactions";
 
-
 // const MessageItem = ({
 //   message,
 //   isInThreadPanel = false,
@@ -71,7 +70,6 @@
 //       })
 //     );
 //   };
-
 
 //   return (
 //     <>
@@ -156,7 +154,6 @@
 // };
 
 // export default MessageItem;
-
 
 // import styles from "./ChatMessage.module.css";
 // import { useState } from "react";
@@ -179,7 +176,6 @@
 // import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
 // import Reactions from "../Reactions/Reactions";
 
-
 // const MessageItem = ({
 //   message,
 //   isInThreadPanel = false,
@@ -231,7 +227,6 @@
 //       })
 //     );
 //   };
-
 
 //   return (
 //     <>
@@ -316,7 +311,6 @@
 // };
 
 // export default MessageItem;
-
 
 import styles from "./ChatMessage.module.css";
 import { useState } from "react";
@@ -346,7 +340,7 @@ const MessageItem = ({
   isThreadParent = false,
   media,
   isSearchResult = false,
-  from = '',
+  from = "",
 }) => {
   const [messageHover, setMessageHover] = useState(false);
   const [dismissedLinks, setDismissedLinks] = useState([]);
@@ -492,15 +486,17 @@ const MessageItem = ({
           </div>
         </div>
 
-        <MessageActions
-          isThread={isInThreadPanel}
-          message={message}
-          messageHover={messageHover}
-          isThreadParent={isThreadParent}
-          threadData={threadData}
-          parentMessage={message}
-          isSender={isMessageSender}
-        />
+        {!isSearchResult && (
+          <MessageActions
+            isThread={isInThreadPanel}
+            message={message}
+            messageHover={messageHover}
+            isThreadParent={isThreadParent}
+            threadData={threadData}
+            parentMessage={message}
+            isSender={isMessageSender}
+          />
+        )}
 
         {/* Menu Actions => forward , later , more , .... */}
         {!isSearchResult && (
