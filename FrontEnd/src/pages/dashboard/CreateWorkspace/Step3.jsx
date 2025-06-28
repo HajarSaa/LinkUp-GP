@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
@@ -12,44 +12,45 @@ import {
 import { updateCreationDataField } from "../../../utils/workspaceUtils";
 import { clearWorkspace } from "../../../API/redux_toolkit/api_data/workspaceSlice";
 import CreationInvite from "../../../components/UI/CreationWork/CreationInvite";
+import useCurrentWorkspace from "../../../API/hooks/workspace/useCurrentWorkspace";
 
 function Step3() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTriggered, setIsTriggered] = useState(false); // ✅ علشان نتحكم في التفعيل
 
   const workspace = useSelector((state) => {
     const w = state.createWorkspace.workspace;
     return w?.workspace ?? w ?? null;
   });
+
   const savedEmails = useSelector((state) => state.createWorkspace.emails);
   const [emailText, setEmailText] = useState(
     Array.isArray(savedEmails) ? savedEmails.join(", ") : ""
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isButtonDisabled = emailText.trim() === "";
 
-  //   تحويل النص إلى array وحفظه
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value;
-  //   setEmailText(value);
+  // ✅ استخدم الهوك ولكن بتمكين مشروط
+  const { isSuccess, isLoading } = useCurrentWorkspace(isTriggered);
 
-  //   const emailArray = value
-  //     .split(",")
-  //     .map((email) => email.trim())
-  //     .filter((email) => email.length > 0);
-
-  //   dispatch(setEmails(emailArray));
-  //   updateCreationDataField("emails", emailArray);
-  // };
+  // ✅ بعد نجاح الفتش يتم التنقل
+  useEffect(() => {
+    if (isTriggered && isSuccess) {
+      navigate("/");
+    }
+  }, [isTriggered, isSuccess, navigate]);
 
   const handleNextClick = () => {
-    if (localStorage.getItem("selectedWorkspaceId"))
-      localStorage.removeItem("selectedWorkspaceId");
-    dispatch(clearWorkspace());
-    localStorage.setItem("selectedWorkspaceId", workspace.id);
-    dispatch(clearCreationSteps());
-    navigate("/"); //   إنهاء وإنقال
+    if (workspace?.id) {
+      localStorage.setItem("selectedWorkspaceId", workspace.id); // لازم قبل أي dispatch
+      setIsTriggered(true); // فعل الفتش
+      dispatch(clearWorkspace());
+      dispatch(clearCreationSteps());
+    } else {
+      console.error("Workspace ID is missing, can't proceed.");
+    }
   };
 
   const handleSkipClick = () => {
@@ -68,7 +69,10 @@ function Step3() {
   };
 
   if (!workspace) {
-    return <p>Loading workspace info...</p>;
+    return (
+      <PageContent>
+      </PageContent>
+    );
   }
 
   return (

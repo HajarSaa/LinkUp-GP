@@ -41,15 +41,21 @@ function UserMenu() {
       removeAllPanels();
       dispatch(closeUserMenuModal());
       dispatch(clearWorkspace());
-      navigate("/login");
+      navigate("/workspaces-landing");
     });
   } else {
     console.warn("⚠️ No workspace ID found on sign out");
     removeAllPanels();
     dispatch(closeUserMenuModal());
     dispatch(clearWorkspace());
-    navigate("/login");
-  }
+    navigate("/workspaces-landing");
+    }
+
+    // clear local storage
+    if (localStorage.getItem("logged_user_data"))
+      localStorage.removeItem("logged_user_data");
+    if (localStorage.getItem("sidebarWidth"))
+      localStorage.removeItem("sidebarWidth");
 };
 
 

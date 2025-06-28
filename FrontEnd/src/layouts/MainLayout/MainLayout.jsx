@@ -26,13 +26,13 @@ function MainLayout() {
   useSocketConnection();
   useBrowseChannels();
 
-  useEffect(() => {
-    if (
-      !localStorage.getItem("selectedWorkspaceId") ||
-      !localStorage.getItem("logged_user_data")
-    )
-      navigate("/login");
-  });
+  // useEffect(() => {
+  //   if (
+  //     !localStorage.getItem("selectedWorkspaceId") ||
+  //     !localStorage.getItem("logged_user_data")
+  //   )
+  //     navigate("/login");
+  // });
 
   // navigate to main channel in main page
   useEffect(() => {
