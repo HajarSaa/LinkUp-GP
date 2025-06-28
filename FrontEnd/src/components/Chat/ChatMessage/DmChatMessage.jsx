@@ -18,7 +18,9 @@ function DmChatMessage({ containerRef }) {
   const { mutate: toggleThisReact } = useToggleReaction();
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
-    const { conversMedia } = useSelector((state) => state.conversMedia);
+  const searchedMessageId = new URLSearchParams(search).get("searched_message");
+
+  const { conversMedia } = useSelector((state) => state.conversMedia);
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetConversMessages(convers_id);
 
@@ -48,6 +50,7 @@ function DmChatMessage({ containerRef }) {
     }
   }, [messages, targetMessageId]);
 
+  // scroll for later message
   useEffect(() => {
     if (!targetMessageId || !messages?.length) return;
 
@@ -79,6 +82,45 @@ function DmChatMessage({ containerRef }) {
     tryScrollToTarget();
   }, [
     targetMessageId,
+    messages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ]);
+
+  // scroll for searched message
+  useEffect(() => {
+    if (!searchedMessageId || !messages?.length) return;
+
+    const tryScrollToSearchedMessage = async () => {
+      const MAX_TRIES = 20;
+      let tries = 0;
+
+      while (tries < MAX_TRIES) {
+        const element = document.getElementById(`message-${searchedMessageId}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+          if (element.parentElement) {
+            element.parentElement.classList.add(styles.highlight);
+            setTimeout(() => {
+              element.parentElement.classList.remove(styles.highlight);
+            }, 2000);
+          }
+
+          break;
+        }
+
+        if (!hasNextPage || isFetchingNextPage) break;
+
+        await fetchNextPage();
+        tries++;
+      }
+    };
+
+    tryScrollToSearchedMessage();
+  }, [
+    searchedMessageId,
     messages,
     fetchNextPage,
     hasNextPage,

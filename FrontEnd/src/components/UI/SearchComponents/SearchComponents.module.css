@@ -1,0 +1,204 @@
+.searchHeader {
+  width: 100%;
+}
+
+.searchHeader_content {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.search_query {
+  font-size: 20px;
+}
+
+
+.browse_channel_header>div {
+  width: 90%;
+}
+
+
+.search_list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.search_list.scrolled {
+  border-top: 1px solid var(--border-color);
+}
+
+.search_list_container {
+  width: 90%;
+  background-color: var(--bg-white);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.browseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.browseHeader>.title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.browseHeader {
+  margin-bottom: 1rem;
+}
+
+
+.channelItem {
+  padding: 20px 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.channelItem:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.headerText {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.channelName {
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  gap: 5px;
+}
+
+.viewChannel {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+}
+
+.viewChannel.req_ifo>* {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Required Attribute */
+.req_ifo {
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+}
+
+.req_ifo>span {
+  display: flex;
+}
+
+
+.channelItem:hover .viewChannel,
+.channelItem:hover .viewChannel.req_ifo,
+.channelItem:hover .buttonGroups {
+  visibility: visible;
+}
+
+/* buttonGroup */
+.buttonGroups {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 30px;
+  display: flex;
+  gap: 8px;
+  cursor: context-menu;
+  visibility: hidden;
+}
+
+.buttonGroups>.buttonGroups_btn,
+.createBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 100%;
+  font-weight: bold;
+  border-radius: var(--border-radius);
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-white);
+  height: 32px;
+}
+
+.toggle_join {
+  width: 70px;
+}
+
+.buttonGroups>.buttonGroups_btn:hover,
+.createBtn:hover {
+  background-color: var(--white-btn-hover-color);
+}
+
+
+
+.channelInfo {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.channelInfo_text {
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.joined {
+  color: var(--green-color);
+}
+
+
+.joinedIcon {
+  font-size: 11px;
+}
+
+.search_message {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.not_found {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: var(--text-secondary);
+}

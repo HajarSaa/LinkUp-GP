@@ -10,19 +10,18 @@ import DateDivider from "../DateDivider/DateDivider";
 import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
 import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
 
-
 function ChatMessage({ containerRef }) {
   const { id: channel_id } = useParams();
   const messages = useSelector((state) =>
     selectMessagesByChannel(state, channel_id)
   );
   const { channelMedia } = useSelector((state) => state.channelMedia);
-  const {mutate:toggleThisReact} = useToggleReaction()
+  const { mutate: toggleThisReact } = useToggleReaction();
   // const toggleThisReact = useToggleReaction();
-
 
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
+  const searchedMessageId = new URLSearchParams(search).get("searched_message");
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChannelMessages(channel_id);
@@ -53,6 +52,7 @@ function ChatMessage({ containerRef }) {
     }
   }, [messages, targetMessageId]);
 
+  // scroll for later message
   useEffect(() => {
     if (!targetMessageId || !messages?.length) return;
 
@@ -84,6 +84,45 @@ function ChatMessage({ containerRef }) {
     tryScrollToTarget();
   }, [
     targetMessageId,
+    messages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ]);
+
+  //scroll for searched message
+  useEffect(() => {
+    if (!searchedMessageId || !messages?.length) return;
+
+    const tryScrollToSearchedMessage = async () => {
+      const MAX_TRIES = 20;
+      let tries = 0;
+
+      while (tries < MAX_TRIES) {
+        const element = document.getElementById(`message-${searchedMessageId}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+          if (element.parentElement) {
+            element.parentElement.classList.add(styles.highlight);
+            setTimeout(() => {
+              element.parentElement.classList.remove(styles.highlight);
+            }, 2000);
+          }
+
+          break;
+        }
+
+        if (!hasNextPage || isFetchingNextPage) break;
+
+        await fetchNextPage();
+        tries++;
+      }
+    };
+
+    tryScrollToSearchedMessage();
+  }, [
+    searchedMessageId,
     messages,
     fetchNextPage,
     hasNextPage,
