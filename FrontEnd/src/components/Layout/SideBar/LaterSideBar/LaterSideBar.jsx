@@ -5,11 +5,13 @@ import laterStyle from "./LaterSideBar.module.css";
 import { MdAdd, MdOutlineFilterList } from "react-icons/md";
 import { useState } from "react";
 import LaterItem from "./LaterItem";
+import useGetLaterItems from "../../../../API/hooks/Later/useGetLaterItems";
+import Spinner from "../../../UI/Spinner/Spinner";
 
 function LaterSideBar() {
   const { workspace } = useSelector((state) => state.workspace);
   const [activeTab, setActiveTab] = useState("inProgress");
-
+  const { data: later_items, isLoading, isError } = useGetLaterItems();
 
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
 
@@ -59,22 +61,21 @@ function LaterSideBar() {
           <div className={laterStyle.content}>
             {activeTab === "inProgress" && (
               <>
-                <LaterItem
-                username="AYmoon"
-                message="hello"
-                tag="Overdue by 39 minutes"
-                />
-              <LaterItem username="AYmoon" message="aaaassssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
-                <LaterItem username="AYmoon" message="aaaa" />
+                {isLoading ? (
+                  <div className={laterStyle.placeholder}>
+                    <Spinner
+                      width={60}
+                      height={60}
+                      color="var(--secondary-color)"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    {later_items.map((later_item, index) => (
+                      <LaterItem key={index} laterDate={later_item} />
+                    ))}
+                  </>
+                )}
               </>
             )}
 
