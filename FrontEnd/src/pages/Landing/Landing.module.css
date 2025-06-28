@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  position: relative;
 }
 
 .landing_page_container {
@@ -34,4 +35,21 @@
   max-width: 90%;
   display: flex;
   flex-direction: column;
+}
+
+.logout {
+  position: absolute;
+  top: 2%;
+  right: 5%;
+  display: flex;
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+}
+
+.logout:hover{
+  background-color: var(--secondary-color);
 }
