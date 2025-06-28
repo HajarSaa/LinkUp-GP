@@ -82,6 +82,7 @@ const MessageItem = ({
         activeMessageId: message_id,
         isSender: isMessageSender,
         isInThread: isInThreadPanel,
+        isPinned: message.pinned,
       })
     );
   };

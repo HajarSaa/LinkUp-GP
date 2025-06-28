@@ -43,6 +43,7 @@ function MessageActions({
         activeMessageId: message_id,
         isSender: isSender,
         isInThread: isThread,
+        isPinned: message.pinned,
       })
     );
   };

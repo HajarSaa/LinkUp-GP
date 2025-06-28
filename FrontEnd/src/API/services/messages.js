@@ -72,3 +72,11 @@ export const updateThisMessage = async (message_id, content) => {
   const { data } = await axiosInstance.patch(`/messages/${message_id}`, content);
   return data.data;
 };
+
+// ================(Pin or Unpin a message)
+export const togglePinMessage = async ({ messageId, pin }) => {
+  const { data } = await axiosInstance.patch(
+    `/messages/${messageId}/pin?pin=${pin}`
+  );
+  return data.data;
+};
