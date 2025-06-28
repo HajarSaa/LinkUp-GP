@@ -80,3 +80,19 @@ export const togglePinMessage = async ({ messageId, pin }) => {
   );
   return data.data;
 };
+// ================(Get Pinned Channel Messages)
+// Get pinned messages for a channel with pagination
+
+export const getChannelPinnedMessages = async ({ channelId, limit = 10, page = 1 }) => {
+  const { data } = await axiosInstance.get(
+    `/messages/channelPinnedMessages/${channelId}?limit=${limit}&page=${page}`
+  );
+  return {
+    data: data.data,
+    currentPage: data.currentPage,
+    hasNextPage: data.hasNextPage,
+  };
+};
+
+
+// ================(Get Pinned Conversation Messages)

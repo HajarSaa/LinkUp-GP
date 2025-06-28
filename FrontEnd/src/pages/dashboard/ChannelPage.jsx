@@ -42,6 +42,7 @@ function ChannelPage() {
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
   const media_query = useGetChannelMedia(channel_id);
+
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
   const [activeTab, setActiveTab] = useState("messages");
@@ -60,7 +61,7 @@ function ChannelPage() {
           page_id: channel_id,
         })
       );
-    } 
+    }
     else if (isThreadPanel) {
       const parentMessage = getParentMessageByPageId(channel_id);
 
