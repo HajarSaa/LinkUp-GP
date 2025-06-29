@@ -4,13 +4,12 @@ import styles from "./FilesContainer.module.css";
 import SearchInput from "../InputField/SearchInput/SearchInput";
 import MediaModal from "../Modal/MediaModal/MediaModal";
 import AudioMedia from "../Media/AudioMedia/AudioMedia";
-import { useSelector } from "react-redux";
-function FilesContainer({ isLoading, isError, error }) {
-  const channelMedia = useSelector((state) => state.channelMedia.channelMedia);
+function FilesContainer({media, isLoading, isError, error }) {
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const filteredFiles =
-    channelMedia?.filter((file) => {
+    media?.filter((file) => {
       const lowerSearch = searchTerm?.toLowerCase();
       return (
         file.fileName.toLowerCase().includes(lowerSearch) ||
@@ -39,7 +38,7 @@ function FilesContainer({ isLoading, isError, error }) {
     );
 
   const noFiles =
-    (!isSearchActive && channelMedia?.length === 0) ||
+    (!isSearchActive && media?.length === 0) ||
     (isSearchActive && filteredFiles.length === 0);
 
   return (
@@ -136,7 +135,7 @@ function FilesContainer({ isLoading, isError, error }) {
 }
 
 FilesContainer.propTypes = {
-  files: PropTypes.any,
+  media: PropTypes.any,
   isLoading: PropTypes.bool,
   isError: PropTypes.bool,
   error: PropTypes.object,

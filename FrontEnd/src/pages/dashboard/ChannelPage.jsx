@@ -49,6 +49,7 @@ function ChannelPage() {
   const messages = useSelector((state) =>
     selectPinnedMessagesByChannel(state, channel_id)
   );
+  const channelMedia = useSelector((state) => state.channelMedia.channelMedia);
 
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
@@ -165,6 +166,7 @@ function ChannelPage() {
               />
             ) : (
               <FilesContainer
+                media={channelMedia}
                 isLoading={media_query.isLoading}
                 isError={media_query.isError}
                 error={media_query.error}
