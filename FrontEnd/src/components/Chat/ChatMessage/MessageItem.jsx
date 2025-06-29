@@ -208,7 +208,7 @@ const MessageItem = ({
       </div>
 
       <MessageMenu createdAt={message?.createdAt} />
-      <ForwardMessageModal />
+      <ForwardMessageModal messageId={message._id} />
     </>
   );
 };

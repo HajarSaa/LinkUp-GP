@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState, useMemo } from "react";
 import styles from "./ForwardMessageModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,11 +7,15 @@ import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import ChannelType from "../../Channel/ChannelType/ChannelType";
 import UserImage from "../../User/UserImage";
 import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
+import PropTypes from "prop-types";
+import useForwardMessage from "../../../../API/hooks/messages/useForwardMessage";
+import Spinner from "../../Spinner/Spinner";
 
-const ForwardMessageModal = () => {
+const ForwardMessageModal = ({ messageId }) => {
   const { isOpen } = useSelector((state) => state.forwardModal);
   const dispatch = useDispatch();
   const { workspace } = useSelector((state) => state.workspace);
+  const forward_request = useForwardMessage();
 
   const channels = workspace.channels || [];
   const conversations = useGetSidebarConvers(workspace) || [];
@@ -67,16 +72,33 @@ const ForwardMessageModal = () => {
     return selected.some((s) => s.id === item.id && s.type === item.type);
   };
 
-  const handleClose = () => dispatch(closeForwardModal());
+  const handleClose = () => {
+    dispatch(closeForwardModal());
+    setSearch("");
+    setSelected([]);
+  };
 
   const handleCloseModal = (e) => {
     if (e.target === e.currentTarget) handleClose();
   };
 
   const handleForward = () => {
-    console.log("Selected Targets:", selected);
-    // ابعت الرسالة هنا بقى...
-    handleClose();
+    
+    if (selected.length === 0) {
+      handleClose(); // مفيش حاجة متعلم عليها.. نقفل وخلاص
+      return;
+    }
+
+    const requestBody = {
+      originalMessageId: messageId,
+      targets: selected,
+    };
+
+    forward_request.mutate(requestBody, {
+      onSuccess: () => {
+        handleClose();
+      },
+    });
   };
 
   if (!isOpen) return null;
@@ -133,12 +155,21 @@ const ForwardMessageModal = () => {
             className={`${styles.btn} ${styles.forward_btn}`}
             onClick={handleForward}
           >
-            Forward
+            {forward_request.isLoading ? (
+              <span className={styles.loading_status}>
+                <Spinner width={18} height={18} color="var(--primary-color)" />
+              </span>
+            ) : (
+              "Forward"
+            )}
           </button>
         </div>
       </div>
     </div>
   );
+};
+ForwardMessageModal.propTypes = {
+  messageId: PropTypes.any.isRequired,
 };
 
 export default ForwardMessageModal;
