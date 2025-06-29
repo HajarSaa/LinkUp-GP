@@ -503,7 +503,9 @@ export const forwardMessage = catchAsync(async (req, res, next) => {
     return next(new AppError("Missing original MessageId or targets", 400));
   }
 
-  const originalMessage = await Message.findById(originalMessageId).lean();
+  const originalMessage = await Message.findById(originalMessageId).populate(
+    "attachments"
+  );
   if (!originalMessage) {
     return next(new AppError("Original message not found", 404));
   }
@@ -528,14 +530,48 @@ export const forwardMessage = catchAsync(async (req, res, next) => {
         );
       }
 
+      // Create new attachments with the same (fileName, fileSize, fileType, fileUrl, cloudinaryId, cloudinaryResourceType)'
+      let attachments = [];
+      if (
+        originalMessage.attachments &&
+        originalMessage.attachments.length > 0
+      ) {
+        attachments = await Promise.all(
+          originalMessage.attachments.map(async (attachment) => {
+            const newAttachment = await File.create({
+              fileName: attachment.fileName,
+              fileSize: attachment.fileSize,
+              fileType: attachment.fileType,
+              fileUrl: attachment.fileUrl,
+              cloudinaryResourceType: attachment.cloudinaryResourceType,
+              cloudinaryId: attachment.cloudinaryId,
+              uploadedBy: userProfileId,
+              conversationId: id,
+              // attachedToMessage :
+            });
+            return newAttachment;
+          })
+        );
+      }
+
       const forwarded = await Message.create({
         content: originalMessage.content,
-        attachments: originalMessage.attachments || [],
+        attachments: attachments,
         createdBy: userProfileId,
         messageType: originalMessage.messageType,
         forwarded: true,
         conversationId: id,
       });
+
+      // Update attachments to be attached to the new message
+      await File.updateMany(
+        {
+          _id: { $in: attachments.map((a) => a._id) },
+        },
+        {
+          attachedToMessage: forwarded._id,
+        }
+      );
 
       forwardedMessages.push(forwarded);
     }
@@ -546,18 +582,53 @@ export const forwardMessage = catchAsync(async (req, res, next) => {
         return next(new AppError(`Channel not found: ${id}`, 404));
       }
 
-      if (!channel.members.includes(req.userProfile.id)) {
+      const userProfileId = req.userProfile.id;
+      if (!channel.members.includes(userProfileId)) {
         return next(new AppError("You are not a member of this channel", 403));
+      }
+
+      // Create new attachments with the same (fileName, fileSize, fileType, fileUrl, cloudinaryId, cloudinaryResourceType)'
+      let attachments = [];
+      if (
+        originalMessage.attachments &&
+        originalMessage.attachments.length > 0
+      ) {
+        attachments = await Promise.all(
+          originalMessage.attachments.map(async (attachment) => {
+            const newAttachment = await File.create({
+              fileName: attachment.fileName,
+              fileSize: attachment.fileSize,
+              fileType: attachment.fileType,
+              fileUrl: attachment.fileUrl,
+              cloudinaryResourceType: attachment.cloudinaryResourceType,
+              cloudinaryId: attachment.cloudinaryId,
+              uploadedBy: userProfileId,
+              channelId: id,
+              // attachedToMessage :
+            });
+            return newAttachment;
+          })
+        );
       }
 
       const forwarded = await Message.create({
         content: originalMessage.content,
-        attachments: originalMessage.attachments || [],
+        attachments: attachments,
         createdBy: req.userProfile.id,
         messageType: originalMessage.messageType,
         forwarded: true,
         channelId: id,
       });
+
+      // Update attachments to be attached to the new message
+      await File.updateMany(
+        {
+          _id: { $in: attachments.map((a) => a._id) },
+        },
+        {
+          attachedToMessage: forwarded._id,
+        }
+      );
 
       forwardedMessages.push(forwarded);
     }
