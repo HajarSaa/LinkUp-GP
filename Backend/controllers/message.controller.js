@@ -4,6 +4,7 @@ import Conversation from "../models/converstion.model.js";
 import Message from "../models/message.model.js";
 import File from "../models/file.model.js";
 import UserProfile from "../models/userProfile.model.js";
+import Notification from "../models/notification.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
@@ -258,10 +259,12 @@ export const createMessage = catchAsync(async (req, res, next) => {
         req.userProfile.id === conversation.memberOneId.toString() ||
         req.userProfile.id === conversation.memberTwoId.toString()
       )
-    )
+    ) {
       return next(
         new AppError("You are not a participant in this conversation", 403)
       );
+    }
+
     req.body.conversationId = req.params.conversationId;
   }
 
@@ -303,6 +306,16 @@ export const createMessage = catchAsync(async (req, res, next) => {
     await Message.findByIdAndUpdate(req.body.parentMessageId, {
       lastRepliedAt: new Date(),
     });
+
+    // notification for reply
+    if (parentMessage.createdBy.toString() !== req.userProfile.id) {
+      await Notification.create({
+        type: "reply",
+        recipient: parentMessage.createdBy,
+        triggeredBy: req.userProfile.id,
+        messageId: parentMessage._id,
+      });
+    }
   }
 
   // Step 1: Extract URLs
@@ -313,7 +326,33 @@ export const createMessage = catchAsync(async (req, res, next) => {
     urls.map((url) => MetadataService.fetchMetadata(url))
   );
   req.body.metadata = { links: linkMetadata };
+
+  // create the message
   const message = await Message.create(req.body);
+
+  // mention notifications
+  const mentionRegex = /@(\w+)/g;
+  const mentionedUsernames = [...(content?.matchAll(mentionRegex) || [])].map(
+    (m) => m[1]
+  );
+
+  if (mentionedUsernames.length > 0) {
+    const mentionedProfiles = await UserProfile.find({
+      userName: { $in: mentionedUsernames },
+      workspace: req.workspace.id,
+    });
+
+    for (const profile of mentionedProfiles) {
+      if (profile._id.toString() !== req.userProfile.id) {
+        await Notification.create({
+          type: "mention",
+          recipient: profile._id,
+          triggeredBy: req.userProfile.id,
+          messageId: message._id,
+        });
+      }
+    }
+  }
 
   // Update attached files
   if (attachmentIds.length > 0) {

@@ -4,6 +4,22 @@ const notificationSchema = new mongoose.Schema(
   {
     type: {
       type: String,
+      enum: ["mention", "reaction", "reply"],
+      required: true,
+    },
+    recipient: {
+      type: mongoose.Schema.ObjectId,
+      ref: "UserProfile",
+      required: true,
+    },
+    triggeredBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "UserProfile",
+      required: true,
+    },
+    messageId: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Message",
     },
     isRead: {
       type: Boolean,

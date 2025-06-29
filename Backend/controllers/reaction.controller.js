@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Message from "../models/message.model.js";
 import Reaction from "../models/reaction.model.js";
+import Notification from "../models/notification.model.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError.js";
 
@@ -41,6 +42,15 @@ export const creatReaction = catchAsync(async (req, res, next) => {
     createdBy: userProfileId,
     emoji,
   });
+  // notification if reacting to someone's message
+  if (message.createdBy.toString() !== userProfileId) {
+    await Notification.create({
+      type: "reaction",
+      recipient: message.createdBy,
+      triggeredBy: userProfileId,
+      messageId,
+    });
+  }
 
   // Send the response
   res.status(201).json({

@@ -16,6 +16,9 @@ import uploadRouter from "./routes/uploadFile.routes.js";
 import fileRouter from "./routes/file.routes.js";
 import reactionRouter from "./routes/reaction.routes.js";
 import laterItemRouter from "./routes/laterItem.routes.js";
+import notificationRouter from "./routes/notification.routes.js";
+// import googleRoutes from "./services/google/googleRoutes.js";
+// import webhookRoutes from "./webhook.route.js";
 
 // Error handling imports
 import AppError from "./utils/appError.js";
@@ -35,6 +38,7 @@ app.use(express.static(path.join(__dirname, "public")));
 middlewares(app);
 app.use(morgan("dev"));
 app.use(express.json());
+// app.use(webhookRoutes);
 
 // API Routes
 app.use("/api/v1/auth", authRouter);
@@ -49,6 +53,8 @@ app.use("/api/v1/files", fileRouter);
 app.use("/api/v1/search", searchRoutes);
 app.use("/api/v1/reactions", reactionRouter);
 app.use("/api/v1/laterItems", laterItemRouter);
+app.use("/api/v1/notifications", notificationRouter);
+// app.use("/api/google", googleRoutes);
 
 // 404 route handler middleware
 app.all("*", (req, res, next) => {
