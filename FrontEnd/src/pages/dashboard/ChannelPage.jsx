@@ -33,6 +33,7 @@ import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
 import PinnedContainer from "../../components/UI/PinnedContainer/PinnedContainer";
 import useGetChannelPinnedMessages from "../../API/hooks/messages/useGetChannelPinnedMessages";
+import { selectPinnedMessagesByChannel } from "../../API/redux_toolkit/selectore/selectPinnedMessagesSelector";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
@@ -45,6 +46,9 @@ function ChannelPage() {
   const message_query = useGetChannelMessages(channel_id);
   const media_query = useGetChannelMedia(channel_id);
   const pins_query = useGetChannelPinnedMessages(channel_id);
+  const messages = useSelector((state) =>
+    selectPinnedMessagesByChannel(state, channel_id)
+  );
 
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
@@ -52,7 +56,6 @@ function ChannelPage() {
   const dispatch = useDispatch();
 
   useRoomSubscription(roomId);
-
 
   const location = useLocation();
 
@@ -64,7 +67,6 @@ function ChannelPage() {
       setActiveTab("messages");
     }
   }, [location.search]);
-
 
   // handle opened Panels
   useEffect(() => {
@@ -102,8 +104,6 @@ function ChannelPage() {
     // reset active tab
     setActiveTab("messages");
   }, [channel_id, dispatch]);
-
-
 
   if (channel_query.isLoading || message_query.isLoading)
     return (
@@ -155,7 +155,7 @@ function ChannelPage() {
               </>
             ) : activeTab === "pins" ? (
               <PinnedContainer
-                pins={pins_query.data?.pages?.flatMap((page) => page.data)}
+                messages={messages}
                 isLoading={pins_query.isLoading}
                 isError={pins_query.isError}
                 error={pins_query.error}
@@ -165,7 +165,6 @@ function ChannelPage() {
               />
             ) : (
               <FilesContainer
-                files={media_query?.data?.media}
                 isLoading={media_query.isLoading}
                 isError={media_query.isError}
                 error={media_query.error}

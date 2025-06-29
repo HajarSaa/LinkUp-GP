@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import Spinner from "../Spinner/Spinner";
 import styles from "./PinnedContainer.module.css";
 import MessageItem from "../../Chat/ChatMessage/MessageItem";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectPinnedMessagesByChannel } from "../../../API/redux_toolkit/selectore/selectPinnedMessagesSelector";
+import { useLocation, useNavigate} from "react-router-dom";
 
 function PinnedContainer({
+  messages,
   isLoading,
   isError,
   error,
@@ -18,11 +17,8 @@ function PinnedContainer({
   const containerRef = useRef();
   const navigate = useNavigate();
   const location = useLocation();
-  const { id: channel_id } = useParams();
 
-  const messages = useSelector((state) =>
-    selectPinnedMessagesByChannel(state, channel_id)
-  );
+
   console.log(messages);
 
   // loading more messages
@@ -99,6 +95,7 @@ function PinnedContainer({
     );
 }
 PinnedContainer.propTypes = {
+  messages:PropTypes.any.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   error: PropTypes.object,

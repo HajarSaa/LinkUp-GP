@@ -31,6 +31,7 @@ import useGetConversMessages from "../../API/hooks/messages/useGetConversMessage
 import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
 import PinnedContainer from "../../components/UI/PinnedContainer/PinnedContainer";
 import useGetConversationPinnedMessages from "../../API/hooks/messages/useGetConversationPinnedMessages";
+import { selectPinnedMessagesByConversation } from "../../API/redux_toolkit/selectore/selectPinnedConversationMessagesSelector";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -45,11 +46,12 @@ function DmPage() {
   const roomId = convers ? `conversation:${convers._id}` : null;
   useRoomSubscription(roomId);
 
-  useEffect(() => {
-    if (activeTab === "pins" && !pins_query.isFetching) {
-      pins_query.refetch();
-    }
-  }, [activeTab]);
+  const messages = useSelector((state) =>
+    selectPinnedMessagesByConversation(state, convers_id)
+  );
+
+
+
 
 
   useEffect(() => {
@@ -137,7 +139,7 @@ function DmPage() {
           </>
         ) : activeTab === "pins" ? (
           <PinnedContainer
-            pins={pins_query.data?.pages?.flatMap((page) => page.data.messages)}
+            messages={messages}
             isLoading={pins_query.isLoading}
             isError={pins_query.isError}
             error={pins_query.error}
@@ -147,7 +149,6 @@ function DmPage() {
           />
         ) : (
           <FilesContainer
-            files={media_query?.data?.media}
             isLoading={media_query.isLoading}
             isError={media_query.isError}
             error={media_query.error}
