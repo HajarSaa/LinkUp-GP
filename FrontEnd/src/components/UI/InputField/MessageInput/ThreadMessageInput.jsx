@@ -14,13 +14,14 @@ import { IoSend } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import PropTypes from "prop-types";
 import { useLocation, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 import useTypingEmitter from "../../../../API/hooks/socket/useTypingEmmiter";
 import { v4 as uuidv4 } from "uuid";
 import MediaContainer from "./MediaContainer/MediaContainer";
 import UploadMenu from "./UploadMenu/UploadMenu";
+import { clearFiles } from "../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
 
 const ThreadMessageInput = ({ parentMessageId }) => {
   const [message, setMessage] = useState("");
@@ -28,26 +29,28 @@ const ThreadMessageInput = ({ parentMessageId }) => {
   const [isChecked, setIsChecked] = useState(false);
   const location = useLocation();
   const { id } = useParams();
+  const dispatch = useDispatch();
   const { channel } = useSelector((state) => state.channel);
   const isChannel = location.pathname.includes("/channels");
   const pageId = `thread-${parentMessageId}`;
 
-  let send_also_to = null;
-  if (isChannel) send_also_to = channel.name;
+
+  const { pages } = useSelector((state) => state.fileUpload);
+  const files = pages[pageId]?.files || [];
+  const responseData = pages[pageId]?.responseData || [];
+
+  const hasMedia = files.length > 0;
+  const hasPendingMedia = files.some((f) => f.status === "pending");
+  const canSend = (message.trim() || hasMedia) && !hasPendingMedia;
 
   const sendMessage = useSendMessage();
   const room = `thread:${parentMessageId}`;
   const emitTyping = useTypingEmitter(room);
 
-  const handleToggleCheckbox = () => {
-    const newCheckedState = !isChecked;
-    setIsChecked(newCheckedState);
-  };
+  const send_also_to = isChannel ? channel.name : null;
 
   useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
+    if (textareaRef.current) textareaRef.current.focus();
   }, []);
 
   const handleChange = (e) => {
@@ -56,24 +59,26 @@ const ThreadMessageInput = ({ parentMessageId }) => {
   };
 
   const handleSend = () => {
-    if (!message.trim()) return;
+    if (!canSend) return;
+
+    const tempId = uuidv4();
+    const type = isChannel ? "channel" : "conversation";
 
     const messageContent = {
       content: message,
-      parentMessageId: parentMessageId,
-      tempId: uuidv4(),
+      parentMessageId,
+      attachmentIds: responseData,
+      tempId,
     };
 
-    const type = isChannel ? "channel" : "conversation";
-
     sendMessage.mutate(
-      { type, id, messageContent },
+      { type, id, messageContent, tempId },
       {
         onSuccess: () => {
           setMessage("");
           setIsChecked(false);
-          const textarea = textareaRef.current;
-          if (textarea) textarea.style.height = "40px";
+          textareaRef.current.style.height = "40px";
+          dispatch(clearFiles({ pageId }));
         },
       }
     );
@@ -81,6 +86,7 @@ const ThreadMessageInput = ({ parentMessageId }) => {
     if (isChecked) {
       const secondaryContent = {
         content: message,
+        attachmentIds: responseData, // ✅ كمان هنا لو بعت للـ channel
         tempId: uuidv4(),
       };
 
@@ -102,75 +108,73 @@ const ThreadMessageInput = ({ parentMessageId }) => {
 
   return (
     <>
-    <div className={styles.messageInputContainer}>
-      <div className={styles.input_field}>
-        {/* <div className={styles.upper_row_icons}>
-          {renderIcons(
-            upperIcons,
-            [3, 6],
-            styles.upper_icons,
-            styles.upper_icon_style
-          )}
-        </div> */}
-        <textarea
-          name="messageBox"
-          ref={textareaRef}
-          className={styles.textarea}
-          placeholder="write your message ..."
-          value={message}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          onInput={handleInputHeight}
-        />
-        <label htmlFor="checkbox" className={styles.checkBox}>
-          <input
-            id="checkbox"
-            type="checkbox"
-            checked={isChecked}
-            onChange={handleToggleCheckbox}
-            className={styles.checkBox_input}
+      <div className={styles.messageInputContainer}>
+        <div className={styles.input_field}>
+          <textarea
+            name="messageBox"
+            ref={textareaRef}
+            className={styles.textarea}
+            placeholder="write your message ..."
+            value={message}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onInput={handleInputHeight}
           />
-          <span className={styles.checkBox_text}>Also send to</span>
-          <span className={styles.checkBox_channelName}>{send_also_to}</span>
-        </label>
-        <MediaContainer pageId={pageId} />
-        <div className={styles.lower_row_icons}>
-          <LowerToolbar isThread={true} />
-          <div
-            className={`${styles.right_icons} ${
-              message.trim() && styles.activeSend
-            }`}
-          >
-            <div
-              className={`${styles.sendBtns} ${styles.sendBtns_send}`}
-              onClick={handleSend}
-            >
-              <IoSend />
-            </div>
-            <div className={styles.box11}></div>
 
-            <div className={`${styles.sendBtns} ${styles.sendBtns_dropdown}`}>
-              <IoIosArrowDown />
+          {isChannel && (
+            <label htmlFor="checkbox" className={styles.checkBox}>
+              <input
+                id="checkbox"
+                type="checkbox"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+                className={styles.checkBox_input}
+              />
+              <span className={styles.checkBox_text}>Also send to</span>
+              <span className={styles.checkBox_channelName}>
+                {send_also_to}
+              </span>
+            </label>
+          )}
+
+          <MediaContainer pageId={pageId} />
+
+          <div className={styles.lower_row_icons}>
+            <LowerToolbar isThread={true} />
+            <div
+              className={`${styles.right_icons} ${
+                canSend && styles.activeSend
+              }`}
+            >
+              <div
+                className={`${styles.sendBtns} ${styles.sendBtns_send}`}
+                onClick={handleSend}
+              >
+                <IoSend />
+              </div>
+              <div className={styles.box11}></div>
+              <div className={styles.sendBtns + " " + styles.sendBtns_dropdown}>
+                <IoIosArrowDown />
+              </div>
             </div>
           </div>
         </div>
+
+        <div className={`${styles.newLineHint} ${!canSend && styles.hidden}`}>
+          <span
+            className={`${styles.hintText} ${
+              canSend ? styles.showHint : styles.hideHint
+            }`}
+          >
+            Shift + Enter for new line
+          </span>
+        </div>
       </div>
-      <div
-        className={`${styles.newLineHint} ${!message.trim() && styles.hidden}`}
-      >
-        <span
-          className={`${styles.hintText} ${
-            message.trim() ? styles.showHint : styles.hideHint
-          }`}
-        >
-          Shift + Enter for new line
-        </span>
-      </div>
-    </div>
-    <UploadMenu pageId={pageId} />
+      <UploadMenu pageId={pageId} />
     </>
   );
 };
+
 
 export default ThreadMessageInput;
 
