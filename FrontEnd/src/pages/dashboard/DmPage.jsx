@@ -50,6 +50,8 @@ function DmPage() {
     selectPinnedMessagesByConversation(state, convers_id)
   );
 
+  const { conversMedia } = useSelector((state) => state.conversMedia);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pinnedMessageId = params.get("pinned_message");
@@ -145,6 +147,7 @@ function DmPage() {
           />
         ) : (
           <FilesContainer
+            media={conversMedia}
             isLoading={media_query.isLoading}
             isError={media_query.isError}
             error={media_query.error}
