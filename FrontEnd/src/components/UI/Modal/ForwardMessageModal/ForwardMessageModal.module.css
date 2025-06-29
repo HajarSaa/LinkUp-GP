@@ -92,12 +92,13 @@
   gap: 8px;
 }
 
-.avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
+.dmInfo_image {
+  width: 25px;
+  height: 25px;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
 }
+
 
 /* checkbox */
 .item input[type="checkbox"] {
@@ -109,7 +110,6 @@
   display: inline-block;
   position: relative;
   cursor: pointer;
-  transition: all 0.2s ease;
   background-color: #fff;
   vertical-align: middle;
 }

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import styles from "./ForwardMessageModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../Spinner/Spinner";
 import { closeForwardModal } from "../../../../API/redux_toolkit/modals/chat/forwardModal";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import ChannelType from "../../Channel/ChannelType/ChannelType";
@@ -13,14 +12,12 @@ const ForwardMessageModal = () => {
   const dispatch = useDispatch();
   const { workspace } = useSelector((state) => state.workspace);
 
-  const channels = workspace.channels;
-  const conversations = useGetSidebarConvers(workspace);
-  const targetItems = [...conversations, ...channels];
-
-  const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState([]);
+  const channels = workspace.channels || [];
+  const conversations = useGetSidebarConvers(workspace) || [];
 
   const searchRef = useRef();
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     if (isOpen && searchRef.current) {
@@ -28,32 +25,59 @@ const ForwardMessageModal = () => {
     }
   }, [isOpen]);
 
-  // داتا تجريبية
-  const items = [
-    { id: "ch1", type: "channel", name: "general" },
-    { id: "ch2", type: "channel", name: "random" },
-    { id: "dm1", type: "dm", name: "أحمد سامي", image: "/avatars/ahmed.jpg" },
-    { id: "dm2", type: "dm", name: "الاء", image: "/avatars/alaa.jpg" },
-  ];
+  // تحويل الداتا لشكل موحد
+  const targetItems = useMemo(() => {
+    const convItems = conversations.map((conv) => ({
+      id: conv.conversationId,
+      type: "conversation",
+      name: conv.member?.userName || "Unknown",
+      image: conv.member?.photo || "",
+    }));
 
+    const channelItems = channels.map((ch) => ({
+      id: ch._id,
+      type: "channel",
+      name: ch.name,
+      channelType: ch.type,
+    }));
+
+    return [...convItems, ...channelItems];
+  }, [conversations, channels]);
+
+  // فلترة بالبحث
   const filteredItems = useMemo(() => {
-    return items.filter((item) =>
-      item.name.toLowerCase().includes(search.toLowerCase())
+    return targetItems.filter((item) =>
+      item.name?.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search]);
+  }, [search, targetItems]);
 
-  const handleClose = () => {
-    dispatch(closeForwardModal());
-  };
-
-  const handleSelectChange = (id) => {
+  // التوجّه لما تختار أو تشيل اختيار
+  const handleSelectChange = (item) => {
+    const exists = selected.some(
+      (s) => s.id === item.id && s.type === item.type
+    );
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      exists
+        ? prev.filter((s) => !(s.id === item.id && s.type === item.type))
+        : [...prev, { type: item.type, id: item.id }]
     );
   };
-  function handleCloseModal(e) {
+
+  const isChecked = (item) => {
+    return selected.some((s) => s.id === item.id && s.type === item.type);
+  };
+
+  const handleClose = () => dispatch(closeForwardModal());
+
+  const handleCloseModal = (e) => {
     if (e.target === e.currentTarget) handleClose();
-  }
+  };
+
+  const handleForward = () => {
+    console.log("Selected Targets:", selected);
+    // ابعت الرسالة هنا بقى...
+    handleClose();
+  };
 
   if (!isOpen) return null;
   return (
@@ -63,6 +87,7 @@ const ForwardMessageModal = () => {
           <h2 className={styles.title}>Forward Message</h2>
           <CloseIcon closeEvent={handleClose} />
         </div>
+
         <div className={styles.container}>
           <input
             ref={searchRef}
@@ -76,20 +101,22 @@ const ForwardMessageModal = () => {
 
           <div className={styles.list}>
             {filteredItems.map((item) => (
-              <label key={item.id} className={styles.item}>
+              <label key={`${item.type}-${item.id}`} className={styles.item}>
                 <input
                   type="checkbox"
-                  checked={selected.includes(item.id)}
-                  onChange={() => handleSelectChange(item.id)}
+                  checked={isChecked(item)}
+                  onChange={() => handleSelectChange(item)}
                 />
                 {item.type === "channel" ? (
                   <div className={styles.channelTag}>
-                    <ChannelType type={"public"} />
-                    <span>name</span>
+                    <ChannelType type={item.channelType} />
+                    <span>{item.name}</span>
                   </div>
                 ) : (
                   <div className={styles.dmInfo}>
-                    {/* <UserImage src={} /> */}
+                    <div className={styles.dmInfo_image}>
+                      <UserImage src={item.image} alt={item.name} />
+                    </div>
                     <span>{item.name}</span>
                   </div>
                 )}
@@ -97,9 +124,15 @@ const ForwardMessageModal = () => {
             ))}
           </div>
         </div>
+
         <div className={styles.btns}>
-          <button className={`${styles.btn}`}>Cancel</button>
-          <button className={`${styles.btn} ${styles.forward_btn}`}>
+          <button className={styles.btn} onClick={handleClose}>
+            Cancel
+          </button>
+          <button
+            className={`${styles.btn} ${styles.forward_btn}`}
+            onClick={handleForward}
+          >
             Forward
           </button>
         </div>
