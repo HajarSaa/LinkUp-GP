@@ -161,6 +161,8 @@ export const getLaterItems = catchAsync(async (req, res, next) => {
             attachments: msg.attachments,
             createdAt: msg.createdAt,
             forwarded: msg.forwarded,
+            channelId: msg.channelId || null,
+            conversationId: msg.conversationId || null,
             savedForLater: true,
           }
         : null,
