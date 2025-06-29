@@ -28,6 +28,7 @@ const MessageItem = ({
   isThreadParent = false,
   media,
   isSearchResult = false,
+  isPinnedTap = false,
   from = "",
 }) => {
   const [messageHover, setMessageHover] = useState(false);
@@ -60,7 +61,7 @@ const MessageItem = ({
   else pinnedBy = findMemberById(workspace, message?.pinnedBy)?.userName;
 
   function openProfile() {
-    if (isSearchResult) return;
+    if (isSearchResult || isPinnedTap) return;
     dispatch(
       openUserPanel({
         type: "userPanel",
@@ -71,7 +72,7 @@ const MessageItem = ({
   }
 
   const handelOpenMenu = (e, message_id) => {
-    if (isSearchResult) return;
+    if (isSearchResult || isPinnedTap) return;
     e.preventDefault();
     const menuWidth = 240;
     const padding = 0;
@@ -104,7 +105,7 @@ const MessageItem = ({
         className={`${styles.message_container} ${
           activeMessageId === message._id && styles.active
         } ${editingMessage && isEditing ? styles.editingMessage : ""} ${
-          message.pinned ? styles.pinned_message : ''
+          message.pinned ? styles.pinned_message : ""
         }`}
         onMouseEnter={() => setMessageHover(true)}
         onMouseLeave={() => setMessageHover(false)}
@@ -188,7 +189,7 @@ const MessageItem = ({
           </div>
         </div>
 
-        {!isSearchResult && (
+        {!isSearchResult && !isPinnedTap && (
           <MessageActions
             isThread={isInThreadPanel}
             message={message}
@@ -201,7 +202,7 @@ const MessageItem = ({
         )}
 
         {/* Menu Actions => forward , later , more , .... */}
-        {!isSearchResult && (
+        {!isSearchResult && !isPinnedTap && (
           <MessageActions
             isThread={isInThreadPanel}
             message={message}
@@ -230,6 +231,7 @@ MessageItem.propTypes = {
   isThreadParent: PropTypes.bool,
   media: PropTypes.any,
   isSearchResult: PropTypes.bool,
+  isPinnedTap: PropTypes.bool,
   from: PropTypes.string,
 };
 

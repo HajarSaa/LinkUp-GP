@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from "react-router-dom";
 import PageContent from "../../components/Layout/PageContent/PageContnet";
 import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
@@ -28,6 +29,8 @@ import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicat
 import DmBody from "../../components/UI/UserDM/DmBody";
 import useGetConversMessages from "../../API/hooks/messages/useGetConversMessages";
 import useGetConversMedia from "../../API/hooks/conversation/useGetConversMedia";
+import PinnedContainer from "../../components/UI/PinnedContainer/PinnedContainer";
+import useGetConversationPinnedMessages from "../../API/hooks/messages/useGetConversationPinnedMessages";
 
 function DmPage() {
   const { convers } = useSelector((state) => state.convers);
@@ -36,10 +39,27 @@ function DmPage() {
   const convers_query = useGetConvers(convers_id);
   const message_query = useGetConversMessages(convers_id);
   const media_query = useGetConversMedia(convers_id);
+  const pins_query = useGetConversationPinnedMessages(convers_id);
   const [activeTab, setActiveTab] = useState("messages");
   const dispatch = useDispatch();
   const roomId = convers ? `conversation:${convers._id}` : null;
   useRoomSubscription(roomId);
+
+  useEffect(() => {
+    if (activeTab === "pins" && !pins_query.isFetching) {
+      pins_query.refetch();
+    }
+  }, [activeTab]);
+
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const pinnedMessageId = params.get("pinned_message");
+
+    if (pinnedMessageId) {
+      setActiveTab("messages");
+    }
+  }, [location.search]);
 
   // handle opened panel
   useEffect(() => {
@@ -53,8 +73,7 @@ function DmPage() {
           page_id: convers_id,
         })
       );
-    } 
-    else if (isThreadPanel) {
+    } else if (isThreadPanel) {
       const parentMessage = getParentMessageByPageId(convers_id);
 
       const existing = document.getElementById(`message-${parentMessage?._id}`);
@@ -72,8 +91,7 @@ function DmPage() {
         RemoveFromOpenedThreadPanelItems(convers_id);
         dispatch(closeChatPanel());
       }
-    }
-    else {
+    } else {
       dispatch(closeChatPanel());
     }
     // reset active tab
@@ -117,6 +135,16 @@ function DmPage() {
             <TypingIndicator roomId={roomId} />
             {isEditing && !isInThread ? <EditMessageInput /> : <MessageInput />}
           </>
+        ) : activeTab === "pins" ? (
+          <PinnedContainer
+            pins={pins_query.data?.pages?.flatMap((page) => page.data.messages)}
+            isLoading={pins_query.isLoading}
+            isError={pins_query.isError}
+            error={pins_query.error}
+            fetchNextPage={pins_query.fetchNextPage}
+            hasNextPage={pins_query.hasNextPage}
+            media={media_query?.data?.media}
+          />
         ) : (
           <FilesContainer
             files={media_query?.data?.media}

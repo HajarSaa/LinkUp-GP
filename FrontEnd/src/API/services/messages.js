@@ -96,3 +96,19 @@ export const getChannelPinnedMessages = async ({ channelId, limit = 10, page = 1
 
 
 // ================(Get Pinned Conversation Messages)
+// Get conversation messages with pagination
+export const getConversationPinnedMessages = async ({
+  conversationId,
+  limit = 10,
+  page = 1,
+}) => {
+  const { data } = await axiosInstance.get(
+    `/messages/conversationPinnedMessages/${conversationId}?limit=${limit}&page=${page}`
+  );
+
+  return {
+    data: data.data,
+    currentPage: data.currentPage,
+    hasNextPage: data.hasNextPage,
+  };
+};

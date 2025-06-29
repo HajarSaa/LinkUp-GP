@@ -22,6 +22,7 @@ function ChatMessage({ containerRef }) {
   const { search } = useLocation();
   const targetMessageId = new URLSearchParams(search).get("later_message");
   const searchedMessageId = new URLSearchParams(search).get("searched_message");
+  const pinnedMessageId = new URLSearchParams(search).get("pinned_message");
 
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChannelMessages(channel_id);
@@ -46,11 +47,11 @@ function ChatMessage({ containerRef }) {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, containerRef]);
 
   useEffect(() => {
-    if (messages?.length && isInitialLoad.current && !targetMessageId) {
+    if (messages?.length && isInitialLoad.current && !targetMessageId && !pinnedMessageId && !searchedMessageId) {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
       isInitialLoad.current = false;
     }
-  }, [messages, targetMessageId]);
+  }, [messages, targetMessageId, pinnedMessageId, searchedMessageId]);
 
   // scroll for later message
   useEffect(() => {
@@ -128,6 +129,44 @@ function ChatMessage({ containerRef }) {
     hasNextPage,
     isFetchingNextPage,
   ]);
+  //scroll for pinned message
+  useEffect(() => {
+    if (!pinnedMessageId || !messages?.length) return;
+
+    const tryScrollToSearchedMessage = async () => {
+      const MAX_TRIES = 20;
+      let tries = 0;
+
+      while (tries < MAX_TRIES) {
+        const element = document.getElementById(`message-${pinnedMessageId}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+
+          if (element.parentElement) {
+            element.parentElement.classList.add(styles.highlight);
+            setTimeout(() => {
+              element.parentElement.classList.remove(styles.highlight);
+            }, 2000);
+          }
+
+          break;
+        }
+
+        if (!hasNextPage || isFetchingNextPage) break;
+
+        await fetchNextPage();
+        tries++;
+      }
+    };
+
+    tryScrollToSearchedMessage();
+  }, [
+    pinnedMessageId,
+    messages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  ]);
 
   useEffect(() => {
     const container = containerRef?.current;
@@ -168,7 +207,7 @@ function ChatMessage({ containerRef }) {
           });
         }}
       />
-      
+
     </>
   );
 }

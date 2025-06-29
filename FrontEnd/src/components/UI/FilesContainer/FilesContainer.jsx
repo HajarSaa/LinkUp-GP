@@ -4,7 +4,7 @@ import styles from "./FilesContainer.module.css";
 import SearchInput from "../InputField/SearchInput/SearchInput";
 import MediaModal from "../Modal/MediaModal/MediaModal";
 import AudioMedia from "../Media/AudioMedia/AudioMedia";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 function FilesContainer({ isLoading, isError, error }) {
   const channelMedia = useSelector((state) => state.channelMedia.channelMedia);
   const [searchTerm, setSearchTerm] = useState("");

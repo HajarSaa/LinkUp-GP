@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
 import Header from "../../components/UI/Channel/Header/Header";
 import ChannelBody from "../../components/UI/Channel/ChannelBody/ChannelBody";
 import PageContent from "../../components/Layout/PageContent/PageContnet";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import styles from "./dashboard.module.css";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import Panel from "../../components/Layout/Panel/Panel";
@@ -31,6 +32,8 @@ import FilesContainer from "../../components/UI/FilesContainer/FilesContainer";
 import useGetChannelMedia from "../../API/hooks/channel/useGetChannelMedia";
 import useRoomSubscription from "../../API/hooks/socket/useRoomSubscription";
 import TypingIndicator from "../../components/Chat/TypingIndicator/TypingIndicator";
+import PinnedContainer from "../../components/UI/PinnedContainer/PinnedContainer";
+import useGetChannelPinnedMessages from "../../API/hooks/messages/useGetChannelPinnedMessages";
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
@@ -42,6 +45,7 @@ function ChannelPage() {
   const channel_query = useGetChannel(channel_id);
   const message_query = useGetChannelMessages(channel_id);
   const media_query = useGetChannelMedia(channel_id);
+  const pins_query = useGetChannelPinnedMessages(channel_id);
 
   const isMember =
     channel && workspace ? isAChannelMember(workspace, channel) : false;
@@ -49,6 +53,20 @@ function ChannelPage() {
   const dispatch = useDispatch();
 
   useRoomSubscription(roomId);
+
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const pinnedMessageId = params.get("pinned_message");
+
+    if (pinnedMessageId) {
+      setActiveTab("messages");
+    }
+  }, [location.search]);
+
+
   // handle opened Panels
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
@@ -61,8 +79,7 @@ function ChannelPage() {
           page_id: channel_id,
         })
       );
-    }
-    else if (isThreadPanel) {
+    } else if (isThreadPanel) {
       const parentMessage = getParentMessageByPageId(channel_id);
 
       const existing = document.getElementById(`message-${parentMessage?._id}`);
@@ -80,14 +97,19 @@ function ChannelPage() {
         RemoveFromOpenedThreadPanelItems(channel_id);
         dispatch(closeChatPanel());
       }
-    }
-
-    else {
+    } else {
       dispatch(closeChatPanel());
     }
     // reset active tab
     setActiveTab("messages");
   }, [channel_id, dispatch]);
+
+  useEffect(() => {
+    if (activeTab === "pins" && !pins_query.isFetching) {
+      pins_query.refetch();
+    }
+  }, [activeTab]);
+
 
   if (channel_query.isLoading || message_query.isLoading)
     return (
@@ -137,6 +159,18 @@ function ChannelPage() {
                   <ChannelAuth channel={channel} />
                 )}
               </>
+            ) : activeTab === "pins" ? (
+              <PinnedContainer
+                pins={pins_query.data?.pages?.flatMap(
+                  (page) => page.data.messages
+                )}
+                isLoading={pins_query.isLoading}
+                isError={pins_query.isError}
+                error={pins_query.error}
+                fetchNextPage={pins_query.fetchNextPage}
+                hasNextPage={pins_query.hasNextPage}
+                media={media_query?.data?.media}
+              />
             ) : (
               <FilesContainer
                 files={media_query?.data?.media}
