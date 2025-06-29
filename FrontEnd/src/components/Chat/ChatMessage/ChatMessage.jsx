@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useSelector } from "react-redux";
 import styles from "./ChatMessage.module.css";
 import MessageItem from "./MessageItem";
 import React, { useEffect, useRef } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
 import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
@@ -17,18 +18,51 @@ function ChatMessage({ containerRef }) {
   );
   const { channelMedia } = useSelector((state) => state.channelMedia);
   const { mutate: toggleThisReact } = useToggleReaction();
-  // const toggleThisReact = useToggleReaction();
 
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
+  const navigate = useNavigate();
+
   const targetMessageId = new URLSearchParams(search).get("later_message");
   const searchedMessageId = new URLSearchParams(search).get("searched_message");
+  const pinnedMessageId = new URLSearchParams(search).get("pinned_message");
 
+  const hasScrolledToSpecialMessage = useRef(false); // 🟢 جديدة
   const { fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetChannelMessages(channel_id);
 
   const messagesEndRef = useRef(null);
   const isInitialLoad = useRef(true);
   const prevScrollHeightRef = useRef(0);
+
+  // 🔄 حذف الـ params بعد 2 ثانية بدون تأثير على الـ scroll
+  useEffect(() => {
+    const hasQuery = targetMessageId || searchedMessageId || pinnedMessageId;
+    if (!hasQuery) return;
+
+    const timeout = setTimeout(() => {
+      const newSearchParams = new URLSearchParams(search);
+      if (targetMessageId) newSearchParams.delete("later_message");
+      if (searchedMessageId) newSearchParams.delete("searched_message");
+      if (pinnedMessageId) newSearchParams.delete("pinned_message");
+
+      navigate(
+        {
+          pathname,
+          search: newSearchParams.toString(),
+        },
+        { replace: true }
+      );
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, [
+    targetMessageId,
+    searchedMessageId,
+    pinnedMessageId,
+    search,
+    navigate,
+    pathname,
+  ]);
 
   useEffect(() => {
     const container = containerRef?.current;
@@ -46,88 +80,69 @@ function ChatMessage({ containerRef }) {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, containerRef]);
 
   useEffect(() => {
-    if (messages?.length && isInitialLoad.current && !targetMessageId) {
+    if (
+      messages?.length &&
+      isInitialLoad.current &&
+      !targetMessageId &&
+      !pinnedMessageId &&
+      !searchedMessageId &&
+      !hasScrolledToSpecialMessage.current // 🛑 منع الـ scroll التلقائي
+    ) {
       messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
       isInitialLoad.current = false;
     }
-  }, [messages, targetMessageId]);
+  }, [messages, targetMessageId, pinnedMessageId, searchedMessageId]);
 
-  // scroll for later message
-  useEffect(() => {
-    if (!targetMessageId || !messages?.length) return;
+  // reusable scroll function
+  const scrollToMessage = async (messageId) => {
+    const MAX_TRIES = 20;
+    let tries = 0;
 
-    const tryScrollToTarget = async () => {
-      const MAX_TRIES = 20;
-      let tries = 0;
+    while (tries < MAX_TRIES) {
+      const element = document.getElementById(`message-${messageId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
 
-      while (tries < MAX_TRIES) {
-        const element = document.getElementById(`message-${targetMessageId}`);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center" });
-
+        if (element.parentElement) {
+          element.parentElement.classList.add(styles.highlight);
+          setTimeout(() => {
+            element.parentElement.classList.remove(styles.highlight);
+          }, 2000);
+        } else {
           element.classList.add(styles.highlight);
-
           setTimeout(() => {
             element.classList.remove(styles.highlight);
           }, 2000);
-
-          break;
         }
 
-        if (!hasNextPage || isFetchingNextPage) break;
-
-        await fetchNextPage();
-        tries++;
+        hasScrolledToSpecialMessage.current = true; // ✅ نمنع scroll تاني
+        break;
       }
-    };
 
-    tryScrollToTarget();
-  }, [
-    targetMessageId,
-    messages,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  ]);
+      if (!hasNextPage || isFetchingNextPage) break;
 
-  //scroll for searched message
+      await fetchNextPage();
+      tries++;
+    }
+  };
+
   useEffect(() => {
-    if (!searchedMessageId || !messages?.length) return;
+    if (targetMessageId && messages?.length) {
+      scrollToMessage(targetMessageId);
+    }
+  }, [targetMessageId, messages]);
 
-    const tryScrollToSearchedMessage = async () => {
-      const MAX_TRIES = 20;
-      let tries = 0;
+  useEffect(() => {
+    if (searchedMessageId && messages?.length) {
+      scrollToMessage(searchedMessageId);
+    }
+  }, [searchedMessageId, messages]);
 
-      while (tries < MAX_TRIES) {
-        const element = document.getElementById(`message-${searchedMessageId}`);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "center" });
-
-          if (element.parentElement) {
-            element.parentElement.classList.add(styles.highlight);
-            setTimeout(() => {
-              element.parentElement.classList.remove(styles.highlight);
-            }, 2000);
-          }
-
-          break;
-        }
-
-        if (!hasNextPage || isFetchingNextPage) break;
-
-        await fetchNextPage();
-        tries++;
-      }
-    };
-
-    tryScrollToSearchedMessage();
-  }, [
-    searchedMessageId,
-    messages,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  ]);
+  useEffect(() => {
+    if (pinnedMessageId && messages?.length) {
+      scrollToMessage(pinnedMessageId);
+    }
+  }, [pinnedMessageId, messages]);
 
   useEffect(() => {
     const container = containerRef?.current;
@@ -163,12 +178,10 @@ function ChatMessage({ containerRef }) {
         onSelect={(emojiData, messageId) => {
           toggleThisReact({
             messageId,
-            emoji: emojiData.imageUrl, // this best to show the same shape
-            // emoji: emojiData.emoji, // this best for fast show but not the same shape
+            emoji: emojiData.imageUrl,
           });
         }}
       />
-      
     </>
   );
 }

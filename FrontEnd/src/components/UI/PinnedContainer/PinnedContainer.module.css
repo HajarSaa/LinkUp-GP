@@ -1,0 +1,41 @@
+.pinnedContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.title {
+  width: 100%;
+  padding: 10px 20px;
+  font-weight: bold;
+  color: #666;
+  font-size: 14px;
+}
+
+.pins_list {
+  width: 100%;
+  padding: 0 20px 10px;
+  flex: 1;
+  background-color: var(--bg-white);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.status {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message_container {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+}

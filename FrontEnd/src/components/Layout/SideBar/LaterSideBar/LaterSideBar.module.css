@@ -159,3 +159,8 @@
   align-items: center;
   justify-content: center;
 }
+
+.error_message{
+  /* color: var(--error-color); */
+  font-size: 20px;
+}

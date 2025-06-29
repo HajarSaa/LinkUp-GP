@@ -10,20 +10,22 @@ import { useLocation } from "react-router-dom";
 import { useMemo } from "react";
 import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/channelMessagesSelectors";
 import { selectMessagesByConvers } from "../../../API/redux_toolkit/selectore/conversMessagesSelectors";
+import useTogglePinMessage from "../../../API/hooks/messages/useTogglePinMessage";
 
 const MessageMenu = () => {
-  const { isOpen, position, activeMessageId, isSender, isInThread } =
-  useSelector((state) => state.messageMenu);
-  
-  const delete_message = useDeleteMessage();
-  const dispatch = useDispatch();
+  const { isOpen, position, activeMessageId, isSender, isInThread, isPinned } =
+    useSelector((state) => state.messageMenu);
 
+  const delete_message = useDeleteMessage();
+  const togglePin = useTogglePinMessage();
+  const dispatch = useDispatch();
 
   // ... Edit Time Logic
 
   const location = useLocation();
   const isChannel = location.pathname.startsWith("/channels/");
   const id = location.pathname.split("/")[2]; // جِب الـ ID سواء Channel أو Conversation
+  const pinned_position = isChannel ? "channel" : "conversation";
 
   const message = useSelector((state) => {
     if (!id || !activeMessageId) return null;
@@ -63,7 +65,9 @@ const MessageMenu = () => {
   const handleCopy = useCallback(() => {
     if (!activeMessageId) return;
 
-    const messageElement = document.getElementById(`message-${activeMessageId}`);
+    const messageElement = document.getElementById(
+      `message-${activeMessageId}`
+    );
     if (!messageElement) {
       closeModal();
       return;
@@ -79,7 +83,17 @@ const MessageMenu = () => {
     closeModal();
   }, [activeMessageId, closeModal]);
 
-  
+  const handleTogglePin = useCallback(() => {
+    togglePin.mutate(
+      { messageId: activeMessageId, pin: !isPinned },
+      {
+        onSuccess: () => {
+          closeModal();
+        },
+      }
+    );
+  }, [closeModal, activeMessageId, isPinned, togglePin]);
+
   const handleDelete = useCallback(() => {
     if (!isSender) return;
 
@@ -96,10 +110,13 @@ const MessageMenu = () => {
   const handleEdit = useCallback(() => {
     if (isSender) {
       dispatch(closeMessageMenuModal());
-      const messageElement = document.getElementById(`message-${activeMessageId}`);
+      const messageElement = document.getElementById(
+        `message-${activeMessageId}`
+      );
 
       const messageText = messageElement
-        ? messageElement.querySelector(`#message-content-${activeMessageId}`)?.textContent
+        ? messageElement.querySelector(`#message-content-${activeMessageId}`)
+            ?.textContent
         : "";
 
       dispatch(
@@ -112,14 +129,16 @@ const MessageMenu = () => {
       closeModal();
     }
   }, [isSender, activeMessageId, closeModal, dispatch, isInThread]);
-  
+
   useEffect(() => {
     if (!isOpen) return;
-    
-    const handleKeyDown = (event) => {
 
+    const handleKeyDown = (event) => {
       if (event.key.toLowerCase() === "c") {
         handleCopy();
+      }
+      if (event.key.toLowerCase() === "p") {
+        handleTogglePin();
       }
       if (event.key.toLowerCase() === "e" && isSender && isEditable) {
         handleEdit();
@@ -143,6 +162,7 @@ const MessageMenu = () => {
     handleDelete,
     handleEdit,
     handleCopy,
+    handleTogglePin,
     isEditable,
     isSender,
   ]);
@@ -167,9 +187,20 @@ const MessageMenu = () => {
             <span>Copy Message</span>
             <span>C</span>
           </li>
+          <li className={styles.item} onClick={handleTogglePin}>
+            {togglePin.isPending ? (
+              <span className={styles.delete_loading}>
+                <Spinner width={20} height={20} color="var(--link-color)" />
+              </span>
+            ) : (
+              <>
+                <span>{isPinned ? 'Unpin':'Pin'} to this {pinned_position}</span>
+                <span>P</span>
+              </>
+            )}
+          </li>
           {isSender && (
             <>
-
               {isEditable && (
                 <li className={styles.item} onClick={handleEdit}>
                   <span>Edit Message</span>

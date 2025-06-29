@@ -8,7 +8,7 @@ import styles from "./Header.module.css";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import ChannelOptionModal from "../../../UI/Modal/ChannelModals/ChannelOptionsModal/ChannelOptionModal";
 import { openMenu } from "../../../../API/redux_toolkit/modals/channel/channelMenuSlice";
-import { BsLightning, BsThreeDotsVertical } from "react-icons/bs";
+import { BsLightning, BsPinAngle, BsPinAngleFill, BsThreeDotsVertical } from "react-icons/bs";
 import ChannelDetailsModal from "../../Modal/ChannelModals/ChannelDetailsModal/ChannelDetailsModal";
 import NotificationsModal from "../../Modal/ChannelModals/NotifiactionModal/NotificationsModal";
 import ChannelType from "../ChannelType/ChannelType";
@@ -30,6 +30,7 @@ import RenameChannelModal from "../../Modal/ChannelModals/editModals/RenameChann
 import DescriptionModal from "../../Modal/ChannelModals/editModals/DescriptionModal";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import { useNavigate } from "react-router-dom";
+import { GiPin } from "react-icons/gi";
 
 function Header({ activeTab, setActiveTab }) {
   const dispatch = useDispatch();
@@ -57,6 +58,12 @@ function Header({ activeTab, setActiveTab }) {
       label: "Files",
       icon: <FiLayers />,
       activeIcon: <IoLayers />,
+    },
+    {
+      id: "pins",
+      label: "Pins",
+      icon: <BsPinAngle />,
+      activeIcon: <BsPinAngleFill />,
     },
   ];
   const PlusItems = [

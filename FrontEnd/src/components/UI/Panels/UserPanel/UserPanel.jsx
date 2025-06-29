@@ -12,9 +12,11 @@ import EditContact from "../../Modal/EditContactModal/EditContact";
 import EditStartDate from "../../Modal/EditStartDateModal/EditStartDate";
 import ProfileAbout from "./ProfileAbout";
 import UploadProfilePhotoModal from "../../Modal/UploadProfilePhotoModal/UploadProfilePhoto";
+import { useParams } from "react-router-dom";
 
 const UserPanel = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   // Get ID of the user whose panel is open
   const { isOpen, userData: user_id } = useSelector(
@@ -28,7 +30,7 @@ const UserPanel = () => {
   useGetUserProfile(user_id);
 
   const handleClose = () => {
-    dispatch(closeChatPanel({ type: "userPanel", page_id: user_id }));
+    dispatch(closeChatPanel({ type: "userPanel", page_id: id }));
   };
 
   if (!isOpen) return null;

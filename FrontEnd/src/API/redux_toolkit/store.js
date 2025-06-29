@@ -57,11 +57,12 @@ import threadsReducer from "./api_data/messages/threadsSlice";
 import editMessageReducer from "./api_data/messages/editMessageSlice";
 import messageDraftReducer from "./api_data/messages/messageDraftSlice";
 import messageReactionsReducer from "./api_data/messages/messageReactionsSlice";
+import pinnedChannelMessageReducer from "./api_data/messages/pinnedChannelMessagesSlice";
+import pinnedConversMessageReducer from "./api_data/messages/pinnedConversationMessagesSlice";
 
 //======
 
 const store = configureStore({
-  
   reducer: {
     currentUser: userReducer,
     resizing: resizingReducer,
@@ -108,6 +109,8 @@ const store = configureStore({
     editMessage: editMessageReducer,
     messageDraft: messageDraftReducer,
     messageReactions: messageReactionsReducer,
+    pinnedChannelMessages: pinnedChannelMessageReducer,
+    pinnedConverMessages: pinnedConversMessageReducer,
     typing: typingReducer,
     // ==============================(Search)
     // ====

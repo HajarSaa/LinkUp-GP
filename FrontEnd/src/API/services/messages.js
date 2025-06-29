@@ -69,6 +69,55 @@ export const sendMessage = async (type, id, messageContent) => {
 };
 // ================( Send Message in Channel or Convers)
 export const updateThisMessage = async (message_id, content) => {
-  const { data } = await axiosInstance.patch(`/messages/${message_id}`, content);
+  const { data } = await axiosInstance.patch(
+    `/messages/${message_id}`,
+    content
+  );
   return data.data;
+};
+
+// ================(Pin or Unpin a message)
+export const togglePinMessage = async ({ messageId, pin }) => {
+  const { data } = await axiosInstance.patch(
+    `/messages/${messageId}/pin?pin=${pin}`
+  );
+  return data.data;
+};
+// ================(Get Pinned Channel Messages)
+// Get pinned messages for a channel with pagination
+
+export const getChannelPinnedMessages = async ({
+  channel_id,
+  pageParam = 1,
+  limit,
+}) => {
+  const { data } = await axiosInstance.get(
+    `/messages/channelPinnedMessages/${channel_id}?limit=${limit}&page=${pageParam}`
+  );
+
+  return {
+    data: data.data.messages,
+    currentPage: pageParam,
+    limit,
+    hasNextPage: data.data.messages.length === limit,
+  };
+};
+
+// ================(Get Pinned Conversation Messages)
+// Get conversation messages with pagination
+export const getConversationPinnedMessages = async ({
+  conversationId,
+  pageParam = 1,
+  limit,
+}) => {
+  const { data } = await axiosInstance.get(
+    `/messages/conversationPinnedMessages/${conversationId}?limit=${limit}&page=${pageParam}`
+  );
+
+  return {
+    data: data.data.messages,
+    currentPage: pageParam,
+    limit,
+    hasNextPage: data.data.messages.length === limit,
+  };
 };

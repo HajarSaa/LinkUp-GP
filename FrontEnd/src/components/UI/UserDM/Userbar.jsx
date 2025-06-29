@@ -13,7 +13,7 @@ import { FiHeadphones } from "react-icons/fi";
 import { IoIosLink } from "react-icons/io";
 import { FiFileText } from "react-icons/fi";
 import { LiaClipboardListSolid } from "react-icons/lia";
-import { BsLightning } from "react-icons/bs";
+import { BsLightning, BsPinAngle, BsPinAngleFill } from "react-icons/bs";
 import { IoBookmarkOutline } from "react-icons/io5";
 import UserModal from "../Modal/UserModal/UserModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -49,6 +49,12 @@ const Navbar = ({ activeTab, setActiveTab }) => {
       label: "Files",
       icon: <FiLayers />,
       activeIcon: <IoLayers />,
+    },
+    {
+      id: "pins",
+      label: "Pins",
+      icon: <BsPinAngle />,
+      activeIcon: <BsPinAngleFill />,
     },
   ];
 
@@ -113,7 +119,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
               items={huddleItems}
             />
             <MoreDropdown items={moreMenuItems} />
-            {isLater && <CloseIcon closeEvent={()=>navigate("/later")} />}
+            {isLater && <CloseIcon closeEvent={() => navigate("/later")} />}
           </div>
         </div>
 
@@ -122,8 +128,9 @@ const Navbar = ({ activeTab, setActiveTab }) => {
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`${styles.tabButton} ${activeTab === item.id ? styles.active : ""
-                }`}
+              className={`${styles.tabButton} ${
+                activeTab === item.id ? styles.active : ""
+              }`}
               onClick={() => setActiveTab(item.id)}
             >
               {activeTab === item.id ? item.activeIcon : item.icon}
@@ -138,11 +145,10 @@ const Navbar = ({ activeTab, setActiveTab }) => {
       <UserModal />
     </>
   );
-}
+};
 Navbar.propTypes = {
   activeTab: PropTypes.string.isRequired,
   setActiveTab: PropTypes.func.isRequired,
 };
-
 
 export default Navbar;
