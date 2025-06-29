@@ -231,6 +231,21 @@ export const leaveWorkspace = catchAsync(async (req, res, next) => {
     return next(new AppError("You are not a member of this workspace", 403));
   }
 
+  // If the user is the owner of the workspace, they must transfer ownership
+  if (userProfile.role === "owner") {
+    const newOwner = req.body.newOwner;
+    const newOwnerProfile = await UserProfile.findById(newOwner);
+    if (!newOwnerProfile) {
+      return next(new AppError("New owner profile not found", 404));
+    }
+
+    // Transfer ownership to the new owner
+    userProfile.role = "member"; // change current user to member
+    newOwnerProfile.role = "owner"; // change new owner to owner
+    await userProfile.save();
+    await newOwnerProfile.save();
+  }
+
   // Remove the userProfile from the workspace members array
   workspace.members.pull(userProfile._id);
   await workspace.save();
