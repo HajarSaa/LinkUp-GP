@@ -50,10 +50,6 @@ function DmPage() {
     selectPinnedMessagesByConversation(state, convers_id)
   );
 
-
-
-
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pinnedMessageId = params.get("pinned_message");
