@@ -12,7 +12,7 @@ function LaterSideBar() {
   const { workspace } = useSelector((state) => state.workspace);
   const [activeTab, setActiveTab] = useState("inProgress");
   const { data: later_items, isLoading, isError, error } = useGetLaterItems();
-
+  // console.log(later_items);
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
 
   return (
@@ -61,7 +61,7 @@ function LaterSideBar() {
           <div className={laterStyle.content}>
             {activeTab === "inProgress" && (
               <>
-                {!isError ? (
+                {isError ? (
                   <div className={laterStyle.placeholder}>
                     <p className={laterStyle.error_message}>{error}</p>
                   </div>
@@ -76,7 +76,7 @@ function LaterSideBar() {
                 ) : (
                   <>
                     {later_items.map((later_item, index) => (
-                      <LaterItem key={index} laterDate={later_item} />
+                      <LaterItem key={index} laterData={later_item} />
                     ))}
                   </>
                 )}
