@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import MessageInput from "../../components/UI/InputField/MessageInput/MessageInput";
 import Header from "../../components/UI/Channel/Header/Header";
 import ChannelBody from "../../components/UI/Channel/ChannelBody/ChannelBody";
@@ -104,11 +103,6 @@ function ChannelPage() {
     setActiveTab("messages");
   }, [channel_id, dispatch]);
 
-  useEffect(() => {
-    if (activeTab === "pins" && !pins_query.isFetching) {
-      pins_query.refetch();
-    }
-  }, [activeTab]);
 
 
   if (channel_query.isLoading || message_query.isLoading)
@@ -161,9 +155,7 @@ function ChannelPage() {
               </>
             ) : activeTab === "pins" ? (
               <PinnedContainer
-                pins={pins_query.data?.pages?.flatMap(
-                  (page) => page.data.messages
-                )}
+                pins={pins_query.data?.pages?.flatMap((page) => page.data)}
                 isLoading={pins_query.isLoading}
                 isError={pins_query.isError}
                 error={pins_query.error}

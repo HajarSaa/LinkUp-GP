@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import Spinner from "../Spinner/Spinner";
 import styles from "./PinnedContainer.module.css";
 import MessageItem from "../../Chat/ChatMessage/MessageItem";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectPinnedMessagesByChannel } from "../../../API/redux_toolkit/selectore/selectPinnedMessagesSelector";
 
 function PinnedContainer({
-  pins,
   isLoading,
   isError,
   error,
@@ -17,6 +18,12 @@ function PinnedContainer({
   const containerRef = useRef();
   const navigate = useNavigate();
   const location = useLocation();
+  const { id: channel_id } = useParams();
+
+  const messages = useSelector((state) =>
+    selectPinnedMessagesByChannel(state, channel_id)
+  );
+  console.log(messages);
 
   // loading more messages
   useEffect(() => {
@@ -55,7 +62,7 @@ function PinnedContainer({
 
 
 
-  if (isLoading && (!pins || pins.length === 0))
+  if (isLoading && (!messages || messages.length === 0))
     return (
       <div className={styles.status}>
         <Spinner width={60} height={60} color="var(--primary-color)" />
@@ -63,21 +70,24 @@ function PinnedContainer({
     );
   if (isError) return <div className={styles.status}>{error?.message}</div>;
 
-  if (pins.length ===0) return (
-    <div className={styles.status}>
-      <p>No pinned messages yet</p>
-    </div>
-  );
+  if (messages.length === 0)
+    return (
+      <div className={styles.status}>
+        <p>No pinned messages yet</p>
+      </div>
+    );
     return (
       <>
         <div className={styles.title}>Pinned messages</div>
         <div className={styles.pinnedContainer}>
           <div ref={containerRef} className={styles.pins_list}>
-            {pins.map((pin, index) => (
+            {messages.map((pin, index) => (
               <div
                 key={index}
                 className={styles.message_container}
-                onClick={()=>{handleNavigate(pin)}}
+                onClick={() => {
+                  handleNavigate(pin);
+                }}
               >
                 <MessageItem message={pin} isPinnedTap={true} media={media} />
               </div>
@@ -89,7 +99,6 @@ function PinnedContainer({
     );
 }
 PinnedContainer.propTypes = {
-  pins: PropTypes.array.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   error: PropTypes.object,
