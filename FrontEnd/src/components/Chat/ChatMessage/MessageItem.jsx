@@ -21,6 +21,7 @@ import { getAttachedFiles } from "../../../utils/mediaUtils";
 import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
 import Reactions from "../Reactions/Reactions";
 import LinkPreview from "./LinkPreview/LinkPreview";
+import ForwardMessageModal from "../../UI/Modal/ForwardMessageModal/ForwardMessageModal";
 
 const MessageItem = ({
   message,
@@ -188,19 +189,6 @@ const MessageItem = ({
             <Reactions messageId={message._id} />
           </div>
         </div>
-
-        {!isSearchResult && !isPinnedTap && (
-          <MessageActions
-            isThread={isInThreadPanel}
-            message={message}
-            messageHover={messageHover}
-            isThreadParent={isThreadParent}
-            threadData={threadData}
-            parentMessage={message}
-            isSender={isMessageSender}
-          />
-        )}
-
         {/* Menu Actions => forward , later , more , .... */}
         {!isSearchResult && !isPinnedTap && (
           <MessageActions
@@ -220,6 +208,7 @@ const MessageItem = ({
       </div>
 
       <MessageMenu createdAt={message?.createdAt} />
+      <ForwardMessageModal />
     </>
   );
 };

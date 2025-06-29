@@ -45,6 +45,8 @@ import userDetailsReducer from "./modals/convers/userDetailsModal";
 import conversMediaReducer from "./api_data/media/conversMediaSlice";
 //======
 //======
+// ==============================(Modals)
+import forwardModalReducer from "./modals/chat/forwardModal";
 // ==============================(<Media>)
 import fileUploadReducer from "./api_data/media/fileUploadSlice";
 //======
@@ -98,6 +100,7 @@ const store = configureStore({
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
+    forwardModal:forwardModalReducer,
     // ==============================(Media)
     // ====
     fileUpload: fileUploadReducer,
