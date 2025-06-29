@@ -10,14 +10,18 @@ import {
   setFileStatus,
 } from "../../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
 import useUploadMedia from "../../../../../API/hooks/media/useUploadMedia";
+import PropTypes from "prop-types";
 
-function UploadMenu() {
+function UploadMenu({ pageId: customPageId }) {
   const { isOpen, position } = useSelector((state) => state.inputMenu);
   const dispatch = useDispatch();
   const { id } = useParams();
   const location = useLocation();
   const isChannel = location.pathname.includes("/channels");
-  const pageId = `${isChannel ? "channel" : "conversation"}-${id}`;
+
+  // fallback pageId لو مش جاي prop
+  const fallbackPageId = `${isChannel ? "channel" : "conversation"}-${id}`;
+  const pageId = customPageId || fallbackPageId;
 
   const uploadMutation = useUploadMedia();
 
@@ -65,7 +69,6 @@ function UploadMenu() {
           },
         }
       );
-
     };
 
     document.body.appendChild(input);
@@ -136,5 +139,9 @@ function UploadMenu() {
     </div>
   );
 }
+
+UploadMenu.propTypes = {
+  pageId: PropTypes.string,
+};
 
 export default UploadMenu;

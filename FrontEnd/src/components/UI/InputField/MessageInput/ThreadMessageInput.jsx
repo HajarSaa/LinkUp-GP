@@ -19,6 +19,8 @@ import LowerToolbar from "./InputComponents/LowerToolbar";
 import useSendMessage from "../../../../API/hooks/messages/useSendMessage";
 import useTypingEmitter from "../../../../API/hooks/socket/useTypingEmmiter";
 import { v4 as uuidv4 } from "uuid";
+import MediaContainer from "./MediaContainer/MediaContainer";
+import UploadMenu from "./UploadMenu/UploadMenu";
 
 const ThreadMessageInput = ({ parentMessageId }) => {
   const [message, setMessage] = useState("");
@@ -28,6 +30,7 @@ const ThreadMessageInput = ({ parentMessageId }) => {
   const { id } = useParams();
   const { channel } = useSelector((state) => state.channel);
   const isChannel = location.pathname.includes("/channels");
+  const pageId = `thread-${parentMessageId}`;
 
   let send_also_to = null;
   if (isChannel) send_also_to = channel.name;
@@ -98,6 +101,7 @@ const ThreadMessageInput = ({ parentMessageId }) => {
   };
 
   return (
+    <>
     <div className={styles.messageInputContainer}>
       <div className={styles.input_field}>
         {/* <div className={styles.upper_row_icons}>
@@ -118,7 +122,6 @@ const ThreadMessageInput = ({ parentMessageId }) => {
           onKeyDown={handleKeyDown}
           onInput={handleInputHeight}
         />
-
         <label htmlFor="checkbox" className={styles.checkBox}>
           <input
             id="checkbox"
@@ -130,7 +133,7 @@ const ThreadMessageInput = ({ parentMessageId }) => {
           <span className={styles.checkBox_text}>Also send to</span>
           <span className={styles.checkBox_channelName}>{send_also_to}</span>
         </label>
-
+        <MediaContainer pageId={pageId} />
         <div className={styles.lower_row_icons}>
           <LowerToolbar isThread={true} />
           <div
@@ -164,6 +167,8 @@ const ThreadMessageInput = ({ parentMessageId }) => {
         </span>
       </div>
     </div>
+    <UploadMenu pageId={pageId} />
+    </>
   );
 };
 

@@ -3,17 +3,22 @@ import styles from "./MediaContainer.module.css";
 import { removeFile } from "../../../../../API/redux_toolkit/api_data/media/fileUploadSlice";
 import { FaTimes } from "react-icons/fa";
 import Spinner from "../../../Spinner/Spinner";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 import AudioMedia from "../../../Media/AudioMedia/AudioMedia";
 
-function MediaContainer() {
+function MediaContainer({ pageId: customPageId }) {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const location = useLocation();
+
+  // حدد الـ pageId
   const isChannel = location.pathname.includes("/channels");
-  const pageId = `${isChannel ? "channel" : "conversation"}-${id}`;
+  const fallbackPageId = `${isChannel ? "channel" : "conversation"}-${id}`;
+  const pageId = customPageId || fallbackPageId;
+
   const { pages } = useSelector((state) => state.fileUpload);
   const files = pages[pageId]?.files || [];
-
 
   const renderMediaItem = (file, idx) => {
     return (
@@ -40,18 +45,10 @@ function MediaContainer() {
         )}
 
         {file.type.startsWith("video/") && (
-          <video
-            src={file.previewURL}
-            // controls
-            className={styles.media_video}
-          />
+          <video src={file.previewURL} className={styles.media_video} />
         )}
 
-        {file.type.startsWith("audio/") && (
-          <>
-            <AudioMedia file={file} />
-            </>
-        )}
+        {file.type.startsWith("audio/") && <AudioMedia file={file} />}
       </div>
     );
   };
@@ -66,5 +63,9 @@ function MediaContainer() {
     </>
   );
 }
+
+MediaContainer.propTypes = {
+  pageId: PropTypes.string,
+};
 
 export default MediaContainer;
