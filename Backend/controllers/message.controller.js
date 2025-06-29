@@ -5,6 +5,7 @@ import Message from "../models/message.model.js";
 import File from "../models/file.model.js";
 import UserProfile from "../models/userProfile.model.js";
 import Notification from "../models/notification.model.js";
+import LaterItem from "../models/laterItem.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { getAll } from "../utils/handlerFactory.js";
@@ -30,13 +31,30 @@ export const getChannelMessages = catchAsync(async (req, res, next) => {
   const messages = await Message.find({ channelId, parentMessageId: null })
     .skip(skip)
     .limit(limit)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const messageIds = messages.map((msg) => msg._id);
+
+  const savedLaterItems = await LaterItem.find({
+    userProfile: req.userProfile.id,
+    messageId: { $in: messageIds },
+  }).select("messageId");
+
+  const savedIdsSet = new Set(
+    savedLaterItems.map((item) => item.messageId.toString())
+  );
+
+  const enhancedMessages = messages.map((msg) => ({
+    ...msg,
+    savedForLater: savedIdsSet.has(msg._id.toString()),
+  }));
 
   // Send response
   res.status(200).json({
     status: "success",
     data: {
-      messages,
+      messages: enhancedMessages,
     },
   });
 });
@@ -51,16 +69,29 @@ export const getChannelPinnedMessages = catchAsync(async (req, res, next) => {
   }
 
   // Get all pinned messages in channel
-  const messages = await Message.find({
-    channelId,
-    pinned: true,
-  });
+  const messages = await Message.find({ channelId, pinned: true }).lean();
+
+  const messageIds = messages.map((msg) => msg._id);
+
+  const savedItems = await LaterItem.find({
+    userProfile: req.userProfile.id,
+    messageId: { $in: messageIds },
+  }).select("messageId");
+
+  const savedIdsSet = new Set(
+    savedItems.map((item) => item.messageId.toString())
+  );
+
+  const enhancedMessages = messages.map((msg) => ({
+    ...msg,
+    savedForLater: savedIdsSet.has(msg._id.toString()),
+  }));
 
   // send the response
   res.status(200).json({
     status: "success",
     data: {
-      messages: messages || [],
+      messages: enhancedMessages,
     },
   });
 });
@@ -79,13 +110,29 @@ export const getConversationPinnedMessages = catchAsync(
     const messages = await Message.find({
       conversationId,
       pinned: true,
-    });
+    }).lean();
+
+    const messageIds = messages.map((msg) => msg._id);
+
+    const savedItems = await LaterItem.find({
+      userProfile: req.userProfile.id,
+      messageId: { $in: messageIds },
+    }).select("messageId");
+
+    const savedIdsSet = new Set(
+      savedItems.map((item) => item.messageId.toString())
+    );
+
+    const enhancedMessages = messages.map((msg) => ({
+      ...msg,
+      savedForLater: savedIdsSet.has(msg._id.toString()),
+    }));
 
     // send the response
     res.status(200).json({
       status: "success",
       data: {
-        messages: messages || [],
+        messages: enhancedMessages,
       },
     });
   }
@@ -132,13 +179,30 @@ export const getConversationMessages = catchAsync(async (req, res, next) => {
   const messages = await Message.find({ conversationId, parentMessageId: null })
     .skip(skip)
     .limit(limit)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const messageIds = messages.map((msg) => msg._id);
+
+  const savedItems = await LaterItem.find({
+    userProfile: req.userProfile.id,
+    messageId: { $in: messageIds },
+  }).select("messageId");
+
+  const savedIdsSet = new Set(
+    savedItems.map((item) => item.messageId.toString())
+  );
+
+  const enhancedMessages = messages.map((msg) => ({
+    ...msg,
+    savedForLater: savedIdsSet.has(msg._id.toString()),
+  }));
 
   // Send response
   res.status(200).json({
     status: "success",
     data: {
-      messages,
+      messages: enhancedMessages,
     },
   });
 });
@@ -184,13 +248,30 @@ export const getThread = catchAsync(async (req, res, next) => {
   const replies = await Message.find({ parentMessageId: messageId })
     .skip(skip)
     .limit(limit)
-    .sort({ createdAt: 1 });
+    .sort({ createdAt: 1 })
+    .lean();
+
+  const replyIds = replies.map((msg) => msg._id);
+
+  const savedItems = await LaterItem.find({
+    userProfile: req.userProfile.id,
+    messageId: { $in: replyIds },
+  }).select("messageId");
+
+  const savedIdsSet = new Set(
+    savedItems.map((item) => item.messageId.toString())
+  );
+
+  const enhancedReplies = replies.map((msg) => ({
+    ...msg,
+    savedForLater: savedIdsSet.has(msg._id.toString()),
+  }));
 
   // Send response
   res.status(200).json({
     status: "success",
     data: {
-      messages: replies || [],
+      messages: enhancedReplies,
     },
   });
 });

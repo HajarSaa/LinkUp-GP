@@ -121,3 +121,10 @@ export const getConversationPinnedMessages = async ({
     hasNextPage: data.data.messages.length === limit,
   };
 };
+
+// ====================(forwarded Messages)
+// Forward message to multiple targets
+export const forwardMessage = async (requestBody) => {
+  const { data } = await axiosInstance.post("/messages/forward", requestBody);
+  return data.data;
+};

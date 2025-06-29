@@ -13,6 +13,7 @@ import { openThreadPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { useParams } from "react-router-dom";
 import { useRef } from "react";
 import { getEmojiPickerPosition } from "../../../utils/modalsUtils"; // تأكد إنه مستورد
+import { openForwardModal } from "../../../API/redux_toolkit/modals/chat/forwardModal";
 
 function MessageActions({
   children,
@@ -59,6 +60,10 @@ function MessageActions({
     );
   };
 
+  function handleForward() {
+    dispatch(openForwardModal());
+  }
+
   const style = { top: 0, right: 0 };
 
   if (!messageHover) return;
@@ -95,7 +100,7 @@ function MessageActions({
         </div>
       )}
 
-      <div className={styles.action_icon}>
+      <div className={styles.action_icon} onClick={handleForward}>
         <TbArrowForwardUp />
       </div>
 

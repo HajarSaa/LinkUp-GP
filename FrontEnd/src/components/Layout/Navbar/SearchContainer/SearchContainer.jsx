@@ -20,14 +20,10 @@ function SearchContainer({ workspace, targetRef }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
 
-
-
   const { browseChannels } = useSelector((state) => state.browseChannels);
   const members = workspace.members;
   const searchData = [...browseChannels, ...members];
   const conversations = useGetSidebarConvers(workspace);
-
-
 
   const updatePosition = useCallback(() => {
     if (targetRef?.current) {
@@ -102,12 +98,11 @@ function SearchContainer({ workspace, targetRef }) {
         e.preventDefault();
 
         // حالة: لا يوجد نتائج، ولكن في query
-        if (!expandedItems.length && query ) {
+        if (!expandedItems.length && query) {
           dispatch(closeSearch());
           navigateTo(`/search?${query}`);
           return;
         }
-
 
         const item = expandedItems[activeIndex];
         const isViewProfile = item?.conversationId && activeIndex % 2 === 1;

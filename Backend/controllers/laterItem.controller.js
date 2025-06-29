@@ -132,14 +132,50 @@ export const getLaterItems = catchAsync(async (req, res, next) => {
   }
 
   // Find all later items for the workspace
-  const laterItems = await LaterItem.find({ workspaceId });
+  const laterItems = await LaterItem.find({
+    workspaceId,
+    userProfile: req.userProfile.id,
+  })
+    .populate({
+      path: "messageId",
+      populate: {
+        path: "createdBy attachments",
+        select: "userName photo fileName fileType fileUrl",
+      },
+    })
+    .sort({ savedAt: -1 });
 
-  // Send the response
+  const enhancedItems = laterItems.map((item) => {
+    const msg = item.messageId;
+
+    return {
+      _id: item._id,
+      workspaceId: item.workspaceId,
+      userProfile: item.userProfile,
+      message: msg
+        ? {
+            _id: msg._id,
+            content: msg.content,
+            messageType: msg.messageType,
+            createdBy: msg.createdBy,
+            attachments: msg.attachments,
+            createdAt: msg.createdAt,
+            forwarded: msg.forwarded,
+            savedForLater: true,
+          }
+        : null,
+      status: item.status,
+      reminderAt: item.reminderAt,
+      savedAt: item.savedAt,
+      notified: item.notified,
+    };
+  });
+
   res.status(200).json({
-    srtatus: "success",
-    results: laterItems.length,
+    status: "success",
+    results: enhancedItems.length,
     data: {
-      laterItems: laterItems || [],
+      laterItems: enhancedItems,
     },
   });
 });

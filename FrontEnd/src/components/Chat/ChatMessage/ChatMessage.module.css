@@ -16,19 +16,25 @@
   color: #1d1c1d;
 }
 
-.pinned_tag {
+.tags {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.tag_item {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.pinned_icon {
+.tag_icon {
   color: #e9912c;
   display: flex;
   font-size: 15px;
 }
 
-.pinned_text {
+.tag_text {
   font-size: 14px;
   color: #666;
 }
