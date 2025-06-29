@@ -83,7 +83,6 @@ const ForwardMessageModal = ({ messageId }) => {
   };
 
   const handleForward = () => {
-    
     if (selected.length === 0) {
       handleClose(); // مفيش حاجة متعلم عليها.. نقفل وخلاص
       return;
@@ -97,6 +96,9 @@ const ForwardMessageModal = ({ messageId }) => {
     forward_request.mutate(requestBody, {
       onSuccess: () => {
         handleClose();
+      },
+      onError: (err) => {
+        console.error("Failed to forward:", err);
       },
     });
   };
@@ -155,7 +157,7 @@ const ForwardMessageModal = ({ messageId }) => {
             className={`${styles.btn} ${styles.forward_btn}`}
             onClick={handleForward}
           >
-            {forward_request.isLoading ? (
+            {forward_request.isPending ? (
               <span className={styles.loading_status}>
                 <Spinner width={18} height={18} color="var(--primary-color)" />
               </span>
