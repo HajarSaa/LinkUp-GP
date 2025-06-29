@@ -3,7 +3,7 @@ import styles from "./ChatMessage.module.css";
 import { TbArrowForwardUp } from "react-icons/tb";
 import { FiMoreVertical } from "react-icons/fi";
 import { BiMessageRoundedDetail } from "react-icons/bi";
-import { MdOutlineAddReaction } from "react-icons/md";
+import { MdOutlineAddReaction, MdOutlineBookmark } from "react-icons/md";
 import PropTypes from "prop-types";
 import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSlice";
 import { useDispatch } from "react-redux";
@@ -104,9 +104,15 @@ function MessageActions({
         <TbArrowForwardUp />
       </div>
 
-      <div className={styles.action_icon}>
-        <CiBookmark />
-      </div>
+      {message?.savedForLater ? (
+        <div className={styles.action_icon}>
+          <MdOutlineBookmark />
+        </div>
+      ) : (
+        <div className={styles.action_icon}>
+          <CiBookmark />
+        </div>
+      )}
 
       <div
         className={styles.action_icon}
@@ -117,7 +123,6 @@ function MessageActions({
     </div>
   );
 }
-
 
 MessageActions.propTypes = {
   children: PropTypes.any,
