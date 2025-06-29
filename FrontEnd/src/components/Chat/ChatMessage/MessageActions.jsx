@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import { useRef } from "react";
 import { getEmojiPickerPosition } from "../../../utils/modalsUtils"; // تأكد إنه مستورد
 import { openForwardModal } from "../../../API/redux_toolkit/modals/chat/forwardModal";
+import useToggleLaterItem from "../../../API/hooks/Later/useToggleLaterItem";
 
 function MessageActions({
   children,
@@ -28,6 +29,9 @@ function MessageActions({
   const dispatch = useDispatch();
   const { id: page_id } = useParams();
   const addReactRef = useRef(null);
+  const { mutate: toggleLater } = useToggleLaterItem();
+
+
 
   const handelOpenMenu = (e, message_id) => {
     e.preventDefault();
@@ -62,6 +66,10 @@ function MessageActions({
 
   function handleForward() {
     dispatch(openForwardModal());
+  }
+
+  function handleAddToLater() {
+    toggleLater(message._id);
   }
 
   const style = { top: 0, right: 0 };
@@ -104,15 +112,9 @@ function MessageActions({
         <TbArrowForwardUp />
       </div>
 
-      {message?.savedForLater ? (
-        <div className={styles.action_icon}>
-          <MdOutlineBookmark />
-        </div>
-      ) : (
-        <div className={styles.action_icon}>
-          <CiBookmark />
-        </div>
-      )}
+      <div className={styles.action_icon} onClick={handleAddToLater}>
+        {message?.savedForLater ? <MdOutlineBookmark /> : <CiBookmark />}
+      </div>
 
       <div
         className={styles.action_icon}
