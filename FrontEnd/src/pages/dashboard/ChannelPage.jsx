@@ -37,7 +37,6 @@ import { selectPinnedMessagesByChannel } from "../../API/redux_toolkit/selectore
 
 function ChannelPage() {
   const { channel } = useSelector((state) => state.channel);
-  // const channel = useSelector((state) => state.channel.channel);
   const roomId = channel ? `channel:${channel._id}` : null;
   const { workspace } = useSelector((state) => state.workspace);
   const { isEditing, isInThread } = useSelector((state) => state.editMessage);
@@ -69,10 +68,11 @@ function ChannelPage() {
     }
   }, [location.search]);
 
-  // handle opened Panels
+  // ✅ updated logic to restore panels on mount
   useEffect(() => {
     const isUserPanel = isIdInOpenedUserPanelItems(channel_id);
     const isThreadPanel = isIdInOpenedThreadPanelItems(channel_id);
+
     if (isUserPanel) {
       dispatch(
         openUserPanel({
@@ -84,9 +84,7 @@ function ChannelPage() {
     } else if (isThreadPanel) {
       const parentMessage = getParentMessageByPageId(channel_id);
 
-      const existing = document.getElementById(`message-${parentMessage?._id}`);
-
-      if (parentMessage && existing) {
+      if (parentMessage) {
         dispatch(
           openThreadPanel({
             threadID: getThreadPanelIdByPageId(channel_id),
@@ -102,7 +100,7 @@ function ChannelPage() {
     } else {
       dispatch(closeChatPanel());
     }
-    // reset active tab
+
     setActiveTab("messages");
   }, [channel_id, dispatch]);
 
@@ -117,12 +115,14 @@ function ChannelPage() {
         />
       </div>
     );
+
   if (channel_query.isError)
     return (
       <div className={`${styles.status} ${styles.error}`}>
         {channel_query.error}
       </div>
     );
+
   if (message_query.isError)
     return (
       <div className={`${styles.status} ${styles.error}`}>
@@ -179,5 +179,6 @@ function ChannelPage() {
     </PageContent>
   );
 }
+
 
 export default ChannelPage;
