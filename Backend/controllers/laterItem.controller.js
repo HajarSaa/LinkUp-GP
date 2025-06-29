@@ -19,7 +19,7 @@ export const toggleSaveForLater = catchAsync(async (req, res, next) => {
   });
 
   if (existing) {
-    await existing.deleteOne();
+    await LaterItem.deleteOne({ userProfile: userProfileId, messageId });
     return res.status(200).json({
       status: "success",
       action: "removed",
