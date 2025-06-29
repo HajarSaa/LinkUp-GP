@@ -21,6 +21,8 @@ import { getAttachedFiles } from "../../../utils/mediaUtils";
 import AttachmentRenderer from "../../UI/Media/Attachments/AttachmentRender";
 import Reactions from "../Reactions/Reactions";
 import LinkPreview from "./LinkPreview/LinkPreview";
+import ForwardMessageModal from "../../UI/Modal/ForwardMessageModal/ForwardMessageModal";
+import { TbArrowForwardUp } from "react-icons/tb";
 
 const MessageItem = ({
   message,
@@ -113,14 +115,24 @@ const MessageItem = ({
           handelOpenMenu(e, message._id);
         }}
       >
-        {message.pinned && (
-          <div className={styles.pinned_tag}>
-            <span className={styles.pinned_icon}>
-              <GiPin />
-            </span>
-            <span className={styles.pinned_text}>Pinned by {pinnedBy}</span>
-          </div>
-        )}
+        <div className={styles.tags}>
+          {message.pinned && (
+            <div className={styles.tag_item}>
+              <span className={styles.tag_icon}>
+                <GiPin />
+              </span>
+              <span className={styles.tag_text}>Pinned by {pinnedBy}</span>
+            </div>
+          )}
+          {message.forwarded && (
+            <div className={styles.tag_item}>
+              <span className={styles.tag_icon}>
+                <TbArrowForwardUp />
+              </span>
+              <span className={styles.tag_text}>Forwarded</span>
+            </div>
+          )}
+        </div>
         <div className={styles.message} id={`message-${message._id}`}>
           <div className={styles.message_leftSide}>
             <div className={styles.profileWrapper} onClick={openProfile}>
@@ -188,19 +200,6 @@ const MessageItem = ({
             <Reactions messageId={message._id} />
           </div>
         </div>
-
-        {!isSearchResult && !isPinnedTap && (
-          <MessageActions
-            isThread={isInThreadPanel}
-            message={message}
-            messageHover={messageHover}
-            isThreadParent={isThreadParent}
-            threadData={threadData}
-            parentMessage={message}
-            isSender={isMessageSender}
-          />
-        )}
-
         {/* Menu Actions => forward , later , more , .... */}
         {!isSearchResult && !isPinnedTap && (
           <MessageActions
@@ -220,6 +219,7 @@ const MessageItem = ({
       </div>
 
       <MessageMenu createdAt={message?.createdAt} />
+      <ForwardMessageModal messageId={message._id} />
     </>
   );
 };
