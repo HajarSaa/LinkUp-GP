@@ -76,11 +76,11 @@ function UserMenu() {
           </div>
         </div>
       </div>
-      <div className={styles.option} onClick={handleOpenStatusModal}>
+      {/* <div className={styles.option} onClick={handleOpenStatusModal}>
         Update your status
-      </div>
-      <div className={styles.option}>Set yourself as away</div>
-      <div
+      </div> */}
+      {/* <div className={styles.option}>Set yourself as away</div> */}
+      {/* <div
         className={styles.option}
         onMouseEnter={() => setHoverPause(true)}
         onMouseLeave={() => setHoverPause(false)}
@@ -97,11 +97,11 @@ function UserMenu() {
             <div className={styles.subOption}>Custom...</div>
           </div>
         )}
-      </div>
+      </div> */}
       <div className={styles.option} onClick={show_profile}>
         Profile
       </div>
-      <div className={styles.option}>Preferences</div>
+      {/* <div className={styles.option}>Preferences</div> */}
       <div className={styles.option} onClick={handleSignOut}>
         Sign out :)
       </div>

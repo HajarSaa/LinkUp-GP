@@ -90,11 +90,11 @@ function WorkBar() {
       iconFill: <GoBookmarkFill />,
       navigation: "/later",
     },
-    {
-      label: "More",
-      iconOutline: <IoIosMore />,
-      iconFill: <IoIosMore />,
-    },
+    // {
+    //   label: "More",
+    //   iconOutline: <IoIosMore />,
+    //   iconFill: <IoIosMore />,
+    // },
   ];
 
   function handleWorkItems() {

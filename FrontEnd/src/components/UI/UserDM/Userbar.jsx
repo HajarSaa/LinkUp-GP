@@ -113,12 +113,12 @@ const Navbar = ({ activeTab, setActiveTab }) => {
           </div>
           {/* 🟢 Right Section */}
           <div className={styles.rightSection}>
-            <IconDropdown
+            {/* <IconDropdown
               icon={<FiHeadphones />}
               label=""
               items={huddleItems}
-            />
-            <MoreDropdown items={moreMenuItems} />
+            /> */}
+            {/* <MoreDropdown items={moreMenuItems} /> */}
             {isLater && <CloseIcon closeEvent={() => navigate("/later")} />}
           </div>
         </div>
