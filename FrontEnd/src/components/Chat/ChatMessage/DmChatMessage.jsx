@@ -5,7 +5,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { selectMessagesByConvers } from "../../../API/redux_toolkit/selectore/conversMessagesSelectors";
 import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
 import useGetConversMessages from "../../../API/hooks/messages/useGetConversMessages";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
 import MessageItem from "../ChatMessage/MessageItem";
@@ -163,19 +163,40 @@ function DmChatMessage({ containerRef }) {
         {isFetchingNextPage && (
           <div className={styles.loading}>Loading History ...</div>
         )}
-        {messages
-          ?.slice(0)
-          .reverse()
-          .map((message) => (
-            <React.Fragment key={message._id}>
-              <DateDivider date={message.createdAt} />
-              <MessageItem
-                isInThreadPanel={false}
-                message={message}
-                media={conversMedia}
-              />
-            </React.Fragment>
-          ))}
+        {(() => {
+          const rendered = [];
+          let lastDate = null;
+
+          messages
+            ?.slice(0)
+            .reverse()
+            .forEach((message) => {
+              const messageDate = new Date(message.createdAt).toDateString();
+
+              const shouldShowDateDivider = messageDate !== lastDate;
+              if (shouldShowDateDivider) {
+                rendered.push(
+                  <DateDivider
+                    key={`divider-${messageDate}`}
+                    date={message.createdAt}
+                  />
+                );
+                lastDate = messageDate;
+              }
+
+              rendered.push(
+                <MessageItem
+                  key={message._id}
+                  isInThreadPanel={false}
+                  message={message}
+                  media={conversMedia}
+                />
+              );
+            });
+
+          return rendered;
+        })()}
+
         <div ref={messagesEndRef} />
       </div>
       <EmojiPicker

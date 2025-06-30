@@ -2,7 +2,7 @@
 import { useSelector } from "react-redux";
 import styles from "./ChatMessage.module.css";
 import MessageItem from "./MessageItem";
-import React, { useEffect, useRef } from "react";
+import  { useEffect, useRef } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import useGetChannelMessages from "../../../API/hooks/messages/useGetChannelMessage";
@@ -10,6 +10,7 @@ import { selectMessagesByChannel } from "../../../API/redux_toolkit/selectore/ch
 import DateDivider from "../DateDivider/DateDivider";
 import EmojiPicker from "../../UI/EmojiPicker/EmojiPicker";
 import useToggleReaction from "../../../API/hooks/reactions/useToggleReaction";
+import dayjs from "dayjs";
 
 function ChatMessage({ containerRef }) {
   const { id: channel_id } = useParams();
@@ -159,19 +160,40 @@ function ChatMessage({ containerRef }) {
         {isFetchingNextPage && (
           <div className={styles.loading}>Loading History ...</div>
         )}
-        {messages
-          ?.slice(0)
-          .reverse()
-          .map((message) => (
-            <React.Fragment key={message._id}>
-              <DateDivider date={message.createdAt} />
-              <MessageItem
-                isInThreadPanel={false}
-                message={message}
-                media={channelMedia}
-              />
-            </React.Fragment>
-          ))}
+        {(() => {
+          const rendered = [];
+          let lastDate = null;
+
+          messages
+            ?.slice(0)
+            .reverse()
+            .forEach((message) => {
+              const messageDate = dayjs(message.createdAt).format("YYYY-MM-DD");
+
+              const shouldShowDateDivider = messageDate !== lastDate;
+              if (shouldShowDateDivider) {
+                rendered.push(
+                  <DateDivider
+                    key={`divider-${messageDate}`}
+                    date={message.createdAt}
+                  />
+                );
+                lastDate = messageDate;
+              }
+
+              rendered.push(
+                <MessageItem
+                  key={message._id}
+                  isInThreadPanel={false}
+                  message={message}
+                  media={channelMedia}
+                />
+              );
+            });
+
+          return rendered;
+        })()}
+
         <div ref={messagesEndRef} />
       </div>
       <EmojiPicker
