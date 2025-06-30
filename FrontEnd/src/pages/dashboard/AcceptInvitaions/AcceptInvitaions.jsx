@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import styles from "./AcceptInvitaions.module.css";
 import useAcceptInvite from "../../../API/hooks/workspace/useAcceptInvite";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   setStepIndex,
   setWorkspace,
@@ -15,6 +15,7 @@ const AcceptInvitaions = () => {
   const dispatch = useDispatch();
   const token = new URLSearchParams(search).get("token");
   const accept_invite = useAcceptInvite();
+  const buttonRef = useRef(null);
 
   useEffect(() => {
     if (!token) {
@@ -22,28 +23,31 @@ const AcceptInvitaions = () => {
       return;
     }
 
-    console.log(token);
-  }, [token, accept_invite, dispatch, navigate]);
+    // نعمل كلك بعد 3 ثواني
+    const timer = setTimeout(() => {
+      buttonRef.current?.click();
+    }, 3000);
+
+    return () => clearTimeout(timer); // تنظيف التايمر
+  }, [token, navigate]);
 
   function handleAccept() {
-    accept_invite.mutate(
-      token, // لازم تبعت object فيه token
-      {
-        onSuccess: (data) => {
-          console.log("Success:", data);
-          dispatch(
-            setWorkspace({
-              workspace: { _id: data.workspaceId, id: data.workspaceId },
-            })
-          );
-          dispatch(setStepIndex(1));
-          navigate("/new-workspace/step-2");
-        },
-        onError: (err) => {
-          console.log(err);
-        },
-      }
-    );
+    accept_invite.mutate(token, {
+      onSuccess: (data) => {
+        console.log("Success:", data);
+        dispatch(
+          setWorkspace({
+            workspace: { _id: data.workspaceId, id: data.workspaceId },
+          })
+        );
+        dispatch(setStepIndex(1));
+        navigate("/new-workspace/step-2");
+      },
+      onError: (err) => {
+        console.log("Error accepting invitation:", err);
+        navigate("/login");
+      },
+    });
   }
 
   return (
@@ -55,7 +59,13 @@ const AcceptInvitaions = () => {
           <p className={styles.loadingMessage}>
             Just a moment, we&#39;re getting things ready 🚀
           </p>
-          <button onClick={handleAccept}>Click</button>
+          <button
+            ref={buttonRef}
+            onClick={handleAccept}
+            style={{ display: "none" }} // إخفاء الزر
+          >
+            Accept Hidden
+          </button>
         </div>
       </div>
     </div>
