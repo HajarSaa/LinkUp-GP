@@ -24,6 +24,8 @@ import {
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import useSetReminder from "../../../../API/hooks/Later/useSetReminder";
+import useRemoveReminder from "../../../../API/hooks/Later/useRemoveReminder";
 
 const LaterItem = ({ laterData }) => {
   const { workspace } = useSelector((state) => state.workspace);
@@ -31,6 +33,8 @@ const LaterItem = ({ laterData }) => {
   const conversations = useGetSidebarConvers(workspace);
   const navigate = useNavigate();
   const { mutate: toggleLater } = useToggleLaterItem();
+  const { mutate: setReminder } = useSetReminder();
+  const { mutate: removeReminder } = useRemoveReminder();
 
   const [reminderOpen, setReminderOpen] = useState(false);
   const [reminderDate, setReminderDate] = useState(new Date());
@@ -80,20 +84,56 @@ const LaterItem = ({ laterData }) => {
   }
 
   function handleReset() {
-    setReminderDate(new Date());
+    removeReminder(laterData?.message._id,
+      {
+        onSuccess: () => {
+          setReminderOpen(false);
+        },
+      });
   }
 
   function handleSaveReminder() {
     const iso = reminderDate.toISOString();
-    console.log("Reminder At:", iso);
-    setReminderOpen(false);
+    console.log(new Date(iso).toISOString());
+    setReminder(
+      {
+        messageId: laterData?.message._id,
+        reminderAt: new Date(iso).toISOString(),
+      },
+      {
+        onSuccess: () => {
+          setReminderOpen(false);
+        },
+      }
+    );
   }
+
+  const formatTimeDifference = (reminderAt) => {
+    const reminderDate = new Date(reminderAt);
+    const now = new Date();
+    const diffMs = reminderDate - now;
+
+    if (diffMs <= 0) return "Reminder time reached";
+
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+    const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+
+    return `Due in ${diffDays ? `${diffDays} Days` : ""} ${
+      diffHours ? `${diffHours} H` : ""
+    } ${diffMinutes ? `${diffMinutes} M` : ""}`;
+  };
 
   return (
     <>
       <div className={styles.item} onClick={handleNavigate}>
         <div className={styles.tags}>
-          {laterData.tag && <div className={styles.tag}>{laterData.tag}</div>}
+          {laterData.reminderAt && (
+            <div className={styles.tag}>
+              {formatTimeDifference(laterData.reminderAt)}
+              {console.log(laterData.reminderAt)}
+            </div>
+          )}
           <div className={styles.message_source}>in {source_name}</div>
         </div>
         <div className={styles.item_header}>

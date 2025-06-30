@@ -15,3 +15,27 @@ export const toggleLaterItem = async (messageId) => {
   );
   return data.data;
 };
+// =============(Set Reminder on a Later Item)
+export const setReminder = async ({ messageId, reminderAt }) => {
+  const { data } = await axiosInstance.patch(
+    `/laterItems/${messageId}/setReminder`,
+    { reminderAt }
+  );
+  return data.data;
+};
+
+// =============(Remove Reminder from a Later Item)
+export const removeReminder = async (messageId) => {
+  const { data } = await axiosInstance.patch(
+    `/laterItems/${messageId}/removeReminder`
+  );
+  return data.data;
+};
+// =============(Update Later Item Status)
+export const updateLaterItemStatus = async ({ messageId, status }) => {
+  const { data } = await axiosInstance.patch(
+    `/laterItems/${messageId}/status`,
+    { status }
+  );
+  return data.data;
+};
