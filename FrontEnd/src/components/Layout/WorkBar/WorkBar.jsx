@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useRef } from "react";
 import {
   AiOutlineHome,
@@ -9,7 +10,7 @@ import {
 } from "react-icons/ai";
 import { CiBookmark } from "react-icons/ci";
 import { GoBookmarkFill } from "react-icons/go";
-import { IoIosMore } from "react-icons/io";
+// import { IoIosMore } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
 import UserMenu from "./UserMenu/UserMenu";
 import styles from "./Workbar.module.css";
@@ -25,6 +26,9 @@ import {
   openUserMenuModal,
 } from "../../../API/redux_toolkit/modals/userProfile/userMenuSlice";
 import UserStatusDot from "../../UI/User/UserStatusDot";
+import WorkspaceItems from "../../UI/Modal/WorkspaceItems/WorkspaceItems";
+import { openWorkspaceItemsModal } from "../../../API/redux_toolkit/modals/workspace/workspacesItems";
+import { IoIosMore } from "react-icons/io";
 
 function WorkBar() {
   const menuRef = useRef(null);
@@ -32,6 +36,7 @@ function WorkBar() {
   const { workspace } = useSelector((state) => state.workspace);
   const [activeIndex, setActiveIndex] = useState(null);
   const dispatch = useDispatch();
+  const workLabelRef = useRef(null);
 
   const loggin_user = findMemberByUserId(workspace);
 
@@ -69,16 +74,16 @@ function WorkBar() {
       iconFill: <AiFillHome />,
       navigation: `/channels/${main_channel?.id}`,
     },
-    {
-      label: "DMs",
-      iconOutline: <AiOutlineMessage />,
-      iconFill: <AiFillMessage />,
-    },
-    {
-      label: "Activity",
-      iconOutline: <AiOutlineBell />,
-      iconFill: <AiFillBell />,
-    },
+    // {
+    //   label: "DMs",
+    //   iconOutline: <AiOutlineMessage />,
+    //   iconFill: <AiFillMessage />,
+    // },
+    // {
+    //   label: "Activity",
+    //   iconOutline: <AiOutlineBell />,
+    //   iconFill: <AiFillBell />,
+    // },
     {
       label: "Later",
       iconOutline: <CiBookmark />,
@@ -92,49 +97,68 @@ function WorkBar() {
     },
   ];
 
+  function handleWorkItems() {
+    const rect = workLabelRef.current.getBoundingClientRect();
+    dispatch(
+      openWorkspaceItemsModal({
+        top: rect.top + window.scrollY, // ✨ نفس ارتفاع الزر
+        left: rect.right + window.scrollX + 10, // ✨ يبدأ من بعد الزر
+      })
+    );
+  }
+
   return (
-    <div className={styles.work_bar}>
-      <div className={styles.work_label}>{work_label}</div>
+    <>
+      <div className={styles.work_bar}>
+        <div
+          className={styles.work_label}
+          ref={workLabelRef}
+          onClick={handleWorkItems}
+        >
+          {work_label}
+        </div>
 
-      <div className={styles.icons}>
-        {sidebarItems.map((item, index) => {
-          const isActive = activeIndex === index;
+        <div className={styles.icons}>
+          {sidebarItems.map((item, index) => {
+            const isActive = activeIndex === index;
 
-          return (
-            <div
-              key={index}
-              className={`${styles.iconWrapper} ${
-                isActive ? styles.active : ""
-              }`}
-              onClick={() => {
-                handleClick(index, item.navigation);
-              }}
-            >
-              <div className={styles.icon}>
-                {isActive ? item.iconFill : item.iconOutline}
+            return (
+              <div
+                key={index}
+                className={`${styles.iconWrapper} ${
+                  isActive ? styles.active : ""
+                }`}
+                onClick={() => {
+                  handleClick(index, item.navigation);
+                }}
+              >
+                <div className={styles.icon}>
+                  {isActive ? item.iconFill : item.iconOutline}
+                </div>
+                <span className={styles.label}>{item.label}</span>
               </div>
-              <span className={styles.label}>{item.label}</span>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <div className={styles.bottomSection}>
-        <div className={styles.iconButton}>
-          <FaPlus />
-        </div>
-        <div className={styles.profileWrapper} ref={menuRef}>
-          <div
-            className={styles.profilePhotoPlaceholder}
-            onClick={() => dispatch(openUserMenuModal())}
-          >
-            <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
+        <div className={styles.bottomSection}>
+          {/* <div className={styles.iconButton}>
+            <FaPlus />
+          </div> */}
+          <div className={styles.profileWrapper} ref={menuRef}>
+            <div
+              className={styles.profilePhotoPlaceholder}
+              onClick={() => dispatch(openUserMenuModal())}
+            >
+              <UserImage src={loggin_user.photo} alt={loggin_user.userName} />
+            </div>
+            <UserStatusDot userId={loggin_user?.user} />
+            <UserMenu />
           </div>
-          <UserStatusDot userId={loggin_user?.user} />
-          <UserMenu />
         </div>
       </div>
-    </div>
+      <WorkspaceItems />
+    </>
   );
 }
 export default WorkBar;

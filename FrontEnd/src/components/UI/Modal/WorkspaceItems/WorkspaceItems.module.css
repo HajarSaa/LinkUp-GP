@@ -1,0 +1,269 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1002;
+}
+
+.workspace_item_modal {
+  width: 450px;
+  background-color: #fff;
+  border-radius: var(--border-radius-small);
+  min-height: fit-content;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+
+
+.landing_header {
+  margin-bottom: 15px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.header_welcome {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+
+}
+
+.subheader {
+  color: #333;
+  font-weight: normal;
+}
+
+.subtext {
+  color: #666;
+}
+
+/* Create Btn */
+
+.create {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  padding: 15px;
+  background-color: var(--gray-light);
+  border-radius: var(--border-radius);
+}
+
+.create_left_side {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.create_image {
+  max-width: 40px;
+  width: 40px;
+  height: 40px;
+  max-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create_btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.create_btn:hover {
+  background-color: var(--secondary-color);
+}
+
+/* workspaces list */
+.workspaces_list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-bottom: 30px;
+  overflow: hidden;
+  max-height: 100%;
+  min-height: 0;
+}
+
+.workspace_list_header {
+  padding: 20px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.workspace_list_items {
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.workspaceItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 15px;
+  background-color: #fff;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+
+
+.workspaceItem:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  width: calc(100% - 15px);
+  background-color: var(--border-color);
+}
+
+.workspaceItem_leftSide {
+  display: flex;
+  gap: 15px;
+}
+
+.workspaceImage {
+  width: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  height: 50px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.workspaceImage>* {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+}
+
+.workspaceImage>span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20;
+  background-color: #888;
+}
+
+.workspace_details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.workspace_details_members {
+  display: flex;
+}
+
+.workspace_details_members_imgs {
+  display: flex;
+  gap: 2px;
+  margin-right: 6px;
+}
+
+.member_image {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--border-radius-small);
+  overflow: hidden;
+  background-color: #000;
+}
+
+.member_image_avatar {
+  width: 100%;
+  height: 100%;
+  color: var(--secondary-color);
+}
+
+.workspaceItem:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+.workspaceText {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.workspaceItem_rightSide {
+  font-size: 20px;
+  color: #000;
+  display: flex;
+  gap: 5px;
+  align-items: stretch;
+  transform: translateX(-10px);
+  transition: color, transform 0.5s;
+}
+
+.workspaceItem_rightSide>span {
+  display: flex;
+  align-items: center;
+}
+
+.workspaceItem_rightSide>span:first-child {
+  display: none;
+}
+
+.workspaceItem:hover .workspaceItem_rightSide {
+  color: var(--link-color);
+  transform: translateX(0);
+}
+
+.workspaceItem:hover .workspaceItem_rightSide>span:first-child {
+  display: flex;
+}
+
+.loading,
+.error {
+  width: 100%;
+  height: 142px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error>span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error>span:last-child {
+  font-size: 50px;
+}
+
+.error {
+  color: var(--error-color);
+  font-size: 25px;
+  font-weight: bold;
+
+}
+
+.empty_workspace_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-weight: bold;
+}

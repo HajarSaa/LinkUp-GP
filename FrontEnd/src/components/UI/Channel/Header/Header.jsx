@@ -157,7 +157,7 @@ function Header({ activeTab, setActiveTab }) {
             ))}
 
             {/* ✅ Plus Button */}
-            <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} />
+            {/* <IconDropdown icon={<IoMdAdd />} label="" items={PlusItems} /> */}
           </div>
         </div>
       </div>

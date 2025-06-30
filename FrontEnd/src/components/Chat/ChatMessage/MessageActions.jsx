@@ -69,6 +69,7 @@ function MessageActions({
   }
 
   function handleAddToLater() {
+    console.log(message._id);
     toggleLater(message._id);
   }
 

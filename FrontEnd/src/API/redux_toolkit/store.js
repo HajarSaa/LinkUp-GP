@@ -30,6 +30,7 @@ import browseChannelsReducer from "./api_data/channels/browseChannels";
 // ==============================(Worskpace)
 import createWorkspaceReducer from "./ui/creationsStep";
 import workspaceMenuReducer from "./modals/workspace/workspaceMenu";
+import workspaceItems from "./modals/workspace/workspacesItems";
 import searchReducer from "./ui/searchSlice";
 //======
 // ==============================(User Profile)
@@ -82,6 +83,7 @@ const store = configureStore({
     // ====
     createWorkspace: createWorkspaceReducer,
     workspaceMenu: workspaceMenuReducer,
+    workspaceItems: workspaceItems,
     search: searchReducer,
     // ==============================(conversation)
     // ====
@@ -100,7 +102,7 @@ const store = configureStore({
     // ==============================(Modals)
     // ====
     modals: modalsReducer,
-    forwardModal:forwardModalReducer,
+    forwardModal: forwardModalReducer,
     // ==============================(Media)
     // ====
     fileUpload: fileUploadReducer,
