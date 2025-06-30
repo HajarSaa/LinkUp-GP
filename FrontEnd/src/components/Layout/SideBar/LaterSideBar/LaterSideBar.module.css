@@ -148,6 +148,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.message_source > * {
+  display: flex;
+  align-items: center;
 }
 
 .placeholder {
