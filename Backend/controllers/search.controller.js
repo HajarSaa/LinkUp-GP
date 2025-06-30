@@ -1,10 +1,3 @@
-import mongoose from "mongoose";
-import Message from "../models/message.model.js";
-import Channel from "../models/channel.model.js";
-import Conversation from "../models/converstion.model.js";
-import catchAsync from "../utils/catchAsync.js";
-import AppError from "../utils/appError.js";
-
 export const searchMessages = catchAsync(async (req, res, next) => {
   const { keyword, user, channel, conversation, startDate, endDate } =
     req.query;
@@ -35,14 +28,13 @@ export const searchMessages = catchAsync(async (req, res, next) => {
     $or: [{ memberOneId: currentUserId }, { memberTwoId: currentUserId }],
   }).select("_id");
 
-  // Build channel messages query
+  // If channel filter is provided
   if (channel) {
     const channelMessagesQuery = {
       channelId: { $in: userChannels.map((c) => c._id) },
       content: keywordQuery,
     };
 
-    // Apply additional filters if provided
     if (!mongoose.Types.ObjectId.isValid(channel)) {
       return next(new AppError("Invalid channel ID format", 400));
     }
@@ -68,15 +60,12 @@ export const searchMessages = catchAsync(async (req, res, next) => {
 
     query.$or.push(channelMessagesQuery);
   }
-
-  // Build conversation messages query
-  if (conversation) {
+  // If conversation filter is provided
+  else if (conversation) {
     const conversationMessagesQuery = {
       conversationId: { $in: userConversations.map((c) => c._id) },
       content: keywordQuery,
     };
-
-    // Apply additional filters if provided
 
     if (!mongoose.Types.ObjectId.isValid(conversation)) {
       return next(new AppError("Invalid conversation ID format", 400));
@@ -110,6 +99,57 @@ export const searchMessages = catchAsync(async (req, res, next) => {
 
     query.$or.push(conversationMessagesQuery);
   }
+  // If no channel or conversation filter is provided, search in all channels and conversations the user is part of
+  else {
+    // Build channel messages query for all user channels
+    if (userChannels.length > 0) {
+      const channelMessagesQuery = {
+        channelId: { $in: userChannels.map((c) => c._id) },
+        content: keywordQuery,
+      };
+
+      if (user) {
+        if (!mongoose.Types.ObjectId.isValid(user)) {
+          return next(new AppError("Invalid user ID format", 400));
+        }
+        channelMessagesQuery.createdBy = new mongoose.Types.ObjectId(user);
+      }
+
+      if (startDate || endDate) {
+        channelMessagesQuery.createdAt = {};
+        if (startDate)
+          channelMessagesQuery.createdAt.$gte = new Date(startDate);
+        if (endDate) channelMessagesQuery.createdAt.$lte = new Date(endDate);
+      }
+
+      query.$or.push(channelMessagesQuery);
+    }
+
+    // Build conversation messages query for all user conversations
+    if (userConversations.length > 0) {
+      const conversationMessagesQuery = {
+        conversationId: { $in: userConversations.map((c) => c._id) },
+        content: keywordQuery,
+      };
+
+      if (user) {
+        if (!mongoose.Types.ObjectId.isValid(user)) {
+          return next(new AppError("Invalid user ID format", 400));
+        }
+        conversationMessagesQuery.createdBy = new mongoose.Types.ObjectId(user);
+      }
+
+      if (startDate || endDate) {
+        conversationMessagesQuery.createdAt = {};
+        if (startDate)
+          conversationMessagesQuery.createdAt.$gte = new Date(startDate);
+        if (endDate)
+          conversationMessagesQuery.createdAt.$lte = new Date(endDate);
+      }
+
+      query.$or.push(conversationMessagesQuery);
+    }
+  }
 
   // If no channels or conversations found where user is a member
   if (query.$or.length === 0) {
@@ -130,12 +170,12 @@ export const searchMessages = catchAsync(async (req, res, next) => {
     .populate({
       path: "channelId",
       select: "name ",
-      match: { _id: { $exists: true } }, // Only populate if channelId exists
+      match: { _id: { $exists: true } },
     })
     .populate({
       path: "conversationId",
       select: "memberOneId memberTwoId",
-      match: { _id: { $exists: true } }, // Only populate if conversationId exists
+      match: { _id: { $exists: true } },
       populate: [
         {
           path: "memberOneId",
@@ -148,7 +188,6 @@ export const searchMessages = catchAsync(async (req, res, next) => {
       ],
     });
 
-  // send response
   res.status(200).json({
     status: "success",
     results: results.length,
