@@ -6,12 +6,16 @@ import Spinner from "../../UI/Spinner/Spinner"
 import useLogin from "../../../API/hooks/auth/useLogin";
 import { validateLoginForm } from "../../../utils/validation";
 import { useNavigate } from "react-router-dom";
+import useGetMe from "../../../API/hooks/auth/useGetMe";
 
 function LoginForm() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
   const navigateTo = useNavigate();
+  const { refetch } = useGetMe({ enabled: false });
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const loginMutation = useLogin();
 
@@ -30,16 +34,19 @@ function LoginForm() {
     if (Object.keys(validationErrors).length > 0) return;
 
     setMessage("");
-
+    setIsLoading(true)
     loginMutation.mutate(formData, {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await refetch();
         navigateTo("/workspaces-landing");
       },
       onError: (error) => {
         setMessage(
           error?.response?.data?.message || "Login failed, please try again."
         );
-      },
+      }, onSettled: () => {
+        setIsLoading(false);
+      }
     });
   };
 
@@ -66,7 +73,7 @@ function LoginForm() {
         type="submit"
         disabled={loginMutation.isPending}
       >
-        {loginMutation.isPending ? (
+        {loginMutation.isPending || isLoading ? (
           <Spinner secondaryColor="#4A90E2" color="#E6F0FA" />
         ) : (
           "Login"

@@ -22,7 +22,7 @@ function MainLayout() {
   const channels = workspace?.channels;
   const navigate = useNavigate();
   // custom hooks
-  useCurrentWorkspace();
+  const {isLoading:work_loading} = useCurrentWorkspace();
   useSocketConnection();
   useBrowseChannels();
 
@@ -50,17 +50,18 @@ function MainLayout() {
       <NavBar />
       <div className={styles.workspace_wrapper}>
         <WorkBar />
-        {
-          (isBrowseChannels|| isSearchPage) ? (
+        {isBrowseChannels || isSearchPage ? (
           <div className={styles.workspace_content_wrapper}>
-            <div className={styles.full_content}>{workspace && <Outlet />}</div>
+            <div className={styles.full_content}>
+              {!work_loading && <Outlet />}
+            </div>
           </div>
         ) : (
           <div className={styles.workspace_content_wrapper}>
             <div className={styles.workspace_content}>
               <SideBar />
               <div className={styles.main_content}>
-                {workspace && <Outlet />}
+                {!work_loading && <Outlet />}
               </div>
             </div>
           </div>

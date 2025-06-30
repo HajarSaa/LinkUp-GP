@@ -48,8 +48,13 @@
   border: none;
   border-radius: var(--border-radius-small);
   cursor: pointer;
+  height: 35px;
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.logout:hover{
+.logout:hover {
   background-color: var(--secondary-color);
 }
