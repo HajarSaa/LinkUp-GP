@@ -36,24 +36,22 @@ export const searchMessages = catchAsync(async (req, res, next) => {
   }).select("_id");
 
   // Build channel messages query
-  if (userChannels.length > 0) {
+  if (channel) {
     const channelMessagesQuery = {
       channelId: { $in: userChannels.map((c) => c._id) },
       content: keywordQuery,
     };
 
     // Apply additional filters if provided
-    if (channel) {
-      if (!mongoose.Types.ObjectId.isValid(channel)) {
-        return next(new AppError("Invalid channel ID format", 400));
-      }
-      // Verify user is a member of this channel
-      const isMember = userChannels.some((c) => c._id.equals(channel));
-      if (!isMember) {
-        return next(new AppError("You don't have access to this channel", 403));
-      }
-      channelMessagesQuery.channelId = new mongoose.Types.ObjectId(channel);
+    if (!mongoose.Types.ObjectId.isValid(channel)) {
+      return next(new AppError("Invalid channel ID format", 400));
     }
+    // Verify user is a member of this channel
+    const isMember = userChannels.some((c) => c._id.equals(channel));
+    if (!isMember) {
+      return next(new AppError("You don't have access to this channel", 403));
+    }
+    channelMessagesQuery.channelId = new mongoose.Types.ObjectId(channel);
 
     if (user) {
       if (!mongoose.Types.ObjectId.isValid(user)) {
@@ -72,30 +70,29 @@ export const searchMessages = catchAsync(async (req, res, next) => {
   }
 
   // Build conversation messages query
-  if (userConversations.length > 0) {
+  if (conversation) {
     const conversationMessagesQuery = {
       conversationId: { $in: userConversations.map((c) => c._id) },
       content: keywordQuery,
     };
 
     // Apply additional filters if provided
-    if (conversation) {
-      if (!mongoose.Types.ObjectId.isValid(conversation)) {
-        return next(new AppError("Invalid conversation ID format", 400));
-      }
-      // Verify user is part of this conversation
-      const isParticipant = userConversations.some((c) =>
-        c._id.equals(conversation)
-      );
-      if (!isParticipant) {
-        return next(
-          new AppError("You don't have access to this conversation", 403)
-        );
-      }
-      conversationMessagesQuery.conversationId = new mongoose.Types.ObjectId(
-        conversation
+
+    if (!mongoose.Types.ObjectId.isValid(conversation)) {
+      return next(new AppError("Invalid conversation ID format", 400));
+    }
+    // Verify user is part of this conversation
+    const isParticipant = userConversations.some((c) =>
+      c._id.equals(conversation)
+    );
+    if (!isParticipant) {
+      return next(
+        new AppError("You don't have access to this conversation", 403)
       );
     }
+    conversationMessagesQuery.conversationId = new mongoose.Types.ObjectId(
+      conversation
+    );
 
     if (user) {
       if (!mongoose.Types.ObjectId.isValid(user)) {
