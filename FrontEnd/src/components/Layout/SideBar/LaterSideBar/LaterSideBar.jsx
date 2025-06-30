@@ -13,6 +13,11 @@ function LaterSideBar() {
   const [activeTab, setActiveTab] = useState("inProgress");
   const { data: later_items, isLoading, isError, error } = useGetLaterItems();
   // console.log(later_items);
+  const in_progress_items = later_items?.filter(
+    (later_item) => later_item.status === "in-progress"
+  );
+
+
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
 
   return (
@@ -39,7 +44,10 @@ function LaterSideBar() {
               }`}
               onClick={() => setActiveTab("inProgress")}
             >
-              In progress <span className={laterStyle.tab_count}>2</span>
+              In progress{" "}
+              <span className={laterStyle.tab_count}>
+                {in_progress_items?.length}
+              </span>
             </div>
             <div
               className={`${laterStyle.tab} ${
@@ -75,7 +83,7 @@ function LaterSideBar() {
                   </div>
                 ) : (
                   <>
-                    {later_items.map((later_item, index) => (
+                    {in_progress_items?.map((later_item, index) => (
                       <LaterItem key={index} laterData={later_item} />
                     ))}
                   </>

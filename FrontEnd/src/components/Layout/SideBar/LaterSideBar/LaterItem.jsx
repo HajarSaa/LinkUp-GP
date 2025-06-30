@@ -42,7 +42,7 @@ const LaterItem = ({ laterData }) => {
       );
     else if (laterData?.message?.conversationId)
       navigate(
-        `later/conversations/${laterData?.message?.channelId}?later_message=${laterData?.message._id}`
+        `later/conversations/${laterData?.message?.conversationId}?later_message=${laterData?.message._id}`
       );
   }
 
