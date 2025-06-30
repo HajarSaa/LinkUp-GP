@@ -75,6 +75,7 @@ const InviteWorkModal = () => {
           },
         }
       );
+
     }
   };
 
@@ -169,11 +170,7 @@ const InviteWorkModal = () => {
             }`}
             onClick={handleSendInvitaions}
           >
-            {isPending ? (
-              <Spinner width={25} height={25} color="var(--primary-color)" />
-            ) : (
-              "Send"
-            )}
+            {isPending ? <Spinner width={25} height={25} color="var(--primary-color)" /> : "Send"}
           </div>
         </div>
       </div>

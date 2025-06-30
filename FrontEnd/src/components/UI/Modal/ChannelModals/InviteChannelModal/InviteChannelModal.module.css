@@ -61,19 +61,33 @@
   display: flex;
   justify-content: flex-end;
   margin-top: 10px;
+  gap: 10px;
 }
 
 .skipButton {
   background: #fff;
-  border: 1px solid #ccc;
   padding: 8px 15px;
   cursor: pointer;
   border-radius: 4px;
-  font-weight: bold;
+  width: 125px;
+  height: 35px;
   color: #525252;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.send_invite {
+  background: var(--primary-color);
+  color: #fff;
+}
+.disable_invite{
+  background-color: var(--gray-dark);
+}
+.send_invite:not(.disable_invite):hover {
+  background: var(--secondary-color);
 }
 
-.skipButton:hover {
+.skipButton:not(.send_invite):hover {
   background: #f5f5f5;
 }
 
