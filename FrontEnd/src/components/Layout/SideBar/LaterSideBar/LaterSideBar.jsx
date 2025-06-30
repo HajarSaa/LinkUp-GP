@@ -16,6 +16,9 @@ function LaterSideBar() {
   const in_progress_items = later_items?.filter(
     (later_item) => later_item.status === "in-progress"
   );
+  const completed_items = later_items?.filter(
+    (later_item) => later_item.status === "completed"
+  );
 
 
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
@@ -63,7 +66,10 @@ function LaterSideBar() {
               }`}
               onClick={() => setActiveTab("Completed")}
             >
-              Completed
+              Completed{" "}
+              <span className={laterStyle.tab_count}>
+                {completed_items?.length}
+              </span>
             </div>
           </div>
           <div className={laterStyle.content}>
@@ -91,12 +97,34 @@ function LaterSideBar() {
               </>
             )}
 
-            {activeTab === "Archived" && (
+            {/* {activeTab === "Archived" && (
               <div className={laterStyle.placeholder}>No archived items</div>
-            )}
+            )} */}
 
             {activeTab === "Completed" && (
-              <div className={laterStyle.placeholder}>No completed items</div>
+              <div className={laterStyle.content}>
+                <>
+                  {isError ? (
+                    <div className={laterStyle.placeholder}>
+                      <p className={laterStyle.error_message}>{error}</p>
+                    </div>
+                  ) : isLoading ? (
+                    <div className={laterStyle.placeholder}>
+                      <Spinner
+                        width={60}
+                        height={60}
+                        color="var(--secondary-color)"
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      {completed_items?.map((later_item, index) => (
+                        <LaterItem key={index} laterData={later_item} isComplete={true} />
+                      ))}
+                    </>
+                  )}
+                </>
+              </div>
             )}
           </div>
         </div>

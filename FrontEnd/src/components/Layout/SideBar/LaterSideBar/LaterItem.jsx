@@ -6,7 +6,7 @@ import UserImage from "../../../UI/User/UserImage";
 import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
 import ChannelType from "../../../UI/Channel/ChannelType/ChannelType";
 import { useNavigate } from "react-router-dom";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
 import useToggleLaterItem from "../../../../API/hooks/Later/useToggleLaterItem";
 import { LuClock3 } from "react-icons/lu";
@@ -26,8 +26,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import useSetReminder from "../../../../API/hooks/Later/useSetReminder";
 import useRemoveReminder from "../../../../API/hooks/Later/useRemoveReminder";
+import useUpdateLaterStatus from "../../../../API/hooks/Later/useUpdateLaterStatus";
 
-const LaterItem = ({ laterData }) => {
+const LaterItem = ({ laterData, isComplete=false }) => {
   const { workspace } = useSelector((state) => state.workspace);
   const member = findMemberById(workspace, laterData.userProfile);
   const conversations = useGetSidebarConvers(workspace);
@@ -35,6 +36,7 @@ const LaterItem = ({ laterData }) => {
   const { mutate: toggleLater } = useToggleLaterItem();
   const { mutate: setReminder } = useSetReminder();
   const { mutate: removeReminder } = useRemoveReminder();
+  const { mutate: updateStatus } = useUpdateLaterStatus();
 
   const [reminderOpen, setReminderOpen] = useState(false);
   const [reminderDate, setReminderDate] = useState(new Date());
@@ -80,16 +82,19 @@ const LaterItem = ({ laterData }) => {
   }
 
   function handleComplete() {
-    console.log("complete");
+    removeReminder(laterData?.message._id);
+    updateStatus({
+      messageId: laterData?.message._id,
+      status: "completed",
+    });
   }
 
   function handleReset() {
-    removeReminder(laterData?.message._id,
-      {
-        onSuccess: () => {
-          setReminderOpen(false);
-        },
-      });
+    removeReminder(laterData?.message._id, {
+      onSuccess: () => {
+        setReminderOpen(false);
+      },
+    });
   }
 
   function handleSaveReminder() {
@@ -148,52 +153,54 @@ const LaterItem = ({ laterData }) => {
           </div>
         </div>
 
-        <div
-          className={styles.item_actions}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <span
-            className={styles.action_icon}
-            data-tooltip-id={"complete_later"}
-            data-tooltip-content={"Mark as Complete"}
-            onClick={handleComplete}
+        {!isComplete && (
+          <div
+            className={styles.item_actions}
+            onClick={(e) => e.stopPropagation()}
           >
-            <MdDone />
-          </span>
-          <Tooltip
-            id={"complete_later"}
-            place={"top"}
-            className={`custom-tooltip`}
-          />
+            <span
+              className={styles.action_icon}
+              data-tooltip-id={"complete_later"}
+              data-tooltip-content={"Mark as Complete"}
+              onClick={handleComplete}
+            >
+              <MdDone />
+            </span>
+            <Tooltip
+              id={"complete_later"}
+              place={"top"}
+              className={`custom-tooltip`}
+            />
 
-          <span
-            className={styles.action_icon}
-            data-tooltip-id={"remind_later"}
-            data-tooltip-content={"Set reminder"}
-            onClick={handleSetReminder}
-          >
-            <LuClock3 />
-          </span>
-          <Tooltip
-            id={"remind_later"}
-            place={"top"}
-            className={`custom-tooltip`}
-          />
+            <span
+              className={styles.action_icon}
+              data-tooltip-id={"remind_later"}
+              data-tooltip-content={"Set reminder"}
+              onClick={handleSetReminder}
+            >
+              <LuClock3 />
+            </span>
+            <Tooltip
+              id={"remind_later"}
+              place={"top"}
+              className={`custom-tooltip`}
+            />
 
-          <span
-            className={`${styles.action_icon} ${styles.remove}`}
-            data-tooltip-id={"delete_later"}
-            data-tooltip-content={"Remove"}
-            onClick={handleRemoveLater}
-          >
-            <FiTrash2 />
-          </span>
-          <Tooltip
-            id={"delete_later"}
-            place={"top"}
-            className={`custom-tooltip`}
-          />
-        </div>
+            <span
+              className={`${styles.action_icon} ${styles.remove}`}
+              data-tooltip-id={"delete_later"}
+              data-tooltip-content={"Remove"}
+              onClick={handleRemoveLater}
+            >
+              <FiTrash2 />
+            </span>
+            <Tooltip
+              id={"delete_later"}
+              place={"top"}
+              className={`custom-tooltip`}
+            />
+          </div>
+        )}
       </div>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -256,6 +263,7 @@ const LaterItem = ({ laterData }) => {
 
 LaterItem.propTypes = {
   laterData: PropTypes.any.isRequired,
+  isComplete: PropTypes.bool,
 };
 
 export default LaterItem;
