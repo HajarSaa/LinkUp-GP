@@ -426,7 +426,7 @@ export const inviteToWorkspace = catchAsync(async (req, res, next) => {
   });
 
   // Send the invitation email
-  const invitationLink = `linkup/workspace/invite/${invitation.token}`;
+  const invitationLink = `http://localhost:3000/accept-invitaion?token=${invitation.token}`;
   const message = `
 Hello,
 
