@@ -14,3 +14,9 @@ export const getMe = async (signal) => {
   const { data } = await axiosInstance.get("/users/me", { signal });
   return data.data;
 };
+
+
+export const logoutUser = async () => {
+  const { data } = await axiosInstance.post("/auth/logout");
+  return data;
+};

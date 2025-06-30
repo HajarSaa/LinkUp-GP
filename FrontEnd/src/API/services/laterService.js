@@ -9,6 +9,9 @@ export const getGetLaterItems = async () => {
 //==============(Toggle the later item)
 // Toggle save for later on a message
 export const toggleLaterItem = async (messageId) => {
-  const { data } = await axiosInstance.post(`/laterItems/${messageId}/toggle`);
+  const { data } = await axiosInstance.patch(
+    `/laterItems/${messageId}/toggle`,
+    {}
+  );
   return data.data;
 };

@@ -4,12 +4,13 @@ import { Navigate, Outlet } from "react-router-dom";
 import useGetMe from "../API/hooks/auth/useGetMe";
 import ProtectedLoading from "../components/UI/ProtectedLoading/ProtectedLoading";
 import { setUser } from "../API/redux_toolkit/api_data/userSlice";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ProtectedRoute() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error, isError } = useGetMe();
-
 
   useEffect(() => {
     if (data?.user) {
@@ -29,7 +30,10 @@ function ProtectedRoute() {
 
   if (isLoading) return <ProtectedLoading />;
 
-  if (error) console.log(error.message);
+  if (isError && error?.response?.status === 401) {
+    queryClient.invalidateQueries(["currentUser"]);
+    return <Navigate to="/login" replace />;
+  }
 
   if (!data?.user) {
     console.log("User not authenticated, redirecting to login...");

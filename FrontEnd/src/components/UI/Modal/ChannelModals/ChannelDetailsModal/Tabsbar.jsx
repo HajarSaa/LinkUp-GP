@@ -7,7 +7,7 @@ function Tabsbar() {
   const { activeTab } = useSelector((state) => state.channelDetailsModal);
   return (
     <div className={styles.tabs}>
-      {["about", "members", "tabs", "integrations", "settings"].map((tab) => (
+      {["about", "members", "integrations", "settings"].map((tab) => (
         <div
           key={tab}
           className={activeTab === tab ? styles.activeTab : ""}

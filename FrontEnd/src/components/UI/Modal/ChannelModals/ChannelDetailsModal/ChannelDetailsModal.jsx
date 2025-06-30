@@ -11,7 +11,7 @@ import CloseIcon from "../../../Icons/CloseIcon/CloseIcon";
 import AboutTab from "./Tabs/AboutTab";
 import MembersTab from "./Tabs/MembersTab";
 import Tabsbar from "./Tabsbar";
-import TabsTab from "./Tabs/TabsTab";
+// import TabsTab from "./Tabs/TabsTab";
 import IntegTab from "./Tabs/IntegTab";
 import SettingTab from "./Tabs/SettingTab";
 
@@ -54,7 +54,7 @@ const ChannelDetailsModal = () => {
         <div className={styles.tabContent}>
           <AboutTab channelData={channelData} />
           <MembersTab channelData={channelData} />
-          <TabsTab />
+          {/* <TabsTab /> */}
           <IntegTab />
           <SettingTab channelData={channelData} />
         </div>
