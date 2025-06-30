@@ -34,7 +34,6 @@ const AcceptInvitaions = () => {
   function handleAccept() {
     accept_invite.mutate(token, {
       onSuccess: (data) => {
-        console.log("Success:", data);
         dispatch(
           setWorkspace({
             workspace: { _id: data.workspaceId, id: data.workspaceId },
@@ -62,7 +61,7 @@ const AcceptInvitaions = () => {
           <button
             ref={buttonRef}
             onClick={handleAccept}
-            style={{ display: "none" }} // إخفاء الزر
+            style={{ display: "none" }}
           >
             Accept Hidden
           </button>
