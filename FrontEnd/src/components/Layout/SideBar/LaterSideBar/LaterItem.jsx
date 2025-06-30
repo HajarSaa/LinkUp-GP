@@ -6,11 +6,25 @@ import UserImage from "../../../UI/User/UserImage";
 import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSidebarConvers";
 import ChannelType from "../../../UI/Channel/ChannelType/ChannelType";
 import { useNavigate } from "react-router-dom";
-import { FiEdit, FiTrash2, FiBookmark } from "react-icons/fi";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { Tooltip } from "react-tooltip";
 import useToggleLaterItem from "../../../../API/hooks/Later/useToggleLaterItem";
 import { LuClock3 } from "react-icons/lu";
 import { MdDone } from "react-icons/md";
+
+// MUI - DateTime Picker
+import { useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 const LaterItem = ({ laterData }) => {
   const { workspace } = useSelector((state) => state.workspace);
@@ -18,6 +32,9 @@ const LaterItem = ({ laterData }) => {
   const conversations = useGetSidebarConvers(workspace);
   const navigate = useNavigate();
   const { mutate: toggleLater } = useToggleLaterItem();
+
+  const [reminderOpen, setReminderOpen] = useState(false);
+  const [reminderDate, setReminderDate] = useState(new Date());
 
   let source = null;
   if (laterData?.message?.channelId)
@@ -50,75 +67,142 @@ const LaterItem = ({ laterData }) => {
         `later/conversations/${laterData?.message?.conversationId}?later_message=${laterData?.message._id}`
       );
   }
+
   function handleRemoveLater() {
     toggleLater(laterData?.message._id);
   }
+
   function handleSetReminder() {
-    console.log('remind')
+    setReminderOpen(true);
   }
+
   function handleComplete() {
     console.log("complete");
   }
 
+  function handleReset() {
+    
+  }
+
+  function handleSaveReminder() {
+    const iso = reminderDate.toISOString(); // e.g. "2025-06-25T14:30:00Z"
+    console.log("Reminder At:", iso);
+    // هنا ممكن تبعت الـ iso للباك إند
+    setReminderOpen(false);
+  }
+
   return (
-    <div className={styles.item} onClick={handleNavigate}>
-      <div className={styles.tags}>
-        {laterData.tag && <div className={styles.tag}>{laterData.tag}</div>}
-        <div className={styles.message_source}>in {source_name}</div>
-      </div>
-      <div className={styles.item_header}>
-        <div className={styles.avatar}>
-          <UserImage src={member?.photo} />
+    <>
+      <div className={styles.item} onClick={handleNavigate}>
+        <div className={styles.tags}>
+          {laterData.tag && <div className={styles.tag}>{laterData.tag}</div>}
+          <div className={styles.message_source}>in {source_name}</div>
         </div>
-        <div className={styles.item_texts}>
-          <span className={styles.username}>{member?.userName}</span>
-          <span className={styles.message}>{laterData?.message?.content}</span>
+        <div className={styles.item_header}>
+          <div className={styles.avatar}>
+            <UserImage src={member?.photo} />
+          </div>
+          <div className={styles.item_texts}>
+            <span className={styles.username}>{member?.userName}</span>
+            <span className={styles.message}>
+              {laterData?.message?.content}
+            </span>
+          </div>
+        </div>
+
+        {/* Hover Actions */}
+        <div
+          className={styles.item_actions}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span
+            className={styles.action_icon}
+            data-tooltip-id={"complete_later"}
+            data-tooltip-content={"Mark as Complete"}
+            onClick={handleComplete}
+          >
+            <MdDone />
+          </span>
+          <Tooltip
+            id={"complete_later"}
+            place={"top"}
+            className={`custom-tooltip`}
+          />
+
+          <span
+            className={styles.action_icon}
+            data-tooltip-id={"remind_later"}
+            data-tooltip-content={"Set reminder"}
+            onClick={handleSetReminder}
+          >
+            <LuClock3 />
+          </span>
+          <Tooltip
+            id={"remind_later"}
+            place={"top"}
+            className={`custom-tooltip`}
+          />
+
+          <span
+            className={`${styles.action_icon} ${styles.remove}`}
+            data-tooltip-id={"delete_later"}
+            data-tooltip-content={"Remove"}
+            onClick={handleRemoveLater}
+          >
+            <FiTrash2 />
+          </span>
+          <Tooltip
+            id={"delete_later"}
+            place={"top"}
+            className={`custom-tooltip`}
+          />
         </div>
       </div>
 
-      {/* Hover Actions */}
-      <div className={styles.item_actions} onClick={(e) => e.stopPropagation()}>
-        <span
-          className={styles.action_icon}
-          data-tooltip-id={"complete_later"}
-          data-tooltip-content={"Mark as Complete"}
-          onClick={handleComplete}
+      {/* MUI Reminder Dialog */}
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Dialog
+          open={reminderOpen}
+          onClose={() => setReminderOpen(false)}
+          fullWidth
+          maxWidth="xs"
+          scroll="paper"
+          PaperProps={{
+            style: {
+              maxHeight: "90vh",
+              overflow: "auto",
+              borderRadius: "12px",
+            },
+          }}
+          slotProps={{
+            backdrop: {
+              sx: {
+                backgroundColor: "rgba(0, 0, 0, 0.1)", // خفيفة جدًا، غير الرقم حسب ما تحب
+              },
+            },
+          }}
         >
-          <MdDone />
-        </span>
-        <Tooltip
-          id={"complete_later"}
-          place={"top"}
-          className={`custom-tooltip`}
-        />
-        <span
-          className={styles.action_icon}
-          data-tooltip-id={"remind_later"}
-          data-tooltip-content={"Set reminder"}
-          onClick={handleSetReminder}
-        >
-          <LuClock3 />
-        </span>
-        <Tooltip
-          id={"remind_later"}
-          place={"top"}
-          className={`custom-tooltip`}
-        />
-        <span
-          className={`${styles.action_icon} ${styles.remove}`}
-          data-tooltip-id={"delete_later"}
-          data-tooltip-content={"Remove"}
-          onClick={handleRemoveLater}
-        >
-          <FiTrash2 />
-        </span>
-        <Tooltip
-          id={"delete_later"}
-          place={"top"}
-          className={`custom-tooltip`}
-        />
-      </div>
-    </div>
+          <DialogTitle sx={{ paddingTop: "20px" }}>Set Reminder</DialogTitle>
+          <DialogContent sx={{ paddingTop: 1 }}>
+            <DateTimePicker
+              // label="Reminder Time"
+              value={reminderDate}
+              onChange={(newValue) => setReminderDate(newValue)}
+              renderInput={(params) => (
+                <TextField fullWidth margin="normal" {...params} />
+              )}
+            />
+          </DialogContent>
+          <DialogActions sx={{ paddingX: 3, paddingBottom: 2 }}>
+            <Button onClick={() => setReminderOpen(false)}>Cancel</Button>
+            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={handleSaveReminder} variant="contained">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </LocalizationProvider>
+    </>
   );
 };
 

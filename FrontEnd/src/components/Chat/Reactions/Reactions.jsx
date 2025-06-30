@@ -17,7 +17,7 @@ function Reactions({ messageId }) {
   const reactionsObj = data?.groupedReactions || {};
   const { workspace } = useSelector((state) => state.workspace);
   const currentProfile = useSelector((state) => state.userProfile.data);
-  const myProfileId = currentProfile._id;
+  const myProfileId = currentProfile?._id;
   // console.log("✔✔✔✔",myProfileId);
   function openEmojies() {
     const rect = add_react_ref.current.getBoundingClientRect();
