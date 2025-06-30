@@ -23,6 +23,7 @@ const useGetChannelMessages = (channel_id) => {
 
     enabled: !!channel_id,
     staleTime: 0,
+    refetchInterval: 500,
   });
 
   useEffect(() => {

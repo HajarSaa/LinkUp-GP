@@ -52,6 +52,13 @@ function DmPage() {
 
   const { conversMedia } = useSelector((state) => state.conversMedia);
 
+  // refetch pins tab
+  useEffect(() => {
+    if (activeTab === "pins") {
+      pins_query.refetch();
+    }
+  }, [activeTab, pins_query]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pinnedMessageId = params.get("pinned_message");

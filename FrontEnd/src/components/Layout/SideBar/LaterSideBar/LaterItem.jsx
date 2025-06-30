@@ -28,7 +28,7 @@ import useSetReminder from "../../../../API/hooks/Later/useSetReminder";
 import useRemoveReminder from "../../../../API/hooks/Later/useRemoveReminder";
 import useUpdateLaterStatus from "../../../../API/hooks/Later/useUpdateLaterStatus";
 
-const LaterItem = ({ laterData, isComplete=false }) => {
+const LaterItem = ({ laterData, isComplete = false }) => {
   const { workspace } = useSelector((state) => state.workspace);
   const member = findMemberById(workspace, laterData.userProfile);
   const conversations = useGetSidebarConvers(workspace);
@@ -153,54 +153,56 @@ const LaterItem = ({ laterData, isComplete=false }) => {
           </div>
         </div>
 
-        {!isComplete && (
-          <div
-            className={styles.item_actions}
-            onClick={(e) => e.stopPropagation()}
+        <div
+          className={styles.item_actions}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {!isComplete && (
+            <>
+              <span
+                className={styles.action_icon}
+                data-tooltip-id={"complete_later"}
+                data-tooltip-content={"Mark as Complete"}
+                onClick={handleComplete}
+              >
+                <MdDone />
+              </span>
+              <Tooltip
+                id={"complete_later"}
+                place={"top"}
+                className={`custom-tooltip`}
+              />
+
+              <span
+                className={styles.action_icon}
+                data-tooltip-id={"remind_later"}
+                data-tooltip-content={"Set reminder"}
+                onClick={handleSetReminder}
+              >
+                <LuClock3 />
+              </span>
+              <Tooltip
+                id={"remind_later"}
+                place={"top"}
+                className={`custom-tooltip`}
+              />
+            </>
+          )}
+
+          <span
+            className={`${styles.action_icon} ${styles.remove}`}
+            data-tooltip-id={"delete_later"}
+            data-tooltip-content={"Remove"}
+            onClick={handleRemoveLater}
           >
-            <span
-              className={styles.action_icon}
-              data-tooltip-id={"complete_later"}
-              data-tooltip-content={"Mark as Complete"}
-              onClick={handleComplete}
-            >
-              <MdDone />
-            </span>
-            <Tooltip
-              id={"complete_later"}
-              place={"top"}
-              className={`custom-tooltip`}
-            />
-
-            <span
-              className={styles.action_icon}
-              data-tooltip-id={"remind_later"}
-              data-tooltip-content={"Set reminder"}
-              onClick={handleSetReminder}
-            >
-              <LuClock3 />
-            </span>
-            <Tooltip
-              id={"remind_later"}
-              place={"top"}
-              className={`custom-tooltip`}
-            />
-
-            <span
-              className={`${styles.action_icon} ${styles.remove}`}
-              data-tooltip-id={"delete_later"}
-              data-tooltip-content={"Remove"}
-              onClick={handleRemoveLater}
-            >
-              <FiTrash2 />
-            </span>
-            <Tooltip
-              id={"delete_later"}
-              place={"top"}
-              className={`custom-tooltip`}
-            />
-          </div>
-        )}
+            <FiTrash2 />
+          </span>
+          <Tooltip
+            id={"delete_later"}
+            place={"top"}
+            className={`custom-tooltip`}
+          />
+        </div>
       </div>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
