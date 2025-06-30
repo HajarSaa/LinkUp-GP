@@ -29,11 +29,11 @@ router
 router.use(protectAttchWorkspace);
 
 router
+  .post("/acceptInvite", acceptInvite)
+  .post("/signout", signOutWorkspace)
   .patch("/:id", updateWorkspace)
   .delete("/:id", deleteWorkspace)
   .post("/:id/leave", leaveWorkspace)
-  .post("/signout", signOutWorkspace)
-  .post("/:id/invite", inviteToWorkspace)
-  .post("/acceptInvite", acceptInvite);
+  .post("/:id/invite", inviteToWorkspace);
 
 export default router;
