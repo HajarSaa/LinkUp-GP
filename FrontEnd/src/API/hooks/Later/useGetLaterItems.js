@@ -7,7 +7,7 @@ const useGetLaterItems = () => {
     queryKey: ["later_items"],
     queryFn: () => getGetLaterItems(),
     retry: 1,
-    refetchInterval: 500,
+    refetchInterval: 400,
   });
 
 

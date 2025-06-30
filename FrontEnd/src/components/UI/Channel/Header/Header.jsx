@@ -119,7 +119,7 @@ function Header({ activeTab, setActiveTab }) {
                 {channel.members.length.toLocaleString()}
               </span>
             </div>
-            <div className={styles.huddle}>
+            {/* <div className={styles.huddle}>
               <div className={styles.huddleButton}>
                 <span className={styles.icon}>
                   <MdHeadset />
@@ -128,8 +128,8 @@ function Header({ activeTab, setActiveTab }) {
                   <FiChevronDown className={styles.arrow} />
                 </span>
               </div>
-            </div>
-            <div className={styles.menu}>
+            </div> */}
+            {/* <div className={styles.menu}>
               <div
                 className={styles.menuButton}
                 onClick={() => dispatch(openMenu())}
@@ -137,7 +137,7 @@ function Header({ activeTab, setActiveTab }) {
                 <BsThreeDotsVertical />
               </div>
               <ChannelOptionModal />
-            </div>
+            </div> */}
             {isLater && <CloseIcon closeEvent={()=>navigate("/later")} />}
           </div>
         </div>

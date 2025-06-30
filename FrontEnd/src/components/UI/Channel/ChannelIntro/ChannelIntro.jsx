@@ -39,14 +39,14 @@ function EmptyState({ channel }) {
         {channel.description && channel.description}
       </div>
 
-      <div className={styles.actions}>
+      {/* <div className={styles.actions}>
         <DetailsButton icon={<FiEdit2 />} onClick={edit_dicription}>
           Add description
         </DetailsButton>
         <DetailsButton icon={<FiUserPlus />}>
           Add people to channel
         </DetailsButton>
-      </div>
+      </div> */}
     </div>
   );
 }
