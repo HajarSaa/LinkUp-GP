@@ -18,9 +18,9 @@ import Step1 from "./pages/dashboard/CreateWorkspace/Step1";
 import Step2 from "./pages/dashboard/CreateWorkspace/Step2";
 import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 import ProtectedLoading from "./components/UI/ProtectedLoading/ProtectedLoading";
-import Testing from "../Testing/Code/Testing";
 import LaterPage from "./pages/dashboard/LaterPage";
 import SearchPage from "./pages/dashboard/SearchPage";
+import AcceptInvitaions from "./pages/dashboard/AcceptInvitaions/AcceptInvitaions";
 
 function App() {
   return (
@@ -43,16 +43,15 @@ function App() {
               <Route path="conversations/:id" element={<DmPage />} />
               <Route path="channels/:id" element={<ChannelPage />} />
             </Route>
-
-            <Route path="testing" element={<Testing />} />
           </Route>
 
           {/* Create Workspace Flow */}
-          <Route path="/create-workspace" element={<EmptyLayout />}>
+          <Route path="/new-workspace" element={<EmptyLayout />}>
             <Route path="step-1" element={<Step1 />} />
             <Route path="step-2" element={<Step2 />} />
             <Route path="step-3" element={<Step3 />} />
           </Route>
+            <Route path="accept-invitaion" element={<AcceptInvitaions />} />
         </Route>
       </Routes>
     </div>

@@ -1,6 +1,6 @@
 import PageContent from "../../../components/Layout/PageContent/PageContnet";
 import styles from "./CreateWorkspace.module.css";
-import { useState,} from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useCreateWorkspace from "../../../API/hooks/workspace/useCreateWorkspace";
 import {
@@ -22,7 +22,6 @@ function Step1() {
 
   const { mutateAsync: createWorkspace, isPending } = useCreateWorkspace();
 
-
   const isButtonDisabled = teamName.trim() === "" || isPending;
 
   const handleNextClick = async () => {
@@ -32,7 +31,7 @@ function Step1() {
       onSuccess: (workspace) => {
         dispatch(setWorkspace(workspace));
         dispatch(setStepIndex(1));
-        navigate("/create-workspace/step-2");
+        navigate("/new-workspace/step-2");
       },
       onError: (error) => {
         setError(error.response?.data?.message);

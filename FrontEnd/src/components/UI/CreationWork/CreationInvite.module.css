@@ -74,7 +74,6 @@
 .link_btn>span {
   display: flex;
 }
-
 .send_btn {
   background: #fff;
   background-color: #ccc;
@@ -83,13 +82,17 @@
   border-radius: 8px;
   font-weight: bold;
   color: #555;
+  width: 65px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .send_btn.active {
   color: #fff;
   background-color: var(--primary-color);
 }
-
 /* Tags */
 .tagsContainer {
   display: flex;
