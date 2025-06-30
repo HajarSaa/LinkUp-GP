@@ -12,7 +12,6 @@ import useToggleLaterItem from "../../../../API/hooks/Later/useToggleLaterItem";
 import { LuClock3 } from "react-icons/lu";
 import { MdDone } from "react-icons/md";
 
-// MUI - DateTime Picker
 import { useState } from "react";
 import {
   Dialog,
@@ -81,13 +80,12 @@ const LaterItem = ({ laterData }) => {
   }
 
   function handleReset() {
-    
+    setReminderDate(new Date());
   }
 
   function handleSaveReminder() {
-    const iso = reminderDate.toISOString(); // e.g. "2025-06-25T14:30:00Z"
+    const iso = reminderDate.toISOString();
     console.log("Reminder At:", iso);
-    // هنا ممكن تبعت الـ iso للباك إند
     setReminderOpen(false);
   }
 
@@ -110,7 +108,6 @@ const LaterItem = ({ laterData }) => {
           </div>
         </div>
 
-        {/* Hover Actions */}
         <div
           className={styles.item_actions}
           onClick={(e) => e.stopPropagation()}
@@ -159,7 +156,6 @@ const LaterItem = ({ laterData }) => {
         </div>
       </div>
 
-      {/* MUI Reminder Dialog */}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Dialog
           open={reminderOpen}
@@ -177,7 +173,7 @@ const LaterItem = ({ laterData }) => {
           slotProps={{
             backdrop: {
               sx: {
-                backgroundColor: "rgba(0, 0, 0, 0.1)", // خفيفة جدًا، غير الرقم حسب ما تحب
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
               },
             },
           }}
@@ -185,9 +181,21 @@ const LaterItem = ({ laterData }) => {
           <DialogTitle sx={{ paddingTop: "20px" }}>Set Reminder</DialogTitle>
           <DialogContent sx={{ paddingTop: 1 }}>
             <DateTimePicker
-              // label="Reminder Time"
               value={reminderDate}
               onChange={(newValue) => setReminderDate(newValue)}
+              slotProps={{
+                popper: {
+                  sx: {
+                    "&.MuiPopper-root": {
+                      position: "absolute !important",
+                      top: "50% !important",
+                      left: "50% !important",
+                      transform: "translate(-50%, -50%) !important",
+                      zIndex: 1500,
+                    },
+                  },
+                },
+              }}
               renderInput={(params) => (
                 <TextField fullWidth margin="normal" {...params} />
               )}
