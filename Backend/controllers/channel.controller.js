@@ -1,8 +1,8 @@
 import Channel from "../models/channel.model.js";
-import Message from "../models/message.model.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
-import { getAll } from "../utils/handlerFactory.js";
+import UserProfile from "../models/userProfile.model.js";
+import User from "../models/user.model.js";
 
 export const getAllChannels = catchAsync(async (req, res, next) => {
   const workspaceId = req.workspace.id;
@@ -289,6 +289,75 @@ export const leaveChannel = catchAsync(async (req, res, next) => {
     data: {
       channelId: channel._id,
       channelName: channel.name,
+    },
+  });
+});
+
+export const addMemberToChannel = catchAsync(async (req, res, next) => {
+  const channelId = req.params.id;
+  const { email } = req.body;
+
+  // Validate email
+  if (!email) {
+    return next(new AppError("Email is required", 400));
+  }
+
+  // Find the channel
+  const channel = await Channel.findById(channelId);
+  if (!channel) {
+    return next(new AppError("No channel found with that ID", 404));
+  }
+
+  // Find the user
+  const user = await User.findOne({
+    email: email,
+  });
+
+  // Find the user's profile in the workspace
+  const userProfile = await UserProfile.findOne({
+    email: email,
+    workspace: channel.workspaceId,
+  });
+
+  if (!userProfile) {
+    return next(new AppError("User is not a member of this workspace", 400));
+  }
+
+  // Check if the user is already a member of the channel
+  if (channel.members.includes(userProfile.id)) {
+    return next(new AppError("User is already a member of this channel", 400));
+  }
+
+  // Add the user to the channel's members array
+  channel.members.push(userProfile._id);
+  await channel.save();
+
+  // Emit channelMemberJoined event
+  const io = req.app.get("io");
+  const payload = {
+    channelId: channel._id,
+    userId: user.id,
+    profileId: userProfile.id,
+    joinedAt: new Date(),
+    addedBy: req.userProfile.id,
+  };
+
+  // Emit to channel room
+  io.to(`channel:${channel._id}`).emit("channel:memberJoined", payload);
+
+  // Emit to the workspace room
+  io.to(`workspace:${channel.workspaceId}`).emit(
+    "channel:memberJoined",
+    payload
+  );
+
+  // Send response
+  res.status(200).json({
+    status: "success",
+    message: "User added to the channel successfully",
+    data: {
+      channel,
+      addedProfile: userProfile,
     },
   });
 });

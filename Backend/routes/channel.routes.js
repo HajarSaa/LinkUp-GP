@@ -7,6 +7,7 @@ import {
   joinChannel,
   leaveChannel,
   updateChannel,
+  addMemberToChannel,
 } from "../controllers/channel.controller.js";
 import {
   protect,
@@ -29,6 +30,7 @@ router
   .patch("/:id", updateChannel)
   .delete("/:id", deleteChannel)
   .post("/:id/join", joinChannel)
+  .post("/:id/add", addMemberToChannel)
   .post("/:id/leave", leaveChannel);
 
 export default router;
