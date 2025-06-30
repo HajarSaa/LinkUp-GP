@@ -172,7 +172,7 @@ export const searchMessages = catchAsync(async (req, res, next) => {
   // Execute the query
   const results = await Message.find(query)
     .sort({ createdAt: -1 })
-    .populate("attachments", "_id fileName fileType uploadedBy")
+    // .populate("attachments", "_id fileName fileType uploadedBy")
     .populate("createdBy", "userName")
     .populate({
       path: "channelId",
@@ -193,6 +193,13 @@ export const searchMessages = catchAsync(async (req, res, next) => {
           select: "username ",
         },
       ],
+    })
+    .lean()
+    .transform((docs) => {
+      return docs.map((doc) => {
+        doc.attachments = []; // Set attachments to empty array
+        return doc;
+      });
     });
 
   res.status(200).json({
