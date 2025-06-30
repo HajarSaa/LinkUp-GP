@@ -35,6 +35,5 @@ const laterItemSchema = new mongoose.Schema({
   },
 });
 
-laterItemSchema.index({ userProfile: 1, messageId: 1 }, { unique: true });
 
 export default mongoose.model("LaterItem", laterItemSchema);
