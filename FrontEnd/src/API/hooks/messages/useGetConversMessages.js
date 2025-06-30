@@ -23,6 +23,7 @@ const useGetConversMessages = (convers_id) => {
 
     enabled: !!convers_id,
     staleTime: 0,
+    refetchInterval: 500,
   });
 
   useEffect(() => {

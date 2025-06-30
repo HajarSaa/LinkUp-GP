@@ -59,6 +59,7 @@ function ChannelPage() {
 
   const location = useLocation();
 
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const pinnedMessageId = params.get("pinned_message");
@@ -67,6 +68,13 @@ function ChannelPage() {
       setActiveTab("messages");
     }
   }, [location.search]);
+
+  // refetch pins tab
+  useEffect(() => {
+    if (activeTab === "pins") {
+      pins_query.refetch();
+    }
+  }, [activeTab, pins_query]);
 
   // ✅ updated logic to restore panels on mount
   useEffect(() => {
