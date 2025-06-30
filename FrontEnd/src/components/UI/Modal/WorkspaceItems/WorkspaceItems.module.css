@@ -15,7 +15,7 @@
   width: 450px;
   background-color: #fff;
   border-radius: var(--border-radius-small);
-  min-height: fit-content;
+  /* min-height: fit-content; */
   max-height: 90%;
   overflow-y: auto;
 }

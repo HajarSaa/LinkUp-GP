@@ -49,3 +49,14 @@ export const acceptInvite = async (token) => {
   });
   return data.data;
 };
+// ===========================(Send Invitaion)
+
+export const inviteToWork = async (workspace_id,email) => {
+  const { data } = await axiosInstance.post(
+    `/workspaces/${workspace_id}/invite`,
+    {
+      email: email,
+    }
+  );
+  return data.data;
+};

@@ -32,7 +32,15 @@ function WorkspaceItems() {
         {data.workspaces.map((workspace, index) => (
           <WorkspaceItem key={index} workspace={workspace} />
         ))}
-        <div className={styles.create_btn} onClick={()=>{navigate("/new-workspace/step-1");}}>Create new workspace</div>
+        <div
+          className={styles.create_btn}
+          onClick={() => {
+            navigate("/new-workspace/step-1");
+            dispatch(closeWorkspaceItemsModal());
+          }}
+        >
+          Create new workspace
+        </div>
       </div>
     </div>
   );
