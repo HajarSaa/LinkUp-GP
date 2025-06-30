@@ -9,7 +9,6 @@ const useGetConvers = (convers_id) => {
   const dispatch = useDispatch();
   const { workspace } = useSelector((state) => state.workspace);
   const { currentUser } = useSelector((state) => state.currentUser);
-
   const query = useQuery({
     queryKey: ["convers", { convers_id }],
     queryFn: () => getConversData(convers_id),
@@ -22,13 +21,13 @@ const useGetConvers = (convers_id) => {
       dispatch(setConvers(query.data?.conversation));
       const mate = chatMate(
         query.data?.conversation,
-        workspace.members,
+        workspace?.members,
         currentUser
       );
           dispatch(setChatMat(mate));
     }
-  }, [query.data, dispatch, workspace.members, currentUser]);
-  
+  }, [query.data, dispatch, workspace?.members, currentUser]);
+
   return query;
 };
 
