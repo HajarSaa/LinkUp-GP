@@ -49,14 +49,14 @@ function LaterSideBar() {
                 {in_progress_items?.length}
               </span>
             </div>
-            <div
+            {/* <div
               className={`${laterStyle.tab} ${
                 activeTab === "Archived" ? laterStyle.active : ""
               }`}
               onClick={() => setActiveTab("Archived")}
             >
               Archived
-            </div>
+            </div> */}
             <div
               className={`${laterStyle.tab} ${
                 activeTab === "Completed" ? laterStyle.active : ""

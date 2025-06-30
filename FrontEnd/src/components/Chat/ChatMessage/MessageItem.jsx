@@ -6,6 +6,8 @@ import MessageActions from "./MessageActions";
 import MessageThreads from "./MessageThreads";
 import { openUserPanel } from "../../../API/redux_toolkit/ui/chatPanelSlice";
 import { GiPin } from "react-icons/gi";
+import { IoIosBookmark } from "react-icons/io";
+
 
 import {
   findMemberById,
@@ -130,6 +132,14 @@ const MessageItem = ({
                 <TbArrowForwardUp />
               </span>
               <span className={styles.tag_text}>Forwarded</span>
+            </div>
+          )}
+          {message.savedForLater && (
+            <div className={styles.tag_item}>
+              <span className={styles.tag_icon}>
+                <IoIosBookmark />
+              </span>
+              <span className={styles.tag_text}>Saved for later</span>
             </div>
           )}
         </div>

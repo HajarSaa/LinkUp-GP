@@ -7,12 +7,17 @@ import useGetSidebarConvers from "../../../../API/hooks/conversation/useGetSideb
 import ChannelType from "../../../UI/Channel/ChannelType/ChannelType";
 import { useNavigate } from "react-router-dom";
 import { FiEdit, FiTrash2, FiBookmark } from "react-icons/fi";
+import { Tooltip } from "react-tooltip";
+import useToggleLaterItem from "../../../../API/hooks/Later/useToggleLaterItem";
+import { LuClock3 } from "react-icons/lu";
+import { MdDone } from "react-icons/md";
 
 const LaterItem = ({ laterData }) => {
   const { workspace } = useSelector((state) => state.workspace);
   const member = findMemberById(workspace, laterData.userProfile);
   const conversations = useGetSidebarConvers(workspace);
   const navigate = useNavigate();
+  const { mutate: toggleLater } = useToggleLaterItem();
 
   let source = null;
   if (laterData?.message?.channelId)
@@ -45,6 +50,15 @@ const LaterItem = ({ laterData }) => {
         `later/conversations/${laterData?.message?.conversationId}?later_message=${laterData?.message._id}`
       );
   }
+  function handleRemoveLater() {
+    toggleLater(laterData?.message._id);
+  }
+  function handleSetReminder() {
+    console.log('remind')
+  }
+  function handleComplete() {
+    console.log("complete");
+  }
 
   return (
     <div className={styles.item} onClick={handleNavigate}>
@@ -64,15 +78,45 @@ const LaterItem = ({ laterData }) => {
 
       {/* Hover Actions */}
       <div className={styles.item_actions} onClick={(e) => e.stopPropagation()}>
-        <span className={styles.action_icon}>
-          <FiEdit title="Edit" />
+        <span
+          className={styles.action_icon}
+          data-tooltip-id={"complete_later"}
+          data-tooltip-content={"Mark as Complete"}
+          onClick={handleComplete}
+        >
+          <MdDone />
         </span>
-        <span className={styles.action_icon}>
-          <FiTrash2 title="Delete" />
+        <Tooltip
+          id={"complete_later"}
+          place={"top"}
+          className={`custom-tooltip`}
+        />
+        <span
+          className={styles.action_icon}
+          data-tooltip-id={"remind_later"}
+          data-tooltip-content={"Set reminder"}
+          onClick={handleSetReminder}
+        >
+          <LuClock3 />
         </span>
-        <span className={styles.action_icon}>
-          <FiBookmark title="Pin" />
+        <Tooltip
+          id={"remind_later"}
+          place={"top"}
+          className={`custom-tooltip`}
+        />
+        <span
+          className={`${styles.action_icon} ${styles.remove}`}
+          data-tooltip-id={"delete_later"}
+          data-tooltip-content={"Remove"}
+          onClick={handleRemoveLater}
+        >
+          <FiTrash2 />
         </span>
+        <Tooltip
+          id={"delete_later"}
+          place={"top"}
+          className={`custom-tooltip`}
+        />
       </div>
     </div>
   );

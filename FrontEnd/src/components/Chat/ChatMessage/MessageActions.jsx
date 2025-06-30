@@ -3,7 +3,7 @@ import styles from "./ChatMessage.module.css";
 import { TbArrowForwardUp } from "react-icons/tb";
 import { FiMoreVertical } from "react-icons/fi";
 import { BiMessageRoundedDetail } from "react-icons/bi";
-import { MdOutlineAddReaction, MdOutlineBookmark } from "react-icons/md";
+import { MdOutlineAddReaction} from "react-icons/md";
 import PropTypes from "prop-types";
 import { openEmojiPicker } from "../../../API/redux_toolkit/modals/emojiPickerSlice";
 import { useDispatch } from "react-redux";
@@ -15,6 +15,8 @@ import { useRef } from "react";
 import { getEmojiPickerPosition } from "../../../utils/modalsUtils"; // تأكد إنه مستورد
 import { openForwardModal } from "../../../API/redux_toolkit/modals/chat/forwardModal";
 import useToggleLaterItem from "../../../API/hooks/Later/useToggleLaterItem";
+import { IoIosBookmark } from "react-icons/io";
+
 
 function MessageActions({
   children,
@@ -114,7 +116,7 @@ function MessageActions({
       </div>
 
       <div className={styles.action_icon} onClick={handleAddToLater}>
-        {message?.savedForLater ? <MdOutlineBookmark /> : <CiBookmark />}
+        {message?.savedForLater ? <IoIosBookmark /> : <CiBookmark />}
       </div>
 
       <div
