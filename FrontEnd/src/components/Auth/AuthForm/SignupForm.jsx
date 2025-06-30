@@ -38,7 +38,7 @@ function SignupForm() {
 
     signupMutation.mutate(formData, {
       onSuccess: () => {
-        navigateTo("/create-workspace/step-1");
+        navigateTo("/new-workspace/step-1");
       },
       onError: (err) => {
         setMessage(err?.response?.data?.message || "Signup failed.");

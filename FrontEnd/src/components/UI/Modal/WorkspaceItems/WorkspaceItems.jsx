@@ -3,11 +3,13 @@ import styles from "./WorkspaceItems.module.css";
 import { closeWorkspaceItemsModal } from "../../../../API/redux_toolkit/modals/workspace/workspacesItems";
 import useGetMe from "../../../../API/hooks/auth/useGetMe";
 import WorkspaceItem from "./WorkspaceItem";
+import { useNavigate } from "react-router-dom";
 
 function WorkspaceItems() {
   const { isOpen, position } = useSelector((state) => state.workspaceItems);
   const dispatch = useDispatch();
   const { data } = useGetMe();
+  const navigate = useNavigate();
 
   const handleCloseModal = (e) => {
     if (e.target === e.currentTarget) {
@@ -30,6 +32,7 @@ function WorkspaceItems() {
         {data.workspaces.map((workspace, index) => (
           <WorkspaceItem key={index} workspace={workspace} />
         ))}
+        <div className={styles.create_btn} onClick={()=>{navigate("/new-workspace/step-1");}}>Create new workspace</div>
       </div>
     </div>
   );

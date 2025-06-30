@@ -40,3 +40,12 @@ export async function deleteWorkspace(workspaceId) {
   await axiosInstance.delete(`/workspaces/${workspaceId}`);
   return { deletedId: workspaceId };
 }
+
+// ===========================(Accept Invitaion)
+
+export const acceptInvite = async (token) => {
+  const { data } = await axiosInstance.post(`/workspaces/acceptInvite`, {
+    token: token,
+  });
+  return data.data;
+};
