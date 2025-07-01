@@ -49,7 +49,6 @@ function App() {
               <Route path="channels/:id" element={<ChannelPage />} />
             </Route>
 
-            {/* <Route path="testing" element={<Testing />} /> */}
           </Route>
 
           {/* Create Workspace Flow */}
