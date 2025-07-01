@@ -20,6 +20,7 @@ import Step3 from "./pages/dashboard/CreateWorkspace/Step3";
 import ProtectedLoading from "./components/UI/ProtectedLoading/ProtectedLoading";
 import Testing from "../Testing/Code/Testing";
 import LaterPage from "./pages/dashboard/LaterPage";
+import NotificationPage from "./pages/dashboard/NotificationPage";
 import SearchPage from "./pages/dashboard/SearchPage";
 
 function App() {
@@ -40,6 +41,10 @@ function App() {
             <Route path="search" element={<SearchPage />} />
             {/* التفرعات الخاصة بـ later */}
             <Route path="later" element={<LaterPage />}>
+              <Route path="conversations/:id" element={<DmPage />} />
+              <Route path="channels/:id" element={<ChannelPage />} />
+            </Route>
+            <Route path="notifications" element={<NotificationPage />}>
               <Route path="conversations/:id" element={<DmPage />} />
               <Route path="channels/:id" element={<ChannelPage />} />
             </Route>
