@@ -11,6 +11,7 @@ import emojiPickerReducer from "./modals/emojiPickerSlice";
 import workspaceReducer from "./api_data/workspaceSlice";
 import channelReducer from "./api_data/channelSlice";
 import conversReducer from "./api_data/conversSlice";
+import notificationReducer from "./api_data/notificationSlice";
 import resizingReducer from "./ui/resizeSlice";
 import modalsReducer from "./modals/modalsSlice";
 import userReducer from "./api_data/userSlice";
@@ -86,6 +87,7 @@ const store = configureStore({
     workspaceMenu: workspaceMenuReducer,
     workspaceItems: workspaceItems,
     search: searchReducer,
+    notifications: notificationReducer,
     // ==============================(conversation)
     // ====
     convers: conversReducer,

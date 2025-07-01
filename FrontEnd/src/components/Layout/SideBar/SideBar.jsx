@@ -13,11 +13,13 @@ import WorkspaceMenu from "../../UI/Modal/WorkspaceMenu/WorkspaceMenu";
 import RenameWorkModal from "../../UI/Modal/RenameWorkModal/RenameWorkModal";
 import DeleteConfirmModal from "../../UI/Modal/DeleteConfirmModal/DeleteConfirmModal";
 import LaterSideBar from "./LaterSideBar/LaterSideBar";
+import NotificationSidebarContainer from "./NotificationSidebar/NotificationSidebarContainer";
 
 function SideBar() {
   const { workspace } = useSelector((state) => state.workspace);
   const dispatch = useDispatch();
   const isLater = location.pathname.startsWith("/later");
+  const isNotifications = location.pathname.startsWith("/notifications");
   // Custom hook for resizing the sidebar
   // It returns the current width and a function to start resizing
   const sidebarRef = useRef(null);
@@ -31,6 +33,8 @@ function SideBar() {
   }
 
   if (isLater) return <LaterSideBar />;
+  if (isNotifications) return <NotificationSidebarContainer />;
+
 
   if (!workspace)
     return (
