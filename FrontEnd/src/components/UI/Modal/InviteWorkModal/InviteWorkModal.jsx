@@ -2,13 +2,16 @@ import styles from "./InviteWorkModal.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { closeInviteWork } from "../../../../API/redux_toolkit/modals/modalsSlice";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
-import { FaLink } from "react-icons/fa";
+// import { FaLink } from "react-icons/fa";
 import { MdErrorOutline } from "react-icons/md";
 import { useState } from "react";
+import { useInviteToWork } from "../../../../API/hooks/workspace/useInviteToWork";
+import Spinner from "../../Spinner/Spinner";
 
 const InviteWorkModal = () => {
   const { isOpen } = useSelector((state) => state.modals.inviteToWork);
   const { workspace } = useSelector((state) => state.workspace);
+  const { mutate: inviteUser, isPending } = useInviteToWork();
   const dispatch = useDispatch();
 
   const [input, setInput] = useState("");
@@ -60,9 +63,19 @@ const InviteWorkModal = () => {
       const validEmails = emails
         .filter((email) => email.isValid)
         .map((email) => email.value);
-      console.log("Send to:", validEmails);
-      handleRemoveData();
-      closeModal();
+      inviteUser(
+        { workspace_id: workspace.id, email: validEmails[0] },
+        {
+          onSuccess: () => {
+            handleRemoveData();
+            closeModal();
+          },
+          onError: (err) => {
+            console.error("Invitation failed", err);
+          },
+        }
+      );
+
     }
   };
 
@@ -138,7 +151,7 @@ const InviteWorkModal = () => {
 
         {/* Buttons */}
         <div className={styles.modalActions}>
-          <div
+          {/* <div
             className={styles.link_btn}
             onClick={() => {
               console.log("copy link");
@@ -148,7 +161,7 @@ const InviteWorkModal = () => {
               <FaLink />
             </span>
             <span>Copy invite link</span>
-          </div>
+          </div> */}
           <div
             className={`${styles.send_btn} ${
               emails.length > 0 && emails.every((e) => e.isValid)
@@ -157,7 +170,7 @@ const InviteWorkModal = () => {
             }`}
             onClick={handleSendInvitaions}
           >
-            Send
+            {isPending ? <Spinner width={25} height={25} color="var(--primary-color)" /> : "Send"}
           </div>
         </div>
       </div>

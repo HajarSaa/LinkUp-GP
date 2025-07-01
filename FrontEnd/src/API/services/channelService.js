@@ -33,3 +33,14 @@ export const updateChannel = async (channel_id, body) => {
   const { data } = await axiosInstance.patch(`/channels/${channel_id}`, body);
   return data.data;
 };
+// ===========================(Add Members)
+
+export const addMember = async (channel_id,email) => {
+  const { data } = await axiosInstance.post(
+    `/channels/${channel_id}/add`,
+    {
+      email: email,
+    }
+  );
+  return data.data;
+};

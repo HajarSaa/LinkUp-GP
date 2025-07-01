@@ -4,6 +4,9 @@ import { FaLink } from "react-icons/fa";
 import { MdErrorOutline } from "react-icons/md";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import Spinner from "../Spinner/Spinner";
+import { useInviteToWork } from "../../../API/hooks/workspace/useInviteToWork";
+import { useSelector } from "react-redux";
 
 const CreationInvite = ({
   handleSkipClick,
@@ -12,6 +15,8 @@ const CreationInvite = ({
 }) => {
   const [input, setInput] = useState("");
   const [emails, setEmails] = useState([]);
+  const { mutate: inviteUser, isPending } = useInviteToWork();
+  const { workspace } = useSelector((state) => state.createWorkspace.workspace);
 
   const validateEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -52,9 +57,19 @@ const CreationInvite = ({
       const validEmails = emails
         .filter((email) => email.isValid)
         .map((email) => email.value);
-      console.log("Send to:", validEmails);
-      handleRemoveData();
-      closeModal();
+      inviteUser(
+        { workspace_id: workspace.id, email: validEmails[0] },
+        {
+          onSuccess: () => {
+            handleRemoveData();
+            closeModal();
+            handleNextClick();
+          },
+          onError: (err) => {
+            console.error("Invitation failed", err);
+          },
+        }
+      );
     }
   };
 
@@ -127,7 +142,7 @@ const CreationInvite = ({
       </p>
       {/* Buttons */}
       <div className={styles.modalActions}>
-        <div
+        {/* <div
           className={styles.link_btn}
           onClick={() => {
             console.log("copy link");
@@ -137,7 +152,7 @@ const CreationInvite = ({
             <FaLink />
           </span>
           <span>Copy invite link</span>
-        </div>
+        </div> */}
         <button
           type="button"
           onClick={handleSkipClick}
@@ -145,15 +160,20 @@ const CreationInvite = ({
         >
           Skip this step
         </button>
-        <button
-          onClick={handleNextClick}
-          disabled={isButtonDisabled}
-          className={`${styles.button} ${
-            isButtonDisabled ? styles.disabled : ""
+        <div
+          onClick={handleSendInvitaions}
+          className={`${styles.send_btn} ${
+            emails.length > 0 && emails.every((e) => e.isValid)
+              ? styles.active
+              : ""
           }`}
         >
-          Next
-        </button>
+          {isPending ? (
+            <Spinner width={25} height={25} color="var(--primary-color)" />
+          ) : (
+            "Next"
+          )}
+        </div>
       </div>
     </div>
   );

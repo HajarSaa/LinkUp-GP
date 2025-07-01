@@ -8,7 +8,7 @@ function LandingHeader() {
   function handleCreateWork() {
     if (localStorage.getItem("creation_data"))
       localStorage.removeItem("creation_data");
-    navigateTo("/create-workspace/step-1");
+    navigateTo("/new-workspace/step-1");
   }
   return (
     <div className={styles.landing_header}>

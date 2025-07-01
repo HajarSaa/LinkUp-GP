@@ -23,6 +23,7 @@ import searchDataReducer from "./api_data/search/searchSlice";
 //======
 // ==============================(Global)
 import recordingReducer from "./ui/recording";
+import hsitoryReducer from './ui/historySlice'
 //======
 // ==============================(channels)
 import channelMediaReducer from "./api_data/media/channelMediaSlice";
@@ -124,6 +125,7 @@ const store = configureStore({
     searchData: searchDataReducer,
     // ==============================(Global)
     // ====
+    history : hsitoryReducer,
     notificationsModal: notificationsModalReducer,
     emojiPicker: emojiPickerReducer,
     userProfile: userProfileSlice,

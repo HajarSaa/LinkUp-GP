@@ -59,8 +59,10 @@ function Reactions({ messageId }) {
             return (
               <React.Fragment key={emoji}>
                 <div
-                  data-tooltip-id={`reaction-${emoji}`}
-                  className={`${styles.react} ${isMyReact ? styles.myReact : ""}`}
+                  data-tooltip-id={`reaction-${messageId}-${emoji}`}
+                  className={`${styles.react} ${
+                    isMyReact ? styles.myReact : ""
+                  }`}
                   // className={`${styles.react} ${isMyReact ? "" : styles.myReact}`}
                   onClick={() => toggleReaction(emoji)}
                 >
@@ -71,7 +73,7 @@ function Reactions({ messageId }) {
                 </div>
 
                 <Tooltip
-                  id={`reaction-${emoji}`}
+                  id={`reaction-${messageId}-${emoji}`}
                   place="top"
                   className="custom-tooltip"
                   content={

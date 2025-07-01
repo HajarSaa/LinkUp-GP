@@ -20,7 +20,6 @@ function LaterSideBar() {
     (later_item) => later_item.status === "completed"
   );
 
-
   if (!workspace) return <div className={`${laterStyle.later_side_bar}`}></div>;
 
   return (
@@ -31,14 +30,14 @@ function LaterSideBar() {
             <div className={styles.side_bar_header_leftSide}>
               <span className={styles.work_name}>Later</span>
             </div>
-            <div className={laterStyle.right_icons}>
+            {/* <div className={laterStyle.right_icons}>
               <Icon className={styles.side_bar_header_icon}>
                 <MdOutlineFilterList />
               </Icon>
               <Icon className={styles.side_bar_header_icon}>
                 <MdAdd />
               </Icon>
-            </div>
+            </div> */}
           </div>
           <div className={laterStyle.tabs_container}>
             <div
@@ -89,9 +88,15 @@ function LaterSideBar() {
                   </div>
                 ) : (
                   <>
-                    {in_progress_items?.map((later_item, index) => (
-                      <LaterItem key={index} laterData={later_item} />
-                    ))}
+                    {in_progress_items?.length === 0 ? (
+                      <div className={laterStyle.placeholder}>
+                        No In Later Messages Yet
+                      </div>
+                    ) : (
+                      in_progress_items?.map((later_item, index) => (
+                        <LaterItem key={index} laterData={later_item} />
+                      ))
+                    )}
                   </>
                 )}
               </>
@@ -118,9 +123,19 @@ function LaterSideBar() {
                     </div>
                   ) : (
                     <>
-                      {completed_items?.map((later_item, index) => (
-                        <LaterItem key={index} laterData={later_item} isComplete={true} />
-                      ))}
+                      {completed_items.length === 0 ? (
+                        <div className={laterStyle.placeholder}>
+                          No Completed Later Messages Yet
+                        </div>
+                      ) : (
+                        completed_items?.map((later_item, index) => (
+                          <LaterItem
+                            key={index}
+                            laterData={later_item}
+                            isComplete={true}
+                          />
+                        ))
+                      )}
                     </>
                   )}
                 </>

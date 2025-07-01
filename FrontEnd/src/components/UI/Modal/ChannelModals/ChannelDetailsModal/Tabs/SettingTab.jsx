@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import styles from "./Tabs.module.css";
-import DetailsButton from "../../../../Buttons/DetailsButton/DetailsButton";
+// import DetailsButton from "../../../../Buttons/DetailsButton/DetailsButton";
 import {
   closeChannelDetails,
   openRenameModal,
 } from "../../../../../../API/redux_toolkit/modals/channelDetailsSlice";
-import { FaLink } from "react-icons/fa6";
+// import { FaLink } from "react-icons/fa6";
 import { MdDeleteOutline, MdHeadset } from "react-icons/md";
 import ChannelType from "../../../../Channel/ChannelType/ChannelType";
 import { FaArchive } from "react-icons/fa";
@@ -92,7 +92,7 @@ function SettingTab({ channelData }) {
           </div>
         </TabItem>
       </div>
-      <div className={styles.tab_items_container}>
+      {/* <div className={styles.tab_items_container}>
         <TabItem>
           <div className={styles.tab_item_content}>
             <div className={`${styles.tab_item_content_right_col}`}>
@@ -115,7 +115,7 @@ function SettingTab({ channelData }) {
             )}
           </div>
         </TabItem>
-      </div>
+      </div> */}
       <div className={styles.tab_items_container}>
         {/* Transform */}
         <TabItem className={!isOwner && styles.ops_btn}>

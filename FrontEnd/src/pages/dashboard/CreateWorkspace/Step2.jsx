@@ -101,7 +101,7 @@ function Step2() {
         onSuccess: () => {
           dispatch(setUser({ userName }));
           dispatch(setStepIndex(2));
-          navigate("/create-workspace/step-3");
+          navigate("/new-workspace/step-3");
         },
         onError: (err) => {
           setError(err.response?.data?.message || "Something went wrong.");

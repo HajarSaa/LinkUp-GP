@@ -25,6 +25,7 @@ function Step3() {
     return w?.workspace ?? w ?? null;
   });
 
+
   const savedEmails = useSelector((state) => state.createWorkspace.emails);
   const [emailText, setEmailText] = useState(
     Array.isArray(savedEmails) ? savedEmails.join(", ") : ""

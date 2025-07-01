@@ -483,20 +483,12 @@ export const updateMessage = catchAsync(async (req, res, next) => {
   });
 });
 
-//
 export const deleteMessage = catchAsync(async (req, res, next) => {
   const message = await Message.findById(req.params.id);
 
   // Check if the message exists
   if (!message) {
     return next(new AppError("No message found with that ID", 404));
-  }
-
-  // Check if the user is the creator of the message
-  if (message.createdBy.toString() !== req.userProfile.id) {
-    return next(
-      new AppError("You are not authorized to delete this message", 403)
-    );
   }
 
   // If this message is a reply (has a parentMessageId)

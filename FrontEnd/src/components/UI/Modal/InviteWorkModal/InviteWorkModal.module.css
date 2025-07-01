@@ -61,7 +61,7 @@
 
 .modalActions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 
@@ -85,6 +85,11 @@
   border-radius: 8px;
   font-weight: bold;
   color: #555;
+  width: 65px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .send_btn.active {

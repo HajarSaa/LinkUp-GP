@@ -12,7 +12,7 @@ import AboutTab from "./Tabs/AboutTab";
 import MembersTab from "./Tabs/MembersTab";
 import Tabsbar from "./Tabsbar";
 // import TabsTab from "./Tabs/TabsTab";
-import IntegTab from "./Tabs/IntegTab";
+// import IntegTab from "./Tabs/IntegTab";
 import SettingTab from "./Tabs/SettingTab";
 
 const ChannelDetailsModal = () => {
@@ -42,12 +42,12 @@ const ChannelDetailsModal = () => {
         </div>
 
         {/* Actions */}
-        <div className={styles.actions}>
+        {/* <div className={styles.actions}>
           <DetailsButton icon={<FaRegStar />} />
           <DetailsButton icon={<BsBell />}>
             Get notifications for all messages
           </DetailsButton>
-        </div>
+        </div> */}
 
         {/* Tabsbar */}
         <Tabsbar />
@@ -55,7 +55,7 @@ const ChannelDetailsModal = () => {
           <AboutTab channelData={channelData} />
           <MembersTab channelData={channelData} />
           {/* <TabsTab /> */}
-          <IntegTab />
+          {/* <IntegTab /> */}
           <SettingTab channelData={channelData} />
         </div>
       </div>

@@ -132,19 +132,19 @@ function LowerToolbar({ isThread, isEditing }) {
         </span>
       </div> */}
 
-      <div className={styles.tool_wrapper}>
+      {/* <div className={styles.tool_wrapper}>
         <span className={styles.tool_icon}>
           <BsEmojiSmile />
         </span>
-      </div>
+      </div> */}
 
       {!isEditing && (
         <>
-          <div className={styles.tool_wrapper}>
+          {/* <div className={styles.tool_wrapper}>
             <span className={styles.tool_icon}>
               <GoMention />
             </span>
-          </div>
+          </div> */}
 
           <div
             className={`${styles.tool_wrapper} ${

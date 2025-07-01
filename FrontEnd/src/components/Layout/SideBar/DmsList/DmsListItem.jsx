@@ -20,7 +20,7 @@ const DmsListItem = ({ dmData, isActive }) => {
   // ✅ prevent crash if member is missing
   if (!dmData.member) return null;
 
-  return   (
+  return    (
     <div
       className={`${styles.dms_item} ${isActive ? styles.active : ""}`}
       onClick={handleClick}
@@ -35,9 +35,9 @@ const DmsListItem = ({ dmData, isActive }) => {
         <span>{dmData.member.userName}</span>
         {dmData.isMe && <span className={styles.user_name_hint}>(you)</span>}
       </div>
-      <div className={styles.right_side} onClick={handleDeletelteItem}>
+      {/* <div className={styles.right_side} onClick={handleDeletelteItem}>
         <IoMdClose />
-      </div>
+      </div> */}
     </div>
   );
 };
