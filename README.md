@@ -1,5 +1,21 @@
 # LinkUp-GP
 
+📌 About this Fork
+This fork showcases my personal contribution to our graduation project LinkUp — a real-time collaboration platform inspired by Slack.
+
+🔧 My contributions included:
+
+Developing the reactions system and implementing advanced message search using Node.js and MongoDB.
+
+Working on the design and backend logic for third-party integrations (e.g., GitHub), with extensibility in mind.
+
+Ensuring code scalability, clarity, and modular structure for educational and production-grade use.
+
+🛠️ Tech Stack:
+Node.js · Express.js · MongoDB · Socket.IO · React · Redux Toolkit · WebRTC
+
+
+
 ## Table of Contents
 
 - [Project Overview](#project-overview)
